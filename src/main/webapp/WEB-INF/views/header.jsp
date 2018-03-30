@@ -1,15 +1,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="ge.economy.law.dto.UserDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    boolean isAdmin = ((Integer) session.getAttribute("typeId") != null && (Integer) session.getAttribute("typeId") == UserDTO.USER_ADMIN);
+    //    boolean isAdmin = ((Integer) session.getAttribute("typeId") != null && (Integer) session.getAttribute("typeId") == UserDTO.USER_ADMIN);
+    boolean isAdmin = true;
 %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <base href="${pageContext.request.contextPath}/"/>
-    <title>LAW</title>
+    <title>Mimino Travel</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="stylesheet" href="resources/css/bootstrap.css">
     <link rel="stylesheet" href="resources/css/font-awesome.css">
@@ -48,20 +48,6 @@
                 $('#selected_item').text("საქმე");
             } else if (url.pathname.indexOf("courts") > -1) {
                 $('#selected_item').text("სასამართლოები");
-            } else if (url.pathname.indexOf("instances") > -1) {
-                $('#selected_item').text("სასამართლო ინსტანციები");
-            } else if (url.pathname.indexOf("caseresults") > -1) {
-                $('#selected_item').text("საქმის დამთავრების შედეგები");
-            } else if (url.pathname.indexOf("litigsubjects") > -1) {
-                $('#selected_item').text("დავის საგნები");
-            } else if (url.pathname.indexOf("judges") > -1) {
-                $('#selected_item').text("მოსამართლეები");
-            } else if (url.pathname.indexOf("boards") > -1) {
-                $('#selected_item').text("კოლეგია");
-            } else if (url.pathname.indexOf("users") > -1) {
-                $('#selected_item').text("მომხმარებლები");
-            } else if (url.pathname.indexOf("statistics") > -1) {
-                $('#selected_item').text("სტატისტიკა");
             }
 
         });
@@ -94,7 +80,7 @@
 <div class="wrapper">
     <header class="main-header">
         <a href="" class="logo">
-            <span class="logo-lg"><b>LAW</b></span>
+            <span class="logo-lg"><b>Mimino Travel</b></span>
         </a>
         <nav class="navbar navbar-static-top">
             <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
@@ -106,25 +92,25 @@
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-user"></i>
-                            <span class="hidden-xs"><%= session.getAttribute("firstname") %> <%= session.getAttribute("lastname")%></span>
+                            <span class="hidden-xs"><%= session.getAttribute("userDesc") %></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li class="user-header">
                                 <p>
-                                    <%= session.getAttribute("firstname") %> <%= session.getAttribute("lastname")%>
+                                    <%= session.getAttribute("userDesc") %>
                                     <small><%= session.getAttribute("typeName") %>
                                     </small>
                                 </p>
                             </li>
                             <li class="user-body text-center">
                                 <div class=" form-group has-feedback">
-                                    <input type="password" name="password" placeholder="ძველი პაროლი"
+                                    <input type="password" name="password" placeholder="Current Password"
                                            ng-model="newpass.password"
                                            class="form-control">
                                     <span class="fa fa-key form-control-feedback"></span>
                                 </div>
                                 <div class="form-group has-feedback">
-                                    <input type="password" name="password" placeholder="ახალი პაროლი"
+                                    <input type="password" name="password" placeholder="New Password"
                                            ng-model="newpass.newpassword"
                                            class="form-control">
                                     <span class="fa fa-key form-control-feedback"></span>
@@ -132,10 +118,10 @@
                             </li>
                             <li class="user-footer">
                                 <div class="pull-left">
-                                    <a href="" ng-click="changePassword()" class="btn btn-default btn-flat">შეცვლა</a>
+                                    <a href="" ng-click="changePassword()" class="btn btn-default btn-flat">Save</a>
                                 </div>
                                 <div class="pull-right">
-                                    <a href="logout" class="btn btn-default btn-flat">გამოსვლა</a>
+                                    <a href="logout" class="btn btn-default btn-flat">Log Out</a>
                                 </div>
                             </li>
                         </ul>
@@ -150,53 +136,13 @@
     <div class="row" class="main-sidebar">
         <aside class="main-sidebar">
             <section class="sidebar">
+                <img src="resources/imgs/logo.png" style="width: 100%;"/>
+                <hr/>
                 <ul class="sidebar-menu" data-widget="tree">
                     <li>
                         <a class="menuItem" href="cases">
                             <i class="fa fa-briefcase"></i>
                             <span>საქმე</span>
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="menuItem" href="courts">
-                            <i class="fa fa-bank"></i>
-                            <span>სასამართლოები</span>
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="instances">
-                            <i class="fa fa-sitemap"></i>
-                            <span>სასამართლო ინსტანცია</span>
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="caseresults">
-                            <i class="fa fa-folder-open"></i>
-                            <span>საქმის დამთ. შედეგები</span>
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="litigsubjects">
-                            <i class="fa fa-balance-scale"></i>
-                            <span>დავის საგანი</span>
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="boards">
-                            <i class="fa fa-share-alt"></i>
-                            <span>კოლეგია</span>
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="judges">
-                            <i class="fa fa-graduation-cap"></i>
-                            <span>მოსამართლეები</span>
                             </span>
                         </a>
                     </li>

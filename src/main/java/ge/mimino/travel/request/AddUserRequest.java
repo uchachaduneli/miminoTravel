@@ -1,76 +1,96 @@
-package ge.economy.hr.request;
+package ge.mimino.travel.request;
+
+import java.util.Date;
 
 public class AddUserRequest {
-    private int id;
-    private String username;
-    private String password;
-    private String firstname;
-    private String lastname;
-    private int status;
-    private int typeId;
-    private String token;
+    private Integer userId;
+    private String userDesc;
+    private String userName;
+    private String userPassword;
+    private String currentPassword;
+    private Integer typeId;
+    private Integer deleted;
+    private String email;
+    private String emailPassword;
+    private Date createDate;
 
-    public String getToken() {
-        return token;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public int getId() {
-        return id;
+    public String getUserDesc() {
+        return userDesc;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUserDesc(String userDesc) {
+        this.userDesc = userDesc;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getPassword() {
-        return password;
+    public String getUserPassword() {
+        return userPassword;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getCurrentPassword() {
+        return currentPassword;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setCurrentPassword(String currentPassword) {
+        this.currentPassword = currentPassword;
     }
 
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public int getTypeId() {
+    public Integer getTypeId() {
         return typeId;
     }
 
-    public void setTypeId(int typeId) {
+    public void setTypeId(Integer typeId) {
         this.typeId = typeId;
+    }
+
+    public Integer getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Integer deleted) {
+        this.deleted = deleted;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmailPassword() {
+        return emailPassword;
+    }
+
+    public void setEmailPassword(String emailPassword) {
+        this.emailPassword = emailPassword;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 }

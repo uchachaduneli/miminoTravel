@@ -3,27 +3,28 @@ package ge.mimino.travel.model;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.sql.Timestamp;
 
 @Entity
 public class Users {
-    private int userId;
+    private Integer userId;
     private String userDesc;
     private String userName;
     private String userPassword;
-    private int typeId;
-    private int deleted;
+    private Integer typeId;
+    private Integer deleted;
     private String email;
-    private String emailPass;
+    private String emailPassword;
     private Timestamp createDate;
 
-    @Basic
+    @Id
     @Column(name = "user_id")
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
@@ -59,21 +60,21 @@ public class Users {
 
     @Basic
     @Column(name = "type_id")
-    public int getTypeId() {
+    public Integer getTypeId() {
         return typeId;
     }
 
-    public void setTypeId(int typeId) {
+    public void setTypeId(Integer typeId) {
         this.typeId = typeId;
     }
 
     @Basic
     @Column(name = "deleted")
-    public int getDeleted() {
+    public Integer getDeleted() {
         return deleted;
     }
 
-    public void setDeleted(int deleted) {
+    public void setDeleted(Integer deleted) {
         this.deleted = deleted;
     }
 
@@ -88,17 +89,17 @@ public class Users {
     }
 
     @Basic
-    @Column(name = "email_pass")
-    public String getEmailPass() {
-        return emailPass;
+    @Column(name = "email_password")
+    public String getEmailPassword() {
+        return emailPassword;
     }
 
-    public void setEmailPass(String emailPass) {
-        this.emailPass = emailPass;
+    public void setEmailPassword(String emailPassword) {
+        this.emailPassword = emailPassword;
     }
 
     @Basic
-    @Column(name = "create_date")
+    @Column(name = "create_date", insertable = false, updatable = false)
     public Timestamp getCreateDate() {
         return createDate;
     }
@@ -121,7 +122,8 @@ public class Users {
         if (userName != null ? !userName.equals(users.userName) : users.userName != null) return false;
         if (userPassword != null ? !userPassword.equals(users.userPassword) : users.userPassword != null) return false;
         if (email != null ? !email.equals(users.email) : users.email != null) return false;
-        if (emailPass != null ? !emailPass.equals(users.emailPass) : users.emailPass != null) return false;
+        if (emailPassword != null ? !emailPassword.equals(users.emailPassword) : users.emailPassword != null)
+            return false;
         if (createDate != null ? !createDate.equals(users.createDate) : users.createDate != null) return false;
 
         return true;
@@ -129,14 +131,14 @@ public class Users {
 
     @Override
     public int hashCode() {
-        int result = userId;
+        Integer result = userId;
         result = 31 * result + (userDesc != null ? userDesc.hashCode() : 0);
         result = 31 * result + (userName != null ? userName.hashCode() : 0);
         result = 31 * result + (userPassword != null ? userPassword.hashCode() : 0);
         result = 31 * result + typeId;
         result = 31 * result + deleted;
         result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (emailPass != null ? emailPass.hashCode() : 0);
+        result = 31 * result + (emailPassword != null ? emailPassword.hashCode() : 0);
         result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
         return result;
     }

@@ -1,5 +1,5 @@
 
-package ge.economy.hr.dao;
+package ge.mimino.travel.dao;
 
 /**
  *
