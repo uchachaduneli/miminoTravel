@@ -30,33 +30,27 @@ public class UsersService {
     }
 
     @Transactional(rollbackFor = Throwable.class)
-    public Users saveUser(AddUserRequest userParam) throws Exception {
+    public Users saveUser(AddUserRequest request) throws Exception {
 
         Users user = new Users();
 
-//        user.setFirstname(firstName);
-//        user.setLastname(lastName);
-//        user.setUsername(email);
-//        user.setPassword(MD5Provider.doubleMd5(password));
-//        user.setPhoneNumber(phoneNumber);
-//        user.setViber(viber);
-//        user.setSkype(skype);
-//        user.setLoginType(loginType);
-//        user.setToken(pushToken);
-//        user = userDAO.create(user);
+        user.setUserDesc(request.getUserDesc());
+        user.setUserName(request.getUserName());
+        user.setUserPassword(MD5Provider.doubleMd5(request.getUserPassword()));
+        user.setType((UserTypes) userDAO.find(UserTypes.class, request.getTypeId()));
+        user.setDeleted(request.getDeleted());
+        user.setEmail(request.getEmail());
+        user.setEmailPassword(request.getEmailPassword());
 
-//        if (user.getUserId() != null) {
-//            user = userDAO.update(user);
-//        } else {
-//            if (request.getTypeId() == UsersDTO.USER_RESTAURANT) {
-//                Restaurants restaurants = new Restaurants();
-//                restaurants.setIdentNumber(Integer.valueOf(user.getUsername()));
-//                userDAO.create(restaurants);
-//                user.setRestaurantId(restaurants.getRestaurantId());
-//            }
-//            user = userDAO.create(user);
-//
-//        }
+        if (user.getUserId() != null) {
+            Users tmp = (Users) userDAO.find(Users.class, user.getUserId());
+            if (!request.getUserPassword().equals(tmp.getUserPassword())) {
+                user.setUserPassword(MD5Provider.doubleMd5(request.getUserPassword()));
+            }
+            user = (Users) userDAO.update(user);
+        } else {
+            user = (Users) userDAO.create(user);
+        }
         return user;
     }
 

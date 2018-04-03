@@ -13,3 +13,8 @@
 html, body {
     font-family: 'dejavu' !important;
 }
+
+input[type="radio"] {
+    margin-top: -1px;
+    vertical-align: middle;
+}

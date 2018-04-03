@@ -136,7 +136,7 @@
     <div class="row" class="main-sidebar">
         <aside class="main-sidebar">
             <section class="sidebar">
-                <img src="resources/imgs/logo.png" style="width: 100%;"/>
+                <img src="resources/imgs/logo.png" style="width: 100%; margin-top: 5%;"/>
                 <hr/>
                 <ul class="sidebar-menu" data-widget="tree">
                     <li>

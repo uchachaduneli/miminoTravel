@@ -1,9 +1,6 @@
 package ge.mimino.travel.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
@@ -12,7 +9,7 @@ public class Users {
     private String userDesc;
     private String userName;
     private String userPassword;
-    private Integer typeId;
+    private UserTypes type;
     private Integer deleted;
     private String email;
     private String emailPassword;
@@ -58,14 +55,14 @@ public class Users {
         this.userPassword = userPassword;
     }
 
-    @Basic
-    @Column(name = "type_id")
-    public Integer getTypeId() {
-        return typeId;
+    @JoinColumn(name = "type_id")
+    @OneToOne
+    public UserTypes getType() {
+        return type;
     }
 
-    public void setTypeId(Integer typeId) {
-        this.typeId = typeId;
+    public void setType(UserTypes type) {
+        this.type = type;
     }
 
     @Basic
@@ -106,40 +103,5 @@ public class Users {
 
     public void setCreateDate(Timestamp createDate) {
         this.createDate = createDate;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Users users = (Users) o;
-
-        if (userId != users.userId) return false;
-        if (typeId != users.typeId) return false;
-        if (deleted != users.deleted) return false;
-        if (userDesc != null ? !userDesc.equals(users.userDesc) : users.userDesc != null) return false;
-        if (userName != null ? !userName.equals(users.userName) : users.userName != null) return false;
-        if (userPassword != null ? !userPassword.equals(users.userPassword) : users.userPassword != null) return false;
-        if (email != null ? !email.equals(users.email) : users.email != null) return false;
-        if (emailPassword != null ? !emailPassword.equals(users.emailPassword) : users.emailPassword != null)
-            return false;
-        if (createDate != null ? !createDate.equals(users.createDate) : users.createDate != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        Integer result = userId;
-        result = 31 * result + (userDesc != null ? userDesc.hashCode() : 0);
-        result = 31 * result + (userName != null ? userName.hashCode() : 0);
-        result = 31 * result + (userPassword != null ? userPassword.hashCode() : 0);
-        result = 31 * result + typeId;
-        result = 31 * result + deleted;
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (emailPassword != null ? emailPassword.hashCode() : 0);
-        result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
-        return result;
     }
 }

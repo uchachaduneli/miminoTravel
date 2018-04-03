@@ -14,7 +14,7 @@ public class UsersDTO {
     private String userDesc;
     private String userName;
     private String userPassword;
-    private Integer typeId;
+    private UsersTypeDTO type;
     private Integer deleted;
     private String email;
     private String emailPassword;
@@ -30,7 +30,7 @@ public class UsersDTO {
             dto.setUserPassword(record.getUserPassword());
             dto.setEmail(record.getEmail());
             dto.setEmailPassword(record.getEmailPassword());
-            dto.setTypeId(record.getTypeId());
+            dto.setType(UsersTypeDTO.parse(record.getType()));
             dto.setDeleted(record.getDeleted());
             dto.setCreateDate(record.getCreateDate());
             return dto;
@@ -77,12 +77,12 @@ public class UsersDTO {
         this.userPassword = userPassword;
     }
 
-    public Integer getTypeId() {
-        return typeId;
+    public UsersTypeDTO getType() {
+        return type;
     }
 
-    public void setTypeId(Integer typeId) {
-        this.typeId = typeId;
+    public void setType(UsersTypeDTO type) {
+        this.type = type;
     }
 
     public Integer getDeleted() {

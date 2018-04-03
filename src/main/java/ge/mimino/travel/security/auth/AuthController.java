@@ -45,7 +45,7 @@ public class AuthController {
         if (foundedUser != null) {
             request.getSession().setAttribute("userId", foundedUser.getUserId());
             request.getSession().setAttribute("userDesc", foundedUser.getUserDesc());
-            request.getSession().setAttribute("typeId", foundedUser.getTypeId());
+            request.getSession().setAttribute("typeId", foundedUser.getType().getUserTypeId());
 //            switch (foundedUser.getTypeId()) {
 //                case UsersDTO.USER_ADMIN:
 //                    request.getSession().setAttribute("typeName", "ადმინისტრატორი");

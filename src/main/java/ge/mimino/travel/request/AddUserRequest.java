@@ -1,6 +1,6 @@
 package ge.mimino.travel.request;
 
-import java.util.Date;
+import ge.mimino.travel.model.UserTypes;
 
 public class AddUserRequest {
     private Integer userId;
@@ -9,10 +9,19 @@ public class AddUserRequest {
     private String userPassword;
     private String currentPassword;
     private Integer typeId;
+    private UserTypes type;
     private Integer deleted;
     private String email;
     private String emailPassword;
-    private Date createDate;
+    private String createDate;
+
+    public UserTypes getType() {
+        return type;
+    }
+
+    public void setType(UserTypes type) {
+        this.type = type;
+    }
 
     public Integer getUserId() {
         return userId;
@@ -86,11 +95,11 @@ public class AddUserRequest {
         this.emailPassword = emailPassword;
     }
 
-    public Date getCreateDate() {
+    public String getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(String createDate) {
         this.createDate = createDate;
     }
 }

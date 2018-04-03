@@ -70,6 +70,7 @@
             if ($scope.request.insertDate != undefined && $scope.request.insertDate.includes('/')) {
                 $scope.request.insertDate = $scope.request.insertDate.split(/\//).reverse().join('-')
             }
+            console.log($scope.request);
             ajaxCall($http, "users/save-user", angular.toJson($scope.request), resFunc);
         };
 
@@ -90,53 +91,61 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="editModalLabel">შეიტანეთ ინფორმაცია</h4>
+                <h4 class="modal-title" id="editModalLabel">Personal Information</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <form class="form-horizontal" name="myForm">
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">მომხმარებელი</label>
+                            <label class="control-label col-sm-3">UserName</label>
                             <div class="col-sm-9">
-                                <input type="text" ng-model="request.username"
+                                <input type="text" ng-model="request.userName"
                                        class="form-control input-sm">
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">პაროლი</label>
+                            <label class="control-label col-sm-3">Password</label>
                             <div class="col-sm-9">
-                                <input type="password" name="password" ng-model="request.password"
+                                <input type="password" name="password" ng-model="request.userPassword"
                                        class="form-control input-sm">
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">სახელი</label>
+                            <label class="control-label col-sm-3">First - Last Name </label>
                             <div class="col-sm-9">
-                                <input type="text" ng-model="request.firstname" class="form-control input-sm">
+                                <input type="text" ng-model="request.userDesc" class="form-control input-sm">
                             </div>
                         </div>
                         <div class="form-group col-sm-10">
-                            <label class="control-label col-sm-3">გვარი</label>
+                            <label class="control-label col-sm-3">Email</label>
                             <div class="col-xs-9">
-                                <input type="text" ng-model="request.lastname" class="form-control input-sm">
+                                <input type="text" ng-model="request.email" class="form-control input-sm">
                             </div>
                         </div>
                         <div class="form-group col-sm-10">
-                            <label class="control-label col-sm-3">ტიპი</label>
+                            <label class="control-label col-sm-3">Email Password</label>
+                            <div class="col-xs-9">
+                                <input type="text" ng-model="request.emailPassword" class="form-control input-sm">
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10">
+                            <label class="control-label col-sm-3">Level</label>
                             <div class="col-xs-9 btn-group">
                                 <select class="form-control" ng-model="request.typeId">
-                                    <option ng-repeat="s in userTypes" ng-selected="s.userTypeId === request.typeId"
+                                    <option ng-repeat="s in userTypes"
+                                            ng-selected="s.userTypeId === request.type.userTypeId"
                                             ng-value="s.userTypeId">{{s.userTypeName}}
                                     </option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group col-sm-10">
-                            <label class="control-label col-sm-3">სტატუსი</label>
+                            <label class="control-label col-sm-3">Status</label>
                             <div class="col-xs-9 btn-group">
-                                <div class="radio col-xs-3" ng-repeat=" s in userStatuses">
-                                    <label><input type="radio" ng-model="request.statusId" value="{{s.statusId}}"
-                                                  class="input-sm">{{s.name}}</label>
+                                <div class="radio col-xs-6">
+                                    <label><input type="radio" ng-model="request.deleted" value="0" class="input-sm">Active</label>
+                                    &nbsp;<label><input type="radio" ng-model="request.deleted" value="1"
+                                                        class="input-sm">Passive</label>
                                 </div>
                             </div>
                         </div>
@@ -174,10 +183,10 @@
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th>სახელი</th>
-                        <th>გვარი</th>
+                        <th>სახელი - გვარი</th>
                         <th>მომხმარებელი</th>
                         <th>ტიპი</th>
+                        <th>ელ. ფოსტა</th>
                         <th>სტატუსი</th>
                         <th class="col-md-1 text-center">დამატ. დრო</th>
                         <th class="col-md-2 text-center">Action</th>
@@ -186,13 +195,13 @@
                     <tbody>
                     <tr ng-repeat="r in users">
                         <td>{{r.userId}}</td>
-                        <td>{{r.firstname}}</td>
-                        <td>{{r.lastname}}</td>
-                        <td>{{r.username}}</td>
-                        <td>{{r.typeId == 1 ? 'ოპერატორი': 'ადმინისტრატორი'}}</td>
-                        <td>{{r.statusId == 1 ? 'აქტიური': 'პასიური'}}</td>
+                        <td>{{r.userDesc}}</td>
+                        <td>{{r.userName}}</td>
+                        <td>{{r.type.userTypeName}}</td>
+                        <td>{{r.email}}</td>
+                        <td>{{r.deleted == 0 ? 'აქტიური': 'პასიური'}}</td>
                         <td class="text-center">
-                            <small>{{r.insertDate}}</small>
+                            <small>{{r.createDate}}</small>
                         </td>
                         <td class="text-center">
                             <a ng-click="edit(r.userId)" data-toggle="modal" data-target="#editModal"
