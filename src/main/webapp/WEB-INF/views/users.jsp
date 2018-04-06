@@ -103,17 +103,6 @@
             <div class="modal-body">
                 <div class="row">
                     <form class="form-horizontal" name="myForm">
-                        <div class="form-group col-sm-10">
-                            <label class="control-label col-sm-3">Language</label>
-                            <div class="col-xs-9 btn-group">
-                                <select class="form-control" ng-model="request.languageId">
-                                    <option ng-repeat="k in languages"
-                                            ng-selected="k.id === request.language.id"
-                                            ng-value="k.id">{{k.name}}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
                         <div class="form-group col-sm-10 ">
                             <label class="control-label col-sm-3">UserName</label>
                             <div class="col-sm-9">
@@ -146,7 +135,17 @@
                                 <input type="text" ng-model="request.emailPassword" class="form-control input-sm">
                             </div>
                         </div>
-
+                        <div class="form-group col-sm-10">
+                            <label class="control-label col-sm-3">Language</label>
+                            <div class="col-xs-9 btn-group">
+                                <select class="form-control" ng-model="request.languageId">
+                                    <option ng-repeat="k in languages"
+                                            ng-selected="k.id === request.language.id"
+                                            ng-value="k.id">{{k.name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-group col-sm-10">
                             <label class="control-label col-sm-3">Level</label>
                             <div class="col-xs-9 btn-group">
