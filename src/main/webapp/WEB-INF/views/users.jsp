@@ -18,6 +18,7 @@
         $scope.users = [];
         $scope.userTypes = [];
         $scope.userStatuses = [];
+        $scope.languages = [];
 
         $scope.loadMainData = function () {
             function getUsers(res) {
@@ -80,6 +81,12 @@
 
         ajaxCall($http, "users/get-user-types", null, getUserTypes);
 
+        function getLanguages(res) {
+            $scope.languages = res.data;
+        }
+
+        ajaxCall($http, "users/get-languages", null, getLanguages);
+
     });
 </script>
 
@@ -96,6 +103,17 @@
             <div class="modal-body">
                 <div class="row">
                     <form class="form-horizontal" name="myForm">
+                        <div class="form-group col-sm-10">
+                            <label class="control-label col-sm-3">Language</label>
+                            <div class="col-xs-9 btn-group">
+                                <select class="form-control" ng-model="request.languageId">
+                                    <option ng-repeat="k in languages"
+                                            ng-selected="k.id === request.language.id"
+                                            ng-value="k.id">{{k.name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-group col-sm-10 ">
                             <label class="control-label col-sm-3">UserName</label>
                             <div class="col-sm-9">
@@ -128,6 +146,7 @@
                                 <input type="text" ng-model="request.emailPassword" class="form-control input-sm">
                             </div>
                         </div>
+
                         <div class="form-group col-sm-10">
                             <label class="control-label col-sm-3">Level</label>
                             <div class="col-xs-9 btn-group">
@@ -143,9 +162,10 @@
                             <label class="control-label col-sm-3">Status</label>
                             <div class="col-xs-9 btn-group">
                                 <div class="radio col-xs-6">
-                                    <label><input type="radio" ng-model="request.deleted" value="0" class="input-sm">Active</label>
-                                    &nbsp;<label><input type="radio" ng-model="request.deleted" value="1"
-                                                        class="input-sm">Passive</label>
+                                    <label><input type="radio" ng-model="request.deleted" value="0"
+                                                  class="input-sm">Active</label>&nbsp;
+                                    <label><input type="radio" ng-model="request.deleted" value="1"
+                                                  class="input-sm">Passive</label>
                                 </div>
                             </div>
                         </div>
@@ -173,7 +193,7 @@
                     <button type="button" class="btn btn-block btn-primary btn-md" ng-click="init()" data-toggle="modal"
                             data-target="#editModal">
                         <i class="fa fa-plus" aria-hidden="true"></i> &nbsp;
-                        დამატება
+                        Add User
                     </button>
                 </div>
             </div>
@@ -183,12 +203,13 @@
                     <thead>
                     <tr>
                         <th>ID</th>
-                        <th>სახელი - გვარი</th>
-                        <th>მომხმარებელი</th>
-                        <th>ტიპი</th>
-                        <th>ელ. ფოსტა</th>
-                        <th>სტატუსი</th>
-                        <th class="col-md-1 text-center">დამატ. დრო</th>
+                        <th>First-Last Name</th>
+                        <th>User Name</th>
+                        <th>Type</th>
+                        <th>Language</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th class="col-md-1 text-center">Create Date</th>
                         <th class="col-md-2 text-center">Action</th>
                     </tr>
                     </thead>
@@ -198,6 +219,7 @@
                         <td>{{r.userDesc}}</td>
                         <td>{{r.userName}}</td>
                         <td>{{r.type.userTypeName}}</td>
+                        <td>{{r.language.name}}</td>
                         <td>{{r.email}}</td>
                         <td>{{r.deleted == 0 ? 'აქტიური': 'პასიური'}}</td>
                         <td class="text-center">

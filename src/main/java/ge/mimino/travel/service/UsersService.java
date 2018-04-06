@@ -2,8 +2,10 @@ package ge.mimino.travel.service;
 
 
 import ge.mimino.travel.dao.UserDAO;
+import ge.mimino.travel.dto.LanguageDTO;
 import ge.mimino.travel.dto.UsersDTO;
 import ge.mimino.travel.dto.UsersTypeDTO;
+import ge.mimino.travel.model.Language;
 import ge.mimino.travel.model.UserTypes;
 import ge.mimino.travel.model.Users;
 import ge.mimino.travel.request.AddUserRequest;
@@ -37,13 +39,17 @@ public class UsersService {
         user.setUserDesc(request.getUserDesc());
         user.setUserName(request.getUserName());
         user.setUserPassword(MD5Provider.doubleMd5(request.getUserPassword()));
-        user.setType((UserTypes) userDAO.find(UserTypes.class, request.getTypeId()));
+        user.setType((UserTypes) userDAO.find(UserTypes.class, request.getTypeId() == null ?
+                request.getType().getUserTypeId() : request.getTypeId()));
+        user.setLanguage((Language) userDAO.find(Language.class, request.getLanguageId() == null ?
+                request.getLanguage().getId() : request.getLanguageId()));
         user.setDeleted(request.getDeleted());
         user.setEmail(request.getEmail());
         user.setEmailPassword(request.getEmailPassword());
 
-        if (user.getUserId() != null) {
-            Users tmp = (Users) userDAO.find(Users.class, user.getUserId());
+        if (request.getUserId() != null) {
+            user.setUserId(request.getUserId());
+            Users tmp = (Users) userDAO.find(Users.class, request.getUserId());
             if (!request.getUserPassword().equals(tmp.getUserPassword())) {
                 user.setUserPassword(MD5Provider.doubleMd5(request.getUserPassword()));
             }
@@ -87,5 +93,9 @@ public class UsersService {
 
     public List<UsersTypeDTO> getUserTypes() {
         return UsersTypeDTO.parseToList(userDAO.getAll(UserTypes.class));
+    }
+
+    public List<LanguageDTO> getLanguages() {
+        return LanguageDTO.parseToList(userDAO.getAll(Language.class));
     }
 }
