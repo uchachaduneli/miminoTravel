@@ -20,7 +20,31 @@ public class MiscController {
 
     @RequestMapping("/get-countries")
     @ResponseBody
-    private Response getCountries() throws Exception {
+    private Response geteCountries() throws Exception {
         return Response.withSuccess(miscService.getCountries());
+    }
+
+    @RequestMapping("/get-mealcategories")
+    @ResponseBody
+    private Response getMealCategories() throws Exception {
+        return Response.withSuccess(miscService.getMealCategories());
+    }
+
+    @RequestMapping("/get-packagecategories")
+    @ResponseBody
+    private Response getPackageCategories() throws Exception {
+        return Response.withSuccess(miscService.getPackageCategories());
+    }
+
+    @RequestMapping("/get-currencies")
+    @ResponseBody
+    private Response getCurrencies() throws Exception {
+        return Response.withSuccess(miscService.getCurrencies());
+    }
+
+    @RequestMapping("/get-cities")
+    @ResponseBody
+    private Response getCities() throws Exception {
+        return Response.withSuccess(miscService.getCities());
     }
 }

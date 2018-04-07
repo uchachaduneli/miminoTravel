@@ -41,13 +41,14 @@ public abstract class AbstractDAO<T> {
         }
 
         // build dynamic order clause
-        if (!orderValues.isEmpty()) {
+        if (orderValues != null && !orderValues.isEmpty()) {
             q.append(" order by ");
-        }
-        for (int i = 0; i < orderValues.size(); i++) {
-            q.append(" tbl.").append(orderValues.get(i).getParamName()).append(" ").append(orderValues.get(i).getParamValue().toString());
-            if (i != orderValues.size() - 1) {
-                q.append(", ");
+
+            for (int i = 0; i < orderValues.size(); i++) {
+                q.append(" tbl.").append(orderValues.get(i).getParamName()).append(" ").append(orderValues.get(i).getParamValue().toString());
+                if (i != orderValues.size() - 1) {
+                    q.append(", ");
+                }
             }
         }
 
