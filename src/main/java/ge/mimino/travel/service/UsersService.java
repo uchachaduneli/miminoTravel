@@ -38,7 +38,9 @@ public class UsersService {
 
         user.setUserDesc(request.getUserDesc());
         user.setUserName(request.getUserName());
-        user.setUserPassword(MD5Provider.doubleMd5(request.getUserPassword()));
+        if (request.getUserId() == null) {
+            user.setUserPassword(MD5Provider.doubleMd5(request.getUserPassword()));
+        }
         user.setType((UserTypes) userDAO.find(UserTypes.class, request.getTypeId() == null ?
                 request.getType().getUserTypeId() : request.getTypeId()));
         user.setLanguage((Language) userDAO.find(Language.class, request.getLanguageId() == null ?
@@ -52,6 +54,8 @@ public class UsersService {
             Users tmp = (Users) userDAO.find(Users.class, request.getUserId());
             if (!request.getUserPassword().equals(tmp.getUserPassword())) {
                 user.setUserPassword(MD5Provider.doubleMd5(request.getUserPassword()));
+            } else {
+                user.setUserPassword(request.getUserPassword());
             }
             user = (Users) userDAO.update(user);
         } else {

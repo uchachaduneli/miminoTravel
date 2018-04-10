@@ -10,6 +10,7 @@ public class UserTypes {
 
     @Id
     @Column(name = "user_type_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getUserTypeId() {
         return userTypeId;
     }
