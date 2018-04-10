@@ -5,6 +5,7 @@ import ge.mimino.travel.misc.Response;
 import ge.mimino.travel.request.AddUserRequest;
 import ge.mimino.travel.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,7 +46,11 @@ public class UserController {
     @RequestMapping({"/save-user"})
     @ResponseBody
     public Response saveUser(@RequestBody AddUserRequest request) throws Exception {
-        return Response.withSuccess(UsersDTO.parse(userService.saveUser(request)));
+        try {
+            return Response.withSuccess(UsersDTO.parse(userService.saveUser(request)));
+        } catch (DataIntegrityViolationException e) {
+            return Response.withError("Username Already Used, Please Try Another One");
+        }
     }
 
     @RequestMapping({"/change-password"})
