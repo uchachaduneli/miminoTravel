@@ -86,11 +86,11 @@
 //
 //        ajaxCall($http, "litigationsubjects/get-litigationsubjects", null, getlitigationsubjects);
 //
-//        function getjudges(res) {
-//            $scope.judges = res.data;
-//        }
-//
-//        ajaxCall($http, "judges/get-judges", null, getjudges);
+        function getCities(res) {
+            $scope.cities = res.data;
+        }
+
+        ajaxCall($http, "misc/get-cities", null, getCities);
 //
 //        function getcourtInstances(res) {
 //            $scope.courtInstances = res.data;
@@ -599,7 +599,7 @@
                 <div class="col-md-2">
                     <c:if test="<%= isAdmin %>">
                         <button type="button" class="btn btn-block btn-primary btn-md" ng-click="init()"
-                                data-toggle="modal"
+                                data-toggle="modal" disabled="true"
                                 data-target="#editModal">
                             <i class="fa fa-plus" aria-hidden="true"></i> &nbsp;
                             დამატება
@@ -623,26 +623,26 @@
                     <div id="filter-panel" class="filter-panel">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <div class="form-group col-md-1">
-                                    <input type="text" class="form-control srch" ng-model="srchCase.caseId"
-                                           placeholder="ID">
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <input type="text" class="form-control srch" ng-model="srchCase.name"
-                                           placeholder="დასახელება">
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <input type="text" class="form-control srch" ng-model="srchCase.number"
-                                           placeholder="საქმის #">
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <input type="text" class="form-control srch"
-                                           ng-model="srchCase.judgeAssistant" placeholder="თანაშემწე">
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <input type="text" class="form-control srch"
-                                           ng-model="srchCase.judgeAssistantPhone" placeholder="თანაშემწის ტელ.">
-                                </div>
+                                <%--<div class="form-group col-md-1">--%>
+                                <%--<input type="text" class="form-control srch" ng-model="srchCase.caseId"--%>
+                                <%--placeholder="ID">--%>
+                                <%--</div>--%>
+                                <%--<div class="form-group col-md-2">--%>
+                                <%--<input type="text" class="form-control srch" ng-model="srchCase.name"--%>
+                                <%--placeholder="დასახელება">--%>
+                                <%--</div>--%>
+                                <%--<div class="form-group col-md-2">--%>
+                                <%--<input type="text" class="form-control srch" ng-model="srchCase.number"--%>
+                                <%--placeholder="საქმის #">--%>
+                                <%--</div>--%>
+                                <%--<div class="form-group col-md-2">--%>
+                                <%--<input type="text" class="form-control srch"--%>
+                                <%--ng-model="srchCase.judgeAssistant" placeholder="თანაშემწე">--%>
+                                <%--</div>--%>
+                                <%--<div class="form-group col-md-2">--%>
+                                <%--<input type="text" class="form-control srch"--%>
+                                <%--ng-model="srchCase.judgeAssistantPhone" placeholder="თანაშემწის ტელ.">--%>
+                                <%--</div>--%>
                                 <div class="form-group col-md-3">
                                     <div class="input-group">
                                         <div class="input-append">
@@ -650,7 +650,7 @@
                                                    placeholder="დან"
                                                    ng-model="srchCase.caseStartDateFrom" placeholder="">
                                         </div>
-                                        <span class="input-group-addon">დაწყებ. თარიღ.</span>
+                                        <span class="input-group-addon">ჩატარების თარიღი</span>
                                         <div class="input-append">
                                             <input type="text" name="startdate" class="form-control srch"
                                                    placeholder="მდე"
@@ -665,7 +665,22 @@
                                                    placeholder="დან"
                                                    ng-model="srchCase.caseEndDateFrom" placeholder="">
                                         </div>
-                                        <span class="input-group-addon">დასრ. თარიღ.</span>
+                                        <span class="input-group-addon">ჩამოფრენის დრო</span>
+                                        <div class="input-append">
+                                            <input type="text" name="enddate" class="form-control srch"
+                                                   placeholder="მდე"
+                                                   ng-model="srchCase.caseEndDateTo" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <div class="input-group">
+                                        <div class="input-append">
+                                            <input type="text" name="enddate" class="form-control srch"
+                                                   placeholder="დან"
+                                                   ng-model="srchCase.caseEndDateFrom" placeholder="">
+                                        </div>
+                                        <span class="input-group-addon">გაფრენის დრო</span>
                                         <div class="input-append">
                                             <input type="text" name="enddate" class="form-control srch"
                                                    placeholder="მდე"
@@ -675,88 +690,9 @@
                                 </div>
                                 <div class="form-group col-md-2">
                                     <select class="form-control" ng-model="srchCase.judgeId" ng-change="loadMainData()">
-                                        <option value="" selected="selected">მოსამართლე</option>
-                                        <option ng-repeat="v in judges" ng-selected="v.judgeId === srchCase.judgeId"
-                                                value="{{v.judgeId}}">{{v.name}}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <select class="form-control" ng-model="srchCase.litigationSubjectId"
-                                            ng-change="loadMainData()">
-                                        <option value="" selected="selected">დავის საგანი</option>
-                                        <option ng-repeat="v in litigationsubjects"
-                                                ng-selected="v.litigationSubjectId === srchCase.litigationSubjectId"
-                                                value="{{v.litigationSubjectId}}">
-                                            {{v.name}}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <select class="form-control" ng-model="srchCase.courtInstanceId"
-                                            ng-change="loadMainData()">
-                                        <option value="" selected="selected">სასამართლო ინსტანცია</option>
-                                        <option ng-repeat="v in courtInstances"
-                                                ng-selected="v.instanceId === srchCase.courtInstanceId"
-                                                value="{{v.instanceId}}">{{v.name}}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <select class="form-control" ng-model="srchCase.endResultId"
-                                            ng-change="loadMainData()">
-                                        <option value="" selected="selected">დამთავრების შედეგი</option>
-                                        <option ng-repeat="v in endresults"
-                                                ng-selected="srchCase.endResultId === v.endResultId"
-                                                value="{{v.endResultId}}">{{v.name}}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <select class="form-control" ng-model="srchCase.courtId" ng-change="loadMainData()">
-                                        <option value="" selected="selected">სასამართლო</option>
-                                        <option ng-repeat="v in courts"
-                                                ng-selected="v.courtId === srchCase.courtId"
-                                                value="{{v.courtId}}">{{v.name}}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <select class="form-control" ng-model="srchCase.statusId"
-                                            ng-change="loadMainData()">
-                                        <option value="" selected="selected">სტატუსი</option>
-                                        <option ng-repeat="v in statuses"
-                                                ng-selected="v.statusId === srchCase.statusId"
-                                                value="{{v.statusId}}">{{v.name}}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <select class="form-control" ng-model="srchCase.addUserId"
-                                            ng-change="loadMainData()">
-                                        <option value="" selected="selected">მომხმარებელი</option>
-                                        <option ng-repeat="v in users"
-                                                ng-selected="v.userId === srchCase.addUserId"
-                                                value="{{v.userId}}">{{v.firstname}}{{v.lastname}}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <select class="form-control" ng-model="srchCase.boardId"
-                                            ng-change="loadMainData()">
-                                        <option value="" selected="selected">კოლეგია</option>
-                                        <option ng-repeat="v in boards" ng-selected="v.boardId === srchCase.boardId"
-                                                value="{{v.boardId}}">{{v.name}}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <select class="form-control" ng-model="srchCase.ministryStatus"
-                                            ng-change="loadMainData()">
-                                        <option value="" selected="selected">სამინისტროს სტატ.</option>
-                                        <option ng-selected="1 === srchCase.ministryStatus" value="{{1}}">მოპასუხე
-                                        </option>
-                                        <option ng-selected="2 === srchCase.ministryStatus" value="{{2}}">მესამე პირი
+                                        <option value="" selected="selected">ქალაქი</option>
+                                        <option ng-repeat="v in cities" ng-selected="v.id === srchCase.cityId"
+                                                value="{{v.id}}">{{v.name}}
                                         </option>
                                     </select>
                                 </div>
@@ -775,14 +711,11 @@
                         <thead>
                         <tr>
                             <th>ID</th>
-                            <th>დასახელება</th>
-                            <th>საქმის #</th>
-                            <th>სასამართლო</th>
-                            <th>მოსამართლე</th>
-                            <th>საქმე დაიწყო</th>
-                            <th>საქმე დასრულდა</th>
-                            <th>თანამშრომელი</th>
-                            <th>სტატუსი</th>
+                            <th>Name</th>
+                            <th>Contact Email</th>
+                            <th>field 4</th>
+                            <th>field 5</th>
+                            <th>field 6</th>
                             <th class="col-md-2 text-center">Action</th>
                         </tr>
                         </thead>
@@ -794,9 +727,6 @@
                             <td>{{r.courtName}}</td>
                             <td>{{r.judgeName}}</td>
                             <td>{{r.caseStartDate}}</td>
-                            <td>{{r.caseEndDate}}</td>
-                            <td>{{r.addUserName}}</td>
-                            <td>{{r.statusName}}</td>
                             <td class="text-center">
                                 <a ng-click="showDetails(r.caseId)" data-toggle="modal" title="დეტალურად"
                                    data-target="#detailModal" class="btn btn-xs">
