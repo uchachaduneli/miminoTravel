@@ -140,9 +140,9 @@
                 <hr/>
                 <ul class="sidebar-menu" data-widget="tree">
                     <li>
-                        <a class="menuItem" href="cases">
+                        <a class="menuItem" href="home">
                             <i class="fa fa-briefcase"></i>
-                            <span>საქმე</span>
+                            <span>Requests</span>
                             </span>
                         </a>
                     </li>
@@ -150,14 +150,14 @@
                         <li>
                             <a href="users">
                                 <i class="fa fa-users"></i>
-                                <span>მომხმარებლები</span>
+                                <span>Users</span>
                                 </span>
                             </a>
                         </li>
                         <li>
                             <a href="statistics">
                                 <i class="fa fa-bar-chart"></i>
-                                <span>სტატისტიკა</span>
+                                <span>Statistics</span>
                                 </span>
                             </a>
                         </li>
