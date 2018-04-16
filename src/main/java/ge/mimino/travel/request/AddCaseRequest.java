@@ -1,82 +1,42 @@
-package ge.mimino.travel.dto;
+package ge.mimino.travel.request;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import ge.mimino.travel.misc.JsonDateSerializeSupport;
-import ge.mimino.travel.model.Case;
+import ge.mimino.travel.model.City;
+import ge.mimino.travel.model.Currency;
+import ge.mimino.travel.model.MealCategory;
+import ge.mimino.travel.model.PackageCategory;
 
+import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
-public class CaseDTO {
-
+public class AddCaseRequest {
     private Integer id;
     private String contactEmail;
     private Integer combined;
-    @JsonSerialize(using = JsonDateSerializeSupport.class)
     private Date tourStart;
-    @JsonSerialize(using = JsonDateSerializeSupport.class)
     private Date tourEnd;
     private Integer daysCount;
     private Integer nightsCount;
     private Integer touristsCount;
     private String touristsCountNote;
-    @JsonSerialize(using = JsonDateSerializeSupport.class)
     private Date arrivalTime;
-    @JsonSerialize(using = JsonDateSerializeSupport.class)
     private Date leaveTime;
-    private CityDTO arrivalCity;
-    private CityDTO leaveCity;
+    private City arrivalCity;
+    private Integer arrivalCityId;
+    private City leaveCity;
+    private Integer leaveCityId;
     private String tourType;
     private String guideDriver;
     private String hotelCategory;
-    private MealCategoryDTO mealCategory;
+    private MealCategory mealCategory;
+    private Integer mealCategoryId;
     private String entranceFees;
-    private CurrencyDTO currency;
+    private Currency currency;
+    private Integer currencyId;
     private String comment;
     private Double budget;
-    private PackageCategoryDTO packageCategory;
-    @JsonSerialize(using = JsonDateSerializeSupport.class)
+    private PackageCategory packageCategory;
+    private Integer packageCategoryId;
     private Timestamp createDate;
-
-
-    public static CaseDTO parse(Case record) {
-        CaseDTO dto = new CaseDTO();
-        dto.setId(record.getId());
-        dto.setContactEmail(record.getContactEmail());
-        dto.setCombined(record.getCombined());
-        dto.setTourStart(record.getTourStart());
-        dto.setTourEnd(record.getTourEnd());
-        dto.setDaysCount(record.getDaysCount());
-        dto.setNightsCount(record.getNightsCount());
-        dto.setTouristsCount(record.getTouristsCount());
-        dto.setTouristsCountNote(record.getTouristsCountNote());
-        dto.setArrivalTime(record.getArrivalTime());
-        dto.setLeaveTime(record.getLeaveTime());
-        dto.setArrivalCity(CityDTO.parse(record.getArrivalCity()));
-        dto.setLeaveCity(CityDTO.parse(record.getLeaveCity()));
-        dto.setTourType(record.getTourType());
-        dto.setGuideDriver(record.getGuideDriver());
-        dto.setHotelCategory(record.getHotelCategory());
-        dto.setMealCategory(MealCategoryDTO.parse(record.getMealCategory()));
-        dto.setEntranceFees(record.getEntranceFees());
-        dto.setCurrency(CurrencyDTO.parse(record.getCurrency()));
-        dto.setComment(record.getComment());
-        dto.setBudget(record.getBudget());
-        dto.setPackageCategory(PackageCategoryDTO.parse(record.getPackageCategory()));
-        dto.setCreateDate(record.getCreateDate());
-        return dto;
-    }
-
-
-    public static List<CaseDTO> parseToList(List<Case> records) {
-        ArrayList<CaseDTO> list = new ArrayList<CaseDTO>();
-        for (Case record : records) {
-            list.add(CaseDTO.parse(record));
-        }
-        return list;
-    }
 
     public Integer getId() {
         return id;
@@ -166,20 +126,36 @@ public class CaseDTO {
         this.leaveTime = leaveTime;
     }
 
-    public CityDTO getArrivalCity() {
+    public City getArrivalCity() {
         return arrivalCity;
     }
 
-    public void setArrivalCity(CityDTO arrivalCity) {
+    public void setArrivalCity(City arrivalCity) {
         this.arrivalCity = arrivalCity;
     }
 
-    public CityDTO getLeaveCity() {
+    public Integer getArrivalCityId() {
+        return arrivalCityId;
+    }
+
+    public void setArrivalCityId(Integer arrivalCityId) {
+        this.arrivalCityId = arrivalCityId;
+    }
+
+    public City getLeaveCity() {
         return leaveCity;
     }
 
-    public void setLeaveCity(CityDTO leaveCity) {
+    public void setLeaveCity(City leaveCity) {
         this.leaveCity = leaveCity;
+    }
+
+    public Integer getLeaveCityId() {
+        return leaveCityId;
+    }
+
+    public void setLeaveCityId(Integer leaveCityId) {
+        this.leaveCityId = leaveCityId;
     }
 
     public String getTourType() {
@@ -206,12 +182,20 @@ public class CaseDTO {
         this.hotelCategory = hotelCategory;
     }
 
-    public MealCategoryDTO getMealCategory() {
+    public MealCategory getMealCategory() {
         return mealCategory;
     }
 
-    public void setMealCategory(MealCategoryDTO mealCategory) {
+    public void setMealCategory(MealCategory mealCategory) {
         this.mealCategory = mealCategory;
+    }
+
+    public Integer getMealCategoryId() {
+        return mealCategoryId;
+    }
+
+    public void setMealCategoryId(Integer mealCategoryId) {
+        this.mealCategoryId = mealCategoryId;
     }
 
     public String getEntranceFees() {
@@ -222,12 +206,20 @@ public class CaseDTO {
         this.entranceFees = entranceFees;
     }
 
-    public CurrencyDTO getCurrency() {
+    public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(CurrencyDTO currency) {
+    public void setCurrency(Currency currency) {
         this.currency = currency;
+    }
+
+    public Integer getCurrencyId() {
+        return currencyId;
+    }
+
+    public void setCurrencyId(Integer currencyId) {
+        this.currencyId = currencyId;
     }
 
     public String getComment() {
@@ -246,12 +238,20 @@ public class CaseDTO {
         this.budget = budget;
     }
 
-    public PackageCategoryDTO getPackageCategory() {
+    public PackageCategory getPackageCategory() {
         return packageCategory;
     }
 
-    public void setPackageCategory(PackageCategoryDTO packageCategory) {
+    public void setPackageCategory(PackageCategory packageCategory) {
         this.packageCategory = packageCategory;
+    }
+
+    public Integer getPackageCategoryId() {
+        return packageCategoryId;
+    }
+
+    public void setPackageCategoryId(Integer packageCategoryId) {
+        this.packageCategoryId = packageCategoryId;
     }
 
     public Timestamp getCreateDate() {

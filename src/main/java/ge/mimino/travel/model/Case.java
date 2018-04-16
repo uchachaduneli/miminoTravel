@@ -15,8 +15,8 @@ public class Case {
     private Integer nightsCount;
     private Integer touristsCount;
     private String touristsCountNote;
-    private Timestamp arrivalTime;
-    private Timestamp leaveTime;
+    private Date arrivalTime;
+    private Date leaveTime;
     private City arrivalCity;
     private City leaveCity;
     private String tourType;
@@ -25,10 +25,10 @@ public class Case {
     private MealCategory mealCategory;
     private String entranceFees;
     private Currency currency;
-    private String other;
     private String comment;
     private Double budget;
     private PackageCategory packageCategory;
+    private Timestamp createDate;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -123,21 +123,21 @@ public class Case {
 
     @Basic
     @Column(name = "arrival_time", nullable = false)
-    public Timestamp getArrivalTime() {
+    public Date getArrivalTime() {
         return arrivalTime;
     }
 
-    public void setArrivalTime(Timestamp arrivalTime) {
+    public void setArrivalTime(Date arrivalTime) {
         this.arrivalTime = arrivalTime;
     }
 
     @Basic
     @Column(name = "leave_time", nullable = false)
-    public Timestamp getLeaveTime() {
+    public Date getLeaveTime() {
         return leaveTime;
     }
 
-    public void setLeaveTime(Timestamp leaveTime) {
+    public void setLeaveTime(Date leaveTime) {
         this.leaveTime = leaveTime;
     }
 
@@ -222,16 +222,6 @@ public class Case {
     }
 
     @Basic
-    @Column(name = "other", nullable = false, length = -1)
-    public String getOther() {
-        return other;
-    }
-
-    public void setOther(String other) {
-        this.other = other;
-    }
-
-    @Basic
     @Column(name = "comment", nullable = false, length = -1)
     public String getComment() {
         return comment;
@@ -259,5 +249,15 @@ public class Case {
 
     public void setPackageCategory(PackageCategory packageCategory) {
         this.packageCategory = packageCategory;
+    }
+
+    @Basic
+    @Column(name = "create_date", updatable = false, insertable = false)
+    public Timestamp getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Timestamp createDate) {
+        this.createDate = createDate;
     }
 }
