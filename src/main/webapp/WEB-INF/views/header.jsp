@@ -146,6 +146,13 @@
                             </span>
                         </a>
                     </li>
+                    <li>
+                        <a class="menuItem" href="home">
+                            <i class="fa fa-briefcase"></i>
+                            <span>Contact Database</span>
+                            </span>
+                        </a>
+                    </li>
                     <c:if test="<%= isAdmin %>">
                         <li>
                             <a href="users">
