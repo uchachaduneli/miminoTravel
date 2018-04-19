@@ -16,6 +16,7 @@ public class AddContactRequest {
     private String activity;
     private Date nextActivity;
     private String phone;
+    private String email;
     private String website;
     private Integer countryId;
     private Country country;
@@ -26,6 +27,14 @@ public class AddContactRequest {
     private Timestamp createDate;
     private Users user;
     private Integer userId;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public Users getUser() {
         return user;

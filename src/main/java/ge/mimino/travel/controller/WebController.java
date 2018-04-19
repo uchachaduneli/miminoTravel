@@ -25,6 +25,11 @@ public class WebController {
         return "login";
     }
 
+    @RequestMapping("/contacts")
+    public String contacts() {
+        return "contacts";
+    }
+
     @RequestMapping("/")
     public String defaultFnc() {
         return "";

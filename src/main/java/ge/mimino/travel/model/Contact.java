@@ -14,6 +14,7 @@ public class Contact {
     private String activity;
     private Date nextActivity;
     private String phone;
+    private String email;
     private String website;
     private Country country;
     private String city;
@@ -101,6 +102,16 @@ public class Contact {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    @Basic
+    @Column(name = "email")
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Basic

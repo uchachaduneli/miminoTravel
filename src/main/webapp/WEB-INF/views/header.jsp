@@ -44,10 +44,10 @@
             $('.menuItem').filter(function () {
                 return this.href.indexOf(url.pathname) > -1;
             }).addClass('active');
-            if (url.pathname.indexOf("cases") > -1) {
-                $('#selected_item').text("საქმე");
-            } else if (url.pathname.indexOf("courts") > -1) {
-                $('#selected_item').text("სასამართლოები");
+            if (url.pathname.indexOf("home") > -1) {
+                $('#selected_item').text("Requests");
+            } else if (url.pathname.indexOf("contacts") > -1) {
+                $('#selected_item').text("Contacts Database");
             }
 
         });
@@ -63,10 +63,10 @@
             $scope.changePassword = function () {
                 function resFunc(res) {
                     if (res.errorCode == 0) {
-                        successMsg('ოპერაცია დასრულდა წარმატებით');
+                        successMsg('Operation Successfull');
                         closeModal('dropdown');
                     } else {
-                        errorMsg('ოპერაცია არ სრულდება გადაამოწმეთ ველების სისწორე');
+                        errorMsg('Operation Failed');
                     }
                     $scope.newpass = {};
                 }
@@ -84,7 +84,7 @@
         </a>
         <nav class="navbar navbar-static-top">
             <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-                <span class="sr-only">მენიუს შეკეცვა</span>
+                <span class="sr-only">Collapse Menu</span>
             </a>
 
             <div class="navbar-custom-menu" ng-controller="profileCtrl">
@@ -147,9 +147,9 @@
                         </a>
                     </li>
                     <li>
-                        <a class="menuItem" href="home">
-                            <i class="fa fa-briefcase"></i>
-                            <span>Contact Database</span>
+                        <a class="menuItem" href="contacts">
+                            <i class="fa fa-share-alt"></i>
+                            <span>Contact Db</span>
                             </span>
                         </a>
                     </li>

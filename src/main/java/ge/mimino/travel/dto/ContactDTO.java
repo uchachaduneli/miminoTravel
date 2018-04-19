@@ -21,10 +21,12 @@ public class ContactDTO {
     @JsonSerialize(using = JsonDateSerializeSupport.class)
     private Date nextActivity;
     private String phone;
+    private String email;
     private String website;
     private CountryDTO country;
     private String city;
     private ContactRankDTO rank;
+    private UsersDTO user;
     private String source;
     @JsonSerialize(using = JsonDateSerializeSupport.class)
     private Timestamp createDate;
@@ -40,10 +42,12 @@ public class ContactDTO {
         dto.setActivity(record.getActivity());
         dto.setNextActivity(record.getNextActivity());
         dto.setPhone(record.getPhone());
+        dto.setEmail(record.getEmail());
         dto.setWebsite(record.getWebsite());
         dto.setCountry(CountryDTO.parse(record.getCountry()));
         dto.setCity(record.getCity());
         dto.setRank(ContactRankDTO.parse(record.getRank()));
+        dto.setUser(UsersDTO.parse(record.getUser()));
         dto.setSource(record.getSource());
         dto.setCreateDate(record.getCreateDate());
         return dto;
@@ -56,6 +60,22 @@ public class ContactDTO {
             list.add(ContactDTO.parse(record));
         }
         return list;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public UsersDTO getUser() {
+        return user;
+    }
+
+    public void setUser(UsersDTO user) {
+        this.user = user;
     }
 
     public Integer getId() {

@@ -52,6 +52,18 @@ public class ContactController {
         return Response.withSuccess(contactService.getContactCategories(contactId));
     }
 
+    @RequestMapping("/get-statuses")
+    @ResponseBody
+    private Response getStatuses() throws Exception {
+        return Response.withSuccess(contactService.getContactStatuses());
+    }
+
+    @RequestMapping("/get-status-history")
+    @ResponseBody
+    private Response getStatusHistory(@RequestParam Integer contactId) throws Exception {
+        return Response.withSuccess(contactService.getContactStatusHistory(contactId));
+    }
+
     @RequestMapping("/get-ranks")
     @ResponseBody
     private Response getRanks() throws Exception {

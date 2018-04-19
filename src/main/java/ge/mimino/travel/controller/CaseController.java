@@ -1,9 +1,9 @@
 package ge.mimino.travel.controller;
 
-import ge.mimino.travel.dto.ContactDTO;
+import ge.mimino.travel.dto.CaseDTO;
 import ge.mimino.travel.misc.Response;
-import ge.mimino.travel.request.AddContactRequest;
-import ge.mimino.travel.service.ContactService;
+import ge.mimino.travel.request.AddCaseRequest;
+import ge.mimino.travel.service.CaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,47 +15,35 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * @author ucha
  */
-@RequestMapping("/users")
+@RequestMapping("/cases")
 @Controller
 public class CaseController {
 
     @Autowired
-    private ContactService contactService;
+    private CaseService caseService;
 
-    @RequestMapping("/get-contacts")
+    @RequestMapping("/get-cases")
     @ResponseBody
     private Response getContacts() throws Exception {
-        return Response.withSuccess(contactService.getContacts());
+        return Response.withSuccess(caseService.getCases());
     }
 
-    @RequestMapping("/get-types")
+    @RequestMapping("/get-case-countries")
     @ResponseBody
-    private Response getTypes() throws Exception {
-        return Response.withSuccess(contactService.getTypes());
+    private Response getCaseCountries(@RequestParam Integer caseId) throws Exception {
+        return Response.withSuccess(caseService.getCaseCountries(caseId));
     }
 
-    @RequestMapping("/get-contact-types")
+    @RequestMapping({"/save-case"})
     @ResponseBody
-    private Response getContactTypes(@RequestParam Integer contactId) throws Exception {
-        return Response.withSuccess(contactService.getContactTypes(contactId));
-    }
-
-    @RequestMapping("/get-ranks")
-    @ResponseBody
-    private Response getRanks() throws Exception {
-        return Response.withSuccess(contactService.getContactRanks());
-    }
-
-    @RequestMapping({"/save-contact"})
-    @ResponseBody
-    public Response saveUser(@RequestBody AddContactRequest request) throws Exception {
-        return Response.withSuccess(ContactDTO.parse(contactService.save(request)));
+    public Response saveUser(@RequestBody AddCaseRequest request) throws Exception {
+        return Response.withSuccess(CaseDTO.parse(caseService.save(request)));
     }
 
     @RequestMapping({"/delete-contact"})
     @ResponseBody
     public Response delete(@RequestParam int id) {
-        contactService.delete(id);
+        caseService.delete(id);
         return Response.withSuccess(true);
     }
 
