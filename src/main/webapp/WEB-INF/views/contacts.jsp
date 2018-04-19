@@ -80,11 +80,29 @@
 
         $scope.loadMainData();
 
-        function get(res) {
-            $scope. = res.data;
+        function getTypes(res) {
+            $scope.types = res.data;
         }
 
-        ajaxCall($http, "misc/get-", null, get);
+        ajaxCall($http, "misc/get-types", null, getTypes);
+
+        function getCategories(res) {
+            $scope.categories = res.data;
+        }
+
+        ajaxCall($http, "misc/get-categories", null, getCategories);
+
+        function getStatuses(res) {
+            $scope.statuses = res.data;
+        }
+
+        ajaxCall($http, "misc/get-statuses", null, getStatuses);
+
+        function getRanks(res) {
+            $scope.ranks = res.data;
+        }
+
+        ajaxCall($http, "misc/get-ranks", null, getRanks);
 
 //        $scope.remove = function (id) {
 //            if (confirm("დარწმუნებული ხართ რომ გსურთ წაშლა?")) {
