@@ -20,6 +20,7 @@ public class Contact {
     private ContactRank rank;
     private String source;
     private Timestamp createDate;
+    private Users user;
 
     @Id
     @Column(name = "id")
@@ -152,8 +153,18 @@ public class Contact {
         this.source = source;
     }
 
+    @JoinColumn(name = "user_id")
+    @OneToOne
+    public Users getUser() {
+        return user;
+    }
+
+    public void setUser(Users user) {
+        this.user = user;
+    }
+
     @Basic
-    @Column(name = "create_date")
+    @Column(name = "create_date", updatable = false, insertable = false)
     public Timestamp getCreateDate() {
         return createDate;
     }

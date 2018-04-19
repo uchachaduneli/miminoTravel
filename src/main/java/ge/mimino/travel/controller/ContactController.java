@@ -40,6 +40,18 @@ public class ContactController {
         return Response.withSuccess(contactService.getContactTypes(contactId));
     }
 
+    @RequestMapping("/get-categories")
+    @ResponseBody
+    private Response getCategories() throws Exception {
+        return Response.withSuccess(contactService.getCategories());
+    }
+
+    @RequestMapping("/get-contact-categories")
+    @ResponseBody
+    private Response getContactCategories(@RequestParam Integer contactId) throws Exception {
+        return Response.withSuccess(contactService.getContactCategories(contactId));
+    }
+
     @RequestMapping("/get-ranks")
     @ResponseBody
     private Response getRanks() throws Exception {

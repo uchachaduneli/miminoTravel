@@ -2,6 +2,7 @@ package ge.mimino.travel.request;
 
 import ge.mimino.travel.model.ContactRank;
 import ge.mimino.travel.model.Country;
+import ge.mimino.travel.model.Users;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -23,6 +24,24 @@ public class AddContactRequest {
     private ContactRank rank;
     private String source;
     private Timestamp createDate;
+    private Users user;
+    private Integer userId;
+
+    public Users getUser() {
+        return user;
+    }
+
+    public void setUser(Users user) {
+        this.user = user;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
     public Country getCountry() {
         return country;
