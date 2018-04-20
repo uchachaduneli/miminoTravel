@@ -41,19 +41,25 @@
         $scope.start = 0;
         $scope.page = 1;
         $scope.limit = "10";
-        $scope.request = {docs: []};
+        $scope.request = {types: [], categories: [], statusHistory: []};
         $scope.srchCase = {};
 //        $scope.request.docs = [];
 
         $scope.loadMainData = function () {
             function getMainData(res) {
-                $scope.list = res.data.list;
+                $scope.list = res.data;
             }
 
-            ajaxCall($http, "cases/get-contacts?start=" + $scope.start + "&limit=" + $scope.limit, angular.toJson($scope.srchCase), getMainData);
+            ajaxCall($http, "contact/get-contacts?start=" + $scope.start + "&limit=" + $scope.limit, angular.toJson($scope.srchCase), getMainData);
         }
 
         $scope.loadMainData();
+
+        function getCountries(res) {
+            $scope.countries = res.data;
+        }
+
+        ajaxCall($http, "misc/get-countries", null, getCountries);
 
         function getTypes(res) {
             $scope.types = res.data;
@@ -94,30 +100,47 @@
             }
         };
 
+        $scope.edit = function (id) {
+            if (id != undefined) {
+                var selected = $filter('filter')($scope.list, {id: id}, true);
+                $scope.slcted = selected[0];
+                $scope.loadContactDetailsList($scope.slcted.id);
+            }
+        }
+
         $scope.showDetails = function (id) {
             if (id != undefined) {
-                var selected = $filter('filter')($scope.list, {caseId: id}, true);
+                var selected = $filter('filter')($scope.list, {id: id}, true);
                 $scope.slcted = selected[0];
 
-                $scope.loadContactDetailsList($scope.slcted.caseId);
+                $scope.loadContactDetailsList($scope.slcted.id);
             }
         };
 
         $scope.loadContactDetailsList = function (id) {
             function getContactTypes(res) {
                 $scope.slcted.contactTypes = res.data;
+                angular.forEach($scope.slcted.contactTypes, function (v) {
+                    $scope.request.types.push(v.type.id);
+                });
             }
 
             ajaxCall($http, "contact/get-contact-types?id=" + id, null, getContactTypes);
 
             function getContactCategories(res) {
                 $scope.slcted.contactCategories = res.data;
+                angular.forEach($scope.slcted.contactCategories, function (v) {
+                    $scope.request.categories.push(v.category.id);
+                });
             }
 
             ajaxCall($http, "contact/get-contact-categories?id=" + id, null, getContactCategories);
 
             function getContactStatusHistory(res) {
                 $scope.slcted.contactStatusHistory = res.data;
+                angular.forEach($scope.slcted.contactStatusHistory, function (v) {
+                    $scope.request.statusHistory.push(v.status.id);
+                });
             }
 
             ajaxCall($http, "contact/get-status-history?id=" + id, null, getContactStatusHistory);
@@ -129,9 +152,19 @@
         };
 
         $scope.init = function () {
-            $scope.request = {docs: []};
+            $scope.request = {types: [], categories: [], statusHistory: []};
             $('#uploadDocNameInput').val();
         };
+
+        $scope.isChecked = function (id, matches) {
+            var isChecked = false;
+            angular.forEach(matches, function (match) {
+                if (match === id) {
+                    isChecked = true;
+                }
+            });
+            return isChecked;
+        }
 //
 //        $scope.save = function () {
 //
@@ -294,25 +327,6 @@
                 <h4 class="modal-title" id="editModalLabel">Fill The Infromation</h4>
             </div>
             <div class="modal-body">
-                <%--private Integer id;--%>
-                <%--private String name;--%>
-                <%--private String contactPerson;--%>
-                <%--private String info;--%>
-                <%--@JsonSerialize(using = JsonDateSerializeSupport.class)--%>
-                <%--private Date lastActivity;--%>
-                <%--private String activity;--%>
-                <%--@JsonSerialize(using = JsonDateSerializeSupport.class)--%>
-                <%--private Date nextActivity;--%>
-                <%--private String phone;--%>
-                <%--private String email;--%>
-                <%--private String website;--%>
-                <%--private CountryDTO country;--%>
-                <%--private String city;--%>
-                <%--private ContactRankDTO rank;--%>
-                <%--private UsersDTO user;--%>
-                <%--private String source;--%>
-                <%--@JsonSerialize(using = JsonDateSerializeSupport.class)--%>
-                <%--private Timestamp createDate;--%>
                 <div class="row">
                     <form class="form-horizontal" name="ediFormName">
                         <div class="form-group col-sm-10 ">
@@ -357,108 +371,72 @@
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">დავის შინაარსი (*)</label>
+                            <label class="control-label col-sm-3">Phone</label>
                             <div class="col-sm-9">
-                                <textarea rows="5" cols="10" ng-model="request.litigationDescription"
-                                          name="litigationDescription" required
-                                          class="form-control input-sm"></textarea>
+                                <input ng-model="request.phone" type="text" name="phone" required
+                                       class="form-control input-sm"/>
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">სასამართლო ინსტანცია (*)</label>
+                            <label class="control-label col-sm-3">Website</label>
                             <div class="col-sm-9">
-                                <select class="form-control" ng-model="request.courtInstanceId" name="courtInstanceId"
+                                <input ng-model="request.website" type="text" name="website" required
+                                       class="form-control input-sm"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3">Country</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" ng-model="request.countryId" name="countryId"
                                         required>
-                                    <option ng-repeat="v in courtInstances"
-                                            ng-selected="v.instanceId === request.courtInstanceId"
-                                            value="{{v.instanceId}}">{{v.name}}
+                                    <option ng-repeat="v in countries"
+                                            ng-selected="v.id === request.country.id"
+                                            value="{{v.id}}">{{v.name}}
                                     </option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">საქმის დამთავრების შედეგი (*)</label>
+                            <label class="control-label col-sm-3">City</label>
                             <div class="col-sm-9">
-                                <select class="form-control" ng-model="request.endResultId" name="endResultId" required>
-                                    <option ng-repeat="v in endresults"
-                                            ng-selected="request.endResultId === v.endResultId"
-                                            value="{{v.endResultId}}">{{v.name}}
-                                    </option>
-                                </select>
+                                <input ng-model="request.city" type="text" name="city" required
+                                       class="form-control input-sm"/>
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">სასამართლო (*)</label>
+                            <label class="control-label col-sm-3">Rank</label>
                             <div class="col-sm-9">
-                                <select class="form-control" ng-model="request.courtId" name="courtId" required>
-                                    <option ng-repeat="v in courts" ng-selected="v.courtId === request.courtId"
-                                            value="{{v.courtId}}">{{v.name}}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">სამინისტროს სტატუსი (*)</label>
-                            <div class="col-sm-9">
-                                <select class="form-control" ng-model="request.ministryStatus" name="ministryStatus"
+                                <select class="form-control" ng-model="request.rankId" name="rankId"
                                         required>
-                                    <option ng-selected="1 === request.ministryStatus" value="{{1}}">მოპასუხე
-                                    </option>
-                                    <option ng-selected="2 === request.ministryStatus" value="{{2}}">მესამე პირი
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">მესამე პირები</label>
-                            <div class="col-sm-9">
-                                <textarea rows="5" cols="10" ng-model="request.thirdPersons"
-                                          name="thirdPersons" required
-                                          class="form-control input-sm"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">საქმის სტატუსი (*)</label>
-                            <div class="col-sm-9">
-                                <select class="form-control" ng-model="request.statusId" name="statusId" required>
-                                    <option ng-repeat="v in statuses" ng-selected="v.statusId === request.statusId"
-                                            value="{{v.statusId}}">{{v.name}}
+                                    <option ng-repeat="v in ranks"
+                                            ng-selected="v.id === request.rank.id"
+                                            value="{{v.id}}">{{v.name}}
                                     </option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">შენიშვნა</label>
+                            <label class="control-label col-sm-3">Types</label>
                             <div class="col-sm-9">
-                                <textarea rows="5" cols="10" ng-model="request.note"
+                                <label ng-repeat="t in types">
+                                    <input type="checkbox" ng-model="request.types" checklist-value="t.id"
+                                           ng-checked="isChecked(t.id,request.types)"> {{t.name}}
+                                </label>
+                                <select class="form-control" ng-model="request.rankId" name="rankId"
+                                        required>
+                                    <option ng-repeat="v in ranks"
+                                            ng-selected="v.id === request.rank.id"
+                                            value="{{v.id}}">{{v.name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3">Source</label>
+                            <div class="col-sm-9">
+                                <textarea rows="5" cols="10" ng-model="request.source"
+                                          name="source" required
                                           class="form-control input-sm"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">საქმის დოკუმენტები</label>
-                            <div class="col-sm-9">
-                                <div class="input-group input-file" name="Fichier1">
-                                    <input name="upload" type="file" id="documentId"
-                                           onchange="angular.element(this).scope().addDocument()"
-                                           style="display: none;"/>
-                                    <input type="text" id="uploadDocNameInput" class="form-control"
-                                           onclick="$('#documentId').trigger('click');"
-                                           placeholder='აირჩიეთ ფაილი...'/>
-                                    <span class="input-group-btn">
-        		                        <button class="btn btn-default btn-choose" type="button"
-                                                onclick="$('#documentId').trigger('click');">არჩევა</button>
-    		                        </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">დოკუმენტები ({{request.docs.length}})</label>
-                            <div class="col-sm-9">
-                                <ul>
-                                    <li class="col-md-12" ng-repeat="k in request.docs">{{k.name}}
-                                        &nbsp;&nbsp;&nbsp;<span class="fa fa-trash-o" ng-click="removeDoc()"></span>
-                                    </li>
-                                </ul>
                             </div>
                         </div>
                         <div class="form-group col-sm-10"></div>
@@ -507,27 +485,6 @@
                     <div id="filter-panel" class="filter-panel">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <%--<div class="form-group col-md-1">--%>
-                                <%--<input type="text" class="form-control srch" ng-model="srchCase.caseId"--%>
-                                <%--placeholder="ID">--%>
-                                <%--</div>--%>
-                                <%--<div class="form-group col-md-2">--%>
-                                <%--<input type="text" class="form-control srch" ng-model="srchCase.name"--%>
-                                <%--placeholder="დასახელება">--%>
-                                <%--</div>--%>
-                                <%--<div class="form-group col-md-2">--%>
-                                <%--<input type="text" class="form-control srch" ng-model="srchCase.number"--%>
-                                <%--placeholder="საქმის #">--%>
-                                <%--</div>--%>
-                                <%--<div class="form-group col-md-2">--%>
-                                <%--<input type="text" class="form-control srch"--%>
-                                <%--ng-model="srchCase.judgeAssistant" placeholder="თანაშემწე">--%>
-                                <%--</div>--%>
-                                <%--<div class="form-group col-md-2">--%>
-                                <%--<input type="text" class="form-control srch"--%>
-                                <%--ng-model="srchCase.judgeAssistantPhone" placeholder="თანაშემწის ტელ.">--%>
-                                <%--</div>--%>
-
                                 <div class="form-group col-md-2">
                                     <select class="form-control" ng-model="srchCase.judgeId" ng-change="loadMainData()">
                                         <option value="" selected="selected">ქალაქი</option>
@@ -538,7 +495,7 @@
                                 </div>
                                 <div class="form-group col-md-2">
                                     <button class="btn btn-default col-md-11" ng-click="loadMainData()" id="srchBtnId">
-                                        <span class="fa fa-search"></span> &nbsp; &nbsp;ძებნა &nbsp; &nbsp;
+                                        <span class="fa fa-search"></span> &nbsp; &nbsp;Search &nbsp; &nbsp;
                                     </button>
                                 </div>
                             </div>
@@ -560,7 +517,7 @@
                         </tr>
                         </thead>
                         <tbody title="Double Click For Detailed Information">
-                        <tr ng-repeat="r in list" ng-dblclick="handleDoubleClick(r.caseId)">
+                        <tr ng-repeat="r in list" ng-dblclick="handleDoubleClick(r.id)">
                             <td>{{r.id}}</td>
                             <td>{{r.name}}</td>
                             <td>{{r.email}}</td>
@@ -577,7 +534,7 @@
                                    class="btn btn-xs">
                                     <i class="fa fa-pencil"></i>&nbsp;Edit
                                 </a>&nbsp;&nbsp;
-                                <a ng-click="remove(r.caseId)" class="btn btn-xs">
+                                <a ng-click="remove(r.id)" class="btn btn-xs">
                                     <i class="fa fa-trash-o"></i>&nbsp;Remove
                                 </a>
                                 <%--</c:if>--%>
