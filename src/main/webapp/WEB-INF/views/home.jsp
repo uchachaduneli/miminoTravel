@@ -7,31 +7,6 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="header.jsp" %>
-<style>
-    @media print {
-
-        body * {
-            visibility: hidden;
-        }
-
-        #printable * {
-            visibility: visible;
-        }
-
-        .modal {
-            position: absolute;
-            left: 0;
-            top: 0;
-            margin: 0;
-            padding: 0;
-            min-height: 550px
-        }
-
-        #printable button, i {
-            visibility: hidden !important;
-        }
-    }
-</style>
 <script>
 
     $(document).ready(function () {

@@ -7,31 +7,6 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="header.jsp" %>
-<style>
-    @media print {
-
-        body * {
-            visibility: hidden;
-        }
-
-        #printable * {
-            visibility: visible;
-        }
-
-        .modal {
-            position: absolute;
-            left: 0;
-            top: 0;
-            margin: 0;
-            padding: 0;
-            min-height: 550px
-        }
-
-        #printable button, i {
-            visibility: hidden !important;
-        }
-    }
-</style>
 <script>
 
     $(document).ready(function () {
@@ -84,64 +59,70 @@
             $scope.types = res.data;
         }
 
-        ajaxCall($http, "misc/get-types", null, getTypes);
+        ajaxCall($http, "contact/get-types", null, getTypes);
 
         function getCategories(res) {
             $scope.categories = res.data;
         }
 
-        ajaxCall($http, "misc/get-categories", null, getCategories);
+        ajaxCall($http, "contact/get-categories", null, getCategories);
 
         function getStatuses(res) {
             $scope.statuses = res.data;
         }
 
-        ajaxCall($http, "misc/get-statuses", null, getStatuses);
+        ajaxCall($http, "contact/get-statuses", null, getStatuses);
 
         function getRanks(res) {
             $scope.ranks = res.data;
         }
 
-        ajaxCall($http, "misc/get-ranks", null, getRanks);
+        ajaxCall($http, "contact/get-ranks", null, getRanks);
 
-//        $scope.remove = function (id) {
-//            if (confirm("დარწმუნებული ხართ რომ გსურთ წაშლა?")) {
-//                if (id != undefined) {
-//                    function resFnc(res) {
-//                        if (res.errorCode == 0) {
-//                            successMsg('ოპერაცია დასრულდა წარმატებით');
-//                            $scope.loadMainData();
-//                        }
-//                    }
-//
-//                    ajaxCall($http, "cases/delete-contact?id=" + id, null, resFnc);
-//                }
-//            }
-//        };
-//
-//        $scope.showDetails = function (id) {
-//            if (id != undefined) {
-//                var selected = $filter('filter')($scope.list, {caseId: id}, true);
-//                $scope.slcted = selected[0];
-//
-//                function rsFnc(res) {
-//                    $scope.caseInstances = res.data;
-//                }
-//
-//                ajaxCall($http, "cases/get-instance-history?id=" + $scope.slcted.caseId + "&number=" + $scope.slcted.groupId, null, rsFnc);
-//
-//                $scope.loadContactDetailsList($scope.slcted.caseId);
-//            }
-//        };
-//
-//        $scope.loadContactDetailsList = function (caseId) {
-//            function getDocNames(res) {
-//                $scope.request.docs = res.data;
-//            }
-//
-//            ajaxCall($http, "cases/get-doc-names?caseId=" + caseId, null, getDocNames);
-//        }
-//
+        $scope.remove = function (id) {
+            if (confirm("Pleace confirm operation?")) {
+                if (id != undefined) {
+                    function resFnc(res) {
+                        if (res.errorCode == 0) {
+                            successMsg('Operation Successfull');
+                            $scope.loadMainData();
+                        }
+                    }
+
+                    ajaxCall($http, "contact/delete-contact?id=" + id, null, resFnc);
+                }
+            }
+        };
+
+        $scope.showDetails = function (id) {
+            if (id != undefined) {
+                var selected = $filter('filter')($scope.list, {caseId: id}, true);
+                $scope.slcted = selected[0];
+
+                $scope.loadContactDetailsList($scope.slcted.caseId);
+            }
+        };
+
+        $scope.loadContactDetailsList = function (id) {
+            function getContactTypes(res) {
+                $scope.slcted.contactTypes = res.data;
+            }
+
+            ajaxCall($http, "contact/get-contact-types?id=" + id, null, getContactTypes);
+
+            function getContactCategories(res) {
+                $scope.slcted.contactCategories = res.data;
+            }
+
+            ajaxCall($http, "contact/get-contact-categories?id=" + id, null, getContactCategories);
+
+            function getContactStatusHistory(res) {
+                $scope.slcted.contactStatusHistory = res.data;
+            }
+
+            ajaxCall($http, "contact/get-status-history?id=" + id, null, getContactStatusHistory);
+        }
+
         $scope.handleDoubleClick = function (id) {
             $scope.showDetails(id);
             $('#detailModal').modal('show');
@@ -177,10 +158,7 @@
 //            ajaxCall($http, "cases/save-case", angular.toJson($scope.request), resFunc);
 //        };
 //
-//        $scope.chooseInstance = function (v) {
-//            $scope.slcted = v;
-//        }
-//
+
         $scope.handlePage = function (h) {
             if (parseInt(h) >= 0) {
                 $scope.page += 1;
@@ -201,101 +179,97 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="detailModalLabel">დეტალური ინფორმაცია</h4>
+                <h4 class="modal-title" id="detailModalLabel">Details</h4>
             </div>
             <div class="modal-body">
-                <ul class="nav nav-tabs col-md-12">
-                    <li ng-repeat="v in caseInstances" class="nav-item {{v.caseId === slcted.caseId ? 'active':''}}"
-                        style="cursor:pointer;">
-                        <a class="nav-link"
-                           ng-click="chooseInstance(v)">{{$index + 1}}. &nbsp;
-                            {{v.courtInstanceName}}</a>
-                    </li>
-                </ul>
                 <div class="row" id="printable">
                     <table class="table table-striped">
-                        <tr colspan="2">
-                            <button onclick="window.print()" id="prntBtnId" class="pull-right btn btn-default"
-                                    style="margin-right: 15px;"><i class="fa fa-print"
-                                                                   aria-hidden="true">
-                                &nbsp; ბეჭდვა</i></button>
-                        </tr>
                         <tr>
                             <th class="col-md-4 text-right">ID</th>
-                            <td>{{slcted.caseId}}</td>
+                            <td>{{slcted.id}}</td>
                         </tr>
                         <tr>
-                            <th class="text-right">დასახელება</th>
+                            <th class="text-right">Name</th>
                             <td>{{slcted.name}}</td>
                         </tr>
                         <tr>
-                            <th class="text-right">საიდენტიფიკაციო N</th>
-                            <td>{{slcted.number}}</td>
+                            <th class="text-right">Info</th>
+                            <td>{{slcted.info}}</td>
                         </tr>
                         <tr>
-                            <th class="text-right">სასამართლო</th>
-                            <td>{{slcted.courtName}}</td>
+                            <th class="text-right">Last Activity</th>
+                            <td>{{slcted.lastActivity}}</td>
                         </tr>
                         <tr>
-                            <th class="text-right">სამინისტროს სტატუსი</th>
-                            <td>{{slcted.ministryStatus === 1 ? 'მოპასუხე': slcted.ministryStatus === 2 ? 'მესამე პირი'
-                                :''}}
+                            <th class="text-right">Activity</th>
+                            <td>{{slcted.activity}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Next Activity</th>
+                            <td>{{slcted.nextActivity}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Phone</th>
+                            <td>{{slcted.phone}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Email</th>
+                            <td>{{slcted.email}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Website</th>
+                            <td>{{slcted.website}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Country</th>
+                            <td>{{slcted.country.name}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">City</th>
+                            <td>{{slcted.city}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Rank</th>
+                            <td>{{slcted.rank.name}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">User</th>
+                            <td>{{slcted.user.userDesc}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Source</th>
+                            <td>{{slcted.source}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Record Created</th>
+                            <td>{{slcted.createDate}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Types</th>
+                            <td>
+                                <ul>
+                                    <li ng-repeat="k in slcted.contactTypes">
+                                        {{k.type.name}}
+                                    </li>
+                                </ul>
                             </td>
                         </tr>
                         <tr>
-                            <th class="text-right">კოლეგია</th>
-                            <td>{{slcted.boardName}}</td>
-                        </tr>
-                        <tr>
-                            <th class="text-right">მოსამართლე</th>
-                            <td>{{slcted.judgeName}}</td>
-                        </tr>
-                        <tr>
-                            <th class="text-right">თანაშემწე</th>
-                            <td>{{slcted.judgeAssistant}}</td>
-                        </tr>
-                        <tr>
-                            <th class="text-right">თანაშემწის ტელეფონი</th>
-                            <td>{{slcted.judgeAssistantPhone}}</td>
-                        </tr>
-                        <tr>
-                            <th class="text-right">საქმის დაწყების დრო</th>
-                            <td>{{slcted.caseStartDate}}</td>
-                        </tr>
-                        <tr>
-                            <th class="text-right">საქმის დამთავრების დრო</th>
-                            <td>{{slcted.caseEndDate}}</td>
-                        </tr>
-                        <tr>
-                            <th class="text-right">დავის საგანი</th>
-                            <td>{{slcted.litigationSubjectName}}</td>
-                        </tr>
-                        <tr>
-                            <th class="text-right">დავის საგნის ღირებულება</th>
-                            <td>{{slcted.litigationPrice}}</td>
-                        </tr>
-                        <tr>
-                            <th class="text-right">დავის შინაარსი</th>
-                            <td>{{slcted.litigationDescription}}</td>
-                        </tr>
-                        <tr>
-                            <th class="text-right">დამთავრების შედეგი</th>
-                            <td>{{slcted.endResultName}}</td>
-                        </tr>
-                        <tr>
-                            <th class="text-right">თანამშრომელი</th>
-                            <td>{{slcted.addUserName}}</td>
-                        </tr>
-                        <tr>
-                            <th class="text-right">საქმის სტატუსი</th>
-                            <td>{{slcted.statusName}}</td>
-                        </tr>
-                        <tr>
-                            <th class="text-right">დოკუმენტები</th>
+                            <th class="text-right">Categories</th>
                             <td>
                                 <ul>
-                                    <li ng-repeat="item in request.docs"><a
-                                            href="cases/get-doc?name={{item.name.split('.')[0]}}" target="_blank">{{item.name}}</a>
+                                    <li ng-repeat="v in slcted.contactCategories">
+                                        {{v.category.name}}
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Status History</th>
+                            <td>
+                                <ul>
+                                    <li ng-repeat="item in slcted.contactStatusHistory">
+                                        {{item.status.name}}
                                     </li>
                                 </ul>
                             </td>
@@ -317,88 +291,68 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="editModalLabel">შეიტანეთ ინფორმაცია</h4>
+                <h4 class="modal-title" id="editModalLabel">Fill The Infromation</h4>
             </div>
             <div class="modal-body">
+                <%--private Integer id;--%>
+                <%--private String name;--%>
+                <%--private String contactPerson;--%>
+                <%--private String info;--%>
+                <%--@JsonSerialize(using = JsonDateSerializeSupport.class)--%>
+                <%--private Date lastActivity;--%>
+                <%--private String activity;--%>
+                <%--@JsonSerialize(using = JsonDateSerializeSupport.class)--%>
+                <%--private Date nextActivity;--%>
+                <%--private String phone;--%>
+                <%--private String email;--%>
+                <%--private String website;--%>
+                <%--private CountryDTO country;--%>
+                <%--private String city;--%>
+                <%--private ContactRankDTO rank;--%>
+                <%--private UsersDTO user;--%>
+                <%--private String source;--%>
+                <%--@JsonSerialize(using = JsonDateSerializeSupport.class)--%>
+                <%--private Timestamp createDate;--%>
                 <div class="row">
                     <form class="form-horizontal" name="ediFormName">
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">დასახელება (*)</label>
+                            <label class="control-label col-sm-3">Name</label>
                             <div class="col-sm-9">
                                 <input type="text" ng-model="request.name" name="name" required
                                        class="form-control input-sm">
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">საქმის # (*)</label>
+                            <label class="control-label col-sm-3">Contact Person</label>
                             <div class="col-sm-9">
-                                <input type="text" ng-model="request.number" name="number" required
+                                <input type="text" ng-model="request.contactPerson" name="contactPerson" required
                                        class="form-control input-sm">
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">კოლეგია (*)</label>
+                            <label class="control-label col-sm-3">Info</label>
                             <div class="col-sm-9">
-                                <select class="form-control" ng-model="request.boardId" name="boardId" required>
-                                    <option ng-repeat="v in boards" ng-selected="v.boardId === request.boardId"
-                                            value="{{v.boardId}}">{{v.name}}
-                                    </option>
-                                </select>
+                                <input type="text" ng-model="request.info" name="info" required
+                                       class="form-control input-sm">
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">მოსამართლე (*)</label>
-                            <div class="col-sm-9">
-                                <select class="form-control" ng-model="request.judgeId" name="judgeId" required>
-                                    <option ng-repeat="v in judges" ng-selected="v.judgeId === request.judgeId"
-                                            value="{{v.judgeId}}">{{v.name}}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">საქმის დაწყების თარიღი (*)</label>
+                            <label class="control-label col-sm-3">Next Activity</label>
                             <div class="col-sm-9">
                                 <div class="input-group date">
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <input type="text" name="startdate" ng-model="request.caseStartDate"
+                                    <input type="text" name="nextActivity" ng-model="request.nextActivity"
                                            id="caseStartDateInput" required
                                            class="form-control pull-right">
                                 </div>
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">საქმის დასრულების თარიღი</label>
+                            <label class="control-label col-sm-3">Activity</label>
                             <div class="col-sm-9">
-                                <div class="input-group date">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-                                    <input type="text" name="enddate" ng-model="request.caseEndDate"
-                                           id="caseEndDateInput"
-                                           class="form-control pull-right">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">დავის საგანი (*)</label>
-                            <div class="col-sm-9">
-                                <select class="form-control" ng-model="request.litigationSubjectId"
-                                        name="litigationSubjectId" required>
-                                    <option ng-repeat="v in litigationsubjects"
-                                            ng-selected="v.litigationSubjectId === request.litigationSubjectId"
-                                            value="{{v.litigationSubjectId}}">
-                                        {{v.name}}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">დავის საგნის ღირებულება (*)</label>
-                            <div class="col-sm-9">
-                                <input ng-model="request.litigationPrice" type="number" name="litigationPrice" required
+                                <input ng-model="request.activity" type="text" name="activity" required
                                        class="form-control input-sm"/>
                             </div>
                         </div>
@@ -598,35 +552,35 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <th>Contact Email</th>
-                            <th>field 4</th>
-                            <th>field 5</th>
-                            <th>field 6</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>NextActivity</th>
+                            <th>activity</th>
                             <th class="col-md-2 text-center">Action</th>
                         </tr>
                         </thead>
-                        <tbody title="დეტალური ინფორმაციისთვის დაკლიკეთ ორჯერ">
+                        <tbody title="Double Click For Detailed Information">
                         <tr ng-repeat="r in list" ng-dblclick="handleDoubleClick(r.caseId)">
-                            <td>{{r.caseId}}</td>
+                            <td>{{r.id}}</td>
                             <td>{{r.name}}</td>
-                            <td>{{r.number}}</td>
-                            <td>{{r.courtName}}</td>
-                            <td>{{r.judgeName}}</td>
-                            <td>{{r.caseStartDate}}</td>
+                            <td>{{r.email}}</td>
+                            <td>{{r.phone}}</td>
+                            <td>{{r.nextActivity}}</td>
+                            <td>{{r.activity}}</td>
                             <td class="text-center">
-                                <a ng-click="showDetails(r.caseId)" data-toggle="modal" title="დეტალურად"
+                                <a ng-click="showDetails(r.id)" data-toggle="modal" title="Details"
                                    data-target="#detailModal" class="btn btn-xs">
-                                    <i class="fa fa-sticky-note-o"></i>&nbsp; დეტალურად
+                                    <i class="fa fa-sticky-note-o"></i>&nbsp; Details
                                 </a>&nbsp;&nbsp;
-                                <c:if test="<%= isAdmin %>">
-                                    <a ng-click="edit(r.caseId)" data-toggle="modal" data-target="#editModal"
-                                       class="btn btn-xs">
-                                        <i class="fa fa-pencil"></i>&nbsp;შეცვლა
-                                    </a>&nbsp;&nbsp;
-                                    <a ng-click="remove(r.caseId)" class="btn btn-xs">
-                                        <i class="fa fa-trash-o"></i>&nbsp;წაშლა
-                                    </a>
-                                </c:if>
+                                <%--<c:if test="<%= isAdmin %>">--%>
+                                <a ng-click="edit(r.id)" data-toggle="modal" data-target="#editModal"
+                                   class="btn btn-xs">
+                                    <i class="fa fa-pencil"></i>&nbsp;Edit
+                                </a>&nbsp;&nbsp;
+                                <a ng-click="remove(r.caseId)" class="btn btn-xs">
+                                    <i class="fa fa-trash-o"></i>&nbsp;Remove
+                                </a>
+                                <%--</c:if>--%>
                             </td>
                         </tr>
                         </tbody>

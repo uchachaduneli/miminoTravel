@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * @author ucha
  */
-@RequestMapping("/users")
+@RequestMapping("/contact")
 @Controller
 public class ContactController {
 
@@ -36,8 +36,8 @@ public class ContactController {
 
     @RequestMapping("/get-contact-types")
     @ResponseBody
-    private Response getContactTypes(@RequestParam Integer contactId) throws Exception {
-        return Response.withSuccess(contactService.getContactTypes(contactId));
+    private Response getContactTypes(@RequestParam Integer id) throws Exception {
+        return Response.withSuccess(contactService.getContactTypes(id));
     }
 
     @RequestMapping("/get-categories")
@@ -48,8 +48,8 @@ public class ContactController {
 
     @RequestMapping("/get-contact-categories")
     @ResponseBody
-    private Response getContactCategories(@RequestParam Integer contactId) throws Exception {
-        return Response.withSuccess(contactService.getContactCategories(contactId));
+    private Response getContactCategories(@RequestParam Integer id) throws Exception {
+        return Response.withSuccess(contactService.getContactCategories(id));
     }
 
     @RequestMapping("/get-statuses")
@@ -60,8 +60,8 @@ public class ContactController {
 
     @RequestMapping("/get-status-history")
     @ResponseBody
-    private Response getStatusHistory(@RequestParam Integer contactId) throws Exception {
-        return Response.withSuccess(contactService.getContactStatusHistory(contactId));
+    private Response getStatusHistory(@RequestParam Integer id) throws Exception {
+        return Response.withSuccess(contactService.getContactStatusHistory(id));
     }
 
     @RequestMapping("/get-ranks")
