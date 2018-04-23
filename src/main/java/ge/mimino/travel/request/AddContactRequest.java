@@ -1,11 +1,15 @@
 package ge.mimino.travel.request;
 
+import ge.mimino.travel.dto.ContactCategoriesDTO;
+import ge.mimino.travel.dto.ContactStatusHistoryDTO;
+import ge.mimino.travel.dto.ContactTypesDTO;
 import ge.mimino.travel.model.ContactRank;
 import ge.mimino.travel.model.Country;
 import ge.mimino.travel.model.Users;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 public class AddContactRequest {
     private Integer id;
@@ -27,6 +31,60 @@ public class AddContactRequest {
     private Timestamp createDate;
     private Users user;
     private Integer userId;
+    private List<Integer> types;
+    private List<Integer> categories;
+    private List<Integer> statusHistory;
+    private List<ContactTypesDTO> contactTypes;
+    private List<ContactCategoriesDTO> contactCategories;
+    private List<ContactStatusHistoryDTO> contactStatusHistory;
+
+    public List<ContactTypesDTO> getContactTypes() {
+        return contactTypes;
+    }
+
+    public void setContactTypes(List<ContactTypesDTO> contactTypes) {
+        this.contactTypes = contactTypes;
+    }
+
+    public List<ContactCategoriesDTO> getContactCategories() {
+        return contactCategories;
+    }
+
+    public void setContactCategories(List<ContactCategoriesDTO> contactCategories) {
+        this.contactCategories = contactCategories;
+    }
+
+    public List<ContactStatusHistoryDTO> getContactStatusHistory() {
+        return contactStatusHistory;
+    }
+
+    public void setContactStatusHistory(List<ContactStatusHistoryDTO> contactStatusHistory) {
+        this.contactStatusHistory = contactStatusHistory;
+    }
+
+    public List<Integer> getTypes() {
+        return types;
+    }
+
+    public void setTypes(List<Integer> types) {
+        this.types = types;
+    }
+
+    public List<Integer> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Integer> categories) {
+        this.categories = categories;
+    }
+
+    public List<Integer> getStatusHistory() {
+        return statusHistory;
+    }
+
+    public void setStatusHistory(List<Integer> statusHistory) {
+        this.statusHistory = statusHistory;
+    }
 
     public String getEmail() {
         return email;

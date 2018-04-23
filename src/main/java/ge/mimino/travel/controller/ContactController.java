@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * @author ucha
@@ -70,9 +72,10 @@ public class ContactController {
         return Response.withSuccess(contactService.getContactRanks());
     }
 
-    @RequestMapping({"/save-contact"})
+    @RequestMapping({"/save"})
     @ResponseBody
-    public Response saveUser(@RequestBody AddContactRequest request) throws Exception {
+    public Response saveUser(@RequestBody AddContactRequest request, HttpServletRequest servletRequest) throws Exception {
+        request.setUserId((Integer) servletRequest.getSession().getAttribute("userId"));
         return Response.withSuccess(ContactDTO.parse(contactService.save(request)));
     }
 

@@ -261,7 +261,6 @@ requsets -ს თავისი ლოსთი აქვს, appointments -ს
     <column id="85" parent="31" name="last_activity">
       <Position>5</Position>
       <DataType>datetime|0</DataType>
-      <NotNull>1</NotNull>
     </column>
     <column id="86" parent="31" name="activity">
       <Position>6</Position>

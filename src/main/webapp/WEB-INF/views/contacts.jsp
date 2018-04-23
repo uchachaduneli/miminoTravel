@@ -11,12 +11,11 @@
 
     $(document).ready(function () {
 
-        $('input[name="startdate"]').datepicker({
+        $('input[name="nextActivity"]').datepicker({
             format: "dd/mm/yyyy",
             autoclose: true,
-            language: 'ka'
         }).on('changeDate', function (ev) {
-//            $("#caseStartDateInput").val($("#caseStartDateInput").val());
+            $("#caseStartDateInput").val($("#caseStartDateInput").val());
         });
 
         $('input[name="enddate"]').datepicker({
@@ -104,7 +103,11 @@
             if (id != undefined) {
                 var selected = $filter('filter')($scope.list, {id: id}, true);
                 $scope.slcted = selected[0];
-                $scope.loadContactDetailsList($scope.slcted.id);
+                $scope.request = selected[0];
+                $scope.request.types = [];
+                $scope.request.categories = [];
+                $scope.request.statusHistory = [];
+                $scope.loadContactDetailsList($scope.request.id);
             }
         }
 
@@ -120,6 +123,9 @@
         $scope.loadContactDetailsList = function (id) {
             function getContactTypes(res) {
                 $scope.slcted.contactTypes = res.data;
+//                if($scope.slcted.contactTypes.length > 0 && $scope.request.types == undefined){
+//
+//                }
                 angular.forEach($scope.slcted.contactTypes, function (v) {
                     $scope.request.types.push(v.type.id);
                 });
@@ -153,7 +159,6 @@
 
         $scope.init = function () {
             $scope.request = {types: [], categories: [], statusHistory: []};
-            $('#uploadDocNameInput').val();
         };
 
         $scope.isChecked = function (id, matches) {
@@ -165,32 +170,47 @@
             });
             return isChecked;
         }
-//
-//        $scope.save = function () {
-//
+
+        $scope.save = function () {
+
 //            if (!caseRequredFields($scope.ediFormName)) {
 //                return;
 //            }
-//
-//            function resFunc(res) {
-//                if (res.errorCode == 0) {
-//                    successMsg('ოპერაცია დასრულდა წარმატებით');
-//                    $scope.loadMainData();
-//                    closeModal('editModal');
-//                } else {
-//                    errorMsg('ოპერაცია არ სრულდება! გადაამოწმეთ ველების მართებულობა');
-//                }
-//            }
-//
-//            if ($scope.request.caseStartDate != undefined && $scope.request.caseStartDate.includes('/')) {
-//                $scope.request.caseStartDate = $scope.request.caseStartDate.split(/\//).reverse().join('-')
-//            }
-//            if ($scope.request.caseEndDate != undefined && $scope.request.caseEndDate.includes('/')) {
-//                $scope.request.caseEndDate = $scope.request.caseEndDate.split(/\//).reverse().join('-')
-//            }
-//            ajaxCall($http, "cases/save-case", angular.toJson($scope.request), resFunc);
-//        };
-//
+
+            function resFunc(res) {
+                if (res.errorCode == 0) {
+                    successMsg('Operation Successfull');
+                    $scope.loadMainData();
+                    closeModal('editModal');
+                } else {
+                    errorMsg('Operation Failed');
+                }
+            }
+
+            if ($scope.request.nextActivity != undefined && $scope.request.nextActivity.includes('/')) {
+                $scope.request.nextActivity = $scope.request.nextActivity.split(/\//).reverse().join('-')
+            }
+
+            if ($scope.request.types.length > 0) {
+                $scope.tmp = [];
+                angular.forEach($scope.request.types, function (v) {
+                    $scope.tmp.push(v);
+                });
+                $scope.request.types = $scope.tmp;
+            }
+
+            if ($scope.request.categories.length > 0) {
+                $scope.tmp = [];
+                angular.forEach($scope.request.categories, function (v) {
+                    $scope.tmp.push(v);
+                });
+                $scope.request.categories = $scope.tmp;
+            }
+
+            console.log($scope.request);
+            ajaxCall($http, "contact/save", angular.toJson($scope.request), resFunc);
+        };
+
 
         $scope.handlePage = function (h) {
             if (parseInt(h) >= 0) {
@@ -337,7 +357,7 @@
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">Contact Person</label>
+                            <label class="control-label col-sm-3">Cont. Person</label>
                             <div class="col-sm-9">
                                 <input type="text" ng-model="request.contactPerson" name="contactPerson" required
                                        class="form-control input-sm">
@@ -374,6 +394,13 @@
                             <label class="control-label col-sm-3">Phone</label>
                             <div class="col-sm-9">
                                 <input ng-model="request.phone" type="text" name="phone" required
+                                       class="form-control input-sm"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3">Email</label>
+                            <div class="col-sm-9">
+                                <input ng-model="request.email" type="text" name="email" required
                                        class="form-control input-sm"/>
                             </div>
                         </div>
@@ -418,17 +445,22 @@
                         <div class="form-group col-sm-10 ">
                             <label class="control-label col-sm-3">Types</label>
                             <div class="col-sm-9">
-                                <label ng-repeat="t in types">
-                                    <input type="checkbox" ng-model="request.types" checklist-value="t.id"
-                                           ng-checked="isChecked(t.id,request.types)"> {{t.name}}
+                                <label ng-repeat="t in types" class="col-sm-6">
+                                    <input type="checkbox" ng-model="request.types[$index]"
+                                           ng-true-value="{{t.id}}"
+                                           ng-checked="isChecked(t.id,request.types)">&nbsp; {{t.name}}
                                 </label>
-                                <select class="form-control" ng-model="request.rankId" name="rankId"
-                                        required>
-                                    <option ng-repeat="v in ranks"
-                                            ng-selected="v.id === request.rank.id"
-                                            value="{{v.id}}">{{v.name}}
-                                    </option>
-                                </select>
+                                <hr class="col-sm-11" style="margin: 0 0 !important;">
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3">Categories</label>
+                            <div class="col-sm-9">
+                                <label ng-repeat="t in categories" class="col-sm-6">
+                                    <input type="checkbox" ng-model="request.categories[$index]"
+                                           ng-true-value="{{t.id}}"
+                                           ng-checked="isChecked(t.id,request.categories)"> &nbsp;{{t.name}}
+                                </label>
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
@@ -443,7 +475,7 @@
                         <div class="form-group col-sm-10"></div>
                         <div class="form-group col-sm-12 text-center">
                             <a class="btn btn-app" ng-click="save()">
-                                <i class="fa fa-save"></i> შენახვა
+                                <i class="fa fa-save"></i> Save
                             </a>
                         </div>
 
@@ -461,8 +493,7 @@
                 <div class="col-md-2">
                     <c:if test="<%= isAdmin %>">
                         <button type="button" class="btn btn-block btn-primary btn-md" ng-click="init()"
-                                data-toggle="modal" disabled="true"
-                                data-target="#editModal">
+                                data-toggle="modal" data-target="#editModal">
                             <i class="fa fa-plus" aria-hidden="true"></i> &nbsp;
                             Add
                         </button>
@@ -471,7 +502,7 @@
                 <div class="col-md-2 col-xs-offset-8">
                     <select ng-change="loadMainData()" class="pull-right form-control" ng-model="limit"
                             id="rowCountSelectId">
-                        <option value="10" selected>Whow 10</option>
+                        <option value="10" selected>Show 10</option>
                         <option value="15">15</option>
                         <option value="30">30</option>
                         <option value="50">50</option>
