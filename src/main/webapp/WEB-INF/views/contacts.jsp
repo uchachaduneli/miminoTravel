@@ -161,6 +161,24 @@
             $scope.request = {types: [], categories: [], statusHistory: []};
         };
 
+        $scope.manageUnCheck = function (elemId, id, list) {
+            console.log($(elemId).is(':checked'));
+
+            if (!$(elemId).is(':checked')) {
+                var index;
+                angular.forEach($scope.request[list], function (v, k) {
+                    if (v === id) {
+                        index = k;
+                    }
+                });
+
+                console.log('element is ' + $scope.request.types[index]);
+                console.log($scope.request[list]);
+                $scope.request[list].splice(index, 1);
+                console.log($scope.request.types);
+            }
+        }
+
         $scope.isChecked = function (id, matches) {
             var isChecked = false;
             angular.forEach(matches, function (match) {
@@ -191,24 +209,44 @@
                 $scope.request.nextActivity = $scope.request.nextActivity.split(/\//).reverse().join('-')
             }
 
+            $scope.req = {};
+
             if ($scope.request.types.length > 0) {
                 $scope.tmp = [];
                 angular.forEach($scope.request.types, function (v) {
-                    $scope.tmp.push(v);
+                    if (v !== false) {
+                        $scope.tmp.push(v);
+                    }
                 });
-                $scope.request.types = $scope.tmp;
+                $scope.req.types = $scope.tmp;
             }
 
             if ($scope.request.categories.length > 0) {
                 $scope.tmp = [];
                 angular.forEach($scope.request.categories, function (v) {
-                    $scope.tmp.push(v);
+                    if (v !== false) {
+                        $scope.tmp.push(v);
+                    }
                 });
-                $scope.request.categories = $scope.tmp;
+                $scope.req.categories = $scope.tmp;
             }
+            $scope.req.id = $scope.request.id;
+            $scope.req.name = $scope.request.name;
+            $scope.req.contactPerson = $scope.request.contactPerson;
+            $scope.req.info = $scope.request.info;
+            $scope.req.activity = $scope.request.activity;
+            $scope.req.nextActivity = $scope.request.nextActivity;
+            $scope.req.phone = $scope.request.phone;
+            $scope.req.email = $scope.request.email;
+            $scope.req.website = $scope.request.website;
+            $scope.req.countryId = $scope.request.countryId;
+            $scope.req.city = $scope.request.city;
+            $scope.req.rankId = $scope.request.rankId;
+            $scope.req.source = $scope.request.source;
+            $scope.req.userId = $scope.request.userId;
 
-            console.log($scope.request);
-            ajaxCall($http, "contact/save", angular.toJson($scope.request), resFunc);
+            console.log(angular.toJson($scope.req));
+            ajaxCall($http, "contact/save", angular.toJson($scope.req), resFunc);
         };
 
 
@@ -446,8 +484,9 @@
                             <label class="control-label col-sm-3">Types</label>
                             <div class="col-sm-9">
                                 <label ng-repeat="t in types" class="col-sm-6">
-                                    <input type="checkbox" ng-model="request.types[$index]"
+                                    <input type="checkbox" ng-model="request.types[$index]" id="typechecks{{t.id}}"
                                            ng-true-value="{{t.id}}"
+                                           ng-click="manageUnCheck('#typechecks'+t.id, t.id, 'types')"
                                            ng-checked="isChecked(t.id,request.types)">&nbsp; {{t.name}}
                                 </label>
                                 <hr class="col-sm-11" style="margin: 0 0 !important;">

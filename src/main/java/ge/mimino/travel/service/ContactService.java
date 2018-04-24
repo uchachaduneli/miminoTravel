@@ -64,15 +64,13 @@ public class ContactService {
     @Transactional(rollbackFor = Throwable.class)
     public Contact save(AddContactRequest request) throws Exception {
 
-        Contact obj = new Contact();
+        Contact obj = request.getId() != null ? ((Contact) contactDAO.find(Contact.class, request.getId())) : new Contact();
 
         obj.setActivity(request.getActivity());
         obj.setCity(request.getCity());
         obj.setContactPerson(request.getContactPerson());
-        obj.setCountry((Country) contactDAO.find(Country.class, request.getCountryId() == null ?
-                request.getCountry().getId() : request.getCountryId()));
-        obj.setUser((Users) contactDAO.find(Users.class, request.getUserId() == null ?
-                request.getUser().getUserId() : request.getUserId()));
+        obj.setCountry((Country) contactDAO.find(Country.class, request.getCountryId()));
+        obj.setUser((Users) contactDAO.find(Users.class, request.getUserId()));
         obj.setActivity(request.getActivity());
         obj.setInfo(request.getInfo());
         obj.setLastActivity(request.getLastActivity());
@@ -82,10 +80,7 @@ public class ContactService {
         obj.setWebsite(request.getWebsite());
         obj.setPhone(request.getPhone());
         obj.setEmail(request.getEmail());
-        obj.setCountry((Country) contactDAO.find(Country.class, request.getCountryId() == null ?
-                request.getCountry().getId() : request.getCountryId()));
-        obj.setRank((ContactRank) contactDAO.find(ContactRank.class, request.getRankId() == null ?
-                request.getRank().getId() : request.getRankId()));
+        obj.setRank((ContactRank) contactDAO.find(ContactRank.class, request.getRankId()));
 
         if (request.getId() != null) {
             obj.setId(request.getId());
@@ -93,6 +88,20 @@ public class ContactService {
         } else {
             obj = (Contact) contactDAO.create(obj);
         }
+
+        if (!request.getCategories().isEmpty()) {
+            contactDAO.removeContactCategories(obj.getId());
+            for (Integer catId : request.getCategories()) {
+                contactDAO.create(new ContactCategories(obj.getId(), ((ContactCategory) contactDAO.find(ContactCategory.class, catId))));
+            }
+        }
+        if (!request.getTypes().isEmpty()) {
+            contactDAO.removeContactTypes(obj.getId());
+            for (Integer typeId : request.getTypes()) {
+                contactDAO.create(new ContactTypes(obj.getId(), ((ContactType) contactDAO.find(ContactType.class, typeId))));
+            }
+        }
+
         return obj;
     }
 

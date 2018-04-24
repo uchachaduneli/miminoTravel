@@ -24,9 +24,12 @@ public class ContactDTO {
     private String email;
     private String website;
     private CountryDTO country;
+    private Integer countryId;
     private String city;
     private ContactRankDTO rank;
+    private Integer rankId;
     private UsersDTO user;
+    private Integer userId;
     private String source;
     @JsonSerialize(using = JsonDateSerializeSupport.class)
     private Timestamp createDate;
@@ -45,9 +48,13 @@ public class ContactDTO {
         dto.setEmail(record.getEmail());
         dto.setWebsite(record.getWebsite());
         dto.setCountry(CountryDTO.parse(record.getCountry()));
+        dto.setCountryId(record.getCountry().getId());
+        dto.setCity(record.getCity());
         dto.setCity(record.getCity());
         dto.setRank(ContactRankDTO.parse(record.getRank()));
+        dto.setRankId(record.getRank().getId());
         dto.setUser(UsersDTO.parse(record.getUser()));
+        dto.setUserId(record.getUser().getUserId());
         dto.setSource(record.getSource());
         dto.setCreateDate(record.getCreateDate());
         return dto;
@@ -60,6 +67,30 @@ public class ContactDTO {
             list.add(ContactDTO.parse(record));
         }
         return list;
+    }
+
+    public Integer getCountryId() {
+        return countryId;
+    }
+
+    public void setCountryId(Integer countryId) {
+        this.countryId = countryId;
+    }
+
+    public Integer getRankId() {
+        return rankId;
+    }
+
+    public void setRankId(Integer rankId) {
+        this.rankId = rankId;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getEmail() {

@@ -9,6 +9,14 @@ public class ContactCategories {
     private Integer contactId;
     private ContactCategory category;
 
+    public ContactCategories(Integer contactId, ContactCategory category) {
+        this.contactId = contactId;
+        this.category = category;
+    }
+
+    public ContactCategories() {
+    }
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
