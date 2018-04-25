@@ -18,10 +18,16 @@
             $("#caseStartDateInput").val($("#caseStartDateInput").val());
         });
 
-        $('input[name="enddate"]').datepicker({
+        $('input[name="srchActivityStart"]').datepicker({
             format: "dd/mm/yyyy",
             autoclose: true,
-            language: 'ka'
+        }).on('changeDate', function (ev) {
+//            $("#monthSeterInputId").val($("#srch_datepicker").val());
+        });
+
+        $('input[name="srchActivityEnd"]').datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true,
         }).on('changeDate', function (ev) {
 //            $("#monthSeterInputId").val($("#srch_datepicker").val());
         });
@@ -525,10 +531,45 @@
                     <div id="filter-panel" class="filter-panel">
                         <div class="panel panel-default">
                             <div class="panel-body">
+                                <div class="form-group col-md-1">
+                                    <input type="text" class="form-control srch" ng-model="srchCase.id"
+                                           placeholder="ID">
+                                </div>
                                 <div class="form-group col-md-2">
-                                    <select class="form-control" ng-model="srchCase.judgeId" ng-change="loadMainData()">
-                                        <option value="" selected="selected">ქალაქი</option>
-                                        <option ng-repeat="v in cities" ng-selected="v.id === srchCase.cityId"
+                                    <input type="text" class="form-control srch" ng-model="srchCase.name"
+                                           placeholder="Name">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <input type="text" class="form-control srch" ng-model="srchCase.contactPerson"
+                                           placeholder="Contact Person">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <input type="text" class="form-control srch"
+                                           ng-model="srchCase.phone" placeholder="Phone">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <input type="text" class="form-control srch"
+                                           ng-model="srchCase.email" placeholder="Email">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <div class="input-group">
+                                        <div class="input-append">
+                                            <input type="text" name="srchActivityStart" class="form-control srch"
+                                                   placeholder="From"
+                                                   ng-model="srchCase.nextActivity" placeholder="">
+                                        </div>
+                                        <span class="input-group-addon">Next Activ</span>
+                                        <div class="input-append">
+                                            <input type="text" name="srchActivityEnd" class="form-control srch"
+                                                   placeholder="To" ng-model="srchCase.nextActivityEnd">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <select class="form-control" ng-model="srchCase.countryId"
+                                            ng-change="loadMainData()">
+                                        <option value="" selected="selected">Country</option>
+                                        <option ng-repeat="v in cities" ng-selected="v.id === srchCase.countryId"
                                                 value="{{v.id}}">{{v.name}}
                                         </option>
                                     </select>

@@ -26,7 +26,8 @@ public class ContactController {
 
     @RequestMapping("/get-contacts")
     @ResponseBody
-    private Response getContacts() throws Exception {
+    private Response getContacts(@RequestBody AddContactRequest request, HttpServletRequest servletRequest) throws Exception {
+        request.setUserId((Integer) servletRequest.getSession().getAttribute("userId"));
         return Response.withSuccess(contactService.getContacts());
     }
 

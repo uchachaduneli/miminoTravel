@@ -11,6 +11,7 @@ public class AddContactRequest {
     private Date lastActivity;
     private String activity;
     private Date nextActivity;
+    private Date nextActivityTo;
     private String phone;
     private String email;
     private String website;
@@ -22,6 +23,14 @@ public class AddContactRequest {
     private List<Integer> types;
     private List<Integer> categories;
     private List<Integer> statusHistory;
+
+    public Date getNextActivityTo() {
+        return nextActivityTo;
+    }
+
+    public void setNextActivityTo(Date nextActivityTo) {
+        this.nextActivityTo = nextActivityTo;
+    }
 
     public Integer getId() {
         return id;
