@@ -161,34 +161,6 @@
             $scope.request = {types: [], categories: [], statusHistory: []};
         };
 
-        $scope.manageUnCheck = function (elemId, id, list) {
-            console.log($(elemId).is(':checked'));
-
-            if (!$(elemId).is(':checked')) {
-                var index;
-                angular.forEach($scope.request[list], function (v, k) {
-                    if (v === id) {
-                        index = k;
-                    }
-                });
-
-                console.log('element is ' + $scope.request.types[index]);
-                console.log($scope.request[list]);
-                $scope.request[list].splice(index, 1);
-                console.log($scope.request.types);
-            }
-        }
-
-        $scope.isChecked = function (id, matches) {
-            var isChecked = false;
-            angular.forEach(matches, function (match) {
-                if (match === id) {
-                    isChecked = true;
-                }
-            });
-            return isChecked;
-        }
-
         $scope.save = function () {
 
 //            if (!caseRequredFields($scope.ediFormName)) {
@@ -484,10 +456,8 @@
                             <label class="control-label col-sm-3">Types</label>
                             <div class="col-sm-9">
                                 <label ng-repeat="t in types" class="col-sm-6">
-                                    <input type="checkbox" ng-model="request.types[$index]" id="typechecks{{t.id}}"
-                                           ng-true-value="{{t.id}}"
-                                           ng-click="manageUnCheck('#typechecks'+t.id, t.id, 'types')"
-                                           ng-checked="isChecked(t.id,request.types)">&nbsp; {{t.name}}
+                                    <input type="checkbox" id="typechecks{{t.id}}"
+                                           checklist-model="request.types" checklist-value="t.id">&nbsp; {{t.name}}
                                 </label>
                                 <hr class="col-sm-11" style="margin: 0 0 !important;">
                             </div>
@@ -496,10 +466,10 @@
                             <label class="control-label col-sm-3">Categories</label>
                             <div class="col-sm-9">
                                 <label ng-repeat="t in categories" class="col-sm-6">
-                                    <input type="checkbox" ng-model="request.categories[$index]"
-                                           ng-true-value="{{t.id}}"
-                                           ng-checked="isChecked(t.id,request.categories)"> &nbsp;{{t.name}}
+                                    <input type="checkbox" id="categorychecks{{t.id}}"
+                                           checklist-model="request.categories" checklist-value="t.id">&nbsp; {{t.name}}
                                 </label>
+                                <hr class="col-sm-11" style="margin: 0 0 !important;">
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">

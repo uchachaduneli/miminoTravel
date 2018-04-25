@@ -46,21 +46,11 @@ public class AuthController {
             request.getSession().setAttribute("userId", foundedUser.getUserId());
             request.getSession().setAttribute("userDesc", foundedUser.getUserDesc());
             request.getSession().setAttribute("typeId", foundedUser.getType().getUserTypeId());
-//            switch (foundedUser.getTypeId()) {
-//                case UsersDTO.USER_ADMIN:
-//                    request.getSession().setAttribute("typeName", "ადმინისტრატორი");
-//                    break;
-//                case UsersDTO.USER_OPERATOR:
-//                    request.getSession().setAttribute("typeName", "ოპერატორი");
-//                    break;
-//                default:
-//                    break;
-//            }
+            request.getSession().setAttribute("typeName", foundedUser.getType().getUserTypeName());
             response.sendRedirect("home");
-//            return "redirect:cases";
             return null;
         } else {
-            response.sendError(400, "მომხმარებელი ან პაროლი არასწორია");
+            response.sendError(400, "Incorrect Username Or Password");
             return null;
         }
     }

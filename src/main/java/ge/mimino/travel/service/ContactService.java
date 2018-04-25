@@ -88,15 +88,14 @@ public class ContactService {
         } else {
             obj = (Contact) contactDAO.create(obj);
         }
-
-        if (!request.getCategories().isEmpty()) {
-            contactDAO.removeContactCategories(obj.getId());
+        contactDAO.removeContactCategories(obj.getId());
+        if (request.getCategories() != null && !request.getCategories().isEmpty()) {
             for (Integer catId : request.getCategories()) {
                 contactDAO.create(new ContactCategories(obj.getId(), ((ContactCategory) contactDAO.find(ContactCategory.class, catId))));
             }
         }
-        if (!request.getTypes().isEmpty()) {
-            contactDAO.removeContactTypes(obj.getId());
+        contactDAO.removeContactTypes(obj.getId());
+        if (request.getTypes() != null && !request.getTypes().isEmpty()) {
             for (Integer typeId : request.getTypes()) {
                 contactDAO.create(new ContactTypes(obj.getId(), ((ContactType) contactDAO.find(ContactType.class, typeId))));
             }

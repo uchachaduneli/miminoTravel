@@ -22,6 +22,12 @@ public class UsersDTO {
     @JsonSerialize(using = JsonDateSerializeSupport.class)
     private Date createDate;
 
+    public static int ADMINISTRATOR = 1;
+    public static int COMUNICATION_MANAGER = 2;
+    public static int PRODUCT_MANAGER = 3;
+    public static int FINANCIAL_MANAGER = 4;
+    public static int RESERVATION_MANAGER = 5;
+
     public static UsersDTO parse(Users record) {
         if (record != null) {
             UsersDTO dto = new UsersDTO();
