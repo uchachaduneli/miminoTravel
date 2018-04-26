@@ -23,8 +23,8 @@ public class ContactService {
     private ContactDAO contactDAO;
 
 
-    public List<ContactDTO> getContacts() {
-        return ContactDTO.parseToList(contactDAO.getAll(Contact.class));
+    public List<ContactDTO> getContacts(int start, int limit, AddContactRequest srchRequest) {
+        return ContactDTO.parseToList(contactDAO.getContacts(start, limit, srchRequest));
     }
 
     public List<ContactTypeDTO> getTypes() {

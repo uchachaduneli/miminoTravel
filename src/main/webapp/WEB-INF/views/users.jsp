@@ -220,7 +220,7 @@
                         <td>{{r.type.userTypeName}}</td>
                         <td>{{r.language.name}}</td>
                         <td>{{r.email}}</td>
-                        <td>{{r.deleted == 0 ? 'აქტიური': 'პასიური'}}</td>
+                        <td>{{r.deleted == 0 ? 'Active': 'Passive'}}</td>
                         <td class="text-center">
                             <small>{{r.createDate}}</small>
                         </td>

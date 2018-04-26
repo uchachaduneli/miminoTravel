@@ -1,6 +1,7 @@
 package ge.mimino.travel.controller;
 
 import ge.mimino.travel.dto.ContactDTO;
+import ge.mimino.travel.dto.UsersDTO;
 import ge.mimino.travel.misc.Response;
 import ge.mimino.travel.request.AddContactRequest;
 import ge.mimino.travel.service.ContactService;
@@ -26,9 +27,13 @@ public class ContactController {
 
     @RequestMapping("/get-contacts")
     @ResponseBody
-    private Response getContacts(@RequestBody AddContactRequest request, HttpServletRequest servletRequest) throws Exception {
-        request.setUserId((Integer) servletRequest.getSession().getAttribute("userId"));
-        return Response.withSuccess(contactService.getContacts());
+    private Response getContacts(@RequestParam("start") int start, @RequestParam("limit") int limit,
+                                 @RequestBody AddContactRequest request, HttpServletRequest servletRequest) throws Exception {
+        int crntUserId = (Integer) servletRequest.getSession().getAttribute("userId");
+        if (crntUserId == UsersDTO.COMUNICATION_MANAGER) {
+            request.setUserId(crntUserId);
+        }
+        return Response.withSuccess(contactService.getContacts(start, limit, request));
     }
 
     @RequestMapping("/get-types")

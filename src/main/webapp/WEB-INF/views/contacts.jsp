@@ -55,6 +55,15 @@
                 $scope.list = res.data;
             }
 
+            if ($scope.srchCase != undefined) {
+                if ($scope.srchCase.nextActivity != undefined && $scope.srchCase.nextActivity.includes('/')) {
+                    $scope.srchCase.nextActivity = $scope.srchCase.nextActivity.split(/\//).reverse().join('-')
+                }
+                if ($scope.srchCase.nextActivityTo != undefined && $scope.srchCase.nextActivityTo.includes('/')) {
+                    $scope.srchCase.nextActivityTo = $scope.srchCase.nextActivityTo.split(/\//).reverse().join('-')
+                }
+            }
+
             ajaxCall($http, "contact/get-contacts?start=" + $scope.start + "&limit=" + $scope.limit, angular.toJson($scope.srchCase), getMainData);
         }
 
@@ -71,6 +80,12 @@
         }
 
         ajaxCall($http, "contact/get-types", null, getTypes);
+
+        function getUsers(res) {
+            $scope.users = res.data;
+        }
+
+        ajaxCall($http, "users/get-users", null, getUsers);
 
         function getCategories(res) {
             $scope.categories = res.data;
@@ -227,6 +242,11 @@
             ajaxCall($http, "contact/save", angular.toJson($scope.req), resFunc);
         };
 
+
+        $scope.rowNumbersChange = function () {
+            $scope.start = 0;
+            $scope.loadMainData();
+        }
 
         $scope.handlePage = function (h) {
             if (parseInt(h) >= 0) {
@@ -515,7 +535,7 @@
                     </c:if>
                 </div>
                 <div class="col-md-2 col-xs-offset-8">
-                    <select ng-change="loadMainData()" class="pull-right form-control" ng-model="limit"
+                    <select ng-change="rowNumbersChange()" class="pull-right form-control" ng-model="limit"
                             id="rowCountSelectId">
                         <option value="10" selected>Show 10</option>
                         <option value="15">15</option>
@@ -531,15 +551,15 @@
                     <div id="filter-panel" class="filter-panel">
                         <div class="panel panel-default">
                             <div class="panel-body">
-                                <div class="form-group col-md-1">
+                                <div class="form-group col-md-2">
                                     <input type="text" class="form-control srch" ng-model="srchCase.id"
                                            placeholder="ID">
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-3">
                                     <input type="text" class="form-control srch" ng-model="srchCase.name"
                                            placeholder="Name">
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-3">
                                     <input type="text" class="form-control srch" ng-model="srchCase.contactPerson"
                                            placeholder="Contact Person">
                                 </div>
@@ -551,6 +571,33 @@
                                     <input type="text" class="form-control srch"
                                            ng-model="srchCase.email" placeholder="Email">
                                 </div>
+                                <div class="form-group col-md-2">
+                                    <select class="form-control" ng-model="srchCase.countryId"
+                                            ng-change="loadMainData()">
+                                        <option value="" selected="selected">Country</option>
+                                        <option ng-repeat="v in countries" ng-selected="v.id === srchCase.countryId"
+                                                value="{{v.id}}">{{v.name}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <select class="form-control" ng-model="srchCase.rankId"
+                                            ng-change="loadMainData()">
+                                        <option value="" selected="selected">Rank</option>
+                                        <option ng-repeat="v in ranks" ng-selected="v.id === srchCase.rankId"
+                                                value="{{v.id}}">{{v.name}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <select class="form-control" ng-model="srchCase.userId"
+                                            ng-change="loadMainData()">
+                                        <option value="" selected="selected">User</option>
+                                        <option ng-repeat="v in users" ng-selected="v.userId === srchCase.userId"
+                                                value="{{v.userId}}">{{v.userName}}
+                                        </option>
+                                    </select>
+                                </div>
                                 <div class="form-group col-md-3">
                                     <div class="input-group">
                                         <div class="input-append">
@@ -561,20 +608,11 @@
                                         <span class="input-group-addon">Next Activ</span>
                                         <div class="input-append">
                                             <input type="text" name="srchActivityEnd" class="form-control srch"
-                                                   placeholder="To" ng-model="srchCase.nextActivityEnd">
+                                                   placeholder="To" ng-model="srchCase.nextActivityTo">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group col-md-2">
-                                    <select class="form-control" ng-model="srchCase.countryId"
-                                            ng-change="loadMainData()">
-                                        <option value="" selected="selected">Country</option>
-                                        <option ng-repeat="v in cities" ng-selected="v.id === srchCase.countryId"
-                                                value="{{v.id}}">{{v.name}}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-3">
                                     <button class="btn btn-default col-md-11" ng-click="loadMainData()" id="srchBtnId">
                                         <span class="fa fa-search"></span> &nbsp; &nbsp;Search &nbsp; &nbsp;
                                     </button>
