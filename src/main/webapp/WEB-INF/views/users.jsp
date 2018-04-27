@@ -49,8 +49,20 @@
             if (id != undefined) {
                 var selected = $filter('filter')($scope.users, {userId: id}, true);
                 $scope.request = selected[0];
+                $scope.request.languages = [];
+                $scope.loadDetailsList($scope.request.userId);
             }
         };
+
+        $scope.loadDetailsList = function (id) {
+            function getLanguages(res) {
+                angular.forEach(res.data, function (v) {
+                    $scope.request.languages.push(v.language.id);
+                });
+            }
+
+            ajaxCall($http, "users/get-user-languages?id=" + id, null, getLanguages);
+        }
 
         $scope.init = function () {
             $scope.request = null;
@@ -71,8 +83,30 @@
             if ($scope.request.insertDate != undefined && $scope.request.insertDate.includes('/')) {
                 $scope.request.insertDate = $scope.request.insertDate.split(/\//).reverse().join('-')
             }
-            console.log($scope.request);
-            ajaxCall($http, "users/save-user", angular.toJson($scope.request), resFunc);
+
+            $scope.req = {};
+
+            if ($scope.request.languages.length > 0) {
+                $scope.tmp = [];
+                angular.forEach($scope.request.languages, function (v) {
+                    if (v !== false) {
+                        $scope.tmp.push(v);
+                    }
+                });
+                $scope.req.languages = $scope.tmp;
+            }
+
+            $scope.req.userId = $scope.request.userId;
+            $scope.req.userDesc = $scope.request.userDesc;
+            $scope.req.userName = $scope.request.userName;
+            $scope.req.userPassword = $scope.request.userPassword;
+            $scope.req.typeId = $scope.request.type.userTypeId;
+            $scope.req.deleted = $scope.request.deleted;
+            $scope.req.email = $scope.request.email;
+            $scope.req.emailPassword = $scope.request.emailPassword;
+
+            console.log($scope.req);
+            ajaxCall($http, "users/save-user", angular.toJson($scope.req), resFunc);
         };
 
         function getUserTypes(res) {
@@ -135,15 +169,13 @@
                                 <input type="text" ng-model="request.emailPassword" class="form-control input-sm">
                             </div>
                         </div>
-                        <div class="form-group col-sm-10">
-                            <label class="control-label col-sm-3">Language</label>
-                            <div class="col-xs-9 btn-group">
-                                <select class="form-control" ng-model="request.languageId">
-                                    <option ng-repeat="k in languages"
-                                            ng-selected="k.id === request.language.id"
-                                            ng-value="k.id">{{k.name}}
-                                    </option>
-                                </select>
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3">Languages</label>
+                            <div class="col-sm-9">
+                                <label ng-repeat="t in languages" class="col-sm-6">
+                                    <input type="checkbox" id="languageChek{{t.id}}"
+                                           checklist-model="request.languages" checklist-value="t.id">&nbsp; {{t.name}}
+                                </label>
                             </div>
                         </div>
                         <div class="form-group col-sm-10">

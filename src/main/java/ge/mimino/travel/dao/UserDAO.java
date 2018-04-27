@@ -1,6 +1,7 @@
 package ge.mimino.travel.dao;
 
 
+import ge.mimino.travel.model.UserLanguages;
 import ge.mimino.travel.model.Users;
 import org.springframework.stereotype.Repository;
 
@@ -33,5 +34,9 @@ public class UserDAO extends AbstractDAO {
         TypedQuery<Users> query = entityManager.createQuery(q.toString(), Users.class);
         List<Users> res = query.getResultList();
         return res.isEmpty() ? null : res.get(0);
+    }
+
+    public int removeUserLanguages(Integer id) {
+        return entityManager.createQuery("delete from " + UserLanguages.class.getSimpleName() + " c where c.userId=" + id).executeUpdate();
     }
 }

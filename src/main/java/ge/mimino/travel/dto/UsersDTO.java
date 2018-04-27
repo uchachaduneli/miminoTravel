@@ -15,7 +15,6 @@ public class UsersDTO {
     private String userName;
     private String userPassword;
     private UsersTypeDTO type;
-    private LanguageDTO language;
     private Integer deleted;
     private String email;
     private String emailPassword;
@@ -38,7 +37,6 @@ public class UsersDTO {
             dto.setEmail(record.getEmail());
             dto.setEmailPassword(record.getEmailPassword());
             dto.setType(UsersTypeDTO.parse(record.getType()));
-            dto.setLanguage(LanguageDTO.parse(record.getLanguage()));
             dto.setDeleted(record.getDeleted());
             dto.setCreateDate(record.getCreateDate());
             return dto;
@@ -125,11 +123,4 @@ public class UsersDTO {
         this.createDate = createDate;
     }
 
-    public LanguageDTO getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(LanguageDTO language) {
-        this.language = language;
-    }
 }

@@ -1,11 +1,14 @@
 package ge.mimino.travel.service;
 
 
+import ge.mimino.travel.dao.ParamValuePair;
 import ge.mimino.travel.dao.UserDAO;
 import ge.mimino.travel.dto.LanguageDTO;
+import ge.mimino.travel.dto.UserLanguagesDTO;
 import ge.mimino.travel.dto.UsersDTO;
 import ge.mimino.travel.dto.UsersTypeDTO;
 import ge.mimino.travel.model.Language;
+import ge.mimino.travel.model.UserLanguages;
 import ge.mimino.travel.model.UserTypes;
 import ge.mimino.travel.model.Users;
 import ge.mimino.travel.request.AddUserRequest;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,6 +35,12 @@ public class UsersService {
         return UsersDTO.parseToList(userDAO.getAll(Users.class));
     }
 
+    public List<UserLanguagesDTO> getUserLanguages(int id) {
+        List<ParamValuePair> paramValues = new ArrayList<>();
+        paramValues.add(new ParamValuePair("userId", id));
+        return UserLanguagesDTO.parseToList(userDAO.getAllByParamValue(UserLanguages.class, paramValues, null));
+    }
+
     @Transactional(rollbackFor = Throwable.class)
     public Users saveUser(AddUserRequest request) throws Exception {
 
@@ -41,10 +51,7 @@ public class UsersService {
         if (request.getUserId() == null) {
             user.setUserPassword(MD5Provider.doubleMd5(request.getUserPassword()));
         }
-        user.setType((UserTypes) userDAO.find(UserTypes.class, request.getTypeId() == null ?
-                request.getType().getUserTypeId() : request.getTypeId()));
-        user.setLanguage((Language) userDAO.find(Language.class, request.getLanguageId() == null ?
-                request.getLanguage().getId() : request.getLanguageId()));
+        user.setType((UserTypes) userDAO.find(UserTypes.class, request.getTypeId()));
         user.setDeleted(request.getDeleted());
         user.setEmail(request.getEmail());
         user.setEmailPassword(request.getEmailPassword());
@@ -60,6 +67,13 @@ public class UsersService {
             user = (Users) userDAO.update(user);
         } else {
             user = (Users) userDAO.create(user);
+        }
+
+        userDAO.removeUserLanguages(user.getUserId());
+        if (request.getLanguages() != null && !request.getLanguages().isEmpty()) {
+            for (Integer id : request.getLanguages()) {
+                userDAO.create(new UserLanguages(user.getUserId(), ((Language) userDAO.find(Language.class, id))));
+            }
         }
         return user;
     }

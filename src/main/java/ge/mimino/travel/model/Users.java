@@ -10,7 +10,6 @@ public class Users {
     private String userName;
     private String userPassword;
     private UserTypes type;
-    private Language language;
     private Integer deleted;
     private String email;
     private String emailPassword;
@@ -65,16 +64,6 @@ public class Users {
 
     public void setType(UserTypes type) {
         this.type = type;
-    }
-
-    @JoinColumn(name = "language_id")
-    @OneToOne
-    public Language getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(Language language) {
-        this.language = language;
     }
 
     @Basic

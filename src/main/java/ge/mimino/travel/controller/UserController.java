@@ -43,6 +43,12 @@ public class UserController {
         return Response.withSuccess(userService.getLanguages());
     }
 
+    @RequestMapping("/get-user-languages")
+    @ResponseBody
+    private Response getUserLanguages(@RequestParam Integer id) throws Exception {
+        return Response.withSuccess(userService.getUserLanguages(id));
+    }
+
     @RequestMapping({"/save-user"})
     @ResponseBody
     public Response saveUser(@RequestBody AddUserRequest request) throws Exception {

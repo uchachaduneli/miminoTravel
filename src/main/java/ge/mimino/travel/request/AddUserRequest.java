@@ -1,7 +1,6 @@
 package ge.mimino.travel.request;
 
-import ge.mimino.travel.model.Language;
-import ge.mimino.travel.model.UserTypes;
+import java.util.List;
 
 public class AddUserRequest {
     private Integer userId;
@@ -10,37 +9,11 @@ public class AddUserRequest {
     private String userPassword;
     private String currentPassword;
     private Integer typeId;
-    private Integer languageId;
-    private Language language;
-    private UserTypes type;
     private Integer deleted;
     private String email;
     private String emailPassword;
     private String createDate;
-
-    public Language getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(Language language) {
-        this.language = language;
-    }
-
-    public Integer getLanguageId() {
-        return languageId;
-    }
-
-    public void setLanguageId(Integer languageId) {
-        this.languageId = languageId;
-    }
-
-    public UserTypes getType() {
-        return type;
-    }
-
-    public void setType(UserTypes type) {
-        this.type = type;
-    }
+    private List<Integer> languages;
 
     public Integer getUserId() {
         return userId;
@@ -120,5 +93,13 @@ public class AddUserRequest {
 
     public void setCreateDate(String createDate) {
         this.createDate = createDate;
+    }
+
+    public List<Integer> getLanguages() {
+        return languages;
+    }
+
+    public void setLanguages(List<Integer> languages) {
+        this.languages = languages;
     }
 }
