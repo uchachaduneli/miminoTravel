@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * @author ucha
@@ -24,8 +26,13 @@ public class CaseController {
 
     @RequestMapping("/get-cases")
     @ResponseBody
-    private Response getContacts() throws Exception {
-        return Response.withSuccess(caseService.getCases());
+    private Response getContacts(@RequestParam("start") int start, @RequestParam("limit") int limit,
+                                 @RequestBody AddCaseRequest request, HttpServletRequest servletRequest) throws Exception {
+        int crntUserId = (Integer) servletRequest.getSession().getAttribute("userId");
+//        if (crntUserId == UsersDTO.COMUNICATION_MANAGER) {
+//            request.setUserId(crntUserId);
+//        }
+        return Response.withSuccess(caseService.getCases(start, limit, request));
     }
 
     @RequestMapping("/get-case-countries")
@@ -34,13 +41,25 @@ public class CaseController {
         return Response.withSuccess(caseService.getCaseCountries(caseId));
     }
 
+    @RequestMapping("/get-case-details")
+    @ResponseBody
+    private Response getCaseDetails(@RequestParam Integer caseId) throws Exception {
+        return Response.withSuccess(caseService.getCaseDetails(caseId));
+    }
+
+    @RequestMapping("/get-details")
+    @ResponseBody
+    private Response getDetails() throws Exception {
+        return Response.withSuccess(caseService.getDetails());
+    }
+
     @RequestMapping({"/save-case"})
     @ResponseBody
     public Response saveUser(@RequestBody AddCaseRequest request) throws Exception {
         return Response.withSuccess(CaseDTO.parse(caseService.save(request)));
     }
 
-    @RequestMapping({"/delete-contact"})
+    @RequestMapping({"/delete"})
     @ResponseBody
     public Response delete(@RequestParam int id) {
         caseService.delete(id);

@@ -1,12 +1,7 @@
 package ge.mimino.travel.request;
 
-import ge.mimino.travel.model.City;
-import ge.mimino.travel.model.Currency;
-import ge.mimino.travel.model.MealCategory;
-import ge.mimino.travel.model.PackageCategory;
-
 import java.sql.Date;
-import java.sql.Timestamp;
+import java.util.List;
 
 public class AddCaseRequest {
     private Integer id;
@@ -20,23 +15,27 @@ public class AddCaseRequest {
     private String touristsCountNote;
     private Date arrivalTime;
     private Date leaveTime;
-    private City arrivalCity;
     private Integer arrivalCityId;
-    private City leaveCity;
     private Integer leaveCityId;
     private String tourType;
     private String guideDriver;
     private String hotelCategory;
-    private MealCategory mealCategory;
     private Integer mealCategoryId;
     private String entranceFees;
-    private Currency currency;
     private Integer currencyId;
     private String comment;
     private Double budget;
-    private PackageCategory packageCategory;
     private Integer packageCategoryId;
-    private Timestamp createDate;
+    private Integer userId;
+    private List<Integer> otherDetails;
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
     public Integer getId() {
         return id;
@@ -126,28 +125,12 @@ public class AddCaseRequest {
         this.leaveTime = leaveTime;
     }
 
-    public City getArrivalCity() {
-        return arrivalCity;
-    }
-
-    public void setArrivalCity(City arrivalCity) {
-        this.arrivalCity = arrivalCity;
-    }
-
     public Integer getArrivalCityId() {
         return arrivalCityId;
     }
 
     public void setArrivalCityId(Integer arrivalCityId) {
         this.arrivalCityId = arrivalCityId;
-    }
-
-    public City getLeaveCity() {
-        return leaveCity;
-    }
-
-    public void setLeaveCity(City leaveCity) {
-        this.leaveCity = leaveCity;
     }
 
     public Integer getLeaveCityId() {
@@ -182,14 +165,6 @@ public class AddCaseRequest {
         this.hotelCategory = hotelCategory;
     }
 
-    public MealCategory getMealCategory() {
-        return mealCategory;
-    }
-
-    public void setMealCategory(MealCategory mealCategory) {
-        this.mealCategory = mealCategory;
-    }
-
     public Integer getMealCategoryId() {
         return mealCategoryId;
     }
@@ -204,14 +179,6 @@ public class AddCaseRequest {
 
     public void setEntranceFees(String entranceFees) {
         this.entranceFees = entranceFees;
-    }
-
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
     }
 
     public Integer getCurrencyId() {
@@ -238,14 +205,6 @@ public class AddCaseRequest {
         this.budget = budget;
     }
 
-    public PackageCategory getPackageCategory() {
-        return packageCategory;
-    }
-
-    public void setPackageCategory(PackageCategory packageCategory) {
-        this.packageCategory = packageCategory;
-    }
-
     public Integer getPackageCategoryId() {
         return packageCategoryId;
     }
@@ -254,11 +213,11 @@ public class AddCaseRequest {
         this.packageCategoryId = packageCategoryId;
     }
 
-    public Timestamp getCreateDate() {
-        return createDate;
+    public List<Integer> getOtherDetails() {
+        return otherDetails;
     }
 
-    public void setCreateDate(Timestamp createDate) {
-        this.createDate = createDate;
+    public void setOtherDetails(List<Integer> otherDetails) {
+        this.otherDetails = otherDetails;
     }
 }

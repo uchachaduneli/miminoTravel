@@ -5,6 +5,8 @@ import ge.mimino.travel.dao.CaseDAO;
 import ge.mimino.travel.dao.ParamValuePair;
 import ge.mimino.travel.dto.CaseCountryDTO;
 import ge.mimino.travel.dto.CaseDTO;
+import ge.mimino.travel.dto.CaseDetailsDTO;
+import ge.mimino.travel.dto.DetailsDTO;
 import ge.mimino.travel.model.*;
 import ge.mimino.travel.request.AddCaseRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +26,7 @@ public class CaseService {
     private CaseDAO caseDAO;
 
 
-    public List<CaseDTO> getCases() {
+    public List<CaseDTO> getCases(int start, int limit, AddCaseRequest srchRequest) {
         return CaseDTO.parseToList(caseDAO.getAll(Case.class));
     }
 
@@ -46,18 +48,14 @@ public class CaseService {
         obj.setGuideDriver(request.getGuideDriver());
         obj.setHotelCategory(request.getHotelCategory());
         obj.setEntranceFees(request.getEntranceFees());
-        obj.setCurrency(request.getCurrency());
         obj.setComment(request.getComment());
         obj.setBudget(request.getBudget());
 
-        obj.setArrivalCity((City) caseDAO.find(City.class, request.getArrivalCityId() == null ?
-                request.getArrivalCity().getId() : request.getArrivalCityId()));
-        obj.setLeaveCity((City) caseDAO.find(City.class, request.getLeaveCityId() == null ?
-                request.getLeaveCity().getId() : request.getLeaveCityId()));
-        obj.setMealCategory((MealCategory) caseDAO.find(MealCategory.class, request.getMealCategoryId() == null ?
-                request.getMealCategory().getId() : request.getMealCategoryId()));
-        obj.setPackageCategory((PackageCategory) caseDAO.find(PackageCategory.class, request.getPackageCategoryId() == null ?
-                request.getPackageCategory().getId() : request.getPackageCategoryId()));
+        obj.setCurrency((Currency) caseDAO.find(Currency.class, request.getCurrencyId()));
+        obj.setArrivalCity((City) caseDAO.find(City.class, request.getArrivalCityId()));
+        obj.setLeaveCity((City) caseDAO.find(City.class, request.getLeaveCityId()));
+        obj.setMealCategory((MealCategory) caseDAO.find(MealCategory.class, request.getMealCategoryId()));
+        obj.setPackageCategory((PackageCategory) caseDAO.find(PackageCategory.class, request.getPackageCategoryId()));
 
         if (request.getId() != null) {
             obj.setId(request.getId());
@@ -80,5 +78,15 @@ public class CaseService {
         List<ParamValuePair> paramValues = new ArrayList<>();
         paramValues.add(new ParamValuePair("caseId", caseId));
         return CaseCountryDTO.parseToList(caseDAO.getAllByParamValue(CaseCountry.class, paramValues, null));
+    }
+
+    public List<CaseDetailsDTO> getCaseDetails(int caseId) {
+        List<ParamValuePair> paramValues = new ArrayList<>();
+        paramValues.add(new ParamValuePair("caseId", caseId));
+        return CaseDetailsDTO.parseToList(caseDAO.getAllByParamValue(CaseDetails.class, paramValues, null));
+    }
+
+    public List<DetailsDTO> getDetails() {
+        return DetailsDTO.parseToList(caseDAO.getAll(Details.class));
     }
 }

@@ -50,6 +50,9 @@
 
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
+                        if (errorThrown == 'Bad Request') {
+                            errorMsg("Can't authorise, Please Check the credentials");
+                        }
                         console.log(textStatus, errorThrown);
                     }
                 });

@@ -29,7 +29,7 @@ public class AuthController {
             if (loginedUserId == null) {
                 return "login";
             } else {
-                return "redirect:home";
+                return "redirect:requests";
             }
         } catch (Exception ex) {
             return "login";
@@ -47,7 +47,7 @@ public class AuthController {
             request.getSession().setAttribute("userDesc", foundedUser.getUserDesc());
             request.getSession().setAttribute("typeId", foundedUser.getType().getUserTypeId());
             request.getSession().setAttribute("typeName", foundedUser.getType().getUserTypeName());
-            response.sendRedirect("home");
+            response.sendRedirect("requests");
             return null;
         } else {
             response.sendError(400, "Incorrect Username Or Password");

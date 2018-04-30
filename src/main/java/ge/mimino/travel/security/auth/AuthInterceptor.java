@@ -31,7 +31,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
             }
             return false;
         } else if (userId == null) {
-            response.sendError(353, "სესიას გაუვიდა ვადა, გთხოვთ თავიდან გაიაროთ ავტორიზაცია");
+            response.sendError(353, "Your session Expired");
             return false;
         }
         return true;

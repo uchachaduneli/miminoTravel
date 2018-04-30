@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="resources/css/bootstrap-select.css">
     <link rel="stylesheet" href="resources/css/bootstrap-datepicker.css">
     <link rel="stylesheet" href="resources/css/ionicons.min.css">
-    <link rel="shortcut icon" type="image/png" href="resources/imgs/favicon.png"/>
+    <link rel="shortcut icon" type="image/png" href="resources/imgs/logo.png"/>
 
     <script src="resources/js/jquery.js"></script>
     <script src="resources/js/jquery-ui.js"></script>
@@ -45,7 +45,7 @@
             $('.menuItem').filter(function () {
                 return this.href.indexOf(url.pathname) > -1;
             }).addClass('active');
-            if (url.pathname.indexOf("home") > -1) {
+            if (url.pathname.indexOf("requests") > -1) {
                 $('#selected_item').text("Requests");
             } else if (url.pathname.indexOf("contacts") > -1) {
                 $('#selected_item').text("Contacts Database");
@@ -141,7 +141,7 @@
                 <hr/>
                 <ul class="sidebar-menu" data-widget="tree">
                     <li>
-                        <a class="menuItem" href="home">
+                        <a class="menuItem" href="requests">
                             <i class="fa fa-briefcase"></i>
                             <span>Requests</span>
                             </span>

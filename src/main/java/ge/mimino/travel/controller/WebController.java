@@ -15,9 +15,9 @@ public class WebController {
         return "users";
     }
 
-    @RequestMapping("/home")
+    @RequestMapping("/requests")
     public String home() {
-        return "home";
+        return "requests";
     }
 
     @RequestMapping("/login")

@@ -20,7 +20,8 @@ public class Case {
     private City arrivalCity;
     private City leaveCity;
     private String tourType;
-    private String guideDriver;
+    private Integer guideDriver;
+    private Language guideLanguage;
     private String hotelCategory;
     private MealCategory mealCategory;
     private String entranceFees;
@@ -172,13 +173,23 @@ public class Case {
     }
 
     @Basic
-    @Column(name = "guide_driver", nullable = true, length = -1)
-    public String getGuideDriver() {
+    @Column(name = "guide_driver", nullable = false)
+    public Integer getGuideDriver() {
         return guideDriver;
     }
 
-    public void setGuideDriver(String guideDriver) {
+    public void setGuideDriver(Integer guideDriver) {
         this.guideDriver = guideDriver;
+    }
+
+    @JoinColumn(name = "guide_language_id")
+    @OneToOne
+    public Language getGuideLanguage() {
+        return guideLanguage;
+    }
+
+    public void setGuideLanguage(Language leaveCity) {
+        this.guideLanguage = guideLanguage;
     }
 
     @Basic
