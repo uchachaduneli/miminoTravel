@@ -185,49 +185,14 @@
             $scope.req.leaveCityId = $scope.request.leaveCityId;
             $scope.req.tourType = $scope.request.tourType;
             $scope.req.guideDriver = $scope.request.guideDriver;
-            $scope.req.rankId = $scope.request.rankId;
-            $scope.req.source = $scope.request.source;
-            $scope.req.userId = $scope.request.userId;
-
-
-            private
-            Integer
-            arrivalCityId;
-            private
-            Integer
-            leaveCityId;
-            private
-            String
-            tourType;
-            private
-            String
-            guideDriver;
-            private
-            String
-            hotelCategory;
-            private
-            Integer
-            mealCategoryId;
-            private
-            String
-            entranceFees;
-            private
-            Integer
-            currencyId;
-            private
-            String
-            comment;
-            private
-            Double
-            budget;
-            private
-            Integer
-            packageCategoryId;
-            private
-            Integer
-            userId;
-            private
-            List < Integer > otherDetails;
+            $scope.req.guideLanguageId = $scope.request.guideLanguageId;
+            $scope.req.hotelCategory = $scope.request.hotelCategory;
+            $scope.req.mealCategoryId = $scope.request.mealCategoryId;
+            $scope.req.entranceFees = $scope.request.entranceFees;
+            $scope.req.currencyId = $scope.request.currencyId;
+            $scope.req.comment = $scope.request.comment;
+            $scope.req.budget = $scope.request.budget;
+            $scope.req.packageCategoryId = $scope.request.packageCategoryId;
 
             console.log(angular.toJson($scope.req));
             ajaxCall($http, "cases/save", angular.toJson($scope.req), resFunc);
@@ -268,90 +233,76 @@
                             <td>{{slcted.id}}</td>
                         </tr>
                         <tr>
-                            <th class="text-right">Name</th>
-                            <td>{{slcted.name}}</td>
+                            <th class="text-right">Contact Email</th>
+                            <td>{{slcted.contactEmail}}</td>
                         </tr>
                         <tr>
-                            <th class="text-right">Info</th>
-                            <td>{{slcted.info}}</td>
+                            <th class="text-right">Combined</th>
+                            <td>{{slcted.combined == 1 ? 'No':'Yes'}}</td>
                         </tr>
                         <tr>
-                            <th class="text-right">Last Activity</th>
-                            <td>{{slcted.lastActivity}}</td>
+                            <th class="text-right">Days Count</th>
+                            <td>{{slcted.daysCount}}</td>
                         </tr>
                         <tr>
-                            <th class="text-right">Activity</th>
-                            <td>{{slcted.activity}}</td>
+                            <th class="text-right">Nights Count</th>
+                            <td>{{slcted.nightsCount}}</td>
                         </tr>
                         <tr>
-                            <th class="text-right">Next Activity</th>
-                            <td>{{slcted.nextActivity}}</td>
+                            <th class="text-right">Tourists Count</th>
+                            <td>{{slcted.touristsCount}}</td>
                         </tr>
                         <tr>
-                            <th class="text-right">Phone</th>
-                            <td>{{slcted.phone}}</td>
+                            <th class="text-right">Tourists Count Note</th>
+                            <td>{{slcted.touristsCountNote}}</td>
                         </tr>
                         <tr>
-                            <th class="text-right">Email</th>
-                            <td>{{slcted.email}}</td>
+                            <th class="text-right">Arrival City</th>
+                            <td>{{slcted.arrivalCity.name}}</td>
                         </tr>
                         <tr>
-                            <th class="text-right">Website</th>
-                            <td>{{slcted.website}}</td>
+                            <th class="text-right">Leave City</th>
+                            <td>{{slcted.leaveCity.name}}</td>
                         </tr>
                         <tr>
-                            <th class="text-right">Country</th>
-                            <td>{{slcted.country.name}}</td>
+                            <th class="text-right">Tour Type</th>
+                            <td>{{slcted.tourType}}</td>
                         </tr>
                         <tr>
-                            <th class="text-right">City</th>
-                            <td>{{slcted.city}}</td>
+                            <th class="text-right">Guide-Driver/Just Guide</th>
+                            <td>{{slcted.guideDriver ==1 ? 'Guide-Driver':'Just Guide'}}</td>
                         </tr>
                         <tr>
-                            <th class="text-right">Rank</th>
-                            <td>{{slcted.rank.name}}</td>
+                            <th class="text-right">Guide Language</th>
+                            <td>{{slcted.guideLanguage.name}}</td>
                         </tr>
                         <tr>
-                            <th class="text-right">User</th>
-                            <td>{{slcted.user.userDesc}}</td>
+                            <th class="text-right">hotelCategory</th>
+                            <td>{{slcted.hotelCategory}}</td>
                         </tr>
                         <tr>
-                            <th class="text-right">Source</th>
-                            <td>{{slcted.source}}</td>
+                            <th class="text-right">Meal Category</th>
+                            <td>{{slcted.mealCategory.name}}</td>
                         </tr>
                         <tr>
-                            <th class="text-right">Record Created</th>
-                            <td>{{slcted.createDate}}</td>
+                            <th class="text-right">Entrance Fees</th>
+                            <td>{{slcted.entranceFees}}</td>
                         </tr>
                         <tr>
-                            <th class="text-right">Types</th>
-                            <td>
-                                <ul>
-                                    <li ng-repeat="k in slcted.contactTypes">
-                                        {{k.type.name}}
-                                    </li>
-                                </ul>
-                            </td>
+                            <th class="text-right">Currency</th>
+                            <td>{{slcted.currency.name}}</td>
                         </tr>
                         <tr>
-                            <th class="text-right">Categories</th>
-                            <td>
-                                <ul>
-                                    <li ng-repeat="v in slcted.contactCategories">
-                                        {{v.category.name}}
-                                    </li>
-                                </ul>
-                            </td>
+                            <th class="text-right">Comment</th>
+                            <td>{{slcted.comment}}</td>
                         </tr>
                         <tr>
-                            <th class="text-right">Status History</th>
-                            <td>
-                                <ul>
-                                    <li ng-repeat="item in slcted.contactStatusHistory">
-                                        {{item.status.name}}
-                                    </li>
-                                </ul>
-                            </td>
+                            <th class="text-right">Package Category</th>
+                            <td>{{slcted.packageCategory.name}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Budget</th>
+                            <td>{{slcted.budget}}</td>
                         </tr>
                     </table>
                     <div class="form-group"><br/></div>

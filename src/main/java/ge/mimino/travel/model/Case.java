@@ -188,7 +188,7 @@ public class Case {
         return guideLanguage;
     }
 
-    public void setGuideLanguage(Language leaveCity) {
+    public void setGuideLanguage(Language guideLanguage) {
         this.guideLanguage = guideLanguage;
     }
 

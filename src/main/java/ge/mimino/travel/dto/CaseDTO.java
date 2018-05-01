@@ -29,7 +29,8 @@ public class CaseDTO {
     private CityDTO arrivalCity;
     private CityDTO leaveCity;
     private String tourType;
-    private String guideDriver;
+    private Integer guideDriver;
+    private LanguageDTO guideLanguage;
     private String hotelCategory;
     private MealCategoryDTO mealCategory;
     private String entranceFees;
@@ -65,6 +66,7 @@ public class CaseDTO {
         dto.setComment(record.getComment());
         dto.setBudget(record.getBudget());
         dto.setPackageCategory(PackageCategoryDTO.parse(record.getPackageCategory()));
+        dto.setGuideLanguage(LanguageDTO.parse(record.getGuideLanguage()));
         dto.setCreateDate(record.getCreateDate());
         return dto;
     }
@@ -76,6 +78,14 @@ public class CaseDTO {
             list.add(CaseDTO.parse(record));
         }
         return list;
+    }
+
+    public LanguageDTO getGuideLanguage() {
+        return guideLanguage;
+    }
+
+    public void setGuideLanguage(LanguageDTO guideLanguage) {
+        this.guideLanguage = guideLanguage;
     }
 
     public Integer getId() {
@@ -190,11 +200,11 @@ public class CaseDTO {
         this.tourType = tourType;
     }
 
-    public String getGuideDriver() {
+    public Integer getGuideDriver() {
         return guideDriver;
     }
 
-    public void setGuideDriver(String guideDriver) {
+    public void setGuideDriver(Integer guideDriver) {
         this.guideDriver = guideDriver;
     }
 

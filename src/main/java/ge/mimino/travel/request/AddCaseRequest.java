@@ -18,7 +18,8 @@ public class AddCaseRequest {
     private Integer arrivalCityId;
     private Integer leaveCityId;
     private String tourType;
-    private String guideDriver;
+    private Integer guideDriver;
+    private Integer guideLanguageId;
     private String hotelCategory;
     private Integer mealCategoryId;
     private String entranceFees;
@@ -28,6 +29,14 @@ public class AddCaseRequest {
     private Integer packageCategoryId;
     private Integer userId;
     private List<Integer> otherDetails;
+
+    public Integer getGuideLanguageId() {
+        return guideLanguageId;
+    }
+
+    public void setGuideLanguageId(Integer guideLanguageId) {
+        this.guideLanguageId = guideLanguageId;
+    }
 
     public Integer getUserId() {
         return userId;
@@ -149,11 +158,11 @@ public class AddCaseRequest {
         this.tourType = tourType;
     }
 
-    public String getGuideDriver() {
+    public Integer getGuideDriver() {
         return guideDriver;
     }
 
-    public void setGuideDriver(String guideDriver) {
+    public void setGuideDriver(Integer guideDriver) {
         this.guideDriver = guideDriver;
     }
 
