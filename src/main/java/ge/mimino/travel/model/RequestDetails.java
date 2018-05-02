@@ -4,10 +4,10 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "case_details", schema = "university")
-public class CaseDetails {
+@Table(name = "request_details", schema = "university", catalog = "")
+public class RequestDetails {
     private Integer id;
-    private Integer caseId;
+    private Integer requestId;
     private String detail;
 
     @Id
@@ -21,13 +21,13 @@ public class CaseDetails {
     }
 
     @Basic
-    @Column(name = "case_id")
-    public Integer getCaseId() {
-        return caseId;
+    @Column(name = "request_id")
+    public Integer getRequestId() {
+        return requestId;
     }
 
-    public void setCaseId(Integer caseId) {
-        this.caseId = caseId;
+    public void setRequestId(Integer requestId) {
+        this.requestId = requestId;
     }
 
     @Basic
@@ -44,15 +44,15 @@ public class CaseDetails {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CaseDetails that = (CaseDetails) o;
+        RequestDetails that = (RequestDetails) o;
         return Objects.equals(id, that.id) &&
-                Objects.equals(caseId, that.caseId) &&
+                Objects.equals(requestId, that.requestId) &&
                 Objects.equals(detail, that.detail);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, caseId, detail);
+        return Objects.hash(id, requestId, detail);
     }
 }

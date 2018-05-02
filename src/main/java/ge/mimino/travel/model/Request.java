@@ -1,11 +1,11 @@
 package ge.mimino.travel.model;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.Date;
 
 @Entity
-public class Case {
+public class Request {
     private Integer id;
     private String contactEmail;
     private Integer combined;
@@ -15,8 +15,8 @@ public class Case {
     private Integer nightsCount;
     private Integer touristsCount;
     private String touristsCountNote;
-    private Date arrivalTime;
-    private Date leaveTime;
+    private Timestamp arrivalTime;
+    private Timestamp leaveTime;
     private City arrivalCity;
     private City leaveCity;
     private String tourType;
@@ -32,7 +32,7 @@ public class Case {
     private Timestamp createDate;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
@@ -43,7 +43,7 @@ public class Case {
     }
 
     @Basic
-    @Column(name = "contact_email", nullable = false, length = 50)
+    @Column(name = "contact_email")
     public String getContactEmail() {
         return contactEmail;
     }
@@ -53,7 +53,7 @@ public class Case {
     }
 
     @Basic
-    @Column(name = "combined", nullable = false)
+    @Column(name = "combined")
     public Integer getCombined() {
         return combined;
     }
@@ -63,7 +63,7 @@ public class Case {
     }
 
     @Basic
-    @Column(name = "tour_start", nullable = true)
+    @Column(name = "tour_start")
     public Date getTourStart() {
         return tourStart;
     }
@@ -73,7 +73,7 @@ public class Case {
     }
 
     @Basic
-    @Column(name = "tour_end", nullable = true)
+    @Column(name = "tour_end")
     public Date getTourEnd() {
         return tourEnd;
     }
@@ -83,7 +83,7 @@ public class Case {
     }
 
     @Basic
-    @Column(name = "days_count", nullable = false)
+    @Column(name = "days_count")
     public Integer getDaysCount() {
         return daysCount;
     }
@@ -93,7 +93,7 @@ public class Case {
     }
 
     @Basic
-    @Column(name = "nights_count", nullable = false)
+    @Column(name = "nights_count")
     public Integer getNightsCount() {
         return nightsCount;
     }
@@ -103,7 +103,7 @@ public class Case {
     }
 
     @Basic
-    @Column(name = "tourists_count", nullable = false)
+    @Column(name = "tourists_count")
     public Integer getTouristsCount() {
         return touristsCount;
     }
@@ -113,7 +113,7 @@ public class Case {
     }
 
     @Basic
-    @Column(name = "tourists_count_note", nullable = true, length = 250)
+    @Column(name = "tourists_count_note")
     public String getTouristsCountNote() {
         return touristsCountNote;
     }
@@ -123,22 +123,22 @@ public class Case {
     }
 
     @Basic
-    @Column(name = "arrival_time", nullable = false)
-    public Date getArrivalTime() {
+    @Column(name = "arrival_time", insertable = false, updatable = false)
+    public Timestamp getArrivalTime() {
         return arrivalTime;
     }
 
-    public void setArrivalTime(Date arrivalTime) {
+    public void setArrivalTime(Timestamp arrivalTime) {
         this.arrivalTime = arrivalTime;
     }
 
     @Basic
-    @Column(name = "leave_time", nullable = false)
-    public Date getLeaveTime() {
+    @Column(name = "leave_time", insertable = false, updatable = false)
+    public Timestamp getLeaveTime() {
         return leaveTime;
     }
 
-    public void setLeaveTime(Date leaveTime) {
+    public void setLeaveTime(Timestamp leaveTime) {
         this.leaveTime = leaveTime;
     }
 
@@ -163,7 +163,7 @@ public class Case {
     }
 
     @Basic
-    @Column(name = "tour_type", nullable = true, length = -1)
+    @Column(name = "tour_type")
     public String getTourType() {
         return tourType;
     }
@@ -173,7 +173,7 @@ public class Case {
     }
 
     @Basic
-    @Column(name = "guide_driver", nullable = false)
+    @Column(name = "guide_driver")
     public Integer getGuideDriver() {
         return guideDriver;
     }
@@ -193,7 +193,7 @@ public class Case {
     }
 
     @Basic
-    @Column(name = "hotel_category", nullable = true, length = -1)
+    @Column(name = "hotel_category")
     public String getHotelCategory() {
         return hotelCategory;
     }
@@ -213,7 +213,7 @@ public class Case {
     }
 
     @Basic
-    @Column(name = "entrance_fees", nullable = true, length = -1)
+    @Column(name = "entrance_fees")
     public String getEntranceFees() {
         return entranceFees;
     }
@@ -233,7 +233,7 @@ public class Case {
     }
 
     @Basic
-    @Column(name = "comment", nullable = false, length = -1)
+    @Column(name = "comment")
     public String getComment() {
         return comment;
     }
@@ -243,7 +243,7 @@ public class Case {
     }
 
     @Basic
-    @Column(name = "budget", nullable = false, precision = 0)
+    @Column(name = "budget")
     public Double getBudget() {
         return budget;
     }
@@ -263,7 +263,7 @@ public class Case {
     }
 
     @Basic
-    @Column(name = "create_date", updatable = false, insertable = false)
+    @Column(name = "create_date", insertable = false, updatable = false)
     public Timestamp getCreateDate() {
         return createDate;
     }

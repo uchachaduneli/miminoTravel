@@ -3,7 +3,7 @@ package ge.mimino.travel.request;
 import java.sql.Date;
 import java.util.List;
 
-public class AddCaseRequest {
+public class AddRequest {
     private Integer id;
     private String contactEmail;
     private Integer combined;

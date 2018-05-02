@@ -1,11 +1,11 @@
 package ge.mimino.travel.dto;
 
-import ge.mimino.travel.model.CaseCountry;
+import ge.mimino.travel.model.RequestCountry;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CaseCountryDTO {
+public class RequestCountryDTO {
 
     private Integer id;
     private Integer caseId;
@@ -14,10 +14,10 @@ public class CaseCountryDTO {
     private String note;
 
 
-    public static CaseCountryDTO parse(CaseCountry record) {
-        CaseCountryDTO dto = new CaseCountryDTO();
+    public static RequestCountryDTO parse(RequestCountry record) {
+        RequestCountryDTO dto = new RequestCountryDTO();
         dto.setId(record.getId());
-        dto.setCaseId(record.getCaseId());
+        dto.setCaseId(record.getRequestId());
         dto.setCountry(CountryDTO.parse(record.getCountry()));
         dto.setDaysCount(record.getDaysCount());
         dto.setNote(record.getNote());
@@ -25,10 +25,10 @@ public class CaseCountryDTO {
     }
 
 
-    public static List<CaseCountryDTO> parseToList(List<CaseCountry> records) {
-        ArrayList<CaseCountryDTO> list = new ArrayList<CaseCountryDTO>();
-        for (CaseCountry record : records) {
-            list.add(CaseCountryDTO.parse(record));
+    public static List<RequestCountryDTO> parseToList(List<RequestCountry> records) {
+        ArrayList<RequestCountryDTO> list = new ArrayList<RequestCountryDTO>();
+        for (RequestCountry record : records) {
+            list.add(RequestCountryDTO.parse(record));
         }
         return list;
     }

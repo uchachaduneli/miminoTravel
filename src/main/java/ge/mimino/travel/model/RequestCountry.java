@@ -3,17 +3,16 @@ package ge.mimino.travel.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "case_country", schema = "university")
-public class CaseCountry {
+@Table(name = "request_country", schema = "university")
+public class RequestCountry {
     private Integer id;
-    private Integer caseId;
+    private Integer requestId;
     private Country country;
     private Integer daysCount;
     private String note;
 
     @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     public Integer getId() {
         return id;
     }
@@ -23,13 +22,13 @@ public class CaseCountry {
     }
 
     @Basic
-    @Column(name = "case_id", nullable = false)
-    public Integer getCaseId() {
-        return caseId;
+    @Column(name = "request_id")
+    public Integer getRequestId() {
+        return requestId;
     }
 
-    public void setCaseId(Integer caseId) {
-        this.caseId = caseId;
+    public void setRequestId(Integer requestId) {
+        this.requestId = requestId;
     }
 
     @JoinColumn(name = "country_id")
@@ -43,7 +42,7 @@ public class CaseCountry {
     }
 
     @Basic
-    @Column(name = "days_count", nullable = false)
+    @Column(name = "days_count")
     public Integer getDaysCount() {
         return daysCount;
     }
@@ -53,7 +52,7 @@ public class CaseCountry {
     }
 
     @Basic
-    @Column(name = "note", nullable = false, length = 200)
+    @Column(name = "note")
     public String getNote() {
         return note;
     }
@@ -61,5 +60,4 @@ public class CaseCountry {
     public void setNote(String note) {
         this.note = note;
     }
-
 }

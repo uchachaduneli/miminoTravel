@@ -64,7 +64,7 @@
                 }
             }
 
-            ajaxCall($http, "cases/get-cases?start=" + $scope.start + "&limit=" + $scope.limit, angular.toJson($scope.srchCase), getMainData);
+            ajaxCall($http, "requests/get-requests?start=" + $scope.start + "&limit=" + $scope.limit, angular.toJson($scope.srchCase), getMainData);
         }
 
         $scope.loadMainData();
@@ -79,7 +79,7 @@
             $scope.details = res.data;
         }
 
-        ajaxCall($http, "cases/get-details", null, getDetails);
+        ajaxCall($http, "requests/get-details", null, getDetails);
 
         $scope.remove = function (id) {
             if (confirm("Pleace confirm operation?")) {
@@ -91,7 +91,7 @@
                         }
                     }
 
-                    ajaxCall($http, "cases/delete?id=" + id, null, resFnc);
+                    ajaxCall($http, "requests/delete?id=" + id, null, resFnc);
                 }
             }
         };
@@ -125,7 +125,7 @@
                 });
             }
 
-            ajaxCall($http, "cases/get-case-countries?id=" + id, null, getCaseCountries);
+            ajaxCall($http, "requests/get-requests-countries?id=" + id, null, getCaseCountries);
 
             function getCaseDetailes(res) {
                 $scope.slcted.details = res.data;
@@ -195,7 +195,7 @@
             $scope.req.packageCategoryId = $scope.request.packageCategoryId;
 
             console.log(angular.toJson($scope.req));
-            ajaxCall($http, "cases/save", angular.toJson($scope.req), resFunc);
+            ajaxCall($http, "requests/save", angular.toJson($scope.req), resFunc);
         };
 
 

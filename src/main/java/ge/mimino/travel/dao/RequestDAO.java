@@ -1,6 +1,5 @@
 package ge.mimino.travel.dao;
 
-
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -11,7 +10,7 @@ import javax.persistence.PersistenceContext;
  */
 
 @Repository
-public class CaseDAO extends AbstractDAO {
+public class RequestDAO extends AbstractDAO {
 
     @PersistenceContext(unitName = "mimino")
     private EntityManager entityManager;

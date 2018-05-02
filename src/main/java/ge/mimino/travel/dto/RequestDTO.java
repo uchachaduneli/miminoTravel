@@ -2,14 +2,14 @@ package ge.mimino.travel.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ge.mimino.travel.misc.JsonDateSerializeSupport;
-import ge.mimino.travel.model.Case;
+import ge.mimino.travel.model.Request;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class CaseDTO {
+public class RequestDTO {
 
     private Integer id;
     private String contactEmail;
@@ -42,8 +42,8 @@ public class CaseDTO {
     private Timestamp createDate;
 
 
-    public static CaseDTO parse(Case record) {
-        CaseDTO dto = new CaseDTO();
+    public static RequestDTO parse(Request record) {
+        RequestDTO dto = new RequestDTO();
         dto.setId(record.getId());
         dto.setContactEmail(record.getContactEmail());
         dto.setCombined(record.getCombined());
@@ -55,27 +55,27 @@ public class CaseDTO {
         dto.setTouristsCountNote(record.getTouristsCountNote());
         dto.setArrivalTime(record.getArrivalTime());
         dto.setLeaveTime(record.getLeaveTime());
-        dto.setArrivalCity(CityDTO.parse(record.getArrivalCity()));
-        dto.setLeaveCity(CityDTO.parse(record.getLeaveCity()));
+//        dto.setArrivalCity(CityDTO.parse(record.getArrivalCity()));
+//        dto.setLeaveCity(CityDTO.parse(record.getLeaveCity()));
         dto.setTourType(record.getTourType());
         dto.setGuideDriver(record.getGuideDriver());
         dto.setHotelCategory(record.getHotelCategory());
-        dto.setMealCategory(MealCategoryDTO.parse(record.getMealCategory()));
+//        dto.setMealCategory(MealCategoryDTO.parse(record.getMealCategory()));
         dto.setEntranceFees(record.getEntranceFees());
-        dto.setCurrency(CurrencyDTO.parse(record.getCurrency()));
+//        dto.setCurrency(CurrencyDTO.parse(record.getCurrency()));
         dto.setComment(record.getComment());
         dto.setBudget(record.getBudget());
-        dto.setPackageCategory(PackageCategoryDTO.parse(record.getPackageCategory()));
-        dto.setGuideLanguage(LanguageDTO.parse(record.getGuideLanguage()));
+//        dto.setPackageCategory(PackageCategoryDTO.parse(record.getPackageCategory()));
+//        dto.setGuideLanguage(LanguageDTO.parse(record.getGuideLanguage()));
         dto.setCreateDate(record.getCreateDate());
         return dto;
     }
 
 
-    public static List<CaseDTO> parseToList(List<Case> records) {
-        ArrayList<CaseDTO> list = new ArrayList<CaseDTO>();
-        for (Case record : records) {
-            list.add(CaseDTO.parse(record));
+    public static List<RequestDTO> parseToList(List<Request> records) {
+        ArrayList<RequestDTO> list = new ArrayList<RequestDTO>();
+        for (Request record : records) {
+            list.add(RequestDTO.parse(record));
         }
         return list;
     }
