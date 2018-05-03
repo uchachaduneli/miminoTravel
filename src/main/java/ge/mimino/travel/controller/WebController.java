@@ -16,7 +16,7 @@ public class WebController {
     }
 
     @RequestMapping("/requests")
-    public String home() {
+    public String requests() {
         return "requests";
     }
 

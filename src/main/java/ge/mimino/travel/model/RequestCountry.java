@@ -13,6 +13,7 @@ public class RequestCountry {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
     }
@@ -37,7 +38,7 @@ public class RequestCountry {
         return country;
     }
 
-    public void setCountry(Country countryId) {
+    public void setCountry(Country country) {
         this.country = country;
     }
 

@@ -9,6 +9,7 @@ import ge.mimino.travel.dto.RequestDTO;
 import ge.mimino.travel.dto.RequestDetailsDTO;
 import ge.mimino.travel.model.Details;
 import ge.mimino.travel.model.Request;
+import ge.mimino.travel.model.RequestCountry;
 import ge.mimino.travel.model.RequestDetails;
 import ge.mimino.travel.request.AddRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +80,7 @@ public class RequestService {
     public List<RequestCountryDTO> getRequestCountries(int caseId) {
         List<ParamValuePair> paramValues = new ArrayList<>();
         paramValues.add(new ParamValuePair("requestId", caseId));
-        return RequestCountryDTO.parseToList(requestDAO.getAllByParamValue(RequestDetails.class, paramValues, null));
+        return RequestCountryDTO.parseToList(requestDAO.getAllByParamValue(RequestCountry.class, paramValues, null));
     }
 
     public List<RequestDetailsDTO> getRequestDetails(int caseId) {

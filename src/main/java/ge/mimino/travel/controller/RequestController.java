@@ -37,14 +37,14 @@ public class RequestController {
 
     @RequestMapping("/get-requests-countries")
     @ResponseBody
-    private Response getRequestsCountries(@RequestParam Integer caseId) throws Exception {
-        return Response.withSuccess(requestService.getRequestCountries(caseId));
+    private Response getRequestsCountries(@RequestParam Integer id) throws Exception {
+        return Response.withSuccess(requestService.getRequestCountries(id));
     }
 
     @RequestMapping("/get-requests-details")
     @ResponseBody
-    private Response getRequestsDetails(@RequestParam Integer caseId) throws Exception {
-        return Response.withSuccess(requestService.getRequestDetails(caseId));
+    private Response getRequestsDetails(@RequestParam Integer id) throws Exception {
+        return Response.withSuccess(requestService.getRequestDetails(id));
     }
 
     @RequestMapping("/get-details")

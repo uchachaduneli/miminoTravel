@@ -301,6 +301,26 @@
                             <td>{{slcted.packageCategory.name}}</td>
                         </tr>
                         <tr>
+                            <th class="text-right">Coutnries</th>
+                            <td>
+                                <ul>
+                                    <li ng-repeat="k in slcted.countries">
+                                        {{k.country.name}}
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Categories</th>
+                            <td>
+                                <ul>
+                                    <li ng-repeat="v in slcted.contactCategories">
+                                        {{v.category.name}}
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
                             <th class="text-right">Budget</th>
                             <td>{{slcted.budget}}</td>
                         </tr>
