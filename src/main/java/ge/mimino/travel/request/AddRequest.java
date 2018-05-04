@@ -29,6 +29,15 @@ public class AddRequest {
     private Integer packageCategoryId;
     private Integer userId;
     private List<Integer> otherDetails;
+    private List<Integer> combinedCountries;
+
+    public List<Integer> getCombinedCountries() {
+        return combinedCountries;
+    }
+
+    public void setCombinedCountries(List<Integer> combinedCountries) {
+        this.combinedCountries = combinedCountries;
+    }
 
     public Integer getGuideLanguageId() {
         return guideLanguageId;

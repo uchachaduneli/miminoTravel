@@ -46,8 +46,9 @@
         $scope.start = 0;
         $scope.page = 1;
         $scope.limit = "10";
-        $scope.request = {countries: [], details: []};
+        $scope.request = {countries: [], details: [], combined: 2};
         $scope.srchCase = {};
+        $scope.countryRow = [1];
 //        $scope.request.docs = [];
 
         $scope.loadMainData = function () {
@@ -141,7 +142,7 @@
         };
 
         $scope.init = function () {
-            $scope.request = {countries: [], details: []};
+            $scope.request = {countries: [], details: [], combined: 2};
         };
 
         $scope.save = function () {
@@ -214,6 +215,29 @@
             }
             $scope.loadMainData();
         }
+
+        $scope.addCountryRow = function () {
+            var size = $scope.countryRow.length;
+            $scope.countryRow.push(size + 1);
+            $scope.combinedCountries[size + 1] = $scope.combinedCountries[1];
+        };
+
+        $scope.removePotentialLocation = function (index) {
+            $scope.countryRow.splice(index, 1);
+            if ($scope.request.combinedCountries) {
+                $scope.request.combinedCountries.splice(index, 1);
+            }
+        };
+
+        $scope.foundInList = function (id, list) {
+            var found = false;
+            angular.forEach(list, function (v) {
+                if (id === v) {
+                    found = true;
+                }
+            });
+            return found;
+        }
     });
 </script>
 <div class="modal fade bs-example-modal-lg" id="detailModal" tabindex="-1" role="dialog"
@@ -238,7 +262,7 @@
                         </tr>
                         <tr>
                             <th class="text-right">Combined</th>
-                            <td>{{slcted.combined == 1 ? 'No':'Yes'}}</td>
+                            <td>{{slcted.combined == 1 ? 'Yes':'No'}}</td>
                         </tr>
                         <tr>
                             <th class="text-right">Days Count</th>
@@ -347,24 +371,48 @@
                 <div class="row">
                     <form class="form-horizontal" name="ediFormName">
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">Name</label>
-                            <div class="col-sm-9">
-                                <input type="text" ng-model="request.name" name="name" required
-                                       class="form-control input-sm">
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">Cont. Person</label>
+                            <label class="control-label col-sm-3">Cont. Email</label>
                             <div class="col-sm-9">
                                 <input type="text" ng-model="request.contactPerson" name="contactPerson" required
                                        class="form-control input-sm">
                             </div>
                         </div>
-                        <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">Info</label>
+                        <div class="form-group col-sm-10">
+                            <label class="control-label col-sm-3">Combined</label>
+                            <div class="col-xs-9 btn-group">
+                                <div class="radio col-xs-6">
+                                    <label><input type="radio" ng-model="request.combined" value="1"
+                                                  class="input-sm">Yes</label>&nbsp;
+                                    <label><input type="radio" ng-model="request.combined" value="2"
+                                                  class="input-sm">No</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10 " ng-if="request.combined == 1">
+                            <label class="control-label col-sm-3">Choose Countries</label>
                             <div class="col-sm-9">
-                                <input type="text" ng-model="request.info" name="info" required
-                                       class="form-control input-sm">
+                                <div class="form-group" ng-repeat="r in countryRow">
+                                    <div class="col-sm-11">
+                                        <select id="combinedCountrySelect{{r}}" class="form-control input-sm"
+                                                ng-model="request.combinedCountries[r - 1]">
+                                            <option ng-repeat="is in countries" value="{{is.id}}"
+                                                    ng-selected="foundInList(is.id, request.combinedCountries)">
+                                                {{is.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-1" ng-show="$index == 0">
+                                        <a class="btn btn-sm row">
+                                            <span class="fa fa-plus" ng-click="addCountryRow()"></span>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-1" ng-show="$index > 0">
+                                        <a class="btn btn-sm row">
+                                <span class="fa fa-trash"
+                                      ng-click="removePotentialLocation($index)"></span>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
@@ -454,7 +502,8 @@
                             <div class="col-sm-9">
                                 <label ng-repeat="t in categories" class="col-sm-6">
                                     <input type="checkbox" id="categorychecks{{t.id}}"
-                                           checklist-model="request.categories" checklist-value="t.id">&nbsp; {{t.name}}
+                                           checklist-model="request.categories" checklist-value="t.id">&nbsp;
+                                    {{t.name}}
                                 </label>
                                 <hr class="col-sm-11" style="margin: 0 0 !important;">
                             </div>
