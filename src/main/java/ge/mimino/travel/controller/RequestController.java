@@ -53,7 +53,7 @@ public class RequestController {
         return Response.withSuccess(requestService.getDetails());
     }
 
-    @RequestMapping({"/save-requests"})
+    @RequestMapping({"/save"})
     @ResponseBody
     public Response saveUser(@RequestBody AddRequest request) throws Exception {
         return Response.withSuccess(RequestDTO.parse(requestService.save(request)));

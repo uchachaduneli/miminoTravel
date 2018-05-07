@@ -39,4 +39,8 @@ public class MiscService {
         return CurrencyDTO.parseToList(miscDAO.getAll(Currency.class));
     }
 
+    public List<LanguageDTO> getLanguages() {
+        return LanguageDTO.parseToList(miscDAO.getAll(Language.class));
+    }
+
 }

@@ -3,7 +3,6 @@ package ge.mimino.travel.service;
 
 import ge.mimino.travel.dao.ParamValuePair;
 import ge.mimino.travel.dao.UserDAO;
-import ge.mimino.travel.dto.LanguageDTO;
 import ge.mimino.travel.dto.UserLanguagesDTO;
 import ge.mimino.travel.dto.UsersDTO;
 import ge.mimino.travel.dto.UsersTypeDTO;
@@ -111,9 +110,5 @@ public class UsersService {
 
     public List<UsersTypeDTO> getUserTypes() {
         return UsersTypeDTO.parseToList(userDAO.getAll(UserTypes.class));
-    }
-
-    public List<LanguageDTO> getLanguages() {
-        return LanguageDTO.parseToList(userDAO.getAll(Language.class));
     }
 }

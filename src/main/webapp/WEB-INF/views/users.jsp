@@ -119,7 +119,7 @@
             $scope.languages = res.data;
         }
 
-        ajaxCall($http, "users/get-languages", null, getLanguages);
+        ajaxCall($http, "misc/get-languages", null, getLanguages);
 
     });
 </script>

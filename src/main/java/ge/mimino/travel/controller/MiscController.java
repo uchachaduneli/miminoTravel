@@ -47,4 +47,10 @@ public class MiscController {
     private Response getCities() throws Exception {
         return Response.withSuccess(miscService.getCities());
     }
+
+    @RequestMapping("/get-languages")
+    @ResponseBody
+    private Response getLanguages() throws Exception {
+        return Response.withSuccess(miscService.getLanguages());
+    }
 }

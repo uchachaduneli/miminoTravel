@@ -11,25 +11,31 @@
 
     $(document).ready(function () {
 
-        $('input[name="nextActivity"]').datepicker({
+        $('input[name="tourEndsDateInput"]').datepicker({
             format: "dd/mm/yyyy",
             autoclose: true,
         }).on('changeDate', function (ev) {
-            $("#caseStartDateInput").val($("#caseStartDateInput").val());
+//            $("#caseStartDateInput").val($("#caseStartDateInput").val());
         });
 
-        $('input[name="srchActivityStart"]').datepicker({
+        $('input[name="tourStartDateInput"]').datepicker({
             format: "dd/mm/yyyy",
             autoclose: true,
         }).on('changeDate', function (ev) {
 //            $("#monthSeterInputId").val($("#srch_datepicker").val());
         });
 
-        $('input[name="srchActivityEnd"]').datepicker({
-            format: "dd/mm/yyyy",
-            autoclose: true,
+        $('input[name="datetime"]').datetimepicker({
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 1,
+            use24hours: 1
         }).on('changeDate', function (ev) {
-//            $("#monthSeterInputId").val($("#srch_datepicker").val());
+
         });
 
         $('.srch').keypress(function (e) {
@@ -76,11 +82,41 @@
 
         ajaxCall($http, "misc/get-countries", null, getCountries);
 
+        function getLanguagess(res) {
+            $scope.languages = res.data;
+        }
+
+        ajaxCall($http, "misc/get-languages", null, getLanguagess);
+
         function getDetails(res) {
             $scope.details = res.data;
         }
 
         ajaxCall($http, "requests/get-details", null, getDetails);
+
+        function getCities(res) {
+            $scope.cities = res.data;
+        }
+
+        ajaxCall($http, "misc/get-cities", null, getCities);
+
+        function getCurrencies(res) {
+            $scope.currencies = res.data;
+        }
+
+        ajaxCall($http, "misc/get-currencies", null, getCurrencies);
+
+        function getPackagecategories(res) {
+            $scope.packageCategories = res.data;
+        }
+
+        ajaxCall($http, "misc/get-packagecategories", null, getPackagecategories);
+
+        function getMealcategories(res) {
+            $scope.mealCategories = res.data;
+        }
+
+        ajaxCall($http, "misc/get-mealcategories", null, getMealcategories);
 
         $scope.remove = function (id) {
             if (confirm("Pleace confirm operation?")) {
@@ -167,14 +203,8 @@
             if ($scope.request.tourEnd != undefined && $scope.request.tourEnd.includes('/')) {
                 $scope.request.tourEnd = $scope.request.tourEnd.split(/\//).reverse().join('-')
             }
-            if ($scope.request.arrivalTime != undefined && $scope.request.arrivalTime.includes('/')) {
-                $scope.request.arrivalTime = $scope.request.arrivalTime.split(/\//).reverse().join('-')
-            }
-            if ($scope.request.leaveTime != undefined && $scope.request.leaveTime.includes('/')) {
-                $scope.request.leaveTime = $scope.request.leaveTime.split(/\//).reverse().join('-')
-            }
 
-            $scope.req = {};
+            $scope.req = {combinedCountries: []};
             $scope.req.id = $scope.request.id;
             $scope.req.contactEmail = $scope.request.contactEmail;
             $scope.req.combined = $scope.request.combined;
@@ -183,7 +213,9 @@
             $scope.req.touristsCount = $scope.request.touristsCount;
             $scope.req.touristsCountNote = $scope.request.touristsCountNote;
             $scope.req.arrivalCityId = $scope.request.arrivalCityId;
+            $scope.req.arrivalTime = $scope.request.arrivalTime + ':00';
             $scope.req.leaveCityId = $scope.request.leaveCityId;
+            $scope.req.leaveTime = $scope.request.leaveTime + ':00';
             $scope.req.tourType = $scope.request.tourType;
             $scope.req.guideDriver = $scope.request.guideDriver;
             $scope.req.guideLanguageId = $scope.request.guideLanguageId;
@@ -194,6 +226,10 @@
             $scope.req.comment = $scope.request.comment;
             $scope.req.budget = $scope.request.budget;
             $scope.req.packageCategoryId = $scope.request.packageCategoryId;
+
+            angular.forEach($scope.request.combinedCountries, function (v) {
+                $scope.req.combinedCountries.push({'countryId': (parseInt(v.countryId)), 'daysCount': v.daysCount});
+            });
 
             console.log(angular.toJson($scope.req));
             ajaxCall($http, "requests/save", angular.toJson($scope.req), resFunc);
@@ -219,7 +255,7 @@
         $scope.addCountryRow = function () {
             var size = $scope.countryRow.length;
             $scope.countryRow.push(size + 1);
-            $scope.combinedCountries[size + 1] = $scope.combinedCountries[1];
+//            $scope.combinedCountries[size + 1] = $scope.combinedCountries[1];
         };
 
         $scope.removePotentialLocation = function (index) {
@@ -232,7 +268,7 @@
         $scope.foundInList = function (id, list) {
             var found = false;
             angular.forEach(list, function (v) {
-                if (id === v) {
+                if (id === v.countryId) {
                     found = true;
                 }
             });
@@ -285,8 +321,16 @@
                             <td>{{slcted.arrivalCity.name}}</td>
                         </tr>
                         <tr>
+                            <th class="text-right">Arrival Time</th>
+                            <td>{{slcted.arrivalTime}}</td>
+                        </tr>
+                        <tr>
                             <th class="text-right">Leave City</th>
                             <td>{{slcted.leaveCity.name}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Leave Time</th>
+                            <td>{{slcted.leaveTime}}</td>
                         </tr>
                         <tr>
                             <th class="text-right">Tour Type</th>
@@ -294,7 +338,9 @@
                         </tr>
                         <tr>
                             <th class="text-right">Guide-Driver/Just Guide</th>
-                            <td>{{slcted.guideDriver ==1 ? 'Guide-Driver':'Just Guide'}}</td>
+                            <td>{{slcted.guideDriver == 2 ? 'Guide-Driver':(slcted.guideDriver == 1 ? 'Separated Guide /
+                                Driver':'')}}
+                            </td>
                         </tr>
                         <tr>
                             <th class="text-right">Guide Language</th>
@@ -377,6 +423,32 @@
                                        class="form-control input-sm">
                             </div>
                         </div>
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3">Tour Starts</label>
+                            <div class="col-sm-9">
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" name="tourStartDateInput" ng-model="request.tourStart"
+                                           id="tourStartDateInput" required
+                                           class="form-control pull-right">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3">Tour Ends</label>
+                            <div class="col-sm-9">
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" name="tourEndsDateInput" ng-model="request.tourEnd"
+                                           id="tourEndsDateInput" required
+                                           class="form-control pull-right">
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-group col-sm-10">
                             <label class="control-label col-sm-3">Combined</label>
                             <div class="col-xs-9 btn-group">
@@ -392,14 +464,19 @@
                             <label class="control-label col-sm-3">Choose Countries</label>
                             <div class="col-sm-9">
                                 <div class="form-group" ng-repeat="r in countryRow">
-                                    <div class="col-sm-11">
+                                    <div class="col-sm-7">
                                         <select id="combinedCountrySelect{{r}}" class="form-control input-sm"
-                                                ng-model="request.combinedCountries[r - 1]">
+                                                ng-model="request.combinedCountries[r - 1].countryId">
                                             <option ng-repeat="is in countries" value="{{is.id}}"
                                                     ng-selected="foundInList(is.id, request.combinedCountries)">
                                                 {{is.name}}
                                             </option>
                                         </select>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input ng-model="request.combinedCountries[r - 1].daysCount" type="number"
+                                               placeholder="Days Count" name="activity" required
+                                               class="form-control input-sm"/>
                                     </div>
                                     <div class="col-md-1" ng-show="$index == 0">
                                         <a class="btn btn-sm row">
@@ -416,104 +493,168 @@
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">Next Activity</label>
+                            <label class="control-label col-sm-3">Days Count</label>
                             <div class="col-sm-9">
-                                <div class="input-group date">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-                                    <input type="text" name="nextActivity" ng-model="request.nextActivity"
-                                           id="caseStartDateInput" required
-                                           class="form-control pull-right">
+                                <input ng-model="request.daysCount" type="number" name="activity" required
+                                       class="form-control input-sm"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3">Nights Count</label>
+                            <div class="col-sm-9">
+                                <input ng-model="request.nightsCount" type="number" name="phone" required
+                                       class="form-control input-sm"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3">Tourists Count</label>
+                            <div class="col-sm-9">
+                                <input ng-model="request.touristsCount" type="number" required
+                                       class="form-control input-sm"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3">Touris Count Note</label>
+                            <div class="col-sm-9">
+                                <textarea rows="5" cols="10" ng-model="request.touristsCountNote"
+                                          name="source" required
+                                          class="form-control input-sm"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3">Arrival City</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" ng-model="request.arrivalCityId" required>
+                                    <option ng-repeat="v in cities"
+                                            ng-selected="v.id === request.arrivalCityId"
+                                            value="{{v.id}}">{{v.name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3">Arrival Time</label>
+                            <div class="col-sm-9">
+                                <div class="input-group date col-md-5"
+                                     data-date-format="yyyy-mm-dd HH:ii:ss p" data-link-field="dtp_input1">
+                                    <input class="form-control" size="16" type="text" ng-model="request.arrivalTime"
+                                           name="datetime">
                                 </div>
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">Activity</label>
+                            <label class="control-label col-sm-3">Leave City</label>
                             <div class="col-sm-9">
-                                <input ng-model="request.activity" type="text" name="activity" required
-                                       class="form-control input-sm"/>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">Phone</label>
-                            <div class="col-sm-9">
-                                <input ng-model="request.phone" type="text" name="phone" required
-                                       class="form-control input-sm"/>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">Email</label>
-                            <div class="col-sm-9">
-                                <input ng-model="request.email" type="text" name="email" required
-                                       class="form-control input-sm"/>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">Website</label>
-                            <div class="col-sm-9">
-                                <input ng-model="request.website" type="text" name="website" required
-                                       class="form-control input-sm"/>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">Country</label>
-                            <div class="col-sm-9">
-                                <select class="form-control" ng-model="request.countryId" name="countryId"
-                                        required>
-                                    <option ng-repeat="v in countries"
-                                            ng-selected="v.id === request.country.id"
+                                <select class="form-control" ng-model="request.leaveCityId" required>
+                                    <option ng-repeat="v in cities"
+                                            ng-selected="v.id === request.leaveCityId"
                                             value="{{v.id}}">{{v.name}}
                                     </option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">City</label>
+                            <label class="control-label col-sm-3">Leave Time</label>
                             <div class="col-sm-9">
-                                <input ng-model="request.city" type="text" name="city" required
-                                       class="form-control input-sm"/>
+                                <div class="input-group date col-md-5"
+                                     data-date-format="yyyy-mm-dd HH:ii:ss p" data-link-field="dtp_input2">
+                                    <input class="form-control" size="16" type="text" ng-model="request.leaveTime"
+                                           name="datetime">
+                                </div>
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">Rank</label>
+                            <label class="control-label col-sm-3">Tour Type</label>
                             <div class="col-sm-9">
-                                <select class="form-control" ng-model="request.rankId" name="rankId"
-                                        required>
-                                    <option ng-repeat="v in ranks"
-                                            ng-selected="v.id === request.rank.id"
-                                            value="{{v.id}}">{{v.name}}
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">Types</label>
-                            <div class="col-sm-9">
-                                <label ng-repeat="t in types" class="col-sm-6">
-                                    <input type="checkbox" id="typechecks{{t.id}}"
-                                           checklist-model="request.types" checklist-value="t.id">&nbsp; {{t.name}}
-                                </label>
-                                <hr class="col-sm-11" style="margin: 0 0 !important;">
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">Categories</label>
-                            <div class="col-sm-9">
-                                <label ng-repeat="t in categories" class="col-sm-6">
-                                    <input type="checkbox" id="categorychecks{{t.id}}"
-                                           checklist-model="request.categories" checklist-value="t.id">&nbsp;
-                                    {{t.name}}
-                                </label>
-                                <hr class="col-sm-11" style="margin: 0 0 !important;">
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">Source</label>
-                            <div class="col-sm-9">
-                                <textarea rows="5" cols="10" ng-model="request.source"
+                                <textarea rows="5" cols="10" ng-model="request.tourType"
                                           name="source" required
                                           class="form-control input-sm"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10">
+                            <label class="control-label col-sm-3">Separately Guide and Driver or Guide-Driver</label>
+                            <div class="col-xs-9 btn-group">
+                                <div class="radio col-xs-6">
+                                    <label><input type="radio" ng-model="request.guideDriver" value="1"
+                                                  class="input-sm">Guide</label>&nbsp;
+                                    <label><input type="radio" ng-model="request.guideDriver" value="2"
+                                                  class="input-sm">Guide-Driver</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3">Guide Language</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" ng-model="request.guideLanguageId" required>
+                                    <option ng-repeat="v in languages"
+                                            ng-selected="v.id === request.guideLanguageId"
+                                            value="{{v.id}}">{{v.name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3">Hotel category</label>
+                            <div class="col-sm-9">
+                                <textarea rows="5" cols="10" ng-model="request.hotelCategory"
+                                          name="source" required
+                                          class="form-control input-sm"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3">Meal Category</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" ng-model="request.mealCategoryId" required>
+                                    <option ng-repeat="v in mealCategories"
+                                            ng-selected="v.id === request.mealCategoryId"
+                                            value="{{v.id}}">{{v.name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3">Entrance Fees</label>
+                            <div class="col-sm-9">
+                                <textarea rows="5" cols="10" ng-model="request.entranceFees"
+                                          name="source" required
+                                          class="form-control input-sm"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3">Currency</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" ng-model="request.currencyId" required>
+                                    <option ng-repeat="v in currencies"
+                                            ng-selected="v.id === request.currencyId"
+                                            value="{{v.id}}">{{v.name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3">Comment</label>
+                            <div class="col-sm-9">
+                                <textarea rows="5" cols="10" ng-model="request.comment"
+                                          name="source" required
+                                          class="form-control input-sm"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3">Package Category</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" ng-model="request.packageCategoryId" required>
+                                    <option ng-repeat="v in packageCategories"
+                                            ng-selected="v.id === request.packageCategoryId"
+                                            value="{{v.id}}">{{v.name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3">Budget</label>
+                            <div class="col-sm-9">
+                                <input ng-model="request.budget" type="number" required
+                                       class="form-control input-sm"/>
                             </div>
                         </div>
                         <div class="form-group col-sm-10"></div>

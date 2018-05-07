@@ -37,12 +37,6 @@ public class UserController {
         return Response.withSuccess(userService.getUserTypes());
     }
 
-    @RequestMapping("/get-languages")
-    @ResponseBody
-    private Response getLanguages() throws Exception {
-        return Response.withSuccess(userService.getLanguages());
-    }
-
     @RequestMapping("/get-user-languages")
     @ResponseBody
     private Response getUserLanguages(@RequestParam Integer id) throws Exception {

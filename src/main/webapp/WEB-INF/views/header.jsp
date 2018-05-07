@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="resources/css/global.css">
     <link rel="stylesheet" href="resources/css/bootstrap-select.css">
     <link rel="stylesheet" href="resources/css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="resources/css/bootstrap-datetimepicker.css">
     <link rel="stylesheet" href="resources/css/ionicons.min.css">
     <link rel="shortcut icon" type="image/png" href="resources/imgs/logo.png"/>
 
@@ -28,9 +29,10 @@
     <script>
         $.widget.bridge('uibutton', $.ui.button);
     </script>
+    <script src="resources/js/moment.js"></script>
     <script src="resources/js/bootstrap.js"></script>
     <script src="resources/js/bootstrap-datepicker.js"></script>
-    <script src="resources/js/bootstrap-datepicker.ka.js"></script>
+    <script src="resources/js/bootstrap-datetimepicker.js"></script>
     <script src="resources/js/jquery.bootstrap-growl.min.js"></script>
     <script src="resources/js/adminlte.js"></script>
     <script src="resources/js/angular.js"></script>

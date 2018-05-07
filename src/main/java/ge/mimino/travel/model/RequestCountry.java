@@ -11,6 +11,15 @@ public class RequestCountry {
     private Integer daysCount;
     private String note;
 
+    public RequestCountry(Integer requestId, Country country, Integer daysCount) {
+        this.requestId = requestId;
+        this.country = country;
+        this.daysCount = daysCount;
+    }
+
+    public RequestCountry() {
+    }
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

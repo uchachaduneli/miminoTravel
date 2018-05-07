@@ -1,5 +1,7 @@
 package ge.mimino.travel.request;
 
+import ge.mimino.travel.dto.CombinedCountry;
+
 import java.sql.Date;
 import java.util.List;
 
@@ -29,13 +31,13 @@ public class AddRequest {
     private Integer packageCategoryId;
     private Integer userId;
     private List<Integer> otherDetails;
-    private List<Integer> combinedCountries;
+    private List<CombinedCountry> combinedCountries;
 
-    public List<Integer> getCombinedCountries() {
+    public List<CombinedCountry> getCombinedCountries() {
         return combinedCountries;
     }
 
-    public void setCombinedCountries(List<Integer> combinedCountries) {
+    public void setCombinedCountries(List<CombinedCountry> combinedCountries) {
         this.combinedCountries = combinedCountries;
     }
 
