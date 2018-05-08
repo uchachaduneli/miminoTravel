@@ -11,10 +11,11 @@ public class RequestCountry {
     private Integer daysCount;
     private String note;
 
-    public RequestCountry(Integer requestId, Country country, Integer daysCount) {
+    public RequestCountry(Integer requestId, Country country, Integer daysCount, String note) {
         this.requestId = requestId;
         this.country = country;
         this.daysCount = daysCount;
+        this.note = note;
     }
 
     public RequestCountry() {

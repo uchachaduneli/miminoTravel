@@ -156,9 +156,16 @@
         $scope.loadCaseDetailsList = function (id) {
             function getCaseCountries(res) {
                 $scope.slcted.countries = res.data;
-
-                angular.forEach($scope.slcted.countries, function (v) {
+                $scope.countryRow = [];
+                $scope.request.combinedCountries = [];
+                angular.forEach($scope.slcted.countries, function (v, k) {
                     $scope.request.countries.push(v);
+                    $scope.countryRow.push(k + 1);
+                    $scope.request.combinedCountries.push({
+                        'countryId': (v.country.id),
+                        'daysCount': v.daysCount,
+                        'note': v.note
+                    });
                 });
             }
 
@@ -228,7 +235,11 @@
             $scope.req.packageCategoryId = $scope.request.packageCategoryId;
 
             angular.forEach($scope.request.combinedCountries, function (v) {
-                $scope.req.combinedCountries.push({'countryId': (parseInt(v.countryId)), 'daysCount': v.daysCount});
+                $scope.req.combinedCountries.push({
+                    'countryId': (parseInt(v.countryId)),
+                    'daysCount': v.daysCount,
+                    'note': v.note
+                });
             });
 
             console.log(angular.toJson($scope.req));
@@ -299,6 +310,26 @@
                         <tr>
                             <th class="text-right">Combined</th>
                             <td>{{slcted.combined == 1 ? 'Yes':'No'}}</td>
+                        </tr>
+                        <tr ng-if="slcted.combined == 1">
+                            <th class="text-right" style="vertical-align: middle;">Coutnries</th>
+                            <td>
+                                <table class="table table-hover col-sm-8">
+                                    <thead>
+                                    <tr>
+                                        <th>Country</th>
+                                        <th>Days Count</th>
+                                        <th>Note</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="r in slcted.countries">
+                                        <td>{{r.country.name}}</td>
+                                        <td>{{r.daysCount}}</td>
+                                        <td>{{r.note}}</td>
+                                    </tbody>
+                                </table>
+                            </td>
                         </tr>
                         <tr>
                             <th class="text-right">Days Count</th>
@@ -371,26 +402,6 @@
                             <td>{{slcted.packageCategory.name}}</td>
                         </tr>
                         <tr>
-                            <th class="text-right">Coutnries</th>
-                            <td>
-                                <ul>
-                                    <li ng-repeat="k in slcted.countries">
-                                        {{k.country.name}}
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th class="text-right">Categories</th>
-                            <td>
-                                <ul>
-                                    <li ng-repeat="v in slcted.contactCategories">
-                                        {{v.category.name}}
-                                    </li>
-                                </ul>
-                            </td>
-                        </tr>
-                        <tr>
                             <th class="text-right">Budget</th>
                             <td>{{slcted.budget}}</td>
                         </tr>
@@ -419,7 +430,7 @@
                         <div class="form-group col-sm-10 ">
                             <label class="control-label col-sm-3">Cont. Email</label>
                             <div class="col-sm-9">
-                                <input type="text" ng-model="request.contactPerson" name="contactPerson" required
+                                <input type="text" ng-model="request.contactEmail" name="contactEmail" required
                                        class="form-control input-sm">
                             </div>
                         </div>
@@ -461,33 +472,42 @@
                             </div>
                         </div>
                         <div class="form-group col-sm-10 " ng-if="request.combined == 1">
-                            <label class="control-label col-sm-3">Choose Countries</label>
+                            <label class="control-label col-sm-3">Choose Countries </label>
                             <div class="col-sm-9">
                                 <div class="form-group" ng-repeat="r in countryRow">
-                                    <div class="col-sm-7">
-                                        <select id="combinedCountrySelect{{r}}" class="form-control input-sm"
-                                                ng-model="request.combinedCountries[r - 1].countryId">
-                                            <option ng-repeat="is in countries" value="{{is.id}}"
-                                                    ng-selected="foundInList(is.id, request.combinedCountries)">
-                                                {{is.name}}
-                                            </option>
-                                        </select>
+                                    <div class="col-sm-11">
+                                        <div class="col-sm-6">{{request.combinedCountries[r - 1].countryId}}
+                                            <select id="combinedCountrySelect{{r}}" class="form-control input-sm"
+                                                    ng-model="request.combinedCountries[r - 1].countryId">
+                                                <option ng-repeat="is in countries" value="{{is.id}}"
+                                                        ng-selected="is.id === request.combinedCountries[r - 1].countryId">
+                                                    {{is.id}}. {{is.name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input ng-model="request.combinedCountries[r - 1].daysCount" type="number"
+                                                   placeholder="Days Count" name="activity" required
+                                                   class="form-control input-sm"/>
+                                        </div>
+                                        <div class="col-sm-12">
+                                        <textarea rows="3" cols="10" placeholder="Note"
+                                                  ng-model="request.combinedCountries[r - 1].note"
+                                                  class="form-control input-sm"></textarea>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-4">
-                                        <input ng-model="request.combinedCountries[r - 1].daysCount" type="number"
-                                               placeholder="Days Count" name="activity" required
-                                               class="form-control input-sm"/>
-                                    </div>
-                                    <div class="col-md-1" ng-show="$index == 0">
-                                        <a class="btn btn-sm row">
-                                            <span class="fa fa-plus" ng-click="addCountryRow()"></span>
-                                        </a>
-                                    </div>
-                                    <div class="col-md-1" ng-show="$index > 0">
-                                        <a class="btn btn-sm row">
-                                <span class="fa fa-trash"
-                                      ng-click="removePotentialLocation($index)"></span>
-                                        </a>
+                                    <div class="col-sm-1">
+                                        <div class="col-md-1" ng-show="$index == 0">
+                                            <a class="btn btn-sm row" style="vertical-align: bottom;">
+                                                <span class="fa fa-plus" ng-click="addCountryRow()"></span>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-1" ng-show="$index > 0">
+                                            <a class="btn btn-sm row">
+                                                <span class="fa fa-trash"
+                                                      ng-click="removePotentialLocation($index)"></span>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -536,7 +556,7 @@
                             <label class="control-label col-sm-3">Arrival Time</label>
                             <div class="col-sm-9">
                                 <div class="input-group date col-md-5"
-                                     data-date-format="yyyy-mm-dd HH:ii:ss p" data-link-field="dtp_input1">
+                                     data-date-format="yyyy-mm-dd HH:ii p" data-link-field="dtp_input1">
                                     <input class="form-control" size="16" type="text" ng-model="request.arrivalTime"
                                            name="datetime">
                                 </div>
@@ -557,7 +577,7 @@
                             <label class="control-label col-sm-3">Leave Time</label>
                             <div class="col-sm-9">
                                 <div class="input-group date col-md-5"
-                                     data-date-format="yyyy-mm-dd HH:ii:ss p" data-link-field="dtp_input2">
+                                     data-date-format="yyyy-mm-dd HH:ii p" data-link-field="dtp_input2">
                                     <input class="form-control" size="16" type="text" ng-model="request.leaveTime"
                                            name="datetime">
                                 </div>
@@ -778,11 +798,11 @@
                         <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Name</th>
                             <th>Email</th>
-                            <th>Phone</th>
-                            <th>NextActivity</th>
-                            <th>activity</th>
+                            <th></th>
+                            <th>Days/Nights</th>
+                            <th>Arrival</th>
+                            <th>Budget</th>
                             <th class="col-md-2 text-center">Action</th>
                         </tr>
                         </thead>
@@ -791,9 +811,9 @@
                             <td>{{r.id}}</td>
                             <td>{{r.name}}</td>
                             <td>{{r.email}}</td>
-                            <td>{{r.phone}}</td>
-                            <td>{{r.nextActivity}}</td>
-                            <td>{{r.activity}}</td>
+                            <td>{{r.daysCount}} / {{r.nightsCount}}</td>
+                            <td>{{r.arrivalTime}}</td>
+                            <td>{{r.budget}}</td>
                             <td class="text-center">
                                 <a ng-click="showDetails(r.id)" data-toggle="modal" title="Details"
                                    data-target="#detailModal" class="btn btn-xs">

@@ -8,7 +8,7 @@ import java.util.List;
 public class RequestCountryDTO {
 
     private Integer id;
-    private Integer caseId;
+    private Integer requestId;
     private CountryDTO country;
     private Integer daysCount;
     private String note;
@@ -17,7 +17,7 @@ public class RequestCountryDTO {
     public static RequestCountryDTO parse(RequestCountry record) {
         RequestCountryDTO dto = new RequestCountryDTO();
         dto.setId(record.getId());
-        dto.setCaseId(record.getRequestId());
+        dto.setRequestId(record.getRequestId());
         dto.setCountry(CountryDTO.parse(record.getCountry()));
         dto.setDaysCount(record.getDaysCount());
         dto.setNote(record.getNote());
@@ -41,12 +41,12 @@ public class RequestCountryDTO {
         this.id = id;
     }
 
-    public Integer getCaseId() {
-        return caseId;
+    public Integer getRequestId() {
+        return requestId;
     }
 
-    public void setCaseId(Integer caseId) {
-        this.caseId = caseId;
+    public void setRequestId(Integer requestId) {
+        this.requestId = requestId;
     }
 
     public CountryDTO getCountry() {

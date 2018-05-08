@@ -123,7 +123,7 @@ public class Request {
     }
 
     @Basic
-    @Column(name = "arrival_time", insertable = false, updatable = false)
+    @Column(name = "arrival_time")
     public Timestamp getArrivalTime() {
         return arrivalTime;
     }
@@ -133,7 +133,7 @@ public class Request {
     }
 
     @Basic
-    @Column(name = "leave_time", insertable = false, updatable = false)
+    @Column(name = "leave_time")
     public Timestamp getLeaveTime() {
         return leaveTime;
     }

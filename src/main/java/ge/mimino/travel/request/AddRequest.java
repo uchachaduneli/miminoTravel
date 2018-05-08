@@ -15,8 +15,8 @@ public class AddRequest {
     private Integer nightsCount;
     private Integer touristsCount;
     private String touristsCountNote;
-    private Date arrivalTime;
-    private Date leaveTime;
+    private String arrivalTime;
+    private String leaveTime;
     private Integer arrivalCityId;
     private Integer leaveCityId;
     private String tourType;
@@ -32,30 +32,6 @@ public class AddRequest {
     private Integer userId;
     private List<Integer> otherDetails;
     private List<CombinedCountry> combinedCountries;
-
-    public List<CombinedCountry> getCombinedCountries() {
-        return combinedCountries;
-    }
-
-    public void setCombinedCountries(List<CombinedCountry> combinedCountries) {
-        this.combinedCountries = combinedCountries;
-    }
-
-    public Integer getGuideLanguageId() {
-        return guideLanguageId;
-    }
-
-    public void setGuideLanguageId(Integer guideLanguageId) {
-        this.guideLanguageId = guideLanguageId;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
 
     public Integer getId() {
         return id;
@@ -129,19 +105,19 @@ public class AddRequest {
         this.touristsCountNote = touristsCountNote;
     }
 
-    public Date getArrivalTime() {
+    public String getArrivalTime() {
         return arrivalTime;
     }
 
-    public void setArrivalTime(Date arrivalTime) {
+    public void setArrivalTime(String arrivalTime) {
         this.arrivalTime = arrivalTime;
     }
 
-    public Date getLeaveTime() {
+    public String getLeaveTime() {
         return leaveTime;
     }
 
-    public void setLeaveTime(Date leaveTime) {
+    public void setLeaveTime(String leaveTime) {
         this.leaveTime = leaveTime;
     }
 
@@ -175,6 +151,14 @@ public class AddRequest {
 
     public void setGuideDriver(Integer guideDriver) {
         this.guideDriver = guideDriver;
+    }
+
+    public Integer getGuideLanguageId() {
+        return guideLanguageId;
+    }
+
+    public void setGuideLanguageId(Integer guideLanguageId) {
+        this.guideLanguageId = guideLanguageId;
     }
 
     public String getHotelCategory() {
@@ -233,11 +217,27 @@ public class AddRequest {
         this.packageCategoryId = packageCategoryId;
     }
 
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
     public List<Integer> getOtherDetails() {
         return otherDetails;
     }
 
     public void setOtherDetails(List<Integer> otherDetails) {
         this.otherDetails = otherDetails;
+    }
+
+    public List<CombinedCountry> getCombinedCountries() {
+        return combinedCountries;
+    }
+
+    public void setCombinedCountries(List<CombinedCountry> combinedCountries) {
+        this.combinedCountries = combinedCountries;
     }
 }

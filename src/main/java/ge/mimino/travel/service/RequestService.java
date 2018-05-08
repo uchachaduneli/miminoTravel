@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class RequestService {
 
     @Transactional(rollbackFor = Throwable.class)
     public Request save(AddRequest request) throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         Request obj = new Request();
         obj.setContactEmail(request.getContactEmail());
@@ -40,8 +42,8 @@ public class RequestService {
         obj.setNightsCount(request.getNightsCount());
         obj.setTouristsCount(request.getTouristsCount());
         obj.setTouristsCountNote(request.getTouristsCountNote());
-        obj.setArrivalTime(new Timestamp(request.getArrivalTime().getTime()));//request.getArrivalTime()
-        obj.setLeaveTime(new Timestamp(request.getLeaveTime().getTime()));//request.getLeaveTime()
+        obj.setArrivalTime(new Timestamp(sdf.parse(request.getArrivalTime()).getTime()));//request.getArrivalTime()
+        obj.setLeaveTime(new Timestamp(sdf.parse(request.getLeaveTime()).getTime()));//request.getLeaveTime()
         obj.setTourType(request.getTourType());
         obj.setGuideDriver(request.getGuideDriver());
         obj.setHotelCategory(request.getHotelCategory());
@@ -66,7 +68,8 @@ public class RequestService {
         requestDAO.removeRequestCountries(obj.getId());
         if (request.getCombinedCountries() != null && !request.getCombinedCountries().isEmpty()) {
             for (CombinedCountry combCntr : request.getCombinedCountries()) {
-                requestDAO.create(new RequestCountry(obj.getId(), ((Country) requestDAO.find(Country.class, combCntr.getCountryId())), combCntr.getDaysCount()));
+                requestDAO.create(new RequestCountry(obj.getId(), ((Country) requestDAO.find(Country.class, combCntr.getCountryId())),
+                        combCntr.getDaysCount(), combCntr.getNote()));
             }
         }
 

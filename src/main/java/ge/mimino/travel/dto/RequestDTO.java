@@ -2,6 +2,7 @@ package ge.mimino.travel.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ge.mimino.travel.misc.JsonDateSerializeSupport;
+import ge.mimino.travel.misc.JsonDateTimeSerializeSupport;
 import ge.mimino.travel.model.Request;
 
 import java.sql.Timestamp;
@@ -22,22 +23,28 @@ public class RequestDTO {
     private Integer nightsCount;
     private Integer touristsCount;
     private String touristsCountNote;
-    @JsonSerialize(using = JsonDateSerializeSupport.class)
+    @JsonSerialize(using = JsonDateTimeSerializeSupport.class)
     private Date arrivalTime;
-    @JsonSerialize(using = JsonDateSerializeSupport.class)
+    @JsonSerialize(using = JsonDateTimeSerializeSupport.class)
     private Date leaveTime;
     private CityDTO arrivalCity;
+    private Integer arrivalCityId;
     private CityDTO leaveCity;
+    private Integer leaveCityId;
     private String tourType;
     private Integer guideDriver;
     private LanguageDTO guideLanguage;
+    private Integer guideLanguageId;
     private String hotelCategory;
     private MealCategoryDTO mealCategory;
+    private Integer mealCategoryId;
     private String entranceFees;
     private CurrencyDTO currency;
+    private Integer currencyId;
     private String comment;
     private Double budget;
     private PackageCategoryDTO packageCategory;
+    private Integer packageCategoryId;
     @JsonSerialize(using = JsonDateSerializeSupport.class)
     private Timestamp createDate;
 
@@ -55,18 +62,24 @@ public class RequestDTO {
         dto.setTouristsCountNote(record.getTouristsCountNote());
         dto.setArrivalTime(record.getArrivalTime());
         dto.setLeaveTime(record.getLeaveTime());
-//        dto.setArrivalCity(CityDTO.parse(record.getArrivalCity()));
-//        dto.setLeaveCity(CityDTO.parse(record.getLeaveCity()));
+        dto.setArrivalCity(CityDTO.parse(record.getArrivalCity()));
+        dto.setArrivalCityId(record.getArrivalCity().getId());
+        dto.setLeaveCity(CityDTO.parse(record.getLeaveCity()));
+        dto.setLeaveCityId(record.getLeaveCity().getId());
         dto.setTourType(record.getTourType());
         dto.setGuideDriver(record.getGuideDriver());
         dto.setHotelCategory(record.getHotelCategory());
-//        dto.setMealCategory(MealCategoryDTO.parse(record.getMealCategory()));
+        dto.setMealCategory(MealCategoryDTO.parse(record.getMealCategory()));
+        dto.setMealCategoryId(record.getMealCategory().getId());
         dto.setEntranceFees(record.getEntranceFees());
-//        dto.setCurrency(CurrencyDTO.parse(record.getCurrency()));
+        dto.setCurrency(CurrencyDTO.parse(record.getCurrency()));
+        dto.setCurrencyId(record.getCurrency().getId());
         dto.setComment(record.getComment());
         dto.setBudget(record.getBudget());
-//        dto.setPackageCategory(PackageCategoryDTO.parse(record.getPackageCategory()));
-//        dto.setGuideLanguage(LanguageDTO.parse(record.getGuideLanguage()));
+        dto.setPackageCategory(PackageCategoryDTO.parse(record.getPackageCategory()));
+        dto.setPackageCategoryId(record.getPackageCategory().getId());
+        dto.setGuideLanguage(LanguageDTO.parse(record.getGuideLanguage()));
+        dto.setGuideLanguageId(record.getGuideLanguage().getId());
         dto.setCreateDate(record.getCreateDate());
         return dto;
     }
@@ -78,6 +91,54 @@ public class RequestDTO {
             list.add(RequestDTO.parse(record));
         }
         return list;
+    }
+
+    public Integer getArrivalCityId() {
+        return arrivalCityId;
+    }
+
+    public void setArrivalCityId(Integer arrivalCityId) {
+        this.arrivalCityId = arrivalCityId;
+    }
+
+    public Integer getLeaveCityId() {
+        return leaveCityId;
+    }
+
+    public void setLeaveCityId(Integer leaveCityId) {
+        this.leaveCityId = leaveCityId;
+    }
+
+    public Integer getGuideLanguageId() {
+        return guideLanguageId;
+    }
+
+    public void setGuideLanguageId(Integer guideLanguageId) {
+        this.guideLanguageId = guideLanguageId;
+    }
+
+    public Integer getMealCategoryId() {
+        return mealCategoryId;
+    }
+
+    public void setMealCategoryId(Integer mealCategoryId) {
+        this.mealCategoryId = mealCategoryId;
+    }
+
+    public Integer getCurrencyId() {
+        return currencyId;
+    }
+
+    public void setCurrencyId(Integer currencyId) {
+        this.currencyId = currencyId;
+    }
+
+    public Integer getPackageCategoryId() {
+        return packageCategoryId;
+    }
+
+    public void setPackageCategoryId(Integer packageCategoryId) {
+        this.packageCategoryId = packageCategoryId;
     }
 
     public LanguageDTO getGuideLanguage() {

@@ -3,6 +3,7 @@ package ge.mimino.travel.dto;
 public class CombinedCountry {
     private Integer countryId;
     private Integer daysCount;
+    private String note;
 
     public Integer getCountryId() {
         return countryId;
@@ -18,5 +19,13 @@ public class CombinedCountry {
 
     public void setDaysCount(Integer daysCount) {
         this.daysCount = daysCount;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }
