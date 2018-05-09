@@ -159,10 +159,9 @@
                 $scope.countryRow = [];
                 $scope.request.combinedCountries = [];
                 angular.forEach($scope.slcted.countries, function (v, k) {
-                    $scope.request.countries.push(v);
                     $scope.countryRow.push(k + 1);
                     $scope.request.combinedCountries.push({
-                        'countryId': (v.country.id),
+                        'countryId': parseInt(v.country.id),
                         'daysCount': v.daysCount,
                         'note': v.note
                     });
@@ -475,13 +474,13 @@
                             <label class="control-label col-sm-3">Choose Countries </label>
                             <div class="col-sm-9">
                                 <div class="form-group" ng-repeat="r in countryRow">
-                                    <div class="col-sm-11">
-                                        <div class="col-sm-6">{{request.combinedCountries[r - 1].countryId}}
+                                    <div class="col-sm-11" id="divId_{{r}}">
+                                        <div class="col-sm-6" id="dv_{{r}}">
                                             <select id="combinedCountrySelect{{r}}" class="form-control input-sm"
                                                     ng-model="request.combinedCountries[r - 1].countryId">
-                                                <option ng-repeat="is in countries" value="{{is.id}}"
-                                                        ng-selected="is.id === request.combinedCountries[r - 1].countryId">
-                                                    {{is.id}}. {{is.name}}
+                                                <option ng-repeat="c in countries" value="{{c.id}}" ng-value="c.id"
+                                                        ng-selected="c.id === request.combinedCountries[r - 1].countryId">
+                                                    {{c.id}}. {{c.name}}
                                                 </option>
                                             </select>
                                         </div>
