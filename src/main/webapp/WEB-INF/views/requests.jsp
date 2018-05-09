@@ -214,6 +214,8 @@
             $scope.req.id = $scope.request.id;
             $scope.req.contactEmail = $scope.request.contactEmail;
             $scope.req.combined = $scope.request.combined;
+            $scope.req.tourStart = $scope.request.tourStart;
+            $scope.req.tourEnd = $scope.request.tourEnd;
             $scope.req.daysCount = $scope.request.daysCount;
             $scope.req.nightsCount = $scope.request.nightsCount;
             $scope.req.touristsCount = $scope.request.touristsCount;
@@ -305,6 +307,14 @@
                         <tr>
                             <th class="text-right">Contact Email</th>
                             <td>{{slcted.contactEmail}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Tour Starts</th>
+                            <td>{{slcted.tourStart}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Tour Ends</th>
+                            <td>{{slcted.tourEnd}}</td>
                         </tr>
                         <tr>
                             <th class="text-right">Combined</th>
@@ -798,7 +808,6 @@
                         <tr>
                             <th>ID</th>
                             <th>Email</th>
-                            <th></th>
                             <th>Days/Nights</th>
                             <th>Arrival</th>
                             <th>Budget</th>
@@ -808,8 +817,7 @@
                         <tbody title="Double Click For Detailed Information">
                         <tr ng-repeat="r in list" ng-dblclick="handleDoubleClick(r.id)">
                             <td>{{r.id}}</td>
-                            <td>{{r.name}}</td>
-                            <td>{{r.email}}</td>
+                            <td>{{r.contactEmail}}</td>
                             <td>{{r.daysCount}} / {{r.nightsCount}}</td>
                             <td>{{r.arrivalTime}}</td>
                             <td>{{r.budget}}</td>
