@@ -45,6 +45,8 @@ public class RequestDTO {
     private Double budget;
     private PackageCategoryDTO packageCategory;
     private Integer packageCategoryId;
+    private UsersDTO user;
+    private Integer userId;
     @JsonSerialize(using = JsonDateSerializeSupport.class)
     private Timestamp createDate;
 
@@ -78,6 +80,8 @@ public class RequestDTO {
         dto.setBudget(record.getBudget());
         dto.setPackageCategory(PackageCategoryDTO.parse(record.getPackageCategory()));
         dto.setPackageCategoryId(record.getPackageCategory().getId());
+        dto.setUser(UsersDTO.parse(record.getUser()));
+        dto.setUserId(record.getUser().getUserId());
         dto.setGuideLanguage(LanguageDTO.parse(record.getGuideLanguage()));
         dto.setGuideLanguageId(record.getGuideLanguage().getId());
         dto.setCreateDate(record.getCreateDate());
@@ -91,6 +95,22 @@ public class RequestDTO {
             list.add(RequestDTO.parse(record));
         }
         return list;
+    }
+
+    public UsersDTO getUser() {
+        return user;
+    }
+
+    public void setUser(UsersDTO user) {
+        this.user = user;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public Integer getArrivalCityId() {

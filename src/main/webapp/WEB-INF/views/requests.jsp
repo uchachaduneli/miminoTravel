@@ -25,6 +25,11 @@
 //            $("#monthSeterInputId").val($("#srch_datepicker").val());
         });
 
+        $('input[name="date"]').datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true,
+        })
+
         $('input[name="datetime"]').datetimepicker({
             weekStart: 1,
             todayBtn: 1,
@@ -166,6 +171,9 @@
                         'note': v.note
                     });
                 });
+                if ($scope.slcted.countries.length === 0) {
+                    $scope.countryRow = [1];
+                }
             }
 
             ajaxCall($http, "requests/get-requests-countries?id=" + id, null, getCaseCountries);
@@ -736,64 +744,74 @@
                                            placeholder="ID">
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <input type="text" class="form-control srch" ng-model="srchCase.name"
-                                           placeholder="Name">
+                                    <input type="text" class="form-control srch" ng-model="srchCase.contactEmail"
+                                           placeholder="Email">
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <select class="form-control" ng-model="srchCase.combined"
+                                            ng-change="loadMainData()">
+                                        <option value="" selected="selected">Combined</option>
+                                        <option value="1">Yes</option>
+                                        <option value="2">No</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <select class="form-control" ng-model="srchCase.currencyId"
+                                            ng-change="loadMainData()">
+                                        <option value="" selected="selected">Currency</option>
+                                        <option ng-repeat="v in currencies" ng-selected="v.id === srchCase.currencyId"
+                                                value="{{v.id}}">{{v.name}}
+                                        </option>
+                                    </select>
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <input type="text" class="form-control srch" ng-model="srchCase.contactPerson"
-                                           placeholder="Contact Person">
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <input type="text" class="form-control srch"
-                                           ng-model="srchCase.phone" placeholder="Phone">
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <input type="text" class="form-control srch"
-                                           ng-model="srchCase.email" placeholder="Email">
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <select class="form-control" ng-model="srchCase.countryId"
+                                    <select class="form-control" ng-model="srchCase.guideLanguageId"
                                             ng-change="loadMainData()">
-                                        <option value="" selected="selected">Country</option>
-                                        <option ng-repeat="v in countries" ng-selected="v.id === srchCase.countryId"
+                                        <option value="" selected="selected">Language</option>
+                                        <option ng-repeat="v in languages"
+                                                ng-selected="v.id === srchCase.guideLanguageId"
                                                 value="{{v.id}}">{{v.name}}
                                         </option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <select class="form-control" ng-model="srchCase.rankId"
+                                    <select class="form-control" ng-model="srchCase.packageCategoryId"
                                             ng-change="loadMainData()">
-                                        <option value="" selected="selected">Rank</option>
-                                        <option ng-repeat="v in ranks" ng-selected="v.id === srchCase.rankId"
+                                        <option value="" selected="selected">Pakage Category</option>
+                                        <option ng-repeat="v in packageCategories"
+                                                ng-selected="v.id === srchCase.packageCategoryId"
                                                 value="{{v.id}}">{{v.name}}
                                         </option>
                                     </select>
                                 </div>
-                                <div class="form-group col-md-2">
-                                    <select class="form-control" ng-model="srchCase.userId"
-                                            ng-change="loadMainData()">
-                                        <option value="" selected="selected">User</option>
-                                        <option ng-repeat="v in users" ng-selected="v.userId === srchCase.userId"
-                                                value="{{v.userId}}">{{v.userName}}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-4">
                                     <div class="input-group">
                                         <div class="input-append">
-                                            <input type="text" name="srchActivityStart" class="form-control srch"
-                                                   placeholder="From"
-                                                   ng-model="srchCase.nextActivity" placeholder="">
+                                            <input type="text" name="date" class="form-control srch"
+                                                   placeholder="From" ng-model="srchCase.tourStart">
                                         </div>
-                                        <span class="input-group-addon">Next Activ</span>
+                                        <span class="input-group-addon">Tour Starts</span>
                                         <div class="input-append">
-                                            <input type="text" name="srchActivityEnd" class="form-control srch"
-                                                   placeholder="To" ng-model="srchCase.nextActivityTo">
+                                            <input type="text" name="date" class="form-control srch"
+                                                   placeholder="To" ng-model="srchCase.tourStartTo">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group col-md-3">
-                                    <button class="btn btn-default col-md-11" ng-click="loadMainData()" id="srchBtnId">
+                                <div class="form-group col-md-4">
+                                    <div class="input-group">
+                                        <div class="input-append">
+                                            <input type="text" name="date" class="form-control srch"
+                                                   placeholder="From" ng-model="srchCase.tourEnd">
+                                        </div>
+                                        <span class="input-group-addon">Tour Ends</span>
+                                        <div class="input-append">
+                                            <input type="text" name="date" class="form-control srch"
+                                                   placeholder="To" ng-model="srchCase.tourEndTo">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <button class="btn btn-default col-md-12" ng-click="loadMainData()" id="srchBtnId">
                                         <span class="fa fa-search"></span> &nbsp; &nbsp;Search &nbsp; &nbsp;
                                     </button>
                                 </div>

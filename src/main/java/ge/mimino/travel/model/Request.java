@@ -30,6 +30,7 @@ public class Request {
     private Double budget;
     private PackageCategory packageCategory;
     private Timestamp createDate;
+    private Users user;
 
     @Id
     @Column(name = "id")
@@ -260,6 +261,16 @@ public class Request {
 
     public void setPackageCategory(PackageCategory packageCategory) {
         this.packageCategory = packageCategory;
+    }
+
+    @JoinColumn(name = "user_id")
+    @OneToOne
+    public Users getUser() {
+        return user;
+    }
+
+    public void setUser(Users user) {
+        this.user = user;
     }
 
     @Basic

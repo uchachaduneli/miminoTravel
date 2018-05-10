@@ -1,6 +1,7 @@
 package ge.mimino.travel.controller;
 
 import ge.mimino.travel.dto.RequestDTO;
+import ge.mimino.travel.dto.UsersDTO;
 import ge.mimino.travel.misc.Response;
 import ge.mimino.travel.request.AddRequest;
 import ge.mimino.travel.service.RequestService;
@@ -28,10 +29,9 @@ public class RequestController {
     @ResponseBody
     private Response getRequests(@RequestParam("start") int start, @RequestParam("limit") int limit,
                                  @RequestBody AddRequest request, HttpServletRequest servletRequest) throws Exception {
-        int crntUserId = (Integer) servletRequest.getSession().getAttribute("userId");
-//        if (crntUserId == UsersDTO.COMUNICATION_MANAGER) {
-//            request.setUserId(crntUserId);
-//        }
+        if (((Integer) servletRequest.getSession().getAttribute("typeId")) == UsersDTO.COMUNICATION_MANAGER) {
+            request.setUserId((Integer) servletRequest.getSession().getAttribute("userId"));
+        }
         return Response.withSuccess(requestService.getRequests(start, limit, request));
     }
 
@@ -55,7 +55,8 @@ public class RequestController {
 
     @RequestMapping({"/save"})
     @ResponseBody
-    public Response saveUser(@RequestBody AddRequest request) throws Exception {
+    public Response saveUser(@RequestBody AddRequest request, HttpServletRequest servletRequest) throws Exception {
+        request.setUserId((Integer) servletRequest.getSession().getAttribute("userId"));
         return Response.withSuccess(RequestDTO.parse(requestService.save(request)));
     }
 

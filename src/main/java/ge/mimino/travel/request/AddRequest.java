@@ -11,6 +11,8 @@ public class AddRequest {
     private Integer combined;
     private Date tourStart;
     private Date tourEnd;
+    private Date tourStartTo;
+    private Date tourEndTo;
     private Integer daysCount;
     private Integer nightsCount;
     private Integer touristsCount;
@@ -32,6 +34,22 @@ public class AddRequest {
     private Integer userId;
     private List<Integer> otherDetails;
     private List<CombinedCountry> combinedCountries;
+
+    public Date getTourStartTo() {
+        return tourStartTo;
+    }
+
+    public void setTourStartTo(Date tourStartTo) {
+        this.tourStartTo = tourStartTo;
+    }
+
+    public Date getTourEndTo() {
+        return tourEndTo;
+    }
+
+    public void setTourEndTo(Date tourEndTo) {
+        this.tourEndTo = tourEndTo;
+    }
 
     public Integer getId() {
         return id;

@@ -29,9 +29,8 @@ public class ContactController {
     @ResponseBody
     private Response getContacts(@RequestParam("start") int start, @RequestParam("limit") int limit,
                                  @RequestBody AddContactRequest request, HttpServletRequest servletRequest) throws Exception {
-        int crntUserId = (Integer) servletRequest.getSession().getAttribute("userId");
-        if (crntUserId == UsersDTO.COMUNICATION_MANAGER) {
-            request.setUserId(crntUserId);
+        if (((Integer) servletRequest.getSession().getAttribute("typeId")) == UsersDTO.COMUNICATION_MANAGER) {
+            request.setUserId((Integer) servletRequest.getSession().getAttribute("userId"));
         }
         return Response.withSuccess(contactService.getContacts(start, limit, request));
     }

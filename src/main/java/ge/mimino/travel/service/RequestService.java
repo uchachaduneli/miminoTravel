@@ -26,7 +26,7 @@ public class RequestService {
 
 
     public List<RequestDTO> getRequests(int start, int limit, AddRequest srchRequest) {
-        return RequestDTO.parseToList(requestDAO.getAll(Request.class));
+        return RequestDTO.parseToList(requestDAO.getRequests(start, limit, srchRequest));
     }
 
     @Transactional(rollbackFor = Throwable.class)
@@ -57,6 +57,7 @@ public class RequestService {
         obj.setMealCategory((MealCategory) requestDAO.find(MealCategory.class, request.getMealCategoryId()));
         obj.setPackageCategory((PackageCategory) requestDAO.find(PackageCategory.class, request.getPackageCategoryId()));
         obj.setGuideLanguage((Language) requestDAO.find(Language.class, request.getGuideLanguageId()));
+        obj.setUser((Users) requestDAO.find(Users.class, request.getUserId()));
 //
         if (request.getId() != null) {
             obj.setId(request.getId());
