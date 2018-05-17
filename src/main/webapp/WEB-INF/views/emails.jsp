@@ -11,25 +11,16 @@
 
   $(document).ready(function () {
 
-    $('input[name="nextActivity"]').datepicker({
-      format: "dd/mm/yyyy",
-      autoclose: true,
+    $('input[name="datetime"]').datetimepicker({
+      weekStart: 1,
+      todayBtn: 1,
+      autoclose: 1,
+      todayHighlight: 1,
+      startView: 2,
+      forceParse: 0,
+      showMeridian: 1,
+      use24hours: 1
     }).on('changeDate', function (ev) {
-      $("#caseStartDateInput").val($("#caseStartDateInput").val());
-    });
-
-    $('input[name="srchActivityStart"]').datepicker({
-      format: "dd/mm/yyyy",
-      autoclose: true,
-    }).on('changeDate', function (ev) {
-//            $("#monthSeterInputId").val($("#srch_datepicker").val());
-    });
-
-    $('input[name="srchActivityEnd"]').datepicker({
-      format: "dd/mm/yyyy",
-      autoclose: true,
-    }).on('changeDate', function (ev) {
-//            $("#monthSeterInputId").val($("#srch_datepicker").val());
     });
 
     $('.srch').keypress(function (e) {
@@ -188,25 +179,26 @@
           <div id="filter-panel" class="filter-panel">
             <div class="panel panel-default">
               <div class="panel-body">
+
                 <div class="form-group col-md-2">
                   <input type="text" class="form-control srch" ng-model="srchCase.id"
                          placeholder="ID">
                 </div>
-                <div class="form-group col-md-3">
-                  <input type="text" class="form-control srch" ng-model="srchCase.name"
-                         placeholder="Name">
-                </div>
-                <div class="form-group col-md-3">
-                  <input type="text" class="form-control srch" ng-model="srchCase.contactPerson"
-                         placeholder="Contact Person">
+                <div class="form-group col-md-2">
+                  <input type="text" class="form-control srch" ng-model="srchCase.from"
+                         placeholder="From">
                 </div>
                 <div class="form-group col-md-2">
-                  <input type="text" class="form-control srch"
-                         ng-model="srchCase.phone" placeholder="Phone">
+                  <input type="text" class="form-control srch" ng-model="srchCase.to"
+                         placeholder="To">
                 </div>
-                <div class="form-group col-md-2">
+                <div class="form-group col-md-3">
                   <input type="text" class="form-control srch"
-                         ng-model="srchCase.email" placeholder="Email">
+                         ng-model="srchCase.subject" placeholder="Subject">
+                </div>
+                <div class="form-group col-md-3">
+                  <input type="text" class="form-control srch"
+                         ng-model="srchCase.content" placeholder="Content">
                 </div>
                 <div class="form-group col-md-2">
                   <select class="form-control" ng-model="srchCase.userId"
@@ -217,21 +209,35 @@
                     </option>
                   </select>
                 </div>
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-4">
                   <div class="input-group">
                     <div class="input-append">
-                      <input type="text" name="srchActivityStart" class="form-control srch"
+                      <input type="text" name="datetime" class="form-control srch"
                              placeholder="From"
-                             ng-model="srchCase.nextActivity" placeholder="">
+                             ng-model="srchCase.sendDate">
                     </div>
-                    <span class="input-group-addon">Next Activ</span>
+                    <span class="input-group-addon">Send Date</span>
                     <div class="input-append">
-                      <input type="text" name="srchActivityEnd" class="form-control srch"
-                             placeholder="To" ng-model="srchCase.nextActivityTo">
+                      <input type="text" name="datetime" class="form-control srch"
+                             placeholder="To" ng-model="srchCase.sendDateTo">
                     </div>
                   </div>
                 </div>
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-4">
+                  <div class="input-group">
+                    <div class="input-append">
+                      <input type="text" name="datetime" class="form-control srch"
+                             placeholder="From"
+                             ng-model="srchCase.receiveDate">
+                    </div>
+                    <span class="input-group-addon">Receive Date</span>
+                    <div class="input-append">
+                      <input type="text" name="datetime" class="form-control srch"
+                             placeholder="To" ng-model="srchCase.receiveDateTo">
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group col-md-2">
                   <button class="btn btn-default col-md-11" ng-click="loadMainData()" id="srchBtnId">
                     <span class="fa fa-search"></span> &nbsp; &nbsp;Search &nbsp; &nbsp;
                   </button>
