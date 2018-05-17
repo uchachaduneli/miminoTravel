@@ -30,6 +30,11 @@ public class WebController {
         return "contacts";
     }
 
+    @RequestMapping("/emails")
+    public String emails() {
+        return "emails";
+    }
+
     @RequestMapping("/")
     public String defaultFnc() {
         return "";
