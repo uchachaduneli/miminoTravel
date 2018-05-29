@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
+@Table(name = "users")
 public class Users {
     private Integer userId;
     private String userDesc;

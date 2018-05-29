@@ -3,7 +3,7 @@ package ge.mimino.travel.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "contact_status", schema = "university")
+@Table(name = "contact_status")
 public class ContactStatus {
     private Integer id;
     private String name;
