@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
 import javax.mail.*;
 import javax.mail.internet.*;
 import javax.swing.*;
@@ -18,6 +20,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -175,6 +178,66 @@ public class MailService {
         return result;
     }
 
+    private MimeBodyPart createFileAttachment(String filepath)
+            throws MessagingException {
+        MimeBodyPart mbp = new MimeBodyPart();
+
+        FileDataSource fds = new FileDataSource(filepath);
+        mbp.setDataHandler(new DataHandler(fds));
+        mbp.setFileName(fds.getName());
+        return mbp;
+    }
+
+    public boolean sendEmail(String senderEmail, String senderPass, List<String> to, String reply,
+                             List<String> filePaths, String subject, String text) {
+        boolean result = false;
+
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host", "smtp.yandex.com");
+        properties.put("mail.smtp.port", "465");
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.ssl.enable", "true");
+        properties.put("mail.smtp.socketFactory.class",
+                "javax.net.ssl.SSLSocketFactory");
+
+        MimeMessage message;
+        try {
+
+            Authenticator auth = new EmailAuthenticator(senderEmail, senderPass);
+            Session session = Session.getDefaultInstance(properties, auth);
+            session.setDebug(false);
+
+            InternetAddress email_from = new InternetAddress(senderEmail);
+            InternetAddress email_to = new InternetAddress(to.get(0));
+            InternetAddress reply_to = (reply != null) ? new InternetAddress(reply) : null;
+
+            message = new MimeMessage(session);
+            message.setFrom(email_from);
+            message.setRecipient(Message.RecipientType.TO, email_to);
+            message.setSubject(subject);
+
+            if (reply_to != null) {
+                message.setReplyTo(new Address[]{reply_to});
+            }
+
+            Multipart mmp = new MimeMultipart();
+            MimeBodyPart bodyPart = new MimeBodyPart();
+            bodyPart.setContent(text, "text/plain; charset=utf-8");
+            mmp.addBodyPart(bodyPart);
+
+            if (!filePaths.isEmpty()) {
+                MimeBodyPart mbr = createFileAttachment(filePaths.get(0));
+                mmp.addBodyPart(mbr);
+            }
+            message.setContent(mmp);
+            Transport.send(message);
+            result = true;
+        } catch (MessagingException e) {
+            System.err.println(e.getMessage());
+        }
+        return result;
+    }
+
     public void readGmail() {
 
         /*this will print subject of all messages in the inbox of sender@gmail.com*/
@@ -297,7 +360,7 @@ public class MailService {
                             // this part is attachment
                             String fileName = part.getFileName();
                             attachFiles += fileName + ", ";
-                            part.saveFile("C:\\Users\\ME\\IdeaProjects\\MyMailer\\src\\main\\resources" + File.separator + fileName);
+                            part.saveFile("C:\\Users\\ME\\IdeaProjects\\miminoTravel\\src\\main\\resources" + File.separator + fileName);
                         } else {
                             // this part may be the message content
                             if (arrayMessages[i].isMimeType("text/plain")) {
@@ -348,17 +411,46 @@ public class MailService {
 
 //        String mailFrom = new String("miminotest@gmail.com");
 //        String mailTo = new String("miminotest@gmail.com");
+
         String senderPassword = new String("1qaz@WSX1qaz");
         String senderUserName = new String("miminotest@yandex.ru");
-//        String mailSubject = new String("Testing Mail");
-//        String mailText = new String("Have an Nice Day ...........!!!");
+
+//        String senderPassword = new String("Testirebah1");
+//        String senderUserName = new String("administrator@hotelhub.ge");
+
         MailService newGmailClient = new MailService();
         newGmailClient.setAccountDetails(senderUserName, senderPassword);
 
 //        newGmailClient.sendGmail(mailFrom, mailTo, mailSubject, mailText);
 
 //        newGmailClient.readGmail();
-        newGmailClient.downloadEmailAttachments();
+//        newGmailClient.downloadEmailAttachments();
+// ************************************************************
 
+        List<String> addresats = new ArrayList<>();
+//        addresats.add("uchachaduneli@gmail.com");
+        addresats.add("david.kaliashvili@gmail.com");
+
+        List<String> attachments = new ArrayList<>();
+        attachments.add("C:\\Users\\ME\\IdeaProjects\\miminoTravel\\src\\main\\resources\\0012.pdf");
+
+        newGmailClient.sendEmail(senderUserName, senderPassword,
+                addresats,
+                null, attachments, "TEST MAIL SUBJECT", "ეს არის სატესტო მეილის ტექსტი");
+    }
+
+
+    class EmailAuthenticator extends javax.mail.Authenticator {
+        private String login;
+        private String password;
+
+        public EmailAuthenticator(final String login, final String password) {
+            this.login = login;
+            this.password = password;
+        }
+
+        public PasswordAuthentication getPasswordAuthentication() {
+            return new PasswordAuthentication(login, password);
+        }
     }
 }
