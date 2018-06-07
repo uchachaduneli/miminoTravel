@@ -14,6 +14,7 @@ import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 import javax.mail.*;
 import javax.mail.internet.*;
+import javax.mail.search.FlagTerm;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
@@ -310,11 +311,9 @@ public class MailService {
 
     }
 
-    public void downloadEmailAttachments() {
+    public void downloadEmailAttachments(String userName, String password) {
 
-        this.receivingHost = "imap.yandex.ru";//for imap protocol
         Properties props2 = System.getProperties();
-
         props2.setProperty("mail.store.protocol", "imaps");
         props2.put("mail.debug", "false");
         props2.put("mail.store.protocol", "imaps");
@@ -322,19 +321,18 @@ public class MailService {
         props2.put("mail.imap.port", "993");
 
         Session session2 = Session.getDefaultInstance(props2, null);
-
         try {
 
             Store store = session2.getStore("imaps");
 
-            store.connect(this.receivingHost, this.userName, this.password);
+            store.connect("imap.yandex.ru", userName, password);
 
             Folder folder = store.getFolder("INBOX");//get inbox
-            System.out.println("has new messages: " + folder.hasNewMessages() + "\n \n");
+            UIDFolder uf = (UIDFolder) folder;
 
             folder.open(Folder.READ_ONLY);//open folder only to read
 
-            Message arrayMessages[] = folder.getMessages();
+            Message arrayMessages[] = folder.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false));
 
             for (int i = 0; i < arrayMessages.length; i++) {
                 Message message = arrayMessages[i];
@@ -343,6 +341,7 @@ public class MailService {
                 String subject = message.getSubject();
                 String sentDate = message.getSentDate().toString();
                 String receiveDate = message.getReceivedDate().toString();
+                System.out.println("Unique ID is --> " + uf.getUID(message));
 
                 String contentType = message.getContentType();
                 String messageContent = "";
@@ -360,7 +359,7 @@ public class MailService {
                             // this part is attachment
                             String fileName = part.getFileName();
                             attachFiles += fileName + ", ";
-                            part.saveFile("C:\\Users\\ME\\IdeaProjects\\miminoTravel\\src\\main\\resources" + File.separator + fileName);
+                            part.saveFile("C://Users//ME//Desktop//attachments" + File.separator + fileName);
                         } else {
                             // this part may be the message content
                             if (arrayMessages[i].isMimeType("text/plain")) {

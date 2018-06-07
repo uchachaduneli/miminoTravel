@@ -27,6 +27,10 @@ public class UsersDTO {
     public static int FINANCIAL_MANAGER = 4;
     public static int RESERVATION_MANAGER = 5;
 
+
+    public static int DELETED = 1;
+    public static int ACTIVE = 0;
+
     public static UsersDTO parse(Users record) {
         if (record != null) {
             UsersDTO dto = new UsersDTO();
