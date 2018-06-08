@@ -15,10 +15,28 @@ public class Email {
     private Timestamp receiveDate;
     private String content;
     private String attachments;
+    private String uid;//meilis uniq ID
     private Timestamp insertDate;
+
+    public Email(String from, String to, String subject, Timestamp sendDate,
+                 Timestamp receiveDate, String content, String attachments, String uid, Users user) {
+        this.from = from;
+        this.to = to;
+        this.subject = subject;
+        this.sendDate = sendDate;
+        this.receiveDate = receiveDate;
+        this.content = content;
+        this.attachments = attachments;
+        this.uid = uid;
+        this.user = user;
+    }
+
+    public Email() {
+    }
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
     }
@@ -38,7 +56,7 @@ public class Email {
     }
 
     @Basic
-    @Column(name = "from")
+    @Column(name = "`from`")
     public String getFrom() {
         return from;
     }
@@ -48,7 +66,7 @@ public class Email {
     }
 
     @Basic
-    @Column(name = "to")
+    @Column(name = "`to`")
     public String getTo() {
         return to;
     }
@@ -58,7 +76,7 @@ public class Email {
     }
 
     @Basic
-    @Column(name = "subject")
+    @Column(name = "`subject`")
     public String getSubject() {
         return subject;
     }
@@ -105,6 +123,16 @@ public class Email {
 
     public void setAttachments(String attachments) {
         this.attachments = attachments;
+    }
+
+    @Basic
+    @Column(name = "uid")
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     @Basic

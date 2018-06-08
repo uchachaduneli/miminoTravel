@@ -3,6 +3,7 @@ package ge.mimino.travel.service;
 
 import ge.mimino.travel.dao.MailDAO;
 import ge.mimino.travel.dto.EmailDTO;
+import ge.mimino.travel.dto.UsersDTO;
 import ge.mimino.travel.model.Email;
 import ge.mimino.travel.model.Users;
 import ge.mimino.travel.request.MailRequest;
@@ -15,13 +16,13 @@ import javax.activation.FileDataSource;
 import javax.mail.*;
 import javax.mail.internet.*;
 import javax.mail.search.FlagTerm;
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -31,18 +32,11 @@ import java.util.Properties;
 @Service
 public class MailService {
 
-    private String userName;
-    private String password;
-    private String sendingHost;
-    private int sendingPort;
-    private String from;
-    private String to;
-    private String subject;
-    private String text;
-    private String receivingHost;
-
     @Autowired
     private MailDAO mailDAO;
+
+    @Autowired
+    private UsersService userService;
 
 
     public List<EmailDTO> getEmails(int start, int limit, MailRequest srchRequest) throws ParseException {
@@ -71,93 +65,6 @@ public class MailService {
         }
 
         return obj;
-    }
-
-
-//    *************************************************** Email Syncronization ****************************************************************
-
-    public void setAccountDetails(String userName, String password) {
-
-        this.userName = userName;//sender's email can also use as User Name
-        this.password = password;
-
-    }
-
-    public void sendGmail(String from, String to, String subject, String text) {
-
-        // This will send mail from -->sender@gmail.com to -->receiver@gmail.com
-
-        this.from = from;
-        this.to = to;
-        this.subject = subject;
-        this.text = text;
-
-        // For a Gmail account--sending mails-- host and port shold be as follows
-
-        this.sendingHost = "smtp.gmail.com";
-        this.sendingPort = 465;
-
-        Properties props = new Properties();
-
-        props.put("mail.smtp.host", this.sendingHost);
-        props.put("mail.smtp.port", String.valueOf(this.sendingPort));
-        props.put("mail.smtp.user", this.userName);
-        props.put("mail.smtp.password", this.password);
-
-        props.put("mail.smtp.auth", "true");
-
-        Session session1 = Session.getDefaultInstance(props);
-
-        Message simpleMessage = new MimeMessage(session1);
-
-        //MIME stands for Multipurpose Internet Mail Extensions
-
-        InternetAddress fromAddress = null;
-        InternetAddress toAddress = null;
-
-        try {
-
-            fromAddress = new InternetAddress(this.from);
-            toAddress = new InternetAddress(this.to);
-
-        } catch (AddressException e) {
-
-            e.printStackTrace();
-
-            JOptionPane.showMessageDialog(null, "Sending email to: " + to + " failed !!!", "Falied to Send!!!", JOptionPane.ERROR_MESSAGE);
-
-        }
-
-        try {
-
-            simpleMessage.setFrom(fromAddress);
-
-            simpleMessage.setRecipient(Message.RecipientType.TO, toAddress);
-
-            // to add CC or BCC use
-            // simpleMessage.setRecipient(RecipientType.CC, new InternetAddress("CC_Recipient@any_mail.com"));
-            // simpleMessage.setRecipient(RecipientType.BCC, new InternetAddress("CBC_Recipient@any_mail.com"));
-
-            simpleMessage.setSubject(this.subject);
-
-            simpleMessage.setText(this.text);
-
-            //sometimes Transport.send(simpleMessage); is used, but for gmail it's different
-
-            Transport transport = session1.getTransport("smtps");
-
-            transport.connect(this.sendingHost, sendingPort, this.userName, this.password);
-
-            transport.sendMessage(simpleMessage, simpleMessage.getAllRecipients());
-
-            transport.close();
-
-            System.out.println("Mail sent ");
-
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
-
     }
 
     private String getTextFromMimeMultipart(
@@ -239,109 +146,45 @@ public class MailService {
         return result;
     }
 
-    public void readGmail() {
-
-        /*this will print subject of all messages in the inbox of sender@gmail.com*/
-
-        this.receivingHost = "imap.yandex.ru";//for imap protocol
-
-        Properties props2 = System.getProperties();
-
-        props2.setProperty("mail.store.protocol", "imaps");
-        props2.put("mail.debug", "false");
-        props2.put("mail.store.protocol", "imaps");
-        props2.put("mail.imap.ssl.enable", "true");
-        props2.put("mail.imap.port", "993");
-        // I used imaps protocol here
-
-        Session session2 = Session.getDefaultInstance(props2, null);
-
+    public void downloadEmailWithAttachments(Integer userId, String userName, String password) {
         try {
 
-            Store store = session2.getStore("imaps");
+            Users user = (Users) mailDAO.find(Users.class, userId);
 
-            store.connect(this.receivingHost, this.userName, this.password);
+            Properties props2 = System.getProperties();
+            props2.setProperty("mail.store.protocol", "imaps");
+            props2.put("mail.debug", "false");
+            props2.put("mail.store.protocol", "imaps");
+            props2.put("mail.imap.ssl.enable", "true");
+            props2.put("mail.imap.port", "993");
 
-            Folder folder = store.getFolder("INBOX");//get inbox
-            System.out.println("has new messages: " + folder.hasNewMessages() + "\n \n");
+            Session session2 = Session.getDefaultInstance(props2, null);
 
-            folder.open(Folder.READ_ONLY);//open folder only to read
-
-            Message message[] = folder.getMessages();
-
-            for (int i = 0; i < message.length; i++) {
-
-                //print subjects of all mails in the inbox
-
-                System.out.println("getSubject " + message[i].getSubject());
-                System.out.println("getAllRecipients ");
-                for (Address address : message[i].getAllRecipients()) {
-                    System.out.println(((InternetAddress) address).getAddress());
-                }
-                System.out.println(" ------------------------- ");
-                System.out.println("getMessageNumber " + message[i].getMessageNumber());
-                System.out.println("getFrom ");
-                System.out.println(message[i].getFrom() != null ? ((InternetAddress) message[i].getFrom()[0]).getAddress() : "");
-                System.out.println("getSentDate " + message[i].getSentDate());
-                System.out.println("getReceivedDate " + message[i].getReceivedDate());
-                //get Content
-                if (message[i].isMimeType("text/plain")) {
-                    System.out.println("getContent " + message[i].getContent().toString());
-                } else if (message[i].isMimeType("multipart/*")) {
-                    MimeMultipart mimeMultipart = (MimeMultipart) message[i].getContent();
-                    System.out.println("getContent " + getTextFromMimeMultipart(mimeMultipart));
-                }
-                System.out.println("\n \n *************** \n \n");
-
-                //anything else you want
-
-            }
-
-            //close connections
-
-            folder.close(true);
-
-            store.close();
-
-        } catch (Exception e) {
-
-            System.out.println(e.toString());
-
-        }
-
-    }
-
-    public void downloadEmailAttachments(String userName, String password) {
-
-        Properties props2 = System.getProperties();
-        props2.setProperty("mail.store.protocol", "imaps");
-        props2.put("mail.debug", "false");
-        props2.put("mail.store.protocol", "imaps");
-        props2.put("mail.imap.ssl.enable", "true");
-        props2.put("mail.imap.port", "993");
-
-        Session session2 = Session.getDefaultInstance(props2, null);
-        try {
 
             Store store = session2.getStore("imaps");
 
             store.connect("imap.yandex.ru", userName, password);
 
+//        Folder[] f = store.getDefaultFolder().list();
+//        for(Folder fd:f)
+//            System.out.println(">> "+fd.getName()); System.exit(0);
+
             Folder folder = store.getFolder("INBOX");//get inbox
             UIDFolder uf = (UIDFolder) folder;
 
-            folder.open(Folder.READ_ONLY);//open folder only to read
+            folder.open(Folder.READ_WRITE);//open folder only to read
 
-            Message arrayMessages[] = folder.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false));
+            Message inboxMails[] = folder.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false));
 
-            for (int i = 0; i < arrayMessages.length; i++) {
-                Message message = arrayMessages[i];
+            List<Email> emails = new ArrayList<>();
+
+            for (int i = 0; i < inboxMails.length; i++) {
+                Message message = inboxMails[i];
                 Address[] fromAddress = message.getFrom();
                 String from = fromAddress[0].toString();
                 String subject = message.getSubject();
-                String sentDate = message.getSentDate().toString();
-                String receiveDate = message.getReceivedDate().toString();
-                System.out.println("Unique ID is --> " + uf.getUID(message));
+                Date sentDate = message.getSentDate();
+                Date receiveDate = message.getReceivedDate();
 
                 String contentType = message.getContentType();
                 String messageContent = "";
@@ -358,14 +201,15 @@ public class MailService {
                         if (Part.ATTACHMENT.equalsIgnoreCase(part.getDisposition())) {
                             // this part is attachment
                             String fileName = part.getFileName();
-                            attachFiles += fileName + ", ";
-                            part.saveFile("C://Users//ME//Desktop//attachments" + File.separator + fileName);
+                            attachFiles += fileName + " ";
+                            part.saveFile("C:\\Users\\ME\\Desktop\\attachments" + File.separator + uf.getUID(message) + "_" + fileName);
+//                        part.saveFile("/usr/binaries/tomcat9/webapps/ROOT/attachments" + File.separator + uf.getUID(message) + "_" + fileName);
                         } else {
                             // this part may be the message content
-                            if (arrayMessages[i].isMimeType("text/plain")) {
-                                messageContent = arrayMessages[i].getContent().toString();
-                            } else if (arrayMessages[i].isMimeType("multipart/*")) {
-                                MimeMultipart mimeMultipart = (MimeMultipart) arrayMessages[i].getContent();
+                            if (inboxMails[i].isMimeType("text/plain")) {
+                                messageContent = inboxMails[i].getContent().toString();
+                            } else if (inboxMails[i].isMimeType("multipart/*")) {
+                                MimeMultipart mimeMultipart = (MimeMultipart) inboxMails[i].getContent();
                                 messageContent = getTextFromMimeMultipart(mimeMultipart);
                             }
 //                            messageContent = part.getContent().toString();
@@ -382,8 +226,11 @@ public class MailService {
                     }
                 }
 
+                mailDAO.create(new Email(from, user.getEmail(), subject, new Timestamp(sentDate.getTime()),
+                        new Timestamp(receiveDate.getTime()), messageContent, attachFiles, uf.getUID(message) + "", user));
+                message.setFlag(Flags.Flag.SEEN, true);//თუ აქამდე მოვიდა და ბაზაშიც დასეივდა SEEN დაუსვას მეილზე
 //				print out details of each message
-                System.out.println("Message #" + arrayMessages[i].getMessageNumber() + ":");
+                System.out.println("Message ID" + uf.getUID(message) + ":");
                 System.out.println("\t From: " + from);
                 System.out.println("\t Subject: " + subject);
                 System.out.println("\t Sent Date: " + sentDate);
@@ -393,20 +240,26 @@ public class MailService {
             }
 
             // disconnect
+//            folder.setFlags(inboxMails, new Flags(Flags.Flag.SEEN), true); // es mtels papkas adebs seens
             folder.close(false);
-            store.close();
-        } catch (NoSuchProviderException ex) {
-            System.out.println("No provider for pop3.");
-            ex.printStackTrace();
-        } catch (MessagingException ex) {
-            System.out.println("Could not connect to the message store");
-            ex.printStackTrace();
-        } catch (IOException ex) {
+//        store.close();
+        } catch (javax.mail.MessagingException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    public static void main(String[] args) {
+    @Transactional(rollbackFor = Throwable.class)
+    public void processUnreadEmails() {
+        List<UsersDTO> users = userService.getUsers();
+        for (UsersDTO user : users) {
+            if (user.getEmail() != null && user.getEmailPassword() != null && user.getDeleted() != UsersDTO.DELETED) {
+                downloadEmailWithAttachments(user.getUserId(), user.getEmail(), user.getEmailPassword());
+            }
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
 
 //        String mailFrom = new String("miminotest@gmail.com");
 //        String mailTo = new String("miminotest@gmail.com");
@@ -417,25 +270,24 @@ public class MailService {
 //        String senderPassword = new String("Testirebah1");
 //        String senderUserName = new String("administrator@hotelhub.ge");
 
-        MailService newGmailClient = new MailService();
-        newGmailClient.setAccountDetails(senderUserName, senderPassword);
+//        MailService newGmailClient = new MailService();
 
 //        newGmailClient.sendGmail(mailFrom, mailTo, mailSubject, mailText);
 
 //        newGmailClient.readGmail();
-//        newGmailClient.downloadEmailAttachments();
+//        newGmailClient.downloadEmailAttachments(senderUserName, senderPassword);
 // ************************************************************
 
-        List<String> addresats = new ArrayList<>();
-//        addresats.add("uchachaduneli@gmail.com");
-        addresats.add("david.kaliashvili@gmail.com");
-
-        List<String> attachments = new ArrayList<>();
-        attachments.add("C:\\Users\\ME\\IdeaProjects\\miminoTravel\\src\\main\\resources\\0012.pdf");
-
-        newGmailClient.sendEmail(senderUserName, senderPassword,
-                addresats,
-                null, attachments, "TEST MAIL SUBJECT", "ეს არის სატესტო მეილის ტექსტი");
+//        List<String> addresats = new ArrayList<>();
+////        addresats.add("uchachaduneli@gmail.com");
+//        addresats.add("david.kaliashvili@gmail.com");
+//
+//        List<String> attachments = new ArrayList<>();
+//        attachments.add("C:\\Users\\ME\\IdeaProjects\\miminoTravel\\src\\main\\resources\\0012.pdf");
+//
+//        newGmailClient.sendEmail(senderUserName, senderPassword,
+//                addresats,
+//                null, attachments, "TEST MAIL SUBJECT", "ეს არის სატესტო მეილის ტექსტი");
     }
 
 
