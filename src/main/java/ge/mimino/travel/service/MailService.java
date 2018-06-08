@@ -14,7 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 import javax.mail.*;
-import javax.mail.internet.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.mail.search.FlagTerm;
 import java.io.File;
 import java.io.IOException;
@@ -181,7 +184,7 @@ public class MailService {
             for (int i = 0; i < inboxMails.length; i++) {
                 Message message = inboxMails[i];
                 Address[] fromAddress = message.getFrom();
-                String from = fromAddress[0].toString();
+                String from = ((InternetAddress) fromAddress[0]).getAddress();
                 String subject = message.getSubject();
                 Date sentDate = message.getSentDate();
                 Date receiveDate = message.getReceivedDate();
@@ -202,7 +205,7 @@ public class MailService {
                             // this part is attachment
                             String fileName = part.getFileName();
                             attachFiles += fileName + " ";
-                            part.saveFile("C:\\Users\\ME\\Desktop\\attachments" + File.separator + uf.getUID(message) + "_" + fileName);
+                            part.saveFile("C:\\Users\\home\\Desktop\\attachments" + File.separator + uf.getUID(message) + "_" + fileName);
 //                        part.saveFile("/usr/binaries/tomcat9/webapps/ROOT/attachments" + File.separator + uf.getUID(message) + "_" + fileName);
                         } else {
                             // this part may be the message content
