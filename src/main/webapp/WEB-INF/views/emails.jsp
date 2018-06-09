@@ -64,6 +64,12 @@
 
     ajaxCall($http, "users/get-users", null, getUsers);
 
+    function getFolders(res) {
+      $scope.folders = res.data;
+    }
+
+    ajaxCall($http, "emails/get-email-folders", null, getFolders);
+
     $scope.showDetails = function (id) {
       if (id != undefined) {
         var selected = $filter('filter')($scope.list, {id: id}, true);
@@ -201,6 +207,15 @@
                          ng-model="srchCase.content" placeholder="Content">
                 </div>
                 <div class="form-group col-md-2">
+                  <select class="form-control" ng-model="srchCase.folderId"
+                          ng-change="loadMainData()">
+                    <option value="" selected="selected">Type</option>
+                    <option ng-repeat="v in folders" ng-selected="v.id === srchCase.folderId"
+                            value="{{v.id}}">{{v.name}}
+                    </option>
+                  </select>
+                </div>
+                <div class="form-group col-md-2">
                   <select class="form-control" ng-model="srchCase.userId"
                           ng-change="loadMainData()">
                     <option value="" selected="selected">User</option>
@@ -209,7 +224,7 @@
                     </option>
                   </select>
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                   <div class="input-group">
                     <div class="input-append">
                       <input type="text" name="datetime" class="form-control srch"
@@ -223,7 +238,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                   <div class="input-group">
                     <div class="input-append">
                       <input type="text" name="datetime" class="form-control srch"

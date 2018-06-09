@@ -2,6 +2,7 @@ package ge.mimino.travel.model;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 @Entity
 @Table(name = "email")
@@ -17,9 +18,10 @@ public class Email {
     private String attachments;
     private String uid;//meilis uniq ID
     private Timestamp insertDate;
+    private EmailFolders folder;
 
     public Email(String from, String to, String subject, Timestamp sendDate,
-                 Timestamp receiveDate, String content, String attachments, String uid, Users user) {
+                 Timestamp receiveDate, String content, String attachments, String uid, Users user, EmailFolders folder) {
         this.from = from;
         this.to = to;
         this.subject = subject;
@@ -29,6 +31,7 @@ public class Email {
         this.attachments = attachments;
         this.uid = uid;
         this.user = user;
+        this.folder = folder;
     }
 
     public Email() {
@@ -143,5 +146,15 @@ public class Email {
 
     public void setInsertDate(Timestamp insertDate) {
         this.insertDate = insertDate;
+    }
+
+    @JoinColumn(name = "folder_id")
+    @OneToOne
+    public EmailFolders getFolder() {
+        return folder;
+    }
+
+    public void setFolder(EmailFolders folder) {
+        this.folder = folder;
     }
 }

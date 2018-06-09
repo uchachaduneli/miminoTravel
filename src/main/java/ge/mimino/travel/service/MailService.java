@@ -3,8 +3,10 @@ package ge.mimino.travel.service;
 
 import ge.mimino.travel.dao.MailDAO;
 import ge.mimino.travel.dto.EmailDTO;
+import ge.mimino.travel.dto.EmailFolderDTO;
 import ge.mimino.travel.dto.UsersDTO;
 import ge.mimino.travel.model.Email;
+import ge.mimino.travel.model.EmailFolders;
 import ge.mimino.travel.model.Users;
 import ge.mimino.travel.request.MailRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,10 @@ public class MailService {
 
     public List<EmailDTO> getEmails(int start, int limit, MailRequest srchRequest) throws ParseException {
         return EmailDTO.parseToList(mailDAO.getEMails(start, limit, srchRequest));
+    }
+
+    public List<EmailFolderDTO> getEmailFolders() throws ParseException {
+        return EmailFolderDTO.parseToList(mailDAO.getAll(EmailFolders.class));
     }
 
     @Transactional(rollbackFor = Throwable.class)
@@ -153,6 +159,7 @@ public class MailService {
         try {
 
             Users user = (Users) mailDAO.find(Users.class, userId);
+            EmailFolders emailFolder = (EmailFolders) mailDAO.find(EmailFolders.class, 1);//inbox -ია 1 აიდიზე
 
             Properties props2 = System.getProperties();
             props2.setProperty("mail.store.protocol", "imaps");
@@ -206,7 +213,7 @@ public class MailService {
                             String fileName = part.getFileName();
                             attachFiles += fileName + " ";
                             part.saveFile("C:\\Users\\home\\Desktop\\attachments" + File.separator + uf.getUID(message) + "_" + fileName);
-//                        part.saveFile("/usr/binaries/tomcat9/webapps/ROOT/attachments" + File.separator + uf.getUID(message) + "_" + fileName);
+//                            part.saveFile("/usr/binaries/tomcat9/webapps/ROOT/attachments" + File.separator + uf.getUID(message) + "_" + fileName);
                         } else {
                             // this part may be the message content
                             if (inboxMails[i].isMimeType("text/plain")) {
@@ -230,7 +237,7 @@ public class MailService {
                 }
 
                 mailDAO.create(new Email(from, user.getEmail(), subject, new Timestamp(sentDate.getTime()),
-                        new Timestamp(receiveDate.getTime()), messageContent, attachFiles, uf.getUID(message) + "", user));
+                        new Timestamp(receiveDate.getTime()), messageContent, attachFiles, uf.getUID(message) + "", user, emailFolder));
                 message.setFlag(Flags.Flag.SEEN, true);//თუ აქამდე მოვიდა და ბაზაშიც დასეივდა SEEN დაუსვას მეილზე
 //				print out details of each message
                 System.out.println("Message ID" + uf.getUID(message) + ":");

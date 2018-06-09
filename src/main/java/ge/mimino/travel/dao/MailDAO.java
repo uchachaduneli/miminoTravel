@@ -36,6 +36,9 @@ public class MailDAO extends AbstractDAO {
         if (srchRequest.getId() != null && srchRequest.getId() > 0) {
             q.append(" and e.id ='").append(srchRequest.getId()).append("'");
         }
+        if (srchRequest.getFolderId() != null && srchRequest.getFolderId() > 0) {
+            q.append(" and e.folder.id ='").append(srchRequest.getFolderId()).append("'");
+        }
         if (srchRequest.getFrom() != null) {
             q.append(" and e.from like '%").append(srchRequest.getFrom()).append("%'");
         }

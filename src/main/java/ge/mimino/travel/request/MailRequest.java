@@ -3,6 +3,7 @@ package ge.mimino.travel.request;
 public class MailRequest {
     private Integer id;
     private Integer userId;
+    private Integer folderId;
     private String from;
     private String to;
     private String subject;
@@ -12,6 +13,14 @@ public class MailRequest {
     private String receiveDateTo;
     private String content;
     private String attachments;
+
+    public Integer getFolderId() {
+        return folderId;
+    }
+
+    public void setFolderId(Integer folderId) {
+        this.folderId = folderId;
+    }
 
     public Integer getId() {
         return id;
