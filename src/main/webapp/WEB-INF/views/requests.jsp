@@ -422,6 +422,10 @@
                             <th class="text-right">Budget</th>
                             <td>{{slcted.budget}}</td>
                         </tr>
+                        <tr>
+                            <th class="text-right">Create Date</th>
+                            <td>{{slcted.createDate}}</td>
+                        </tr>
                     </table>
                     <div class="form-group"><br/></div>
                 </div>

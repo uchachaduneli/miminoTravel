@@ -47,7 +47,7 @@ public class RequestDTO {
     private Integer packageCategoryId;
     private UsersDTO user;
     private Integer userId;
-    @JsonSerialize(using = JsonDateSerializeSupport.class)
+    @JsonSerialize(using = JsonDateTimeSerializeSupport.class)
     private Timestamp createDate;
 
 
