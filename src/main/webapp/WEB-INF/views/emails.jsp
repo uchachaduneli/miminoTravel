@@ -267,7 +267,7 @@
               <td>{{r.from}}</td>
               <td>{{r.to}}</td>
               <td>{{r.subject}}</td>
-              <td>{{r.attachments.length > 0 ? 'YES('+r.attachments.length+')':'NO'}}</td>
+              <td>{{r.attachments.length > 0 ? 'YES('+r.attachments.split(' ').length+')':'NO'}}</td>
               <td>{{r.insertDate}}</td>
               <td class="text-center">
                 <a ng-click="showDetails(r.id)" data-toggle="modal" title="Details"
