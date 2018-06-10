@@ -25,8 +25,13 @@ public class FileService {
 
     private String rootDir;
 
-    public byte[] readFile(String identifier) throws IOException {
-        return fileTOBytesArray(getFilePath(identifier));
+    public byte[] readFile(String identifier) {
+        try {
+            return fileTOBytesArray(getFilePath(identifier));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 
     private byte[] fileTOBytesArray(String fileName) throws FileNotFoundException, IOException {
@@ -41,17 +46,22 @@ public class FileService {
     }
 
     private String getFilePath(String identifier) {
-        File f = new File(rootDir+identifier.split("/")[0]);
-        if (f.isDirectory()) {
-            File[] files = f.listFiles();
-            for (File _f : files) {
-                String a = FilenameUtils.removeExtension(_f.getName());
-                if (FilenameUtils.removeExtension(_f.getName()).equals(identifier.split("/")[1])) {
-                    return _f.getPath();
+        try {
+            File f = new File(rootDir + identifier.split("/")[0]);
+            if (f.isDirectory()) {
+                File[] files = f.listFiles();
+                for (File _f : files) {
+                    String a = FilenameUtils.removeExtension(_f.getName());
+                    if (FilenameUtils.removeExtension(_f.getName()).equals(identifier.split("/")[1])) {
+                        return _f.getPath();
+                    }
                 }
             }
+            return null;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     public void deleteFile(String identifier) {
