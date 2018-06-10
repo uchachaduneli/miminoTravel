@@ -77,4 +77,8 @@
         <property name="maxUploadSize" value="500000000"/>
     </bean>
 
+    <bean name="fileService" class="ge.mimino.travel.service.FileService">
+        <property name="rootDir" value="/usr/binaries/tomcat9/webapps/ROOT"/>
+    </bean>
+
 </beans>
