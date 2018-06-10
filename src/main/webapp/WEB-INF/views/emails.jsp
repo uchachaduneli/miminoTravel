@@ -169,18 +169,6 @@
               <th class="text-right">CreateDate</th>
               <td>{{slcted.insertDate}}</td>
             </tr>
-            <%--<tr>--%>
-            <%--&lt;%&ndash;<th class="text-right">Content</th>&ndash;%&gt;--%>
-            <%--<td colspan="2">--%>
-            <%--<div class="text-center">Content</div>--%>
-            <%--<iframe class="col-md-12" id="foo" ng-switch="showMailHtmlContent(slcted.content)"--%>
-            <%--onload="$(this).height($(this.contentWindow).find(\'html\').first().height());"--%>
-            <%--" ></iframe>--%>
-            <%--<a ng-click="showMailHtmlContent(slcted.content)" title="Opent Email Content Properly In New Window">Open--%>
-            <%--Content</a>--%>
-            <%--&lt;%&ndash;<div class="modal-content" ng-bind-html="slcted.content"></div>&ndash;%&gt;--%>
-            <%--</td>--%>
-            <%--</tr>--%>
           </table>
           <div class="text-center" style="font-weight: bold;">Content &nbsp;&nbsp; &nbsp;
             <i class="glyphicon glyphicon-new-window zoom fa-pulse pulse" style="font-size: 14px; "
