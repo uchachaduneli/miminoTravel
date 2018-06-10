@@ -33,7 +33,7 @@
 
   });
 
-  app.controller("angController", function ($scope, $http, $filter) {
+  app.controller("angController", function ($scope, $http, $filter, $window) {
     $scope.start = 0;
     $scope.page = 1;
     $scope.limit = "10";
@@ -97,7 +97,22 @@
       }
       $scope.loadMainData();
     }
+
+    $scope.openMailHtmlContent = function (content) {
+      var newWindow = $window.open();
+      newWindow.document.writeln(content);
+      newWindow.document.close();
+    }
+
+    $scope.showMailHtmlContent = function (content) {
+
+      var iframe = document.getElementById('foo'),
+          iframedoc = iframe.contentDocument || iframe.contentWindow.document;
+
+      iframedoc.body.innerHTML = content;
+    };
   });
+
 </script>
 
 <div class="modal fade bs-example-modal-lg" id="detailModal" tabindex="-1" role="dialog"
@@ -141,10 +156,6 @@
               <td>{{slcted.receiveDate}}</td>
             </tr>
             <tr>
-              <th class="text-right">Content</th>
-              <td>{{slcted.content}}</td>
-            </tr>
-            <tr>
               <th class="text-right">Attachments</th>
               <td>{{slcted.attachments}}</td>
             </tr>
@@ -152,7 +163,27 @@
               <th class="text-right">CreateDate</th>
               <td>{{slcted.insertDate}}</td>
             </tr>
+            <%--<tr>--%>
+            <%--&lt;%&ndash;<th class="text-right">Content</th>&ndash;%&gt;--%>
+            <%--<td colspan="2">--%>
+            <%--<div class="text-center">Content</div>--%>
+            <%--<iframe class="col-md-12" id="foo" ng-switch="showMailHtmlContent(slcted.content)"--%>
+            <%--onload="$(this).height($(this.contentWindow).find(\'html\').first().height());"--%>
+            <%--" ></iframe>--%>
+            <%--<a ng-click="showMailHtmlContent(slcted.content)" title="Opent Email Content Properly In New Window">Open--%>
+            <%--Content</a>--%>
+            <%--&lt;%&ndash;<div class="modal-content" ng-bind-html="slcted.content"></div>&ndash;%&gt;--%>
+            <%--</td>--%>
+            <%--</tr>--%>
           </table>
+          <div class="text-center" style="font-weight: bold;">Content &nbsp;&nbsp; &nbsp;
+            <i class="glyphicon glyphicon-new-window zoom fa-pulse pulse" style="font-size: 14px; "
+               ng-click="openMailHtmlContent(slcted.content)"
+               title="Opent Email Content Properly In New Window"></i>
+          </div>
+          <br>
+          <iframe class="col-md-11" id="foo" ng-switch="showMailHtmlContent(slcted.content)"
+                  frameborder="0" style="margin-left: 4.5%; height: 400px !important;"></iframe>
           <div class="form-group"><br/></div>
         </div>
       </div>

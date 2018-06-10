@@ -212,8 +212,8 @@ public class MailService {
                             // this part is attachment
                             String fileName = part.getFileName();
                             attachFiles += fileName + " ";
-                            part.saveFile("C:\\Users\\home\\Desktop\\attachments" + File.separator + uf.getUID(message) + "_" + fileName);
-//                            part.saveFile("/usr/binaries/tomcat9/webapps/ROOT/attachments" + File.separator + uf.getUID(message) + "_" + fileName);
+//                            part.saveFile("C:\\Users\\home\\Desktop\\attachments" + File.separator + uf.getUID(message) + "_" + fileName);
+                            part.saveFile("/usr/binaries/tomcat9/webapps/ROOT/attachments" + File.separator + uf.getUID(message) + "_" + fileName);
                         } else {
                             // this part may be the message content
                             if (inboxMails[i].isMimeType("text/plain")) {
