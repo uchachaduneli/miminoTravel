@@ -157,7 +157,13 @@
             </tr>
             <tr>
               <th class="text-right">Attachments</th>
-              <td>{{slcted.attachments}}</td>
+              <td>{{slcted.attachments}}
+                <ul>
+                  <li ng-repeat="item in slcted.attachments.split(' ')"><a
+                          href="misc/get-file?name=attachments/{{item.split('.')[0].trim()}}" target="_blank">{{item}}</a>
+                  </li>
+                </ul>
+              </td>
             </tr>
             <tr>
               <th class="text-right">CreateDate</th>

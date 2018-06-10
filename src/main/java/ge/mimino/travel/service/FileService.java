@@ -41,12 +41,12 @@ public class FileService {
     }
 
     private String getFilePath(String identifier) {
-        File f = new File(rootDir);
+        File f = new File(rootDir+identifier.split("/")[0]);
         if (f.isDirectory()) {
             File[] files = f.listFiles();
             for (File _f : files) {
                 String a = FilenameUtils.removeExtension(_f.getName());
-                if (FilenameUtils.removeExtension(_f.getName()).equals(identifier)) {
+                if (FilenameUtils.removeExtension(_f.getName()).equals(identifier.split("/")[1])) {
                     return _f.getPath();
                 }
             }
