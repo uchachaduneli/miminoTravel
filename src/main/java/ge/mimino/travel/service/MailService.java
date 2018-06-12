@@ -182,7 +182,7 @@ public class MailService {
             Folder folder = store.getFolder("INBOX");//get inbox
             UIDFolder uf = (UIDFolder) folder;
 
-            folder.open(Folder.READ_WRITE);//open folder only to read
+            folder.open(Folder.READ_ONLY);//open folder only to read
 
             Message inboxMails[] = folder.search(new FlagTerm(new Flags(Flags.Flag.SEEN), false));
 
@@ -212,8 +212,9 @@ public class MailService {
                             // this part is attachment
                             String fileName = part.getFileName();
                             attachFiles += fileName + " ";
+                            part.saveFile("C:\\Users\\ME\\Desktop\\attachments" + File.separator + uf.getUID(message) + "_" + fileName);
 //                            part.saveFile("C:\\Users\\home\\Desktop\\attachments" + File.separator + uf.getUID(message) + "_" + fileName);
-                            part.saveFile("/usr/binaries/tomcat9/webapps/ROOT/attachments" + File.separator + uf.getUID(message) + "_" + fileName);
+//                            part.saveFile("/usr/binaries/tomcat9/webapps/ROOT/attachments" + File.separator + uf.getUID(message) + "_" + fileName);
                         } else {
                             // this part may be the message content
                             if (inboxMails[i].isMimeType("text/plain")) {
@@ -238,7 +239,7 @@ public class MailService {
 
                 mailDAO.create(new Email(from, user.getEmail(), subject, new Timestamp(sentDate.getTime()),
                         new Timestamp(receiveDate.getTime()), messageContent, attachFiles, uf.getUID(message) + "", user, emailFolder));
-                message.setFlag(Flags.Flag.SEEN, true);//თუ აქამდე მოვიდა და ბაზაშიც დასეივდა SEEN დაუსვას მეილზე
+//                message.setFlag(Flags.Flag.SEEN, true);//თუ აქამდე მოვიდა და ბაზაშიც დასეივდა SEEN დაუსვას მეილზე
 //				print out details of each message
                 System.out.println("Message ID" + uf.getUID(message) + ":");
                 System.out.println("\t From: " + from);
@@ -250,10 +251,10 @@ public class MailService {
             }
 
             // disconnect
-//            folder.setFlags(inboxMails, new Flags(Flags.Flag.SEEN), true); // es mtels papkas adebs seens
             folder.close(false);
-//        store.close();
+            store.close();
         } catch (javax.mail.MessagingException ex) {
+            ex.printStackTrace();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

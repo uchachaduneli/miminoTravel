@@ -14,6 +14,8 @@
        http://www.springframework.org/schema/tx
        http://www.springframework.org/schema/tx/spring-tx.xsd">
 
+    <context:property-placeholder location="classpath:log4j.properties"/>
+
     <tx:annotation-driven/>
 
     <context:component-scan base-package="ge.mimino.travel"/>
@@ -80,6 +82,15 @@
     <bean name="fileService" class="ge.mimino.travel.service.FileService">
         <property name="rootDir" value="/usr/binaries/tomcat9/webapps/ROOT/"/>
         <!--<property name="rootDir" value="C:/Users/home/Desktop/"/>-->
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:log4j.properties</value>
+            </list>
+        </property>
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
     </bean>
 
 </beans>

@@ -40,8 +40,11 @@
     $scope.srchCase = {};
 
     $scope.loadMainData = function () {
+      $('#loadingModal').modal('show');
+
       function getMainData(res) {
         $scope.list = res.data;
+        $('#loadingModal').modal('hide');
       }
 
       if ($scope.srchCase != undefined) {
@@ -52,7 +55,6 @@
           $scope.srchCase.nextActivityTo = $scope.srchCase.nextActivityTo.split(/\//).reverse().join('-')
         }
       }
-
       ajaxCall($http, "emails/get-emails?start=" + $scope.start + "&limit=" + $scope.limit, angular.toJson($scope.srchCase), getMainData);
     }
 
@@ -90,10 +92,10 @@
     $scope.handlePage = function (h) {
       if (parseInt(h) >= 0) {
         $scope.page += 1;
-        $scope.start = $scope.page * $scope.limit;
+        $scope.start = $scope.start + $scope.limit;
       } else {
         $scope.page -= 1;
-        $scope.start = ($scope.page * $scope.limit) < 0 ? 0 : ($scope.page * $scope.limit);
+        $scope.start = ($scope.start - $scope.limit) < 0 ? 0 : ($scope.start - $scope.limit);
       }
       $scope.loadMainData();
     }
@@ -160,7 +162,8 @@
               <td>{{slcted.attachments}}
                 <ul>
                   <li ng-repeat="item in slcted.attachments.split(' ')"><a
-                          href="misc/get-file?name=attachments/{{item.split('.')[0].trim()}}" target="_blank">{{item}}</a>
+                          href="misc/get-file?name=attachments/{{item.split('.')[0].trim()}}"
+                          target="_blank">{{item}}</a>
                   </li>
                 </ul>
               </td>

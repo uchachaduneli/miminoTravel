@@ -21,8 +21,11 @@
     $scope.languages = [];
 
     $scope.loadMainData = function () {
+      $('#loadingModal').modal('hide');
+
       function getUsers(res) {
         $scope.users = res.data;
+        $('#loadingModal').modal('hide');
       }
 
       ajaxCall($http, "users/get-users", null, getUsers);

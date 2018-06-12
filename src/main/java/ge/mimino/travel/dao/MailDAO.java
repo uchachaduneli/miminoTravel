@@ -63,7 +63,7 @@ public class MailDAO extends AbstractDAO {
                     .append("' and '").append(srchRequest.getReceiveDateTo()).append("'");
         }
 
-        TypedQuery<Email> query = entityManager.createQuery(q.toString(), Email.class);
+        TypedQuery<Email> query = entityManager.createQuery(q.toString() + " order by e.id desc", Email.class);
         return query.setFirstResult(start).setMaxResults(limit).getResultList();
     }
 }
