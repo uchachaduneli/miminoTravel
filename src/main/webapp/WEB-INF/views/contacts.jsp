@@ -669,10 +669,10 @@
               <div class="col col-md-12">
                 <ul class="pagination pull-right">
                   <li>
-                    <a ng-click="handlePage(-1)">«</a>
+                    <a ng-click="handlePage(-1)" style="cursor: pointer;">«</a>
                   </li>
                   <li>
-                    <a ng-click="handlePage(1)" ng>»</a>
+                    <a ng-click="handlePage(1)" style="cursor: pointer;">»</a>
                   </li>
                 </ul>
               </div>
