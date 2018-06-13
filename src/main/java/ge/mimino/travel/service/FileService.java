@@ -89,12 +89,12 @@ public class FileService {
         return imageString;
     }
 
-    public String addFile(MultipartFile file) throws IOException {
+    public String addFile(MultipartFile file, String directory) throws IOException {
         String[] fileParts = file.getOriginalFilename().split("\\.");
         String fileExtention = fileParts.length > 1 ? fileParts[fileParts.length - 1] : "";
 //        String fileName = "" + UUID.randomUUID() + (fileExtention.length() > 0 ? ("." + fileExtention) : "");
         String fileName = fileParts[0] + "_" + new Date().getTime() + (fileExtention.length() > 0 ? ("." + fileExtention) : "");
-        File f = new File(rootDir + "/" + fileName);
+        File f = new File(rootDir + directory + "/" + fileName);
         try {
             file.transferTo(f);
         } catch (Exception ex) {
