@@ -3,6 +3,7 @@ package ge.mimino.travel.controller;
 import ge.mimino.travel.dto.UsersDTO;
 import ge.mimino.travel.misc.Response;
 import ge.mimino.travel.request.MailRequest;
+import ge.mimino.travel.service.FileService;
 import ge.mimino.travel.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 
 /**
@@ -23,6 +26,9 @@ public class EmailController {
 
     @Autowired
     private MailService mailService;
+
+    @Autowired
+    private FileService fileService;
 
     @RequestMapping("/get-emails")
     @ResponseBody
@@ -40,5 +46,10 @@ public class EmailController {
         return Response.withSuccess(mailService.getEmailFolders());
     }
 
+    @RequestMapping("/add-attachment")
+    @ResponseBody
+    private Response addImage(@RequestParam("file") MultipartFile file) throws IOException {
+        return Response.withSuccess(fileService.addFile(file, "attachments"));
+    }
 
 }
