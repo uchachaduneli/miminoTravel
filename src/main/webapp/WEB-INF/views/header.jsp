@@ -40,6 +40,8 @@
   <script src="resources/js/growlMessages.js"></script>
   <script src="resources/js/requireds.js"></script>
   <script src="resources/js/checklist-model.js"></script>
+  <script src="resources/js/ng-file-upload-shim.js"></script>
+  <script src="resources/js/ng-file-upload.js"></script>
   <script>
     $(document).ready(function () {
       $(".datepicker").datepicker({language: 'ka'});
@@ -55,7 +57,7 @@
 
     });
 
-    var app = angular.module("app", ["checklist-model"]);
+    var app = angular.module("app", ["checklist-model", "ngFileUpload"]);
     app.controller("profileCtrl", function ($scope, $http, $location) {
       var absUrl = $location.absUrl();
       $scope.uri = "";

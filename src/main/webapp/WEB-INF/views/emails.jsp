@@ -33,7 +33,7 @@
 
   });
 
-  app.controller("angController", function ($scope, $http, $filter, $window) {
+  app.controller("angController", ['$scope', '$http', '$filter', '$window', 'Upload', '$timeout', function ($scope, $http, $filter, $window, Upload, $timeout) {
     $scope.start = 0;
     $scope.page = 1;
     $scope.limit = "10";
@@ -113,9 +113,124 @@
 
       iframedoc.body.innerHTML = content;
     };
-  });
+
+    $scope.uploadFiles = function (files) {
+      $scope.files = files;
+      angular.forEach(files, function (file) {
+        if (file && !file.$error) {
+          file.upload = Upload.upload({
+            url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
+            file: file
+          });
+
+          file.upload.then(function (response) {
+            $timeout(function () {
+              file.result = response.data;
+            });
+          }, function (response) {
+            if (response.status > 0)
+              $scope.errorMsg = response.status + ': ' + response.data;
+          });
+
+          file.upload.progress(function (evt) {
+            file.progress = Math.min(100, parseInt(100.0 *
+                evt.loaded / evt.total));
+          });
+        }
+      });
+    }
+  }]);
 
 </script>
+<style>
+  .thumb {
+    width: 24px;
+    height: 24px;
+    float: none;
+    position: relative;
+    top: 7px;
+  }
+
+  form .progress {
+    line-height: 15px;
+  }
+
+  .progress {
+    display: inline-block;
+    width: 100px;
+    border: 3px groove #CCC;
+  }
+
+  .progress div {
+    font-size: smaller;
+    background: orange;
+    width: 0;
+  }
+</style>
+
+<button type="file" ngf-select="uploadFiles($files)" multiple
+        accept="image/*" ngf-max-height="1000" ngf-max-size="1MB">
+  Select Files
+</button>
+<br>
+Files:
+<ul>
+  <li ng-repeat="f in files">{{f.name}} {{f.$error}} {{f.$errorParam}}
+    <span class="progress" ng-show="f.progress >= 0">
+        <div style="width:{{f.progress}}%"
+             ng-bind="f.progress + '%'"></div>
+      </span>
+  </li>
+</ul>
+{{errorMsg}}
+
+<br><br><br><br>
+
+<div class="modal fade bs-example-modal-lg not-printable" id="editModal" role="dialog" aria-labelledby="editModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="editModalLabel">Enter Information</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <form class="form-horizontal" name="ediFormName">
+            <div class="form-group col-sm-10 ">
+              <label class="control-label col-sm-3">To, Cc</label>
+              <div class="col-sm-9">
+                <input type="text" ng-model="request.to" class="form-control input-sm">
+              </div>
+            </div>
+            <div class="form-group col-sm-10 ">
+              <label class="control-label col-sm-3">Message</label>
+              <div class="col-sm-9">
+                <input type="text" ng-model="request.content" name="info" required
+                       class="form-control input-sm">
+              </div>
+            </div>
+            <div class="form-group col-sm-10">
+              <ul>
+                <li ng-repeat="item in request.attachments">
+                  <a href="misc/get-file?name=attachments/{{item.split('.')[0].trim()}}" target="_blank">{{item}}</a>
+                </li>
+              </ul>
+            </div>
+            <div class="form-group col-sm-10"></div>
+            <div class="form-group col-sm-12 text-center">
+              <a class="btn btn-app" ng-click="save()">
+                <i class="fa fa-save"></i> Save
+              </a>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="modal fade bs-example-modal-lg" id="detailModal" tabindex="-1" role="dialog"
      aria-labelledby="editModalLabel" aria-hidden="true">
@@ -195,6 +310,11 @@
     <div class="box">
       <div class="box-header">
         <div class="col-md-2">
+          <button type="button" class="btn btn-block btn-primary btn-md" ng-click="init()"
+                  data-toggle="modal" data-target="#editModal">
+            <i class="fa fa-envelope" aria-hidden="true"></i> &nbsp;
+            Add
+          </button>
         </div>
         <div class="col-md-2 col-xs-offset-8">
           <select ng-change="rowNumbersChange()" class="pull-right form-control" ng-model="limit"
