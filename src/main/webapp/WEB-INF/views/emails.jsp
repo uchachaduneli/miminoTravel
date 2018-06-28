@@ -119,7 +119,7 @@
       angular.forEach(files, function (file) {
         if (file && !file.$error) {
           file.upload = Upload.upload({
-            url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
+            url: 'emails/add-attachment',
             file: file
           });
 
@@ -131,55 +131,46 @@
             if (response.status > 0)
               $scope.errorMsg = response.status + ': ' + response.data;
           });
-
-          file.upload.progress(function (evt) {
-            file.progress = Math.min(100, parseInt(100.0 *
-                evt.loaded / evt.total));
-          });
         }
       });
     }
   }]);
 
 </script>
-<style>
-  .thumb {
-    width: 24px;
-    height: 24px;
-    float: none;
-    position: relative;
-    top: 7px;
-  }
+<%--<style>--%>
+<%--.thumb {--%>
+<%--width: 24px;--%>
+<%--height: 24px;--%>
+<%--float: none;--%>
+<%--position: relative;--%>
+<%--top: 7px;--%>
+<%--}--%>
 
-  form .progress {
-    line-height: 15px;
-  }
+<%--form .progress {--%>
+<%--line-height: 15px;--%>
+<%--}--%>
 
-  .progress {
-    display: inline-block;
-    width: 100px;
-    border: 3px groove #CCC;
-  }
+<%--.progress {--%>
+<%--display: inline-block;--%>
+<%--width: 100px;--%>
+<%--border: 3px groove #CCC;--%>
+<%--}--%>
 
-  .progress div {
-    font-size: smaller;
-    background: orange;
-    width: 0;
-  }
-</style>
+<%--.progress div {--%>
+<%--font-size: smaller;--%>
+<%--background: orange;--%>
+<%--width: 0;--%>
+<%--}--%>
+<%--</style>--%>
 
 <button type="file" ngf-select="uploadFiles($files)" multiple
-        accept="image/*" ngf-max-height="1000" ngf-max-size="1MB">
+        accept="*/*" ngf-max-height="1000" ngf-max-size="30MB">
   Select Files
 </button>
 <br>
 Files:
 <ul>
   <li ng-repeat="f in files">{{f.name}} {{f.$error}} {{f.$errorParam}}
-    <span class="progress" ng-show="f.progress >= 0">
-        <div style="width:{{f.progress}}%"
-             ng-bind="f.progress + '%'"></div>
-      </span>
   </li>
 </ul>
 {{errorMsg}}
@@ -207,17 +198,24 @@ Files:
             <div class="form-group col-sm-10 ">
               <label class="control-label col-sm-3">Message</label>
               <div class="col-sm-9">
-                <input type="text" ng-model="request.content" name="info" required
-                       class="form-control input-sm">
+                <textarea cols="5" rows="5" type="text" ng-model="request.content" name="info" required
+                          class="form-control input-sm"> </textarea>
               </div>
             </div>
-            <div class="form-group col-sm-10">
-              <ul>
-                <li ng-repeat="item in request.attachments">
-                  <a href="misc/get-file?name=attachments/{{item.split('.')[0].trim()}}" target="_blank">{{item}}</a>
-                </li>
-              </ul>
+            <div class="form-group col-sm-10 ">
+              <label class="control-label col-sm-3">Attachments</label>
+              <div class="col-sm-9">
+                <textarea cols="5" rows="5" type="text" ng-model="request.content" name="info" required
+                          class="form-control input-sm"> </textarea>
+              </div>
             </div>
+            <%--<div class="form-group col-sm-10">--%>
+            <%--<ul>--%>
+            <%--<li ng-repeat="item in request.attachments">--%>
+            <%--<a href="misc/get-file?name=attachments/{{item.split('.')[0].trim()}}" target="_blank">{{item}}</a>--%>
+            <%--</li>--%>
+            <%--</ul>--%>
+            <%--</div>--%>
             <div class="form-group col-sm-10"></div>
             <div class="form-group col-sm-12 text-center">
               <a class="btn btn-app" ng-click="save()">
@@ -313,7 +311,7 @@ Files:
           <button type="button" class="btn btn-block btn-primary btn-md" ng-click="init()"
                   data-toggle="modal" data-target="#editModal">
             <i class="fa fa-envelope" aria-hidden="true"></i> &nbsp;
-            Add
+            Compose
           </button>
         </div>
         <div class="col-md-2 col-xs-offset-8">
