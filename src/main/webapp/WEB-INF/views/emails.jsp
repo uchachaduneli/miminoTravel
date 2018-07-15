@@ -23,14 +23,6 @@
     }).on('changeDate', function (ev) {
     });
 
-    $('.srch').keypress(function (e) {
-      var key = e.which;
-      if (key == 13) {
-        $('#srchBtnId').click();
-        return false;
-      }
-    });
-
   });
 
   app.controller("angController", ['$scope', '$http', '$filter', '$window', 'Upload', '$timeout', function ($scope, $http, $filter, $window, Upload, $timeout) {

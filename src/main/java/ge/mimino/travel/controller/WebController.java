@@ -35,6 +35,11 @@ public class WebController {
         return "emails";
     }
 
+    @RequestMapping("/hotels")
+    public String hotels() {
+        return "hotels";
+    }
+
     @RequestMapping("/")
     public String defaultFnc() {
         return "";

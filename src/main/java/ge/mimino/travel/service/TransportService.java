@@ -1,0 +1,78 @@
+package ge.mimino.travel.service;
+
+
+import ge.mimino.travel.dao.TransportDAO;
+import ge.mimino.travel.dto.FuelDTO;
+import ge.mimino.travel.dto.TransportDTO;
+import ge.mimino.travel.model.Fuel;
+import ge.mimino.travel.model.Transport;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+/**
+ * @author ucha
+ */
+@Service
+public class TransportService {
+
+    @Autowired
+    private TransportDAO transportDAO;
+
+
+    public List<TransportDTO> getTransports(int start, int limit, TransportDTO srchRequest) {
+        return TransportDTO.parseToList(transportDAO.getTransports(start, limit, srchRequest));
+    }
+
+    @Transactional(rollbackFor = Throwable.class)
+    public Transport save(TransportDTO request) throws Exception {
+
+        Transport obj = request.getId() != null ? ((Transport) transportDAO.find(Transport.class, request.getId())) : new Transport();
+        obj.setDescription(request.getDescription());
+        obj.setName(request.getName());
+        obj.setFuelConsumption(request.getFuelConsumption());
+        obj.setPrice(request.getPrice());
+        obj.setSeatsCount(request.getSeatsCount());
+
+        if (request.getId() != null) {
+            obj.setId(request.getId());
+            obj = (Transport) transportDAO.update(obj);
+        } else {
+            obj = (Transport) transportDAO.create(obj);
+        }
+
+        return obj;
+    }
+
+    @Transactional(rollbackFor = Throwable.class)
+    public void delete(int id) {
+        Transport obj = (Transport) transportDAO.find(Transport.class, id);
+        if (obj != null) {
+            transportDAO.delete(obj);
+        }
+    }
+
+
+    public List<FuelDTO> getFuels() {
+        return FuelDTO.parseToList(transportDAO.getAll(Fuel.class));
+    }
+
+    @Transactional(rollbackFor = Throwable.class)
+    public Fuel saveFuel(FuelDTO request) throws Exception {
+
+        Fuel obj = request.getId() != null ? ((Fuel) transportDAO.find(Fuel.class, request.getId())) : new Fuel();
+        obj.setName(request.getName());
+        obj.setPrice(request.getPrice());
+
+        if (request.getId() != null) {
+            obj.setId(request.getId());
+            obj = (Fuel) transportDAO.update(obj);
+        } else {
+            obj = (Fuel) transportDAO.create(obj);
+        }
+
+        return obj;
+    }
+}

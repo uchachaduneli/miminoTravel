@@ -55,6 +55,20 @@
         $('#selected_item').text("Contacts Database");
       }
 
+      $('.srch').keypress(function (e) {
+        var key = e.which;
+        if (key == 13) {
+          $('#srchBtnId').click();
+          return false;
+        }
+      });
+
+      $('.dateInput').datepicker({
+        format: "dd/mm/yyyy",
+        autoclose: true,
+      }).on('changeDate', function (ev) {
+      });
+
     });
 
     var app = angular.module("app", ["checklist-model", "ngFileUpload"]);
@@ -94,6 +108,16 @@
 
       <div class="navbar-custom-menu" ng-controller="profileCtrl">
         <ul class="nav navbar-nav">
+          <li>
+            <a>
+              <i class="fa fa-comments fa-lg"></i>
+            </a>
+          </li>
+          <li>
+            <a>
+              <i class="fa fa-bell fa-lg"></i>
+            </a>
+          </li>
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-user"></i>
@@ -160,6 +184,12 @@
             <a class="menuItem" href="contacts">
               <i class="fa fa-share-alt"></i>
               <span>Contact Db</span>
+            </a>
+          </li>
+          <li>
+            <a class="menuItem" href="hotels">
+              <i class="fa fa-bed"></i>
+              <span>Hotels</span>
             </a>
           </li>
           <c:if test="<%= isAdmin %>">
