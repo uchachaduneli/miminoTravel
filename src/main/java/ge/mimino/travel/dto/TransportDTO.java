@@ -8,13 +8,26 @@ import java.util.List;
 public class TransportDTO {
 
     private Integer id;
-    private String name;
-    private String description;
     private Integer seatsCount;
     private FuelDTO fuel;
     private Integer fuelId;
     private Double fuelConsumption;
     private Double price;
+
+    private String nameEn;
+    private String nameGe;
+    private String nameFr;
+    private String nameIt;
+    private String nameSp;
+    private String namePo;
+    private String nameRu;
+    private String descriptionEn;
+    private String descriptionGe;
+    private String descriptionFr;
+    private String descriptionIt;
+    private String descriptionSp;
+    private String descriptionPo;
+    private String descriptionRu;
 
 
     public static TransportDTO parse(Transport record) {

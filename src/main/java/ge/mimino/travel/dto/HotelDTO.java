@@ -11,17 +11,28 @@ import java.util.List;
 public class HotelDTO {
 
     private Integer id;
-    private String name;
-    private String description;
     private Double singlePrice;
     private Double doublePrice;
     private Double triplePrice;
     private Double singleSupply;
     private String starsCount;
-    private LanguageDTO language;
-    private Integer languageId;
     @JsonSerialize(using = JsonDateTimeSerializeSupport.class)
     private Timestamp createDate;
+
+    private String nameEn;
+    private String nameGe;
+    private String nameFr;
+    private String nameIt;
+    private String nameSp;
+    private String namePo;
+    private String nameRu;
+    private String descriptionEn;
+    private String descriptionGe;
+    private String descriptionFr;
+    private String descriptionIt;
+    private String descriptionSp;
+    private String descriptionPo;
+    private String descriptionRu;
 
 
     public static HotelDTO parse(Hotel record) {

@@ -11,15 +11,26 @@ import java.util.List;
 public class GeoObjectDTO {
 
     private Integer id;
-    private String name;
     private Double personPrice;
-    private LanguageDTO language;
-    private String description;
     private GeoObjectTypesDTO type;
     private Integer typeId;
-    private Integer languageId;
     @JsonSerialize(using = JsonDateTimeSerializeSupport.class)
     private Timestamp createDate;
+
+    private String nameEn;
+    private String nameGe;
+    private String nameFr;
+    private String nameIt;
+    private String nameSp;
+    private String namePo;
+    private String nameRu;
+    private String descriptionEn;
+    private String descriptionGe;
+    private String descriptionFr;
+    private String descriptionIt;
+    private String descriptionSp;
+    private String descriptionPo;
+    private String descriptionRu;
 
 
     public static GeoObjectDTO parse(GeoObject record) {
