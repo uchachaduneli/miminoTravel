@@ -24,7 +24,6 @@ public class GeoObject {
     private String descriptionSp;
     private String descriptionPo;
     private String descriptionRu;
-    private Integer typeId;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -205,15 +204,5 @@ public class GeoObject {
 
     public void setDescriptionRu(String descriptionRu) {
         this.descriptionRu = descriptionRu;
-    }
-
-    @Basic
-    @Column(name = "type_id")
-    public Integer getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(Integer typeId) {
-        this.typeId = typeId;
     }
 }

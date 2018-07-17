@@ -40,6 +40,26 @@ public class WebController {
         return "hotels";
     }
 
+    @RequestMapping("/objects")
+    public String objects() {
+        return "objects";
+    }
+
+    @RequestMapping("/places")
+    public String places() {
+        return "places";
+    }
+
+    @RequestMapping("/transports")
+    public String transports() {
+        return "transports";
+    }
+
+    @RequestMapping("/nonstandarts")
+    public String nonstandarts() {
+        return "nonstandarts";
+    }
+
     @RequestMapping("/")
     public String defaultFnc() {
         return "";

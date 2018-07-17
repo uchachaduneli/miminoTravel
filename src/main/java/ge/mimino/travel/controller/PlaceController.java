@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * @author ucha
  */
-@RequestMapping("/place")
+@RequestMapping("/places")
 @Controller
 public class PlaceController {
 
@@ -39,6 +39,12 @@ public class PlaceController {
     public Response delete(@RequestParam int id) {
         placeService.delete(id);
         return Response.withSuccess(true);
+    }
+
+    @RequestMapping("/get-images")
+    @ResponseBody
+    private Response getImages(@RequestParam Integer id) throws Exception {
+        return Response.withSuccess(placeService.getObjectImages(id));
     }
 
 }

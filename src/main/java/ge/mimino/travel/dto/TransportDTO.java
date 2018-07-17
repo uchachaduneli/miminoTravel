@@ -33,8 +33,20 @@ public class TransportDTO {
     public static TransportDTO parse(Transport record) {
         TransportDTO dto = new TransportDTO();
         dto.setId(record.getId());
-        dto.setName(record.getName());
-        dto.setDescription(record.getDescription());
+        dto.setNameEn(record.getNameEn());
+        dto.setNameGe(record.getNameGe());
+        dto.setNameFr(record.getNameFr());
+        dto.setNameIt(record.getNameIt());
+        dto.setNameSp(record.getNameSp());
+        dto.setNamePo(record.getNamePo());
+        dto.setNameRu(record.getNameRu());
+        dto.setDescriptionEn(record.getDescriptionEn());
+        dto.setDescriptionGe(record.getDescriptionGe());
+        dto.setDescriptionFr(record.getDescriptionFr());
+        dto.setDescriptionIt(record.getDescriptionIt());
+        dto.setDescriptionSp(record.getDescriptionSp());
+        dto.setDescriptionPo(record.getDescriptionPo());
+        dto.setDescriptionRu(record.getDescriptionRu());
         dto.setSeatsCount(record.getSeatsCount());
         dto.setFuel(FuelDTO.parse(record.getFuel()));
         dto.setFuelId(record.getFuel().getId());
@@ -58,22 +70,6 @@ public class TransportDTO {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public Integer getSeatsCount() {
@@ -114,5 +110,117 @@ public class TransportDTO {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public String getNameEn() {
+        return nameEn;
+    }
+
+    public void setNameEn(String nameEn) {
+        this.nameEn = nameEn;
+    }
+
+    public String getNameGe() {
+        return nameGe;
+    }
+
+    public void setNameGe(String nameGe) {
+        this.nameGe = nameGe;
+    }
+
+    public String getNameFr() {
+        return nameFr;
+    }
+
+    public void setNameFr(String nameFr) {
+        this.nameFr = nameFr;
+    }
+
+    public String getNameIt() {
+        return nameIt;
+    }
+
+    public void setNameIt(String nameIt) {
+        this.nameIt = nameIt;
+    }
+
+    public String getNameSp() {
+        return nameSp;
+    }
+
+    public void setNameSp(String nameSp) {
+        this.nameSp = nameSp;
+    }
+
+    public String getNamePo() {
+        return namePo;
+    }
+
+    public void setNamePo(String namePo) {
+        this.namePo = namePo;
+    }
+
+    public String getNameRu() {
+        return nameRu;
+    }
+
+    public void setNameRu(String nameRu) {
+        this.nameRu = nameRu;
+    }
+
+    public String getDescriptionEn() {
+        return descriptionEn;
+    }
+
+    public void setDescriptionEn(String descriptionEn) {
+        this.descriptionEn = descriptionEn;
+    }
+
+    public String getDescriptionGe() {
+        return descriptionGe;
+    }
+
+    public void setDescriptionGe(String descriptionGe) {
+        this.descriptionGe = descriptionGe;
+    }
+
+    public String getDescriptionFr() {
+        return descriptionFr;
+    }
+
+    public void setDescriptionFr(String descriptionFr) {
+        this.descriptionFr = descriptionFr;
+    }
+
+    public String getDescriptionIt() {
+        return descriptionIt;
+    }
+
+    public void setDescriptionIt(String descriptionIt) {
+        this.descriptionIt = descriptionIt;
+    }
+
+    public String getDescriptionSp() {
+        return descriptionSp;
+    }
+
+    public void setDescriptionSp(String descriptionSp) {
+        this.descriptionSp = descriptionSp;
+    }
+
+    public String getDescriptionPo() {
+        return descriptionPo;
+    }
+
+    public void setDescriptionPo(String descriptionPo) {
+        this.descriptionPo = descriptionPo;
+    }
+
+    public String getDescriptionRu() {
+        return descriptionRu;
+    }
+
+    public void setDescriptionRu(String descriptionRu) {
+        this.descriptionRu = descriptionRu;
     }
 }

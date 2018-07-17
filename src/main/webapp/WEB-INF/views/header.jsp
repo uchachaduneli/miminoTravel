@@ -53,7 +53,18 @@
         $('#selected_item').text("Requests");
       } else if (url.pathname.indexOf("contacts") > -1) {
         $('#selected_item').text("Contacts Database");
+      } else if (url.pathname.indexOf("hotels") > -1) {
+        $('#selected_item').text("Hotels");
+      } else if (url.pathname.indexOf("objects") > -1) {
+        $('#selected_item').text("Sights");
+      } else if (url.pathname.indexOf("transports") > -1) {
+        $('#selected_item').text("Transpors");
+      } else if (url.pathname.indexOf("places") > -1) {
+        $('#selected_item').text("Places(Towns, Districts, Resorts, etc.)");
+      } else if (url.pathname.indexOf("nonstandarts") > -1) {
+        $('#selected_item').text("Non Standart Services");
       }
+
 
       $('.srch').keypress(function (e) {
         var key = e.which;
@@ -68,6 +79,8 @@
         autoclose: true,
       }).on('changeDate', function (ev) {
       });
+
+      $('input').attr('autocomplete', 'off');
 
     });
 
@@ -187,9 +200,27 @@
             </a>
           </li>
           <li>
+            <a class="menuItem" href="objects">
+              <i class="fa fa-university"></i>
+              <span>Sights</span>
+            </a>
+          </li>
+          <li>
+            <a class="menuItem" href="places">
+              <i class="fa fa-map-marker"></i>
+              <span>Places</span>
+            </a>
+          </li>
+          <li>
             <a class="menuItem" href="hotels">
               <i class="fa fa-bed"></i>
               <span>Hotels</span>
+            </a>
+          </li>
+          <li>
+            <a class="menuItem" href="transports">
+              <i class="fa fa-car"></i>
+              <span>Transport</span>
             </a>
           </li>
           <c:if test="<%= isAdmin %>">
@@ -216,7 +247,6 @@
       <h4 id="selected_item"></h4>
     </section>
     <section class="content">
-
       <div class="modal fade bs-example-modal-lg not-printable" id="loadingModal"
            role="dialog" aria-labelledby="loadingModalLabel" aria-hidden="true">
         <div class="modal-dialog" style="height: 80%; width: 120px;">

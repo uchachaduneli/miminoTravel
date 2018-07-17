@@ -1,14 +1,17 @@
 package ge.mimino.travel.service;
 
 
+import ge.mimino.travel.dao.ParamValuePair;
 import ge.mimino.travel.dao.PlaceDAO;
 import ge.mimino.travel.dto.PlaceDTO;
-import ge.mimino.travel.model.Language;
+import ge.mimino.travel.dto.PlaceImagesDTO;
 import ge.mimino.travel.model.Place;
+import ge.mimino.travel.model.PlaceImages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,15 +32,33 @@ public class PlaceService {
     public Place save(PlaceDTO request) throws Exception {
 
         Place obj = request.getId() != null ? ((Place) placeDAO.find(Place.class, request.getId())) : new Place();
-        obj.setLanguage((Language) placeDAO.find(Language.class, request.getLanguageId()));
-        obj.setDescription(request.getDescription());
-        obj.setName(request.getName());
+        obj.setNameEn(request.getNameEn());
+        obj.setNameGe(request.getNameGe());
+        obj.setNameFr(request.getNameFr());
+        obj.setNameIt(request.getNameIt());
+        obj.setNameSp(request.getNameSp());
+        obj.setNamePo(request.getNamePo());
+        obj.setNameRu(request.getNameRu());
+        obj.setDescriptionEn(request.getDescriptionEn());
+        obj.setDescriptionGe(request.getDescriptionGe());
+        obj.setDescriptionFr(request.getDescriptionFr());
+        obj.setDescriptionIt(request.getDescriptionIt());
+        obj.setDescriptionSp(request.getDescriptionSp());
+        obj.setDescriptionPo(request.getDescriptionPo());
+        obj.setDescriptionRu(request.getDescriptionRu());
 
         if (request.getId() != null) {
             obj.setId(request.getId());
             obj = (Place) placeDAO.update(obj);
         } else {
             obj = (Place) placeDAO.create(obj);
+        }
+
+        placeDAO.removeImages(obj.getId());
+        if (request.getImages() != null && !request.getImages().isEmpty()) {
+            for (String img : request.getImages()) {
+                placeDAO.create(new PlaceImages(img.contains(obj.getId() + "") ? img : obj.getId() + "_" + img, obj.getId()));
+            }
         }
 
         return obj;
@@ -49,5 +70,12 @@ public class PlaceService {
         if (obj != null) {
             placeDAO.delete(obj);
         }
+    }
+
+    public List<PlaceImagesDTO> getObjectImages(Integer id) {
+        List<ParamValuePair> criteria = new ArrayList<>();
+        ParamValuePair crit = new ParamValuePair("placeId", id);
+        criteria.add(crit);
+        return PlaceImagesDTO.parseToList(placeDAO.getAllByParamValue(PlaceImages.class, criteria, null));
     }
 }

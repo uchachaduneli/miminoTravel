@@ -22,15 +22,26 @@ public class PlaceDTO {
     private String descriptionSp;
     private String descriptionPo;
     private String descriptionRu;
+    private List<String> images;
 
 
     public static PlaceDTO parse(Place record) {
         PlaceDTO dto = new PlaceDTO();
         dto.setId(record.getId());
-        dto.setName(record.getName());
-        dto.setDescription(record.getDescription());
-        dto.setLanguage(LanguageDTO.parse(record.getLanguage()));
-        dto.setLanguageId(record.getLanguage().getId());
+        dto.setNameEn(record.getNameEn());
+        dto.setNameGe(record.getNameGe());
+        dto.setNameFr(record.getNameFr());
+        dto.setNameIt(record.getNameIt());
+        dto.setNameSp(record.getNameSp());
+        dto.setNamePo(record.getNamePo());
+        dto.setNameRu(record.getNameRu());
+        dto.setDescriptionEn(record.getDescriptionEn());
+        dto.setDescriptionGe(record.getDescriptionGe());
+        dto.setDescriptionFr(record.getDescriptionFr());
+        dto.setDescriptionIt(record.getDescriptionIt());
+        dto.setDescriptionSp(record.getDescriptionSp());
+        dto.setDescriptionPo(record.getDescriptionPo());
+        dto.setDescriptionRu(record.getDescriptionRu());
         return dto;
     }
 
@@ -43,6 +54,14 @@ public class PlaceDTO {
         return list;
     }
 
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -51,35 +70,115 @@ public class PlaceDTO {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getNameEn() {
+        return nameEn;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNameEn(String nameEn) {
+        this.nameEn = nameEn;
     }
 
-    public String getDescription() {
-        return description;
+    public String getNameGe() {
+        return nameGe;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setNameGe(String nameGe) {
+        this.nameGe = nameGe;
     }
 
-    public LanguageDTO getLanguage() {
-        return language;
+    public String getNameFr() {
+        return nameFr;
     }
 
-    public void setLanguage(LanguageDTO language) {
-        this.language = language;
+    public void setNameFr(String nameFr) {
+        this.nameFr = nameFr;
     }
 
-    public Integer getLanguageId() {
-        return languageId;
+    public String getNameIt() {
+        return nameIt;
     }
 
-    public void setLanguageId(Integer languageId) {
-        this.languageId = languageId;
+    public void setNameIt(String nameIt) {
+        this.nameIt = nameIt;
+    }
+
+    public String getNameSp() {
+        return nameSp;
+    }
+
+    public void setNameSp(String nameSp) {
+        this.nameSp = nameSp;
+    }
+
+    public String getNamePo() {
+        return namePo;
+    }
+
+    public void setNamePo(String namePo) {
+        this.namePo = namePo;
+    }
+
+    public String getNameRu() {
+        return nameRu;
+    }
+
+    public void setNameRu(String nameRu) {
+        this.nameRu = nameRu;
+    }
+
+    public String getDescriptionEn() {
+        return descriptionEn;
+    }
+
+    public void setDescriptionEn(String descriptionEn) {
+        this.descriptionEn = descriptionEn;
+    }
+
+    public String getDescriptionGe() {
+        return descriptionGe;
+    }
+
+    public void setDescriptionGe(String descriptionGe) {
+        this.descriptionGe = descriptionGe;
+    }
+
+    public String getDescriptionFr() {
+        return descriptionFr;
+    }
+
+    public void setDescriptionFr(String descriptionFr) {
+        this.descriptionFr = descriptionFr;
+    }
+
+    public String getDescriptionIt() {
+        return descriptionIt;
+    }
+
+    public void setDescriptionIt(String descriptionIt) {
+        this.descriptionIt = descriptionIt;
+    }
+
+    public String getDescriptionSp() {
+        return descriptionSp;
+    }
+
+    public void setDescriptionSp(String descriptionSp) {
+        this.descriptionSp = descriptionSp;
+    }
+
+    public String getDescriptionPo() {
+        return descriptionPo;
+    }
+
+    public void setDescriptionPo(String descriptionPo) {
+        this.descriptionPo = descriptionPo;
+    }
+
+    public String getDescriptionRu() {
+        return descriptionRu;
+    }
+
+    public void setDescriptionRu(String descriptionRu) {
+        this.descriptionRu = descriptionRu;
     }
 }

@@ -8,7 +8,6 @@ import java.util.List;
 public class GeoObjectImagesDTO {
 
     private Integer id;
-    private GeoObjectDTO geoObject;
     private Integer geoObjectId;
     private String name;
 
@@ -17,8 +16,7 @@ public class GeoObjectImagesDTO {
         GeoObjectImagesDTO dto = new GeoObjectImagesDTO();
         dto.setId(record.getId());
         dto.setName(record.getName());
-        dto.setGeoObject(GeoObjectDTO.parse(record.getGeoObject()));
-        dto.setGeoObjectId(record.getGeoObject().getId());
+        dto.setGeoObjectId(record.getGeoObjectId());
         return dto;
     }
 
@@ -37,14 +35,6 @@ public class GeoObjectImagesDTO {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public GeoObjectDTO getGeoObject() {
-        return geoObject;
-    }
-
-    public void setGeoObject(GeoObjectDTO geoObject) {
-        this.geoObject = geoObject;
     }
 
     public Integer getGeoObjectId() {

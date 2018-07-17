@@ -31,15 +31,26 @@ public class GeoObjectDTO {
     private String descriptionSp;
     private String descriptionPo;
     private String descriptionRu;
+    private List<String> images;
 
 
     public static GeoObjectDTO parse(GeoObject record) {
         GeoObjectDTO dto = new GeoObjectDTO();
         dto.setId(record.getId());
-        dto.setName(record.getName());
-        dto.setDescription(record.getDescription());
-        dto.setLanguage(LanguageDTO.parse(record.getLanguage()));
-        dto.setLanguageId(record.getLanguage().getId());
+        dto.setNameEn(record.getNameEn());
+        dto.setNameGe(record.getNameGe());
+        dto.setNameFr(record.getNameFr());
+        dto.setNameIt(record.getNameIt());
+        dto.setNameSp(record.getNameSp());
+        dto.setNamePo(record.getNamePo());
+        dto.setNameRu(record.getNameRu());
+        dto.setDescriptionEn(record.getDescriptionEn());
+        dto.setDescriptionGe(record.getDescriptionGe());
+        dto.setDescriptionFr(record.getDescriptionFr());
+        dto.setDescriptionIt(record.getDescriptionIt());
+        dto.setDescriptionSp(record.getDescriptionSp());
+        dto.setDescriptionPo(record.getDescriptionPo());
+        dto.setDescriptionRu(record.getDescriptionRu());
         dto.setPersonPrice(record.getPersonPrice());
         dto.setType(GeoObjectTypesDTO.parse(record.getType()));
         dto.setTypeId(record.getType().getId());
@@ -56,12 +67,12 @@ public class GeoObjectDTO {
         return list;
     }
 
-    public Integer getTypeId() {
-        return typeId;
+    public List<String> getImages() {
+        return images;
     }
 
-    public void setTypeId(Integer typeId) {
-        this.typeId = typeId;
+    public void setImages(List<String> images) {
+        this.images = images;
     }
 
     public Integer getId() {
@@ -72,36 +83,12 @@ public class GeoObjectDTO {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Double getPersonPrice() {
         return personPrice;
     }
 
     public void setPersonPrice(Double personPrice) {
         this.personPrice = personPrice;
-    }
-
-    public LanguageDTO getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(LanguageDTO language) {
-        this.language = language;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public GeoObjectTypesDTO getType() {
@@ -112,12 +99,12 @@ public class GeoObjectDTO {
         this.type = type;
     }
 
-    public Integer getLanguageId() {
-        return languageId;
+    public Integer getTypeId() {
+        return typeId;
     }
 
-    public void setLanguageId(Integer languageId) {
-        this.languageId = languageId;
+    public void setTypeId(Integer typeId) {
+        this.typeId = typeId;
     }
 
     public Timestamp getCreateDate() {
@@ -126,5 +113,117 @@ public class GeoObjectDTO {
 
     public void setCreateDate(Timestamp createDate) {
         this.createDate = createDate;
+    }
+
+    public String getNameEn() {
+        return nameEn;
+    }
+
+    public void setNameEn(String nameEn) {
+        this.nameEn = nameEn;
+    }
+
+    public String getNameGe() {
+        return nameGe;
+    }
+
+    public void setNameGe(String nameGe) {
+        this.nameGe = nameGe;
+    }
+
+    public String getNameFr() {
+        return nameFr;
+    }
+
+    public void setNameFr(String nameFr) {
+        this.nameFr = nameFr;
+    }
+
+    public String getNameIt() {
+        return nameIt;
+    }
+
+    public void setNameIt(String nameIt) {
+        this.nameIt = nameIt;
+    }
+
+    public String getNameSp() {
+        return nameSp;
+    }
+
+    public void setNameSp(String nameSp) {
+        this.nameSp = nameSp;
+    }
+
+    public String getNamePo() {
+        return namePo;
+    }
+
+    public void setNamePo(String namePo) {
+        this.namePo = namePo;
+    }
+
+    public String getNameRu() {
+        return nameRu;
+    }
+
+    public void setNameRu(String nameRu) {
+        this.nameRu = nameRu;
+    }
+
+    public String getDescriptionEn() {
+        return descriptionEn;
+    }
+
+    public void setDescriptionEn(String descriptionEn) {
+        this.descriptionEn = descriptionEn;
+    }
+
+    public String getDescriptionGe() {
+        return descriptionGe;
+    }
+
+    public void setDescriptionGe(String descriptionGe) {
+        this.descriptionGe = descriptionGe;
+    }
+
+    public String getDescriptionFr() {
+        return descriptionFr;
+    }
+
+    public void setDescriptionFr(String descriptionFr) {
+        this.descriptionFr = descriptionFr;
+    }
+
+    public String getDescriptionIt() {
+        return descriptionIt;
+    }
+
+    public void setDescriptionIt(String descriptionIt) {
+        this.descriptionIt = descriptionIt;
+    }
+
+    public String getDescriptionSp() {
+        return descriptionSp;
+    }
+
+    public void setDescriptionSp(String descriptionSp) {
+        this.descriptionSp = descriptionSp;
+    }
+
+    public String getDescriptionPo() {
+        return descriptionPo;
+    }
+
+    public void setDescriptionPo(String descriptionPo) {
+        this.descriptionPo = descriptionPo;
+    }
+
+    public String getDescriptionRu() {
+        return descriptionRu;
+    }
+
+    public void setDescriptionRu(String descriptionRu) {
+        this.descriptionRu = descriptionRu;
     }
 }

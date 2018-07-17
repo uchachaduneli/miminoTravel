@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * @author ucha
  */
-@RequestMapping("/transport")
+@RequestMapping("/transports")
 @Controller
 public class TransportController {
 

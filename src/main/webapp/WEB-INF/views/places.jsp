@@ -13,9 +13,8 @@
     $scope.start = 0;
     $scope.page = 1;
     $scope.limit = "10";
-    $scope.request = {};
+    $scope.request = {types: []};
     $scope.srchCase = {};
-    $scope.stars = ['*', '**', '***', '****', '*****'];
 
     $scope.loadMainData = function () {
       $('#loadingModal').modal('show');
@@ -25,7 +24,7 @@
         $('#loadingModal').modal('hide');
       }
 
-      ajaxCall($http, "hotels/get-hotels?start=" + $scope.start + "&limit=" + $scope.limit, angular.toJson($scope.srchCase), getMainData);
+      ajaxCall($http, "places/get-places?start=" + $scope.start + "&limit=" + $scope.limit, angular.toJson($scope.srchCase), getMainData);
     }
 
     $scope.loadMainData();
@@ -40,7 +39,7 @@
             }
           }
 
-          ajaxCall($http, "hotels/delete?id=" + id, null, resFnc);
+          ajaxCall($http, "places/delete?id=" + id, null, resFnc);
         }
       }
     };
@@ -51,7 +50,6 @@
         $scope.slcted = selected[0];
         $scope.request = selected[0];
         $scope.loadDetailsList($scope.request.id);
-        $scope.calculateSingleSupply();
       }
     }
 
@@ -67,10 +65,10 @@
     $scope.loadDetailsList = function (id) {
 
       function getImages(res) {
-        $scope.slcted.hotelImages = res.data;
+        $scope.slcted.images = res.data;
       }
 
-      ajaxCall($http, "hotels/get-images?id=" + id, null, getImages);
+      ajaxCall($http, "places/get-images?id=" + id, null, getImages);
     }
 
     $scope.handleDoubleClick = function (id) {
@@ -79,7 +77,7 @@
     };
 
     $scope.init = function () {
-      $scope.request = {};
+      $scope.request = {types: []};
     };
 
     $scope.save = function () {
@@ -97,11 +95,6 @@
       $scope.req = {};
 
       $scope.req.id = $scope.request.id;
-      $scope.req.singlePrice = $scope.request.singlePrice;
-      $scope.req.doublePrice = $scope.request.doublePrice;
-      $scope.req.triplePrice = $scope.request.triplePrice;
-      $scope.req.singleSupply = $scope.request.singleSupply;
-      $scope.req.starsCount = $scope.request.starsCount;
       $scope.req.nameEn = $scope.request.nameEn;
       $scope.req.nameGe = $scope.request.nameGe;
       $scope.req.nameFr = $scope.request.nameFr;
@@ -118,17 +111,13 @@
       $scope.req.descriptionRu = $scope.request.descriptionRu;
 
       console.log(angular.toJson($scope.req));
-      ajaxCall($http, "hotels/save", angular.toJson($scope.req), resFunc);
+      ajaxCall($http, "places/save", angular.toJson($scope.req), resFunc);
     };
 
 
     $scope.rowNumbersChange = function () {
       $scope.start = 0;
       $scope.loadMainData();
-    }
-
-    $scope.calculateSingleSupply = function (h) {
-      $scope.request.singleSupply = Math.abs($scope.request.singlePrice - $scope.request.doublePrice) / 2;
     }
 
     $scope.handlePage = function (h) {
@@ -217,26 +206,6 @@
               <td>{{slcted.descriptionRu}}</td>
             </tr>
             <tr>
-              <th class="text-right">SinglePrice</th>
-              <td>{{slcted.singlePrice}}</td>
-            </tr>
-            <tr>
-              <th class="text-right">DoublePrice</th>
-              <td>{{slcted.doublePrice}}</td>
-            </tr>
-            <tr>
-              <th class="text-right">TriplePrice</th>
-              <td>{{slcted.triplePrice}}</td>
-            </tr>
-            <tr>
-              <th class="text-right">SingleSupply</th>
-              <td>{{slcted.singleSupply}}</td>
-            </tr>
-            <tr>
-              <th class="text-right">Stars</th>
-              <td>{{slcted.starsCount}}</td>
-            </tr>
-            <tr>
               <th class="text-right">Record Created</th>
               <td>{{slcted.createDate}}</td>
             </tr>
@@ -244,7 +213,7 @@
               <th class="text-right">images</th>
               <td>
                 <ul>
-                  <li ng-repeat="item in slcted.hotelImages">
+                  <li ng-repeat="item in slcted.images">
                     {{item.name}}
                   </li>
                 </ul>
@@ -377,46 +346,6 @@
                 </textarea>
               </div>
             </div>
-            <div class="form-group col-sm-10 ">
-              <label class="control-label col-sm-3">SinglePrice</label>
-              <div class="col-sm-9">
-                <input type="text" ng-keyup="calculateSingleSupply()" ng-model="request.singlePrice" required
-                       class="form-control input-sm">
-              </div>
-            </div>
-            <div class="form-group col-sm-10 ">
-              <label class="control-label col-sm-3">DoublePrice</label>
-              <div class="col-sm-9">
-                <input type="text" ng-keyup="calculateSingleSupply()" ng-model="request.doublePrice" required
-                       class="form-control input-sm">
-              </div>
-            </div>
-            <div class="form-group col-sm-10 ">
-              <label class="control-label col-sm-3">TriplePrice</label>
-              <div class="col-sm-9">
-                <input type="text" ng-model="request.triplePrice" required
-                       class="form-control input-sm">
-              </div>
-            </div>
-            <div class="form-group col-sm-10 ">
-              <label class="control-label col-sm-3">SingleSupply</label>
-              <div class="col-sm-9">
-                <input type="text" disabled="true" ng-model="request.singleSupply" required
-                       class="form-control input-sm">
-              </div>
-            </div>
-            <div class="form-group col-sm-10 ">
-              <label class="control-label col-sm-3">Stars Count</label>
-              <div class="col-sm-9">
-                <select class="form-control" ng-model="request.starsCount"
-                        required>
-                  <option ng-repeat="v in stars"
-                          ng-selected="v === request.starsCount"
-                          value="{{v}}">{{v}}
-                  </option>
-                </select>
-              </div>
-            </div>
             <div class="form-group col-sm-10"></div>
             <div class="form-group col-sm-10"></div>
             <div class="form-group col-sm-12 text-center">
@@ -470,15 +399,6 @@
                          placeholder="Name">
                 </div>
                 <div class="form-group col-md-3">
-                  <select class="form-control" ng-model="srchCase.starsCount"
-                          ng-change="loadMainData()">
-                    <option value="" selected="selected">Stars Count</option>
-                    <option ng-repeat="v in stars" ng-selected="v === srchCase.starsCount"
-                            value="{{v}}">{{v}}
-                    </option>
-                  </select>
-                </div>
-                <div class="form-group col-md-3">
                   <button class="btn btn-default col-md-11" ng-click="loadMainData()" id="srchBtnId">
                     <span class="fa fa-search"></span> &nbsp; &nbsp;Search &nbsp; &nbsp;
                   </button>
@@ -493,12 +413,9 @@
             <thead>
             <tr>
               <th>ID</th>
-              <th>Name</th>
-              <th>SinglePrice</th>
-              <th>DoublePrice</th>
-              <th>TriplePrice</th>
-              <th>SingleSupply</th>
-              <th>StarsCount</th>
+              <th>English</th>
+              <th>German</th>
+              <th>France</th>
               <th class="col-md-2 text-center">Action</th>
             </tr>
             </thead>
@@ -506,11 +423,8 @@
             <tr ng-repeat="r in list" ng-dblclick="handleDoubleClick(r.id)">
               <td>{{r.id}}</td>
               <td>{{r.nameEn}}</td>
-              <td>{{r.singlePrice}}</td>
-              <td>{{r.doublePrice}}</td>
-              <td>{{r.triplePrice}}</td>
-              <td>{{r.singleSupply}}</td>
-              <td>{{r.starsCount}}</td>
+              <td>{{r.nameGe}}</td>
+              <td>{{r.nameFr}}</td>
               <td class="text-center">
                 <a ng-click="showDetails(r.id)" data-toggle="modal" title="Details"
                    data-target="#detailModal" class="btn btn-xs">

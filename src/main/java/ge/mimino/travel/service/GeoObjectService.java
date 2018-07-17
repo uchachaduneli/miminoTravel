@@ -2,17 +2,18 @@ package ge.mimino.travel.service;
 
 
 import ge.mimino.travel.dao.GeoObjectDAO;
+import ge.mimino.travel.dao.ParamValuePair;
 import ge.mimino.travel.dto.GeoObjectDTO;
 import ge.mimino.travel.dto.GeoObjectImagesDTO;
 import ge.mimino.travel.dto.GeoObjectTypesDTO;
 import ge.mimino.travel.model.GeoObject;
 import ge.mimino.travel.model.GeoObjectImages;
 import ge.mimino.travel.model.GeoObjectTypes;
-import ge.mimino.travel.model.Language;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,17 +34,35 @@ public class GeoObjectService {
     public GeoObject save(GeoObjectDTO request) throws Exception {
 
         GeoObject obj = request.getId() != null ? ((GeoObject) geoObjectDAO.find(GeoObject.class, request.getId())) : new GeoObject();
-        obj.setLanguage((Language) geoObjectDAO.find(Language.class, request.getLanguageId()));
         obj.setPersonPrice(request.getPersonPrice());
         obj.setType((GeoObjectTypes) geoObjectDAO.find(GeoObjectTypes.class, request.getTypeId()));
-        obj.setDescription(request.getDescription());
-        obj.setName(request.getName());
+        obj.setNameEn(request.getNameEn());
+        obj.setNameGe(request.getNameGe());
+        obj.setNameFr(request.getNameFr());
+        obj.setNameIt(request.getNameIt());
+        obj.setNameSp(request.getNameSp());
+        obj.setNamePo(request.getNamePo());
+        obj.setNameRu(request.getNameRu());
+        obj.setDescriptionEn(request.getDescriptionEn());
+        obj.setDescriptionGe(request.getDescriptionGe());
+        obj.setDescriptionFr(request.getDescriptionFr());
+        obj.setDescriptionIt(request.getDescriptionIt());
+        obj.setDescriptionSp(request.getDescriptionSp());
+        obj.setDescriptionPo(request.getDescriptionPo());
+        obj.setDescriptionRu(request.getDescriptionRu());
 
         if (request.getId() != null) {
             obj.setId(request.getId());
             obj = (GeoObject) geoObjectDAO.update(obj);
         } else {
             obj = (GeoObject) geoObjectDAO.create(obj);
+        }
+
+        geoObjectDAO.removeImages(obj.getId());
+        if (request.getImages() != null && !request.getImages().isEmpty()) {
+            for (String img : request.getImages()) {
+                geoObjectDAO.create(new GeoObjectImages(img.contains(obj.getId() + "") ? img : obj.getId() + "_" + img, obj.getId()));
+            }
         }
 
         return obj;
@@ -62,7 +81,10 @@ public class GeoObjectService {
         return GeoObjectTypesDTO.parseToList(geoObjectDAO.getAll(GeoObjectTypes.class));
     }
 
-    public List<GeoObjectImagesDTO> getGeoObjectImages() {
-        return GeoObjectImagesDTO.parseToList(geoObjectDAO.getAll(GeoObjectImages.class));
+    public List<GeoObjectImagesDTO> getGeoObjectImages(Integer id) {
+        List<ParamValuePair> criteria = new ArrayList<>();
+        ParamValuePair crit = new ParamValuePair("geoObjectId", id);
+        criteria.add(crit);
+        return GeoObjectImagesDTO.parseToList(geoObjectDAO.getAllByParamValue(GeoObjectImages.class, criteria, null));
     }
 }

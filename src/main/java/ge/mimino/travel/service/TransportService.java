@@ -30,8 +30,21 @@ public class TransportService {
     public Transport save(TransportDTO request) throws Exception {
 
         Transport obj = request.getId() != null ? ((Transport) transportDAO.find(Transport.class, request.getId())) : new Transport();
-        obj.setDescription(request.getDescription());
-        obj.setName(request.getName());
+        obj.setFuel((Fuel) transportDAO.find(Fuel.class, request.getFuelId()));
+        obj.setNameEn(request.getNameEn());
+        obj.setNameGe(request.getNameGe());
+        obj.setNameFr(request.getNameFr());
+        obj.setNameIt(request.getNameIt());
+        obj.setNameSp(request.getNameSp());
+        obj.setNamePo(request.getNamePo());
+        obj.setNameRu(request.getNameRu());
+        obj.setDescriptionEn(request.getDescriptionEn());
+        obj.setDescriptionGe(request.getDescriptionGe());
+        obj.setDescriptionFr(request.getDescriptionFr());
+        obj.setDescriptionIt(request.getDescriptionIt());
+        obj.setDescriptionSp(request.getDescriptionSp());
+        obj.setDescriptionPo(request.getDescriptionPo());
+        obj.setDescriptionRu(request.getDescriptionRu());
         obj.setFuelConsumption(request.getFuelConsumption());
         obj.setPrice(request.getPrice());
         obj.setSeatsCount(request.getSeatsCount());

@@ -9,15 +9,13 @@ public class PlaceImagesDTO {
 
     private Integer id;
     private Integer placeId;
-    private PlaceDTO place;
     private String name;
 
 
     public static PlaceImagesDTO parse(PlaceImages record) {
         PlaceImagesDTO dto = new PlaceImagesDTO();
         dto.setId(record.getId());
-        dto.setPlace(PlaceDTO.parse(record.getPlace()));
-        dto.setPlaceId(record.getPlace().getId());
+        dto.setPlaceId(record.getPlaceId());
         dto.setName(record.getName());
         return dto;
     }
@@ -45,14 +43,6 @@ public class PlaceImagesDTO {
 
     public void setPlaceId(Integer placeId) {
         this.placeId = placeId;
-    }
-
-    public PlaceDTO getPlace() {
-        return place;
-    }
-
-    public void setPlace(PlaceDTO place) {
-        this.place = place;
     }
 
     public String getName() {

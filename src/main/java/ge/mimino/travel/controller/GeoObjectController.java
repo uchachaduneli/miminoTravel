@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * @author ucha
  */
-@RequestMapping("/geoObject")
+@RequestMapping("/objects")
 @Controller
 public class GeoObjectController {
 
     @Autowired
     private GeoObjectService geoObjectService;
 
-    @RequestMapping("/get-geoObjects")
+    @RequestMapping("/get-objects")
     @ResponseBody
     private Response getGeoObjects(@RequestParam("start") int start, @RequestParam("limit") int limit,
                                    @RequestBody GeoObjectDTO request) throws Exception {
@@ -49,7 +49,7 @@ public class GeoObjectController {
 
     @RequestMapping("/get-images")
     @ResponseBody
-    private Response getGeoObjectImages() throws Exception {
-        return Response.withSuccess(geoObjectService.getGeoObjectImages());
+    private Response getGeoObjectImages(@RequestParam Integer id) throws Exception {
+        return Response.withSuccess(geoObjectService.getGeoObjectImages(id));
     }
 }

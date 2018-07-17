@@ -10,7 +10,6 @@ public class Transport {
     private Fuel fuel;
     private Double fuelConsumption;
     private Double price;
-    private Integer fuelId;
     private String nameEn;
     private String nameGe;
     private String nameFr;
@@ -75,16 +74,6 @@ public class Transport {
 
     public void setPrice(Double price) {
         this.price = price;
-    }
-
-    @Basic
-    @Column(name = "fuel_id")
-    public Integer getFuelId() {
-        return fuelId;
-    }
-
-    public void setFuelId(Integer fuelId) {
-        this.fuelId = fuelId;
     }
 
     @Basic
@@ -225,67 +214,5 @@ public class Transport {
 
     public void setDescriptionRu(String descriptionRu) {
         this.descriptionRu = descriptionRu;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Transport transport = (Transport) o;
-
-        if (id != null ? !id.equals(transport.id) : transport.id != null) return false;
-        if (seatsCount != null ? !seatsCount.equals(transport.seatsCount) : transport.seatsCount != null) return false;
-        if (fuelConsumption != null ? !fuelConsumption.equals(transport.fuelConsumption) : transport.fuelConsumption != null)
-            return false;
-        if (price != null ? !price.equals(transport.price) : transport.price != null) return false;
-        if (fuelId != null ? !fuelId.equals(transport.fuelId) : transport.fuelId != null) return false;
-        if (nameEn != null ? !nameEn.equals(transport.nameEn) : transport.nameEn != null) return false;
-        if (nameGe != null ? !nameGe.equals(transport.nameGe) : transport.nameGe != null) return false;
-        if (nameFr != null ? !nameFr.equals(transport.nameFr) : transport.nameFr != null) return false;
-        if (nameIt != null ? !nameIt.equals(transport.nameIt) : transport.nameIt != null) return false;
-        if (nameSp != null ? !nameSp.equals(transport.nameSp) : transport.nameSp != null) return false;
-        if (namePo != null ? !namePo.equals(transport.namePo) : transport.namePo != null) return false;
-        if (nameRu != null ? !nameRu.equals(transport.nameRu) : transport.nameRu != null) return false;
-        if (descriptionEn != null ? !descriptionEn.equals(transport.descriptionEn) : transport.descriptionEn != null)
-            return false;
-        if (descriptionGe != null ? !descriptionGe.equals(transport.descriptionGe) : transport.descriptionGe != null)
-            return false;
-        if (descriptionFr != null ? !descriptionFr.equals(transport.descriptionFr) : transport.descriptionFr != null)
-            return false;
-        if (descriptionIt != null ? !descriptionIt.equals(transport.descriptionIt) : transport.descriptionIt != null)
-            return false;
-        if (descriptionSp != null ? !descriptionSp.equals(transport.descriptionSp) : transport.descriptionSp != null)
-            return false;
-        if (descriptionPo != null ? !descriptionPo.equals(transport.descriptionPo) : transport.descriptionPo != null)
-            return false;
-        if (descriptionRu != null ? !descriptionRu.equals(transport.descriptionRu) : transport.descriptionRu != null)
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (seatsCount != null ? seatsCount.hashCode() : 0);
-        result = 31 * result + (fuelId != null ? fuelId.hashCode() : 0);
-        result = 31 * result + (fuelConsumption != null ? fuelConsumption.hashCode() : 0);
-        result = 31 * result + (price != null ? price.hashCode() : 0);
-        result = 31 * result + (nameEn != null ? nameEn.hashCode() : 0);
-        result = 31 * result + (nameGe != null ? nameGe.hashCode() : 0);
-        result = 31 * result + (nameFr != null ? nameFr.hashCode() : 0);
-        result = 31 * result + (nameIt != null ? nameIt.hashCode() : 0);
-        result = 31 * result + (nameSp != null ? nameSp.hashCode() : 0);
-        result = 31 * result + (namePo != null ? namePo.hashCode() : 0);
-        result = 31 * result + (nameRu != null ? nameRu.hashCode() : 0);
-        result = 31 * result + (descriptionEn != null ? descriptionEn.hashCode() : 0);
-        result = 31 * result + (descriptionGe != null ? descriptionGe.hashCode() : 0);
-        result = 31 * result + (descriptionFr != null ? descriptionFr.hashCode() : 0);
-        result = 31 * result + (descriptionIt != null ? descriptionIt.hashCode() : 0);
-        result = 31 * result + (descriptionSp != null ? descriptionSp.hashCode() : 0);
-        result = 31 * result + (descriptionPo != null ? descriptionPo.hashCode() : 0);
-        result = 31 * result + (descriptionRu != null ? descriptionRu.hashCode() : 0);
-        return result;
     }
 }

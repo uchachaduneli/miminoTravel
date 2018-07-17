@@ -3,7 +3,6 @@ package ge.mimino.travel.service;
 
 import ge.mimino.travel.dao.NonstandartDAO;
 import ge.mimino.travel.dto.NonstandartServiceDTO;
-import ge.mimino.travel.model.Language;
 import ge.mimino.travel.model.NonstandartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,9 +28,20 @@ public class NonStandartService {
     public NonstandartService save(NonstandartServiceDTO request) throws Exception {
 
         NonstandartService obj = request.getId() != null ? ((NonstandartService) nonStandartDAO.find(NonstandartService.class, request.getId())) : new NonstandartService();
-        obj.setLanguage((Language) nonStandartDAO.find(Language.class, request.getLanguageId()));
-        obj.setDescription(request.getDescription());
-        obj.setName(request.getName());
+        obj.setNameEn(request.getNameEn());
+        obj.setNameGe(request.getNameGe());
+        obj.setNameFr(request.getNameFr());
+        obj.setNameIt(request.getNameIt());
+        obj.setNameSp(request.getNameSp());
+        obj.setNamePo(request.getNamePo());
+        obj.setNameRu(request.getNameRu());
+        obj.setDescriptionEn(request.getDescriptionEn());
+        obj.setDescriptionGe(request.getDescriptionGe());
+        obj.setDescriptionFr(request.getDescriptionFr());
+        obj.setDescriptionIt(request.getDescriptionIt());
+        obj.setDescriptionSp(request.getDescriptionSp());
+        obj.setDescriptionPo(request.getDescriptionPo());
+        obj.setDescriptionRu(request.getDescriptionRu());
         obj.setPrice(request.getPrice());
 
         if (request.getId() != null) {
