@@ -3,6 +3,7 @@ package ge.mimino.travel.dao;
 
 import ge.mimino.travel.dto.HotelDTO;
 import ge.mimino.travel.model.Hotel;
+import ge.mimino.travel.model.HotelImages;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -60,5 +61,9 @@ public class HotelDAO extends AbstractDAO {
 
         TypedQuery<Hotel> query = entityManager.createQuery(q.toString(), Hotel.class);
         return query.setFirstResult(start).setMaxResults(limit).getResultList();
+    }
+
+    public int removeImages(Integer id) {
+        return entityManager.createQuery("delete from " + HotelImages.class.getSimpleName() + " c where c.hotelId=" + id).executeUpdate();
     }
 }

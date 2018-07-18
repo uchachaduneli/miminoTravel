@@ -54,13 +54,6 @@ public class PlaceService {
             obj = (Place) placeDAO.create(obj);
         }
 
-        placeDAO.removeImages(obj.getId());
-        if (request.getImages() != null && !request.getImages().isEmpty()) {
-            for (String img : request.getImages()) {
-                placeDAO.create(new PlaceImages(img.contains(obj.getId() + "") ? img : obj.getId() + "_" + img, obj.getId()));
-            }
-        }
-
         return obj;
     }
 

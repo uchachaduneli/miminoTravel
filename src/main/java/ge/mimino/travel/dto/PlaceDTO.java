@@ -22,7 +22,6 @@ public class PlaceDTO {
     private String descriptionSp;
     private String descriptionPo;
     private String descriptionRu;
-    private List<String> images;
 
 
     public static PlaceDTO parse(Place record) {
@@ -52,14 +51,6 @@ public class PlaceDTO {
             list.add(PlaceDTO.parse(record));
         }
         return list;
-    }
-
-    public List<String> getImages() {
-        return images;
-    }
-
-    public void setImages(List<String> images) {
-        this.images = images;
     }
 
     public Integer getId() {

@@ -70,9 +70,19 @@ public class HotelService {
         }
     }
 
+    @Transactional(rollbackFor = Throwable.class)
+    public void saveImages(List<String> images, Integer id) {
+        hotelDAO.removeImages(id);
+        if (images != null && !images.isEmpty()) {
+            for (String img : images) {
+                hotelDAO.create(new HotelImages(img, id));
+            }
+        }
+    }
+
     public List<HotelImagesDTO> getHotelImages(Integer hotelId) {
         List<ParamValuePair> criteria = new ArrayList<>();
-        criteria.add(new ParamValuePair("hotel", (Hotel) hotelDAO.find(Hotel.class, hotelId)));
+        criteria.add(new ParamValuePair("hotelId", hotelId));
         return HotelImagesDTO.parseToList(hotelDAO.getAllByParamValue(HotelImages.class, criteria, null));
     }
 }

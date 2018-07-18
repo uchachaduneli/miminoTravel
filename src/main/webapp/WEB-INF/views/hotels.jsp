@@ -9,13 +9,14 @@
 <%@include file="header.jsp" %>
 <script>
 
-  app.controller("angController", function ($scope, $http, $filter) {
+  app.controller("angController", ['$scope', '$http', '$filter', '$window', 'Upload', '$timeout', function ($scope, $http, $filter, $window, Upload, $timeout) {
     $scope.start = 0;
     $scope.page = 1;
     $scope.limit = "10";
     $scope.request = {};
     $scope.srchCase = {};
     $scope.stars = ['*', '**', '***', '****', '*****'];
+    $scope.imageNames = [];
 
     $scope.loadMainData = function () {
       $('#loadingModal').modal('show');
@@ -65,9 +66,10 @@
     };
 
     $scope.loadDetailsList = function (id) {
+      $scope.slcted.images = [];
 
       function getImages(res) {
-        $scope.slcted.hotelImages = res.data;
+        $scope.slcted.images = res.data;
       }
 
       ajaxCall($http, "hotels/get-images?id=" + id, null, getImages);
@@ -121,6 +123,28 @@
       ajaxCall($http, "hotels/save", angular.toJson($scope.req), resFunc);
     };
 
+    $scope.saveImages = function () {
+      function onImageSave(res) {
+        if (res.errorCode == 0) {
+          successMsg('Operation Successfull');
+          closeModal('imageModal');
+        } else {
+          errorMsg('Operation Failed');
+        }
+      }
+
+      angular.forEach($scope.slcted.images, function (v) {
+        var index = $scope.imageNames.indexOf(v.name);
+        if (index < 0) {
+          $scope.imageNames.push(v.name);
+        }
+      });
+
+      console.log(angular.toJson($scope.imageNames));
+
+      ajaxCall($http, "hotels/save-images?id=" + $scope.slcted.id, angular.toJson($scope.imageNames), onImageSave);
+    };
+
 
     $scope.rowNumbersChange = function () {
       $scope.start = 0;
@@ -141,7 +165,43 @@
       }
       $scope.loadMainData();
     }
-  });
+
+    $scope.removeDoc = function (docname) {
+
+      var index = $scope.imageNames.indexOf(docname);
+      $scope.imageNames.splice(index, 1);
+
+      var selected = $filter('filter')($scope.slcted.images, {name: docname}, true);
+      var index = $scope.slcted.images.indexOf(selected);
+      $scope.slcted.images.splice(index, 1);
+    }
+
+    $scope.uploadFiles = function (files) {
+      $scope.files = files;
+      angular.forEach(files, function (file) {
+
+        $scope.slcted.images.push({name: 'hotel' + $scope.slcted.id + '_' + file.name});
+        $scope.imageNames.push('hotel' + $scope.slcted.id + '_' + file.name);
+
+        if (file && !file.$error) {
+          file.upload = Upload.upload({
+            url: 'hotels/add-images?id=hotel' + $scope.slcted.id,
+            file: file
+          });
+
+          file.upload.then(function (response) {
+            $timeout(function () {
+              file.result = response.data;
+            });
+          }, function (response) {
+            if (response.status > 0)
+              $scope.errorMsg = response.status + ': ' + response.data;
+          });
+        }
+      });
+      console.log($scope.files);
+    }
+  }]);
 </script>
 
 <div class="modal fade bs-example-modal-lg" id="detailModal" tabindex="-1" role="dialog"
@@ -244,8 +304,9 @@
               <th class="text-right">images</th>
               <td>
                 <ul>
-                  <li ng-repeat="item in slcted.hotelImages">
-                    {{item.name}}
+                  <li ng-repeat="item in slcted.images">
+                    <a href="misc/get-file?uploads/name=uploads/{{item.name.split('.')[0]}}"
+                       target="_blank">{{item.name}}</a>
                   </li>
                 </ul>
               </td>
@@ -256,6 +317,60 @@
       </div>
     </div>
     <div class="modal-footer">
+    </div>
+  </div>
+</div>
+
+<div class="modal fade bs-example-modal-lg not-printable" id="imageModal" role="dialog"
+     aria-labelledby="imageModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Upload Images</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <form class="form-horizontal" name="ediFormName">
+            <table class="table table-striped">
+              <tr ng-repeat="item in slcted.images">
+                <th class="text-right col-sm-5"></th>
+                <td>
+                  <a href="misc/get-file?name={{'uploads/' + item.name.split('.')[0]}}"
+                     target="_blank">{{item.name}}</a>
+                  &nbsp;&nbsp;&nbsp;<a><span class="fa fa-trash-o fa-lg" style="cursor: pointer;"
+                                             ng-click="removeDoc(item.name)"></span></a>
+                </td>
+              </tr>
+            </table>
+            <div class="form-group col-sm-10 ">
+              <label class="control-label col-sm-3">Images</label>
+              <div class="col-sm-9">
+                <div class="input-group input-file">
+                  <input type="text" id="uploadDocNameInput" class="form-control"
+                         onclick="$('#documentId').trigger('click');"
+                         placeholder='Choose files...'/>
+                  <span class="input-group-btn">
+                    <button class="btn btn-default btn-choose" id="documentId"
+                            type="file" ngf-select="uploadFiles($files)" ng-model="files" multiple
+                            accept="*/*" ngf-max-size="30MB">
+                      Browse</button>
+    		           </span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-sm-10"></div>
+            <div class="form-group col-sm-10"></div>
+            <div class="form-group col-sm-12 text-center">
+              <a class="btn btn-app" ng-click="saveImages()">
+                <i class="fa fa-save"></i> Save
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -520,6 +635,11 @@
                 <a ng-click="edit(r.id)" data-toggle="modal" data-target="#editModal"
                    class="btn btn-xs">
                   <i class="fa fa-pencil"></i>&nbsp;Edit
+                </a>&nbsp;&nbsp;
+
+                <a ng-click="showDetails(r.id)" data-toggle="modal" data-target="#imageModal"
+                   class="btn btn-xs">
+                  <i class="fa fa-file-image-o"></i>&nbsp;Images
                 </a>&nbsp;&nbsp;
                 <a ng-click="remove(r.id)" class="btn btn-xs">
                   <i class="fa fa-trash-o"></i>&nbsp;Remove

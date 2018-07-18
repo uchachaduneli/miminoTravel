@@ -3,11 +3,19 @@ package ge.mimino.travel.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "hotel_images")
+@Table(name = "hotel_images", schema = "mimino")
 public class HotelImages {
     private Integer id;
-    private Hotel hotel;
     private String name;
+    private Integer hotelId;
+
+    public HotelImages() {
+    }
+
+    public HotelImages(String name, Integer hotelId) {
+        this.name = name;
+        this.hotelId = hotelId;
+    }
 
     @Id
     @Column(name = "id", nullable = false)
@@ -20,16 +28,6 @@ public class HotelImages {
         this.id = id;
     }
 
-    @JoinColumn(name = "hotel_id")
-    @OneToOne
-    public Hotel getHotel() {
-        return hotel;
-    }
-
-    public void setHotel(Hotel hotel) {
-        this.hotel = hotel;
-    }
-
     @Basic
     @Column(name = "name", nullable = false, length = 150)
     public String getName() {
@@ -40,4 +38,13 @@ public class HotelImages {
         this.name = name;
     }
 
+    @Basic
+    @Column(name = "hotel_id")
+    public Integer getHotelId() {
+        return hotelId;
+    }
+
+    public void setHotelId(Integer hotelId) {
+        this.hotelId = hotelId;
+    }
 }

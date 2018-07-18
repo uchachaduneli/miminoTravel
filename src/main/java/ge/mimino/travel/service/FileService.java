@@ -13,7 +13,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Base64;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -52,7 +51,7 @@ public class FileService {
                 File[] files = f.listFiles();
                 for (File _f : files) {
                     String a = FilenameUtils.removeExtension(_f.getName());
-                    if (FilenameUtils.removeExtension(_f.getName()).equals(identifier.split("/")[1])) {
+                    if (a.equals(identifier.split("/")[1])) {
                         return _f.getPath();
                     }
                 }
@@ -89,12 +88,12 @@ public class FileService {
         return imageString;
     }
 
-    public String addFile(MultipartFile file, String directory) throws IOException {
+    public String addFile(MultipartFile file, String directory, String objectId) throws IOException {
         String[] fileParts = file.getOriginalFilename().split("\\.");
         String fileExtention = fileParts.length > 1 ? fileParts[fileParts.length - 1] : "";
 //        String fileName = "" + UUID.randomUUID() + (fileExtention.length() > 0 ? ("." + fileExtention) : "");
-        String fileName = fileParts[0] + "_" + new Date().getTime() + (fileExtention.length() > 0 ? ("." + fileExtention) : "");
-        File f = new File(rootDir + directory + "/" + fileName);
+        String fileName = fileParts[0] + (fileExtention.length() > 0 ? ("." + fileExtention) : "");
+        File f = new File(rootDir + directory + "/" + objectId + "_" + fileName);
         try {
             file.transferTo(f);
         } catch (Exception ex) {

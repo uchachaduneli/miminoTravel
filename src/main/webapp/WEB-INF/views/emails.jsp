@@ -125,38 +125,14 @@
           });
         }
       });
+      console.log($scope.files);
     }
   }]);
 
 </script>
-<%--<style>--%>
-<%--.thumb {--%>
-<%--width: 24px;--%>
-<%--height: 24px;--%>
-<%--float: none;--%>
-<%--position: relative;--%>
-<%--top: 7px;--%>
-<%--}--%>
 
-<%--form .progress {--%>
-<%--line-height: 15px;--%>
-<%--}--%>
-
-<%--.progress {--%>
-<%--display: inline-block;--%>
-<%--width: 100px;--%>
-<%--border: 3px groove #CCC;--%>
-<%--}--%>
-
-<%--.progress div {--%>
-<%--font-size: smaller;--%>
-<%--background: orange;--%>
-<%--width: 0;--%>
-<%--}--%>
-<%--</style>--%>
-
-<button type="file" ngf-select="uploadFiles($files)" multiple
-        accept="*/*" ngf-max-height="1000" ngf-max-size="30MB">
+<button type="file" ngf-select="uploadFiles($files)" ng-model="files" multiple
+        accept="*/*" ngf-max-size="30MB">
   Select Files
 </button>
 <br>

@@ -49,7 +49,7 @@ public class EmailController {
     @RequestMapping("/add-attachment")
     @ResponseBody
     private Response addImage(@RequestParam("file") MultipartFile file) throws IOException {
-        return Response.withSuccess(fileService.addFile(file, "attachments"));
+        return Response.withSuccess(fileService.addFile(file, "attachments", ""));
     }
 
 }

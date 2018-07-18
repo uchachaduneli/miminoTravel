@@ -8,7 +8,6 @@ import java.util.List;
 public class HotelImagesDTO {
 
     private Integer id;
-    private HotelDTO hotel;
     private Integer hotelId;
     private String name;
 
@@ -16,8 +15,7 @@ public class HotelImagesDTO {
     public static HotelImagesDTO parse(HotelImages record) {
         HotelImagesDTO dto = new HotelImagesDTO();
         dto.setId(record.getId());
-        dto.setHotel(HotelDTO.parse(record.getHotel()));
-        dto.setHotelId(record.getHotel().getId());
+        dto.setHotelId(record.getHotelId());
         dto.setName(record.getName());
         return dto;
     }
@@ -37,14 +35,6 @@ public class HotelImagesDTO {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public HotelDTO getHotel() {
-        return hotel;
-    }
-
-    public void setHotel(HotelDTO hotel) {
-        this.hotel = hotel;
     }
 
     public Integer getHotelId() {
