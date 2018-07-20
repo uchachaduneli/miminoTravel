@@ -336,12 +336,16 @@
           <form class="form-horizontal" name="ediFormName">
             <table class="table table-striped">
               <tr ng-repeat="item in slcted.images">
-                <th class="text-right col-sm-5"></th>
-                <td>
-                  <a href="misc/get-file?name={{'uploads/' + item.name.split('.')[0]}}"
-                     target="_blank">{{item.name}}</a>
-                  &nbsp;&nbsp;&nbsp;<a><span class="fa fa-trash-o fa-lg" style="cursor: pointer;"
-                                             ng-click="removeDoc(item.name)"></span></a>
+                <th class="text-right col-sm-3"></th>
+                <td class="col-sm-6">
+                  <a href="misc/get-file?name={{'uploads/' + item.name.split('.')[0]}}" target="_blank">
+                    <img src="misc/get-file?name={{'uploads/' + item.name.split('.')[0]}}"
+                         class="thumbnail img-responsive"/>
+                  </a>
+                </td>
+                <td class="col-sm-3">
+                  <a><span class="fa fa-trash-o fa-lg" style="cursor: pointer;"
+                           ng-click="removeDoc(item.name)"></span></a>
                 </td>
               </tr>
             </table>
