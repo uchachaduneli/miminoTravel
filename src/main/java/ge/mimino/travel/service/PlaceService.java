@@ -71,4 +71,14 @@ public class PlaceService {
         criteria.add(crit);
         return PlaceImagesDTO.parseToList(placeDAO.getAllByParamValue(PlaceImages.class, criteria, null));
     }
+
+    @Transactional(rollbackFor = Throwable.class)
+    public void saveImages(List<String> images, Integer id) {
+        placeDAO.removeImages(id);
+        if (images != null && !images.isEmpty()) {
+            for (String img : images) {
+                placeDAO.create(new PlaceImages(img, id));
+            }
+        }
+    }
 }

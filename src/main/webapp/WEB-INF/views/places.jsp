@@ -9,12 +9,13 @@
 <%@include file="header.jsp" %>
 <script>
 
-  app.controller("angController", function ($scope, $http, $filter) {
+  app.controller("angController", ['$scope', '$http', '$filter', '$window', 'Upload', '$timeout', function ($scope, $http, $filter, $window, Upload, $timeout) {
     $scope.start = 0;
     $scope.page = 1;
     $scope.limit = "10";
     $scope.request = {types: []};
     $scope.srchCase = {};
+    $scope.imageNames = [];
 
     $scope.loadMainData = function () {
       $('#loadingModal').modal('show');
@@ -130,8 +131,125 @@
       }
       $scope.loadMainData();
     }
-  });
+
+    $scope.uploadFiles = function (files) {
+      $scope.files = files;
+      angular.forEach(files, function (file) {
+
+        $scope.slcted.images.push({name: 'place' + $scope.slcted.id + '_' + file.name});
+        $scope.imageNames.push('place' + $scope.slcted.id + '_' + file.name);
+
+        if (file && !file.$error) {
+          file.upload = Upload.upload({
+            url: 'places/add-images?id=place' + $scope.slcted.id,
+            file: file
+          });
+
+          file.upload.then(function (response) {
+            $timeout(function () {
+              file.result = response.data;
+            });
+          }, function (response) {
+            if (response.status > 0)
+              $scope.errorMsg = response.status + ': ' + response.data;
+          });
+        }
+      });
+      console.log($scope.files);
+    }
+
+    $scope.removeDoc = function (docname) {
+
+      var index = $scope.imageNames.indexOf(docname);
+      $scope.imageNames.splice(index, 1);
+
+      var selected = $filter('filter')($scope.slcted.images, {name: docname}, true);
+      var index = $scope.slcted.images.indexOf(selected);
+      $scope.slcted.images.splice(index, 1);
+    }
+
+    $scope.saveImages = function () {
+      function onImageSave(res) {
+        if (res.errorCode == 0) {
+          successMsg('Operation Successfull');
+          closeModal('imageModal');
+        } else {
+          errorMsg('Operation Failed');
+        }
+      }
+
+      angular.forEach($scope.slcted.images, function (v) {
+        var index = $scope.imageNames.indexOf(v.name);
+        if (index < 0) {
+          $scope.imageNames.push(v.name);
+        }
+      });
+
+      console.log(angular.toJson($scope.imageNames));
+
+      ajaxCall($http, "places/save-images?id=" + $scope.slcted.id, angular.toJson($scope.imageNames), onImageSave);
+    }
+
+  }]);
 </script>
+
+<div class="modal fade bs-example-modal-lg not-printable" id="imageModal" role="dialog"
+     aria-labelledby="imageModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Upload Images</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <form class="form-horizontal" name="ediFormName">
+            <table class="table table-striped">
+              <tr ng-repeat="item in slcted.images">
+                <th class="text-right col-sm-3"></th>
+                <td class="col-sm-6">
+                  <a href="misc/get-file?name={{'uploads/' + item.name.split('.')[0]}}" target="_blank">
+                    <img src="misc/get-file?name={{'uploads/' + item.name.split('.')[0]}}&" + new Date().getTime();
+                         class="thumbnail img-responsive"/>
+                  </a>
+                </td>
+                <td class="col-sm-3">
+                  <a><span class="fa fa-trash-o fa-lg" style="cursor: pointer;"
+                           ng-click="removeDoc(item.name)"></span></a>
+                </td>
+              </tr>
+            </table>
+            <div class="form-group col-sm-10 ">
+              <label class="control-label col-sm-3">Images</label>
+              <div class="col-sm-9">
+                <div class="input-group input-file">
+                  <input type="text" id="uploadDocNameInput" class="form-control"
+                         onclick="$('#documentId').trigger('click');"
+                         placeholder='Choose files...'/>
+                  <span class="input-group-btn">
+                    <button class="btn btn-default btn-choose" id="documentId"
+                            type="file" ngf-select="uploadFiles($files)" ng-model="files" multiple
+                            accept="*/*" ngf-max-size="30MB">
+                      Browse</button>
+    		           </span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group col-sm-10"></div>
+            <div class="form-group col-sm-10"></div>
+            <div class="form-group col-sm-12 text-center">
+              <a class="btn btn-app" ng-click="saveImages()">
+                <i class="fa fa-save"></i> Save
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="modal fade bs-example-modal-lg" id="detailModal" tabindex="-1" role="dialog"
      aria-labelledby="editModalLabel" aria-hidden="true">
@@ -214,7 +332,8 @@
               <td>
                 <ul>
                   <li ng-repeat="item in slcted.images">
-                    {{item.name}}
+                    <a href="misc/get-file?name=uploads/{{item.name.split('.')[0]}}"
+                       target="_blank">{{item.name}}</a>
                   </li>
                 </ul>
               </td>
@@ -390,15 +509,15 @@
           <div id="filter-panel" class="filter-panel">
             <div class="panel panel-default">
               <div class="panel-body">
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-4">
                   <input type="text" class="form-control srch" ng-model="srchCase.id"
                          placeholder="ID">
                 </div>
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-4">
                   <input type="text" class="form-control srch" ng-model="srchCase.nameEn"
                          placeholder="Name">
                 </div>
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-4">
                   <button class="btn btn-default col-md-11" ng-click="loadMainData()" id="srchBtnId">
                     <span class="fa fa-search"></span> &nbsp; &nbsp;Search &nbsp; &nbsp;
                   </button>
@@ -416,7 +535,7 @@
               <th>English</th>
               <th>German</th>
               <th>France</th>
-              <th class="col-md-2 text-center">Action</th>
+              <th class="col-md-3 text-center">Action</th>
             </tr>
             </thead>
             <tbody title="Double Click For Detailed Information">
@@ -434,6 +553,10 @@
                 <a ng-click="edit(r.id)" data-toggle="modal" data-target="#editModal"
                    class="btn btn-xs">
                   <i class="fa fa-pencil"></i>&nbsp;Edit
+                </a>&nbsp;&nbsp;
+                <a ng-click="showDetails(r.id)" data-toggle="modal" data-target="#imageModal"
+                   class="btn btn-xs">
+                  <i class="fa fa-file-image-o"></i>&nbsp;Images
                 </a>&nbsp;&nbsp;
                 <a ng-click="remove(r.id)" class="btn btn-xs">
                   <i class="fa fa-trash-o"></i>&nbsp;Remove

@@ -305,7 +305,7 @@
               <td>
                 <ul>
                   <li ng-repeat="item in slcted.images">
-                    <a href="misc/get-file?uploads/name=uploads/{{item.name.split('.')[0]}}"
+                    <a href="misc/get-file?name=uploads/{{item.name.split('.')[0]}}"
                        target="_blank">{{item.name}}</a>
                   </li>
                 </ul>
@@ -339,7 +339,7 @@
                 <th class="text-right col-sm-3"></th>
                 <td class="col-sm-6">
                   <a href="misc/get-file?name={{'uploads/' + item.name.split('.')[0]}}" target="_blank">
-                    <img src="misc/get-file?name={{'uploads/' + item.name.split('.')[0]}}"
+                    <img src="misc/get-file?name={{'uploads/' + item.name.split('.')[0]}}&" + new Date().getTime();
                          class="thumbnail img-responsive"/>
                   </a>
                 </td>

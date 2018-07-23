@@ -87,4 +87,14 @@ public class GeoObjectService {
         criteria.add(crit);
         return GeoObjectImagesDTO.parseToList(geoObjectDAO.getAllByParamValue(GeoObjectImages.class, criteria, null));
     }
+
+    @Transactional(rollbackFor = Throwable.class)
+    public void saveImages(List<String> images, Integer id) {
+        geoObjectDAO.removeImages(id);
+        if (images != null && !images.isEmpty()) {
+            for (String img : images) {
+                geoObjectDAO.create(new GeoObjectImages(img, id));
+            }
+        }
+    }
 }
