@@ -76,16 +76,11 @@ public class TransportService {
     public Fuel saveFuel(FuelDTO request) throws Exception {
 
         Fuel obj = request.getId() != null ? ((Fuel) transportDAO.find(Fuel.class, request.getId())) : new Fuel();
-        obj.setName(request.getName());
-        obj.setPrice(request.getPrice());
 
-        if (request.getId() != null) {
-            obj.setId(request.getId());
+        if (obj != null) {
+            obj.setPrice(request.getPrice());
             obj = (Fuel) transportDAO.update(obj);
-        } else {
-            obj = (Fuel) transportDAO.create(obj);
         }
-
         return obj;
     }
 }

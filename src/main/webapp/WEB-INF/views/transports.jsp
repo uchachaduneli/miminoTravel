@@ -29,11 +29,16 @@
 
     $scope.loadMainData();
 
-    function getFuels(res) {
-      $scope.fuels = res.data;
+    $scope.loadFuels = function () {
+      function getFuels(res) {
+        $scope.fuels = res.data;
+        $scope.loadFuelPrices();
+      }
+
+      ajaxCall($http, "transports/get-fuels", null, getFuels);
     }
 
-    ajaxCall($http, "transports/get-fuels", null, getFuels);
+    $scope.loadFuels();
 
     $scope.remove = function (id) {
       if (confirm("Pleace confirm operation?")) {
@@ -117,6 +122,51 @@
 
       console.log(angular.toJson($scope.req));
       ajaxCall($http, "transports/save", angular.toJson($scope.req), resFunc);
+    };
+
+    $scope.loadFuelPrices = function () {
+
+      if ($scope.fuel == undefined) {
+        $scope.fuel = {};
+      }
+
+      var selected = $filter('filter')($scope.fuels, {id: 1}, true);
+      $scope.fuel.gasoline = selected[0].price;
+
+      selected = $filter('filter')($scope.fuels, {id: 2}, true);
+      $scope.fuel.diesel = selected[0].price;
+      $scope.$apply();
+    }
+
+    $scope.saveFuel = function () {
+
+      function resFunc1(res) {
+        if (res.errorCode == 0) {
+          console.log('Gasoline saved Successfully');
+        } else {
+          errorMsg('Operation Failed');
+        }
+      }
+
+      function resFunc2(res) {
+        if (res.errorCode == 0) {
+          successMsg('Operation Successfull');
+//          closeModal('fuelModal');
+          $scope.loadFuels();
+
+        } else {
+          errorMsg('Operation Failed');
+        }
+      }
+
+      $scope.gasoline = {id: 1, price: $scope.fuel.gasoline};
+      $scope.diesel = {id: 2, price: $scope.fuel.diesel};
+
+      console.log(angular.toJson($scope.gasoline));
+      console.log(angular.toJson($scope.diesel));
+
+      ajaxCall($http, "transports/save-fuel", angular.toJson($scope.gasoline), resFunc1);
+      ajaxCall($http, "transports/save-fuel", angular.toJson($scope.diesel), resFunc2);
     };
 
 
@@ -235,6 +285,47 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade bs-example-modal-lg not-printable" id="fuelModal" role="dialog" aria-labelledby="fuelModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="fuelEdittModalLabel">Fuel Prices</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <form class="form-horizontal" name="ediFormName">
+            <div class="form-group col-sm-10 ">
+              <label class="control-label col-sm-3">Gasoline</label>
+              <div class="col-sm-9">
+                <input type="text" ng-model="fuel.gasoline" required
+                       class="form-control input-sm">
+              </div>
+            </div>
+            <div class="form-group col-sm-10 ">
+              <label class="control-label col-sm-3">Diesel</label>
+              <div class="col-sm-9">
+                <input type="text" ng-model="fuel.diesel" required
+                       class="form-control input-sm">
+              </div>
+            </div>
+            <div class="form-group col-sm-10"></div>
+            <div class="form-group col-sm-10"></div>
+            <div class="form-group col-sm-12 text-center">
+              <a class="btn btn-app" ng-click="saveFuel()">
+                <i class="fa fa-save"></i> Save
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <div class="modal fade bs-example-modal-lg not-printable" id="editModal" role="dialog" aria-labelledby="editModalLabel"
      aria-hidden="true">
@@ -404,16 +495,27 @@
   <div class="col-xs-12">
     <div class="box">
       <div class="box-header">
-        <div class="col-md-2">
+        <div class="col-md-4">
           <%--<c:if test="<%= isAdmin %>">--%>
-          <button type="button" class="btn btn-block btn-primary btn-md" ng-click="init()"
-                  data-toggle="modal" data-target="#editModal">
-            <i class="fa fa-plus" aria-hidden="true"></i> &nbsp;
-            Add
-          </button>
+          <div class="btn-group">
+            <a ng-click="init()" class="btn btn-primary" data-toggle="modal" data-target="#editModal"><i
+                    class="fa fa-plus" aria-hidden="true"></i> &nbsp;Add Transport</a>
+            <a ng-click="loadFuelPrices()" class="btn btn-default" data-toggle="modal" data-target="#fuelModal"><i
+                    class="fa fa-tachometer" aria-hidden="true"></i> &nbsp;Fuel Prices</a>
+            <%--<button type="button" class="btn btn-block btn-primary btn-md" ng-click="init()"--%>
+            <%--data-toggle="modal" data-target="#editModal">--%>
+            <%--<i class="fa fa-plus" aria-hidden="true"></i> &nbsp;--%>
+            <%--Add Transport--%>
+            <%--</button>--%>
+            <%--<button type="button" class="  btn btn-block btn-primary btn-md" ng-click="loadFuelPrices()"--%>
+            <%--data-toggle="modal" data-target="#fuelModal">--%>
+            <%--<i class="fa fa-tachometer" aria-hidden="true"></i> &nbsp;--%>
+            <%--Fuel Prices--%>
+            <%--</button>--%>
+          </div>
           <%--</c:if>--%>
         </div>
-        <div class="col-md-2 col-xs-offset-8">
+        <div class="col-md-2 col-xs-offset-6">
           <select ng-change="rowNumbersChange()" class="pull-right form-control" ng-model="limit"
                   id="rowCountSelectId">
             <option value="10" selected>Show 10</option>
