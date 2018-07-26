@@ -62,7 +62,7 @@
       } else if (url.pathname.indexOf("places") > -1) {
         $('#selected_item').text("Places(Towns, Districts, Resorts, etc.)");
       } else if (url.pathname.indexOf("nonstandarts") > -1) {
-        $('#selected_item').text("Non Standart Services");
+        $('#selected_item').text("Non Standart Services(Delica, Horse, ...)");
       }
 
 
@@ -221,6 +221,12 @@
             <a class="menuItem" href="transports">
               <i class="fa fa-car"></i>
               <span>Transport</span>
+            </a>
+          </li>
+          <li>
+            <a class="menuItem" href="nonstandarts">
+              <i class="fa fa-server"></i>
+              <span>Non St. Serv.</span>
             </a>
           </li>
           <c:if test="<%= isAdmin %>">

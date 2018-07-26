@@ -529,13 +529,13 @@
     <div class="box">
       <div class="box-header">
         <div class="col-md-2">
-          <c:if test="<%= isAdmin %>">
+          <%--<c:if test="<%= isAdmin %>">--%>
             <button type="button" class="btn btn-block btn-primary btn-md" ng-click="init()"
                     data-toggle="modal" data-target="#editModal">
               <i class="fa fa-plus" aria-hidden="true"></i> &nbsp;
               Add
             </button>
-          </c:if>
+          <%--</c:if>--%>
         </div>
         <div class="col-md-2 col-xs-offset-8">
           <select ng-change="rowNumbersChange()" class="pull-right form-control" ng-model="limit"

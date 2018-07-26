@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * @author ucha
  */
-@RequestMapping("/nonstandart")
+@RequestMapping("/nonstandarts")
 @Controller
 public class NonStandartServiceController {
 

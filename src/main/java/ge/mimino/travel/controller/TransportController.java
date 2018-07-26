@@ -35,7 +35,7 @@ public class TransportController {
         return Response.withSuccess(TransportDTO.parse(transportService.save(request)));
     }
 
-    @RequestMapping({"/delete-transport"})
+    @RequestMapping({"/delete"})
     @ResponseBody
     public Response delete(@RequestParam int id) {
         transportService.delete(id);
