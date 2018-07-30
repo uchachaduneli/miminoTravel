@@ -41,6 +41,16 @@ public class RequestController {
         return Response.withSuccess(requestService.getRequestCountries(id));
     }
 
+    @RequestMapping("/get-request-by-key")
+    @ResponseBody
+    private Response getRequestByKey(@RequestParam String id) {
+        try {
+            return Response.withSuccess(RequestDTO.parse(requestService.getRequestByKey(id)));
+        } catch (IndexOutOfBoundsException ex) {
+            return Response.withError("Incorrect Key");
+        }
+    }
+
     @RequestMapping("/get-requests-details")
     @ResponseBody
     private Response getRequestsDetails(@RequestParam Integer id) throws Exception {

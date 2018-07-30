@@ -49,6 +49,7 @@ public class RequestDTO {
     private Integer userId;
     @JsonSerialize(using = JsonDateTimeSerializeSupport.class)
     private Timestamp createDate;
+    private String requestKey;
 
 
     public static RequestDTO parse(Request record) {
@@ -85,6 +86,7 @@ public class RequestDTO {
         dto.setGuideLanguage(LanguageDTO.parse(record.getGuideLanguage()));
         dto.setGuideLanguageId(record.getGuideLanguage().getId());
         dto.setCreateDate(record.getCreateDate());
+        dto.setRequestKey(record.getRequestKey());
         return dto;
     }
 
@@ -95,6 +97,14 @@ public class RequestDTO {
             list.add(RequestDTO.parse(record));
         }
         return list;
+    }
+
+    public String getRequestKey() {
+        return requestKey;
+    }
+
+    public void setRequestKey(String requestKey) {
+        this.requestKey = requestKey;
     }
 
     public UsersDTO getUser() {

@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author ucha
@@ -63,6 +64,7 @@ public class RequestService {
             obj.setId(request.getId());
             obj = (Request) requestDAO.update(obj);
         } else {
+            obj.setRequestKey(UUID.randomUUID() + "");
             obj = (Request) requestDAO.create(obj);
         }
 
@@ -99,5 +101,11 @@ public class RequestService {
 
     public List<DetailsDTO> getDetails() {
         return DetailsDTO.parseToList(requestDAO.getAll(Details.class));
+    }
+
+    public Request getRequestByKey(String key) throws IndexOutOfBoundsException {
+        List<ParamValuePair> paramValues = new ArrayList<>();
+        paramValues.add(new ParamValuePair("requestKey", key));
+        return (Request) requestDAO.getAllByParamValue(Request.class, paramValues, null).get(0);
     }
 }

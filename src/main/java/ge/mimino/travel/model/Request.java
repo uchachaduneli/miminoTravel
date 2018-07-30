@@ -32,6 +32,7 @@ public class Request {
     private PackageCategory packageCategory;
     private Timestamp createDate;
     private Users user;
+    private String requestKey;
 
     @Id
     @Column(name = "id")
@@ -282,5 +283,15 @@ public class Request {
 
     public void setCreateDate(Timestamp createDate) {
         this.createDate = createDate;
+    }
+
+    @Basic
+    @Column(name = "request_key", updatable = false)
+    public String getRequestKey() {
+        return requestKey;
+    }
+
+    public void setRequestKey(String requestKey) {
+        this.requestKey = requestKey;
     }
 }
