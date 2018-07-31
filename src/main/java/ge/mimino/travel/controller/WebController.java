@@ -60,6 +60,11 @@ public class WebController {
         return "nonstandarts";
     }
 
+    @RequestMapping("/product")
+    public String product() {
+        return "product";
+    }
+
     @RequestMapping("/")
     public String defaultFnc() {
         return "";

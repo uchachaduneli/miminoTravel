@@ -46,6 +46,12 @@
       }
     };
 
+    function getPlaces(res) {
+      $scope.places = res.data;
+    }
+
+    ajaxCall($http, "places/get-places?start=0&limit=999999", {}, getPlaces);
+
     $scope.edit = function (id) {
       if (id != undefined) {
         var selected = $filter('filter')($scope.list, {id: id}, true);
@@ -118,6 +124,7 @@
       $scope.req.descriptionSp = $scope.request.descriptionSp;
       $scope.req.descriptionPo = $scope.request.descriptionPo;
       $scope.req.descriptionRu = $scope.request.descriptionRu;
+      $scope.req.placeId = $scope.request.placeId;
 
       console.log(angular.toJson($scope.req));
       ajaxCall($http, "hotels/save", angular.toJson($scope.req), resFunc);
@@ -219,6 +226,10 @@
             <tr>
               <th class="col-md-4 text-right">ID</th>
               <td>{{slcted.id}}</td>
+            </tr>
+            <tr>
+              <th class="text-right">Place</th>
+              <td>{{slcted.place.nameEn}}</td>
             </tr>
             <tr>
               <th class="text-right">Name English</th>
@@ -391,6 +402,17 @@
       <div class="modal-body">
         <div class="row">
           <form class="form-horizontal" name="ediFormName">
+            <div class="form-group col-sm-10 ">
+              <label class="control-label col-sm-3">Place</label>
+              <div class="col-sm-9">
+                <select class="form-control" ng-model="request.placeId" required>
+                  <option ng-repeat="v in places"
+                          ng-selected="v.id === request.placeId"
+                          value="{{v.id}}">{{v.nameEn}}
+                  </option>
+                </select>
+              </div>
+            </div>
             <div class="form-group col-sm-10 ">
               <label class="control-label col-sm-3">Name English</label>
               <div class="col-sm-9">

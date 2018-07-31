@@ -7,6 +7,7 @@ import ge.mimino.travel.dto.HotelDTO;
 import ge.mimino.travel.dto.HotelImagesDTO;
 import ge.mimino.travel.model.Hotel;
 import ge.mimino.travel.model.HotelImages;
+import ge.mimino.travel.model.Place;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,6 +52,7 @@ public class HotelService {
         obj.setTriplePrice(request.getTriplePrice());
         obj.setSingleSupply(request.getSingleSupply());
         obj.setStarsCount(request.getStarsCount());
+        obj.setPlace((Place) hotelDAO.find(Place.class, request.getPlaceId()));
 
         if (request.getId() != null) {
             obj.setId(request.getId());

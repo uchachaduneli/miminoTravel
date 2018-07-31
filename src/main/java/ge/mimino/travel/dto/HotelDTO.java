@@ -33,6 +33,8 @@ public class HotelDTO {
     private String descriptionSp;
     private String descriptionPo;
     private String descriptionRu;
+    private PlaceDTO place;
+    private Integer placeId;
 
 
     public static HotelDTO parse(Hotel record) {
@@ -58,6 +60,8 @@ public class HotelDTO {
         dto.setSingleSupply(record.getSingleSupply());
         dto.setStarsCount(record.getStarsCount());
         dto.setCreateDate(record.getCreateDate());
+        dto.setPlace(PlaceDTO.parse(record.getPlace()));
+        dto.setPlaceId(record.getPlace().getId());
         return dto;
     }
 
@@ -68,6 +72,22 @@ public class HotelDTO {
             list.add(HotelDTO.parse(record));
         }
         return list;
+    }
+
+    public PlaceDTO getPlace() {
+        return place;
+    }
+
+    public void setPlace(PlaceDTO place) {
+        this.place = place;
+    }
+
+    public Integer getPlaceId() {
+        return placeId;
+    }
+
+    public void setPlaceId(Integer placeId) {
+        this.placeId = placeId;
     }
 
     public Integer getId() {

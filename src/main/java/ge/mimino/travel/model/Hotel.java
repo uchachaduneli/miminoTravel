@@ -27,6 +27,7 @@ public class Hotel {
     private String descriptionSp;
     private String descriptionPo;
     private String descriptionRu;
+    private Place place;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -239,4 +240,13 @@ public class Hotel {
         this.descriptionRu = descriptionRu;
     }
 
+    @JoinColumn(name = "place_id")
+    @OneToOne
+    public Place getPlace() {
+        return place;
+    }
+
+    public void setPlace(Place place) {
+        this.place = place;
+    }
 }
