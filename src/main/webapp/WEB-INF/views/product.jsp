@@ -51,7 +51,10 @@
 
 <div class="row">
   <div class="col-xs-12">
-    <div ng-repeat="n in [] | range: request.daysCount" class="box">
+    <div ng-repeat="n in [].constructor(request.daysCount) track by $index" class="box">
+      <div class="box-header text-center">
+        <b><h4>Day ({{$index}})</h4></b>
+      </div>
       <div class="box-body">
         {{$index}}
       </div>
