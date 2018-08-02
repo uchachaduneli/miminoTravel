@@ -4,6 +4,7 @@ import ge.mimino.travel.dto.RequestDTO;
 import ge.mimino.travel.dto.UsersDTO;
 import ge.mimino.travel.misc.Response;
 import ge.mimino.travel.request.AddRequest;
+import ge.mimino.travel.request.ProductRequest;
 import ge.mimino.travel.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -51,6 +52,12 @@ public class RequestController {
         }
     }
 
+    @RequestMapping("/get-product-details")
+    @ResponseBody
+    private Response getProductDetailsById(@RequestParam Integer requestId, @RequestParam Integer day) {
+        return Response.withSuccess(requestService.getProductDetailsById(requestId, day));
+    }
+
     @RequestMapping("/get-requests-details")
     @ResponseBody
     private Response getRequestsDetails(@RequestParam Integer id) throws Exception {
@@ -68,6 +75,13 @@ public class RequestController {
     public Response saveUser(@RequestBody AddRequest request, HttpServletRequest servletRequest) throws Exception {
         request.setUserId((Integer) servletRequest.getSession().getAttribute("userId"));
         return Response.withSuccess(RequestDTO.parse(requestService.save(request)));
+    }
+
+    @RequestMapping({"/save-product"})
+    @ResponseBody
+    public Response saveUser(@RequestBody ProductRequest request) throws Exception {
+        requestService.saveProduct(request);
+        return Response.ok();
     }
 
     @RequestMapping({"/delete"})

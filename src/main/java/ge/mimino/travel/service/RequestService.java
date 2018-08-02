@@ -6,6 +6,7 @@ import ge.mimino.travel.dao.RequestDAO;
 import ge.mimino.travel.dto.*;
 import ge.mimino.travel.model.*;
 import ge.mimino.travel.request.AddRequest;
+import ge.mimino.travel.request.ProductRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -79,6 +80,46 @@ public class RequestService {
         return obj;
     }
 
+
+    @Transactional(rollbackFor = Throwable.class)
+    public void saveProduct(ProductRequest request) throws Exception {
+
+        if (request.getHotels() != null && !request.getHotels().isEmpty()) {
+            requestDAO.removeProductHotels(request.getRequestId(), request.getHotels(), request.getDay());
+            for (Integer obj : request.getHotels()) {
+                requestDAO.create(new ProductHotels(obj, request.getRequestId(), request.getDay()));
+            }
+        }
+
+        if (request.getNonstandarts() != null && !request.getNonstandarts().isEmpty()) {
+            requestDAO.removeProductNonstandarts(request.getRequestId(), request.getNonstandarts(), request.getDay());
+            for (Integer obj : request.getNonstandarts()) {
+                requestDAO.create(new ProductNonstandarts(obj, request.getRequestId(), request.getDay()));
+            }
+        }
+
+        if (request.getPlaces() != null && !request.getPlaces().isEmpty()) {
+            requestDAO.removeProductPlaces(request.getRequestId(), request.getPlaces(), request.getDay());
+            for (Integer obj : request.getPlaces()) {
+                requestDAO.create(new ProductPlaces(obj, request.getRequestId(), request.getDay()));
+            }
+        }
+
+        if (request.getSights() != null && !request.getSights().isEmpty()) {
+            requestDAO.removeProductSights(request.getRequestId(), request.getSights(), request.getDay());
+            for (Integer obj : request.getSights()) {
+                requestDAO.create(new ProductSights(obj, request.getRequestId(), request.getDay()));
+            }
+        }
+
+        if (request.getTransports() != null && !request.getTransports().isEmpty()) {
+            requestDAO.removeProductTransports(request.getRequestId(), request.getTransports(), request.getDay());
+            for (Integer obj : request.getTransports()) {
+                requestDAO.create(new ProductTransports(obj, request.getRequestId(), request.getDay()));
+            }
+        }
+    }
+
     @Transactional(rollbackFor = Throwable.class)
     public void delete(int id) {
         Request obj = (Request) requestDAO.find(Request.class, id);
@@ -107,5 +148,41 @@ public class RequestService {
         List<ParamValuePair> paramValues = new ArrayList<>();
         paramValues.add(new ParamValuePair("requestKey", key));
         return (Request) requestDAO.getAllByParamValue(Request.class, paramValues, null).get(0);
+    }
+
+    public ProductRequest getProductDetailsById(Integer requestId, Integer day) {
+
+        ProductRequest res = new ProductRequest();
+        res.setHotels(new ArrayList<>());
+        res.setNonstandarts(new ArrayList<>());
+        res.setPlaces(new ArrayList<>());
+        res.setSights(new ArrayList<>());
+        res.setTransports(new ArrayList<>());
+
+        List<ParamValuePair> paramValues = new ArrayList<>();
+        paramValues.add(new ParamValuePair("requestId", requestId));
+        paramValues.add(new ParamValuePair("day", day));
+
+        for (ProductHotels obj : (List<ProductHotels>) requestDAO.getAllByParamValue(ProductHotels.class, paramValues, null)) {
+            res.getHotels().add(obj.getHotelId());
+        }
+
+        for (ProductNonstandarts obj : (List<ProductNonstandarts>) requestDAO.getAllByParamValue(ProductNonstandarts.class, paramValues, null)) {
+            res.getNonstandarts().add(obj.getNonstandartServiceId());
+        }
+
+        for (ProductPlaces obj : (List<ProductPlaces>) requestDAO.getAllByParamValue(ProductPlaces.class, paramValues, null)) {
+            res.getPlaces().add(obj.getPlaceId());
+        }
+
+        for (ProductSights obj : (List<ProductSights>) requestDAO.getAllByParamValue(ProductSights.class, paramValues, null)) {
+            res.getSights().add(obj.getSightId());
+        }
+
+        for (ProductTransports obj : (List<ProductTransports>) requestDAO.getAllByParamValue(ProductTransports.class, paramValues, null)) {
+            res.getTransports().add(obj.getTransportId());
+        }
+
+        return res;
     }
 }

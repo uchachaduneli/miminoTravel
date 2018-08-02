@@ -1,12 +1,12 @@
 package ge.mimino.travel.dao;
 
-import ge.mimino.travel.model.Request;
-import ge.mimino.travel.model.RequestCountry;
+import ge.mimino.travel.model.*;
 import ge.mimino.travel.request.AddRequest;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
@@ -65,5 +65,40 @@ public class RequestDAO extends AbstractDAO {
 
         TypedQuery<Request> query = entityManager.createQuery(q.toString(), Request.class);
         return query.setFirstResult(start).setMaxResults(limit).getResultList();
+    }
+
+    public void removeProductHotels(Integer requestId, List<Integer> hotels, Integer day) {
+        Query query = getEntityManager().createQuery("delete from " + ProductHotels.class.getSimpleName()
+                + " c where c.requestId=" + requestId + " and c.day=" + day + " and c.hotelId in :listOfIds");
+        query.setParameter("listOfIds", hotels);
+        query.executeUpdate();
+    }
+
+    public void removeProductNonstandarts(Integer requestId, List<Integer> nonstandarts, Integer day) {
+        Query query = getEntityManager().createQuery("delete from " + ProductNonstandarts.class.getSimpleName()
+                + " c where c.requestId=" + requestId + " and c.day=" + day + " and c.nonstandartServiceId in :listOfIds");
+        query.setParameter("listOfIds", nonstandarts);
+        query.executeUpdate();
+    }
+
+    public void removeProductPlaces(Integer requestId, List<Integer> places, Integer day) {
+        Query query = getEntityManager().createQuery("delete from " + ProductPlaces.class.getSimpleName()
+                + " c where c.requestId=" + requestId + " and c.day=" + day + " and c.placeId in :listOfIds");
+        query.setParameter("listOfIds", places);
+        query.executeUpdate();
+    }
+
+    public void removeProductSights(Integer requestId, List<Integer> sights, Integer day) {
+        Query query = getEntityManager().createQuery("delete from " + ProductSights.class.getSimpleName()
+                + " c where c.requestId=" + requestId + " and c.day=" + day + " and c.sightId in :listOfIds");
+        query.setParameter("listOfIds", sights);
+        query.executeUpdate();
+    }
+
+    public void removeProductTransports(Integer requestId, List<Integer> transports, Integer day) {
+        Query query = getEntityManager().createQuery("delete from " + ProductTransports.class.getSimpleName()
+                + " c where c.requestId=" + requestId + " and c.day=" + day + " and c.transportId in :listOfIds");
+        query.setParameter("listOfIds", transports);
+        query.executeUpdate();
     }
 }

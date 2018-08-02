@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "geo_object", schema = "mimino", catalog = "")
+@Table(name = "geo_object", schema = "mimino")
 public class GeoObject {
     private Integer id;
     private Double personPrice;
