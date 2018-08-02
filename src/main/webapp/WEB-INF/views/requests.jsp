@@ -856,7 +856,7 @@
                    class="btn btn-xs">
                   <i class="fa fa-pencil"></i>&nbsp;Edit
                 </a>&nbsp;&nbsp;
-                <a href="/product?key={{r.requestKey}}"
+                <a href="miminoTravel/product?key={{r.requestKey}}"
                    class="btn btn-xs">
                   <i class="fa fa-server"></i>&nbsp;product
                 </a>&nbsp;&nbsp;
