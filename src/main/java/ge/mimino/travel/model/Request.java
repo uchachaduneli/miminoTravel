@@ -33,6 +33,12 @@ public class Request {
     private Timestamp createDate;
     private Users user;
     private String requestKey;
+    private String strTourStart;
+    private String strTourEnd;
+    private String strLeaveTime;
+    private String tourCode;
+    private String nationality;
+    private String strArrivalTime;
 
     @Id
     @Column(name = "id")
@@ -293,5 +299,83 @@ public class Request {
 
     public void setRequestKey(String requestKey) {
         this.requestKey = requestKey;
+    }
+
+    @Basic
+    @Column(name = "str_tour_start")
+    public String getStrTourStart() {
+        return strTourStart;
+    }
+
+    public void setStrTourStart(String strTourStart) {
+        this.strTourStart = strTourStart;
+    }
+
+    @Basic
+    @Column(name = "str_tour_end")
+    public String getStrTourEnd() {
+        return strTourEnd;
+    }
+
+    public void setStrTourEnd(String strTourEnd) {
+        this.strTourEnd = strTourEnd;
+    }
+
+    @Basic
+    @Column(name = "str_leave_time")
+    public String getStrLeaveTime() {
+        return strLeaveTime;
+    }
+
+    public void setStrLeaveTime(String strLeaveTime) {
+        this.strLeaveTime = strLeaveTime;
+    }
+
+    @Basic
+    @Column(name = "tour_code")
+    public String getTourCode() {
+        return tourCode;
+    }
+
+    public void setTourCode(String tourCode) {
+        this.tourCode = tourCode;
+    }
+
+    @Basic
+    @Column(name = "nationality")
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
+    @Basic
+    @Column(name = "str_arrival_time")
+    public String getStrArrivalTime() {
+        return strArrivalTime;
+    }
+
+    public void setStrArrivalTime(String strArrivalTime) {
+        this.strArrivalTime = strArrivalTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Request request = (Request) o;
+
+        if (strArrivalTime != null ? !strArrivalTime.equals(request.strArrivalTime) : request.strArrivalTime != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return strArrivalTime != null ? strArrivalTime.hashCode() : 0;
     }
 }

@@ -39,6 +39,9 @@ public class RequestDAO extends AbstractDAO {
         if (srchRequest.getContactEmail() != null) {
             q.append(" and e.contactEmail like '%").append(srchRequest.getContactEmail()).append("%'");
         }
+        if (srchRequest.getTourCode() != null) {
+            q.append(" and e.tourCode like '%").append(srchRequest.getTourCode()).append("%'");
+        }
         if (srchRequest.getCombined() != null) {
             q.append(" and e.combined ='").append(srchRequest.getCombined()).append("'");
         }

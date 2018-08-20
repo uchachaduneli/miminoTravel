@@ -244,6 +244,12 @@
       $scope.req.currencyId = $scope.request.currencyId;
       $scope.req.comment = $scope.request.comment;
       $scope.req.budget = $scope.request.budget;
+      $scope.req.strTourStart = $scope.request.strTourStart;
+      $scope.req.strTourEnd = $scope.request.strTourEnd;
+      $scope.req.strArrivalTime = $scope.request.strArrivalTime;
+      $scope.req.strLeaveTime = $scope.request.strLeaveTime;
+      $scope.req.tourCode = $scope.request.tourCode;
+      $scope.req.nationality = $scope.request.nationality;
       $scope.req.packageCategoryId = $scope.request.packageCategoryId;
 
       angular.forEach($scope.request.combinedCountries, function (v) {
@@ -316,16 +322,20 @@
               <td>{{slcted.id}}</td>
             </tr>
             <tr>
+              <th class="col-md-4 text-right">Tour Code</th>
+              <td>{{slcted.tourCode}}</td>
+            </tr>
+            <tr>
               <th class="text-right">Contact Email</th>
               <td>{{slcted.contactEmail}}</td>
             </tr>
             <tr>
               <th class="text-right">Tour Starts</th>
-              <td>{{slcted.tourStart}}</td>
+              <td>{{slcted.tourStart}} / {{slcted.strTourStart}}</td>
             </tr>
             <tr>
               <th class="text-right">Tour Ends</th>
-              <td>{{slcted.tourEnd}}</td>
+              <td>{{slcted.tourEnd}} / {{slcted.strTourEnd}}</td>
             </tr>
             <tr>
               <th class="text-right">Combined</th>
@@ -373,7 +383,7 @@
             </tr>
             <tr>
               <th class="text-right">Arrival Time</th>
-              <td>{{slcted.arrivalTime}}</td>
+              <td>{{slcted.arrivalTime}} / {{slcted.strArrivalTime}}</td>
             </tr>
             <tr>
               <th class="text-right">Leave City</th>
@@ -381,16 +391,23 @@
             </tr>
             <tr>
               <th class="text-right">Leave Time</th>
-              <td>{{slcted.leaveTime}}</td>
+              <td>{{slcted.leaveTime}} / {{slcted.strLeaveTime}}</td>
+            </tr>
+            <tr>
+              <th class="text-right">Nationality</th>
+              <td>{{slcted.nationality}}</td>
             </tr>
             <tr>
               <th class="text-right">Tour Type</th>
               <td>{{slcted.tourType}}</td>
             </tr>
             <tr>
-              <th class="text-right">Guide-Driver/Just Guide</th>
-              <td>{{slcted.guideDriver == 2 ? 'Guide-Driver':(slcted.guideDriver == 1 ? 'Separated Guide /
-                Driver':'')}}
+              <th class="text-right">Guide, Driver, Self Driver</th>
+              <td>
+                <span ng-if="slcted.guideDriver == 1">Guide</span>
+                <span ng-if="slcted.guideDriver == 2">Guide-Driver</span>
+                <span ng-if="slcted.guideDriver == 3">Driver</span>
+                <span ng-if="slcted.guideDriver == 4">Self driver</span>
               </td>
             </tr>
             <tr>
@@ -469,6 +486,8 @@
                          id="tourStartDateInput" required
                          class="form-control pull-right">
                 </div>
+                <input type="text" ng-model="request.strTourStart" placeholder="Textual"
+                       class="form-control input-sm">
               </div>
             </div>
             <div class="form-group col-sm-10 ">
@@ -482,6 +501,8 @@
                          id="tourEndsDateInput" required
                          class="form-control pull-right">
                 </div>
+                <input type="text" ng-model="request.strTourEnd" placeholder="Textual"
+                       class="form-control input-sm">
               </div>
             </div>
             <div class="form-group col-sm-10">
@@ -584,6 +605,8 @@
                   <input class="form-control" size="16" type="text" ng-model="request.arrivalTime"
                          name="datetime">
                 </div>
+                <input type="text" ng-model="request.strArrivalTime" placeholder="Textual"
+                       class="form-control input-sm">
               </div>
             </div>
             <div class="form-group col-sm-10 ">
@@ -605,6 +628,8 @@
                   <input class="form-control" size="16" type="text" ng-model="request.leaveTime"
                          name="datetime">
                 </div>
+                <input type="text" ng-model="request.strLeaveTime" placeholder="Textual"
+                       class="form-control input-sm">
               </div>
             </div>
             <div class="form-group col-sm-10 ">
@@ -616,13 +641,17 @@
               </div>
             </div>
             <div class="form-group col-sm-10">
-              <label class="control-label col-sm-3">Separately Guide and Driver or Guide-Driver</label>
+              <label class="control-label col-sm-3">Guide/Driver</label>
               <div class="col-xs-9 btn-group">
                 <div class="radio col-xs-6">
                   <label><input type="radio" ng-model="request.guideDriver" value="1"
                                 class="input-sm">Guide</label>&nbsp;
                   <label><input type="radio" ng-model="request.guideDriver" value="2"
-                                class="input-sm">Guide-Driver</label>
+                                class="input-sm">Guide-Driver</label>&nbsp;
+                  <label><input type="radio" ng-model="request.guideDriver" value="3"
+                                class="input-sm">Driver</label>&nbsp;
+                  <label><input type="radio" ng-model="request.guideDriver" value="4"
+                                class="input-sm">Self Drive</label>
                 </div>
               </div>
             </div>
@@ -662,6 +691,13 @@
                                 <textarea rows="5" cols="10" ng-model="request.entranceFees"
                                           name="source" required
                                           class="form-control input-sm"></textarea>
+              </div>
+            </div>
+            <div class="form-group col-sm-10 ">
+              <label class="control-label col-sm-3">Nationality</label>
+              <div class="col-sm-9">
+                <input ng-model="request.nationality" type="text"
+                       class="form-control input-sm"/>
               </div>
             </div>
             <div class="form-group col-sm-10 ">
@@ -750,7 +786,11 @@
                   <input type="text" class="form-control srch" ng-model="srchCase.id"
                          placeholder="ID">
                 </div>
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-2">
+                  <input type="text" class="form-control srch" ng-model="srchCase.tourCode"
+                         placeholder="Tour Code">
+                </div>
+                <div class="form-group col-md-2">
                   <input type="text" class="form-control srch" ng-model="srchCase.contactEmail"
                          placeholder="Email">
                 </div>
@@ -771,7 +811,7 @@
                     </option>
                   </select>
                 </div>
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-2">
                   <select class="form-control" ng-model="srchCase.guideLanguageId"
                           ng-change="loadMainData()">
                     <option value="" selected="selected">Language</option>

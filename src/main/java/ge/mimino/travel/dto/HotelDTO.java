@@ -33,6 +33,7 @@ public class HotelDTO {
     private String descriptionSp;
     private String descriptionPo;
     private String descriptionRu;
+    private String link;
     private PlaceDTO place;
     private Integer placeId;
 
@@ -62,6 +63,7 @@ public class HotelDTO {
         dto.setCreateDate(record.getCreateDate());
         dto.setPlace(PlaceDTO.parse(record.getPlace()));
         dto.setPlaceId(record.getPlace().getId());
+        dto.setLink(record.getLink());
         return dto;
     }
 
@@ -72,6 +74,14 @@ public class HotelDTO {
             list.add(HotelDTO.parse(record));
         }
         return list;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public PlaceDTO getPlace() {

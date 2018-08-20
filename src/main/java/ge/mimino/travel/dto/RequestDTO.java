@@ -50,6 +50,12 @@ public class RequestDTO {
     @JsonSerialize(using = JsonDateTimeSerializeSupport.class)
     private Timestamp createDate;
     private String requestKey;
+    private String strTourStart;
+    private String strTourEnd;
+    private String strArrivalTime;
+    private String strLeaveTime;
+    private String tourCode;
+    private String nationality;
 
 
     public static RequestDTO parse(Request record) {
@@ -87,6 +93,12 @@ public class RequestDTO {
         dto.setGuideLanguageId(record.getGuideLanguage().getId());
         dto.setCreateDate(record.getCreateDate());
         dto.setRequestKey(record.getRequestKey());
+        dto.setTourCode(record.getTourCode());
+        dto.setNationality(record.getNationality());
+        dto.setStrArrivalTime(record.getStrArrivalTime());
+        dto.setStrLeaveTime(record.getStrLeaveTime());
+        dto.setStrTourStart(record.getStrTourStart());
+        dto.setStrTourEnd(record.getStrTourEnd());
         return dto;
     }
 
@@ -97,86 +109,6 @@ public class RequestDTO {
             list.add(RequestDTO.parse(record));
         }
         return list;
-    }
-
-    public String getRequestKey() {
-        return requestKey;
-    }
-
-    public void setRequestKey(String requestKey) {
-        this.requestKey = requestKey;
-    }
-
-    public UsersDTO getUser() {
-        return user;
-    }
-
-    public void setUser(UsersDTO user) {
-        this.user = user;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public Integer getArrivalCityId() {
-        return arrivalCityId;
-    }
-
-    public void setArrivalCityId(Integer arrivalCityId) {
-        this.arrivalCityId = arrivalCityId;
-    }
-
-    public Integer getLeaveCityId() {
-        return leaveCityId;
-    }
-
-    public void setLeaveCityId(Integer leaveCityId) {
-        this.leaveCityId = leaveCityId;
-    }
-
-    public Integer getGuideLanguageId() {
-        return guideLanguageId;
-    }
-
-    public void setGuideLanguageId(Integer guideLanguageId) {
-        this.guideLanguageId = guideLanguageId;
-    }
-
-    public Integer getMealCategoryId() {
-        return mealCategoryId;
-    }
-
-    public void setMealCategoryId(Integer mealCategoryId) {
-        this.mealCategoryId = mealCategoryId;
-    }
-
-    public Integer getCurrencyId() {
-        return currencyId;
-    }
-
-    public void setCurrencyId(Integer currencyId) {
-        this.currencyId = currencyId;
-    }
-
-    public Integer getPackageCategoryId() {
-        return packageCategoryId;
-    }
-
-    public void setPackageCategoryId(Integer packageCategoryId) {
-        this.packageCategoryId = packageCategoryId;
-    }
-
-    public LanguageDTO getGuideLanguage() {
-        return guideLanguage;
-    }
-
-    public void setGuideLanguage(LanguageDTO guideLanguage) {
-        this.guideLanguage = guideLanguage;
     }
 
     public Integer getId() {
@@ -275,12 +207,28 @@ public class RequestDTO {
         this.arrivalCity = arrivalCity;
     }
 
+    public Integer getArrivalCityId() {
+        return arrivalCityId;
+    }
+
+    public void setArrivalCityId(Integer arrivalCityId) {
+        this.arrivalCityId = arrivalCityId;
+    }
+
     public CityDTO getLeaveCity() {
         return leaveCity;
     }
 
     public void setLeaveCity(CityDTO leaveCity) {
         this.leaveCity = leaveCity;
+    }
+
+    public Integer getLeaveCityId() {
+        return leaveCityId;
+    }
+
+    public void setLeaveCityId(Integer leaveCityId) {
+        this.leaveCityId = leaveCityId;
     }
 
     public String getTourType() {
@@ -299,6 +247,22 @@ public class RequestDTO {
         this.guideDriver = guideDriver;
     }
 
+    public LanguageDTO getGuideLanguage() {
+        return guideLanguage;
+    }
+
+    public void setGuideLanguage(LanguageDTO guideLanguage) {
+        this.guideLanguage = guideLanguage;
+    }
+
+    public Integer getGuideLanguageId() {
+        return guideLanguageId;
+    }
+
+    public void setGuideLanguageId(Integer guideLanguageId) {
+        this.guideLanguageId = guideLanguageId;
+    }
+
     public String getHotelCategory() {
         return hotelCategory;
     }
@@ -315,6 +279,14 @@ public class RequestDTO {
         this.mealCategory = mealCategory;
     }
 
+    public Integer getMealCategoryId() {
+        return mealCategoryId;
+    }
+
+    public void setMealCategoryId(Integer mealCategoryId) {
+        this.mealCategoryId = mealCategoryId;
+    }
+
     public String getEntranceFees() {
         return entranceFees;
     }
@@ -329,6 +301,14 @@ public class RequestDTO {
 
     public void setCurrency(CurrencyDTO currency) {
         this.currency = currency;
+    }
+
+    public Integer getCurrencyId() {
+        return currencyId;
+    }
+
+    public void setCurrencyId(Integer currencyId) {
+        this.currencyId = currencyId;
     }
 
     public String getComment() {
@@ -355,11 +335,91 @@ public class RequestDTO {
         this.packageCategory = packageCategory;
     }
 
+    public Integer getPackageCategoryId() {
+        return packageCategoryId;
+    }
+
+    public void setPackageCategoryId(Integer packageCategoryId) {
+        this.packageCategoryId = packageCategoryId;
+    }
+
+    public UsersDTO getUser() {
+        return user;
+    }
+
+    public void setUser(UsersDTO user) {
+        this.user = user;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
     public Timestamp getCreateDate() {
         return createDate;
     }
 
     public void setCreateDate(Timestamp createDate) {
         this.createDate = createDate;
+    }
+
+    public String getRequestKey() {
+        return requestKey;
+    }
+
+    public void setRequestKey(String requestKey) {
+        this.requestKey = requestKey;
+    }
+
+    public String getStrTourStart() {
+        return strTourStart;
+    }
+
+    public void setStrTourStart(String strTourStart) {
+        this.strTourStart = strTourStart;
+    }
+
+    public String getStrTourEnd() {
+        return strTourEnd;
+    }
+
+    public void setStrTourEnd(String strTourEnd) {
+        this.strTourEnd = strTourEnd;
+    }
+
+    public String getStrArrivalTime() {
+        return strArrivalTime;
+    }
+
+    public void setStrArrivalTime(String strArrivalTime) {
+        this.strArrivalTime = strArrivalTime;
+    }
+
+    public String getStrLeaveTime() {
+        return strLeaveTime;
+    }
+
+    public void setStrLeaveTime(String strLeaveTime) {
+        this.strLeaveTime = strLeaveTime;
+    }
+
+    public String getTourCode() {
+        return tourCode;
+    }
+
+    public void setTourCode(String tourCode) {
+        this.tourCode = tourCode;
+    }
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
     }
 }

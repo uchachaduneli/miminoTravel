@@ -125,6 +125,7 @@
       $scope.req.descriptionPo = $scope.request.descriptionPo;
       $scope.req.descriptionRu = $scope.request.descriptionRu;
       $scope.req.placeId = $scope.request.placeId;
+      $scope.req.link = $scope.request.link;
 
       console.log(angular.toJson($scope.req));
       ajaxCall($http, "hotels/save", angular.toJson($scope.req), resFunc);
@@ -226,6 +227,10 @@
             <tr>
               <th class="col-md-4 text-right">ID</th>
               <td>{{slcted.id}}</td>
+            </tr>
+            <tr>
+              <th class="text-right">Web Page</th>
+              <td>{{slcted.link}}</td>
             </tr>
             <tr>
               <th class="text-right">Place</th>
@@ -411,6 +416,13 @@
                           value="{{v.id}}">{{v.nameEn}}
                   </option>
                 </select>
+              </div>
+            </div>
+            <div class="form-group col-sm-10 ">
+              <label class="control-label col-sm-3">Web Page</label>
+              <div class="col-sm-9">
+                <input type="text" ng-model="request.link" required
+                       class="form-control input-sm">
               </div>
             </div>
             <div class="form-group col-sm-10 ">

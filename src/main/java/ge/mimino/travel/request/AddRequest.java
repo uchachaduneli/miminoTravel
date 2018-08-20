@@ -34,22 +34,12 @@ public class AddRequest {
     private Integer userId;
     private List<Integer> otherDetails;
     private List<CombinedCountry> combinedCountries;
-
-    public Date getTourStartTo() {
-        return tourStartTo;
-    }
-
-    public void setTourStartTo(Date tourStartTo) {
-        this.tourStartTo = tourStartTo;
-    }
-
-    public Date getTourEndTo() {
-        return tourEndTo;
-    }
-
-    public void setTourEndTo(Date tourEndTo) {
-        this.tourEndTo = tourEndTo;
-    }
+    private String strTourStart;
+    private String strTourEnd;
+    private String strArrivalTime;
+    private String strLeaveTime;
+    private String tourCode;
+    private String nationality;
 
     public Integer getId() {
         return id;
@@ -89,6 +79,22 @@ public class AddRequest {
 
     public void setTourEnd(Date tourEnd) {
         this.tourEnd = tourEnd;
+    }
+
+    public Date getTourStartTo() {
+        return tourStartTo;
+    }
+
+    public void setTourStartTo(Date tourStartTo) {
+        this.tourStartTo = tourStartTo;
+    }
+
+    public Date getTourEndTo() {
+        return tourEndTo;
+    }
+
+    public void setTourEndTo(Date tourEndTo) {
+        this.tourEndTo = tourEndTo;
     }
 
     public Integer getDaysCount() {
@@ -257,5 +263,53 @@ public class AddRequest {
 
     public void setCombinedCountries(List<CombinedCountry> combinedCountries) {
         this.combinedCountries = combinedCountries;
+    }
+
+    public String getStrTourStart() {
+        return strTourStart;
+    }
+
+    public void setStrTourStart(String strTourStart) {
+        this.strTourStart = strTourStart;
+    }
+
+    public String getStrTourEnd() {
+        return strTourEnd;
+    }
+
+    public void setStrTourEnd(String strTourEnd) {
+        this.strTourEnd = strTourEnd;
+    }
+
+    public String getStrArrivalTime() {
+        return strArrivalTime;
+    }
+
+    public void setStrArrivalTime(String strArrivalTime) {
+        this.strArrivalTime = strArrivalTime;
+    }
+
+    public String getStrLeaveTime() {
+        return strLeaveTime;
+    }
+
+    public void setStrLeaveTime(String strLeaveTime) {
+        this.strLeaveTime = strLeaveTime;
+    }
+
+    public String getTourCode() {
+        return tourCode;
+    }
+
+    public void setTourCode(String tourCode) {
+        this.tourCode = tourCode;
+    }
+
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
     }
 }

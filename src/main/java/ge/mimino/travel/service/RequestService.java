@@ -5,6 +5,7 @@ import ge.mimino.travel.dao.ParamValuePair;
 import ge.mimino.travel.dao.RequestDAO;
 import ge.mimino.travel.dto.*;
 import ge.mimino.travel.model.*;
+import ge.mimino.travel.model.Currency;
 import ge.mimino.travel.request.AddRequest;
 import ge.mimino.travel.request.ProductRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author ucha
@@ -39,19 +38,25 @@ public class RequestService {
         obj.setContactEmail(request.getContactEmail());
         obj.setCombined(request.getCombined());
         obj.setTourStart(request.getTourStart());
+        obj.setStrTourStart(request.getStrTourStart());
         obj.setTourEnd(request.getTourEnd());
+        obj.setStrTourEnd(request.getStrTourEnd());
         obj.setDaysCount(request.getDaysCount());
         obj.setNightsCount(request.getNightsCount());
         obj.setTouristsCount(request.getTouristsCount());
         obj.setTouristsCountNote(request.getTouristsCountNote());
         obj.setArrivalTime(new Timestamp(sdf.parse(request.getArrivalTime()).getTime()));//request.getArrivalTime()
+        obj.setStrArrivalTime(request.getStrArrivalTime());
         obj.setLeaveTime(new Timestamp(sdf.parse(request.getLeaveTime()).getTime()));//request.getLeaveTime()
+        obj.setStrLeaveTime(request.getStrLeaveTime());
         obj.setTourType(request.getTourType());
         obj.setGuideDriver(request.getGuideDriver());
         obj.setHotelCategory(request.getHotelCategory());
         obj.setEntranceFees(request.getEntranceFees());
         obj.setComment(request.getComment());
         obj.setBudget(request.getBudget());
+        obj.setTourCode(request.getTourCode());
+        obj.setNationality(request.getNationality());
 //
         obj.setCurrency((Currency) requestDAO.find(Currency.class, request.getCurrencyId()));
         obj.setArrivalCity((City) requestDAO.find(City.class, request.getArrivalCityId()));
@@ -65,6 +70,9 @@ public class RequestService {
             obj.setId(request.getId());
             obj = (Request) requestDAO.update(obj);
         } else {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            obj.setTourCode(cal.get(Calendar.DAY_OF_MONTH) + "." + cal.get(Calendar.MONTH) + "-" + request.getTouristsCount());
             obj.setRequestKey(UUID.randomUUID() + "");
             obj = (Request) requestDAO.create(obj);
         }
