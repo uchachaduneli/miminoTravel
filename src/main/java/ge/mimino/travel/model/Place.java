@@ -20,6 +20,7 @@ public class Place {
     private String descriptionSp;
     private String descriptionPo;
     private String descriptionRu;
+    private Region region;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -172,4 +173,13 @@ public class Place {
         this.descriptionRu = descriptionRu;
     }
 
+    @JoinColumn(name = "region_id")
+    @OneToOne
+    public Region getRegion() {
+        return region;
+    }
+
+    public void setRegion(Region region) {
+        this.region = region;
+    }
 }

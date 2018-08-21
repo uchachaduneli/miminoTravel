@@ -62,6 +62,12 @@ public class MiscController {
         return Response.withSuccess(miscService.getLanguages());
     }
 
+    @RequestMapping("/get-regions")
+    @ResponseBody
+    private Response getRegions() throws Exception {
+        return Response.withSuccess(miscService.getRegions());
+    }
+
     @RequestMapping("/get-file")
     @ResponseBody
     private void getImage(HttpServletResponse response, @RequestParam String name) throws IOException {

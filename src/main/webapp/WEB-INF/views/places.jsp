@@ -16,6 +16,7 @@
     $scope.request = {types: []};
     $scope.srchCase = {};
     $scope.imageNames = [];
+    $scope.regions = [];
 
     $scope.loadMainData = function () {
       $('#loadingModal').modal('show');
@@ -44,6 +45,12 @@
         }
       }
     };
+
+    function getRegions(res) {
+      $scope.regions = res.data;
+    }
+
+    ajaxCall($http, "misc/get-regions", null, getRegions);
 
     $scope.edit = function (id) {
       if (id != undefined) {
@@ -110,6 +117,7 @@
       $scope.req.descriptionSp = $scope.request.descriptionSp;
       $scope.req.descriptionPo = $scope.request.descriptionPo;
       $scope.req.descriptionRu = $scope.request.descriptionRu;
+      $scope.req.regionId = $scope.request.regionId;
 
       console.log(angular.toJson($scope.req));
       ajaxCall($http, "places/save", angular.toJson($scope.req), resFunc);
@@ -268,6 +276,10 @@
               <td>{{slcted.id}}</td>
             </tr>
             <tr>
+              <th class="text-right">Region</th>
+              <td>{{slcted.region.name}}</td>
+            </tr>
+            <tr>
               <th class="text-right">Name English</th>
               <td>{{slcted.nameEn}}</td>
             </tr>
@@ -360,6 +372,17 @@
       <div class="modal-body">
         <div class="row">
           <form class="form-horizontal" name="ediFormName">
+            <div class="form-group col-sm-10 ">
+              <label class="control-label col-sm-3">Region</label>
+              <div class="col-sm-9">
+                <select class="form-control" ng-model="request.regionId" required>
+                  <option ng-repeat="v in regions"
+                          ng-selected="v.id === request.regionId"
+                          value="{{v.id}}">{{v.name}}
+                  </option>
+                </select>
+              </div>
+            </div>
             <div class="form-group col-sm-10 ">
               <label class="control-label col-sm-3">Name English</label>
               <div class="col-sm-9">
@@ -509,13 +532,23 @@
           <div id="filter-panel" class="filter-panel">
             <div class="panel panel-default">
               <div class="panel-body">
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-2">
                   <input type="text" class="form-control srch" ng-model="srchCase.id"
                          placeholder="ID">
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-3">
                   <input type="text" class="form-control srch" ng-model="srchCase.nameEn"
                          placeholder="Name">
+                </div>
+                <div class="form-group col-md-3">
+                  <select class="form-control" ng-model="srchCase.regionId"
+                          ng-change="loadMainData()">
+                    <option value="" selected="selected">Region</option>
+                    <option ng-repeat="v in regions"
+                            ng-selected="v.id === srchCase.regionId"
+                            value="{{v.id}}">{{v.name}}
+                    </option>
+                  </select>
                 </div>
                 <div class="form-group col-md-4">
                   <button class="btn btn-default col-md-11" ng-click="loadMainData()" id="srchBtnId">

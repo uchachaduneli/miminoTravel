@@ -7,6 +7,7 @@ import ge.mimino.travel.dto.PlaceDTO;
 import ge.mimino.travel.dto.PlaceImagesDTO;
 import ge.mimino.travel.model.Place;
 import ge.mimino.travel.model.PlaceImages;
+import ge.mimino.travel.model.Region;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +47,7 @@ public class PlaceService {
         obj.setDescriptionSp(request.getDescriptionSp());
         obj.setDescriptionPo(request.getDescriptionPo());
         obj.setDescriptionRu(request.getDescriptionRu());
+        obj.setRegion((Region) placeDAO.find(Region.class, request.getRegionId()));
 
         if (request.getId() != null) {
             obj.setId(request.getId());

@@ -13,9 +13,8 @@
     $scope.start = 0;
     $scope.page = 1;
     $scope.limit = "10";
-    $scope.request = {types: []};
+    $scope.request = {};
     $scope.srchCase = {};
-    $scope.imageNames = [];
 
     $scope.loadMainData = function () {
       $('#loadingModal').modal('show');
@@ -25,7 +24,7 @@
         $('#loadingModal').modal('hide');
       }
 
-      ajaxCall($http, "objects/get-objects?start=" + $scope.start + "&limit=" + $scope.limit, angular.toJson($scope.srchCase), getMainData);
+      ajaxCall($http, "restaurants/get-restaurants?start=" + $scope.start + "&limit=" + $scope.limit, angular.toJson($scope.srchCase), getMainData);
     }
 
     $scope.loadMainData();
@@ -37,12 +36,6 @@
 
     ajaxCall($http, "places/get-places?start=0&limit=999999", {}, getPlaces);
 
-    function getTypes(res) {
-      $scope.types = res.data;
-    }
-
-    ajaxCall($http, "objects/get-types", null, getTypes);
-
     $scope.remove = function (id) {
       if (confirm("Pleace confirm operation?")) {
         if (id != undefined) {
@@ -53,7 +46,7 @@
             }
           }
 
-          ajaxCall($http, "objects/delete?id=" + id, null, resFnc);
+          ajaxCall($http, "restaurants/delete?id=" + id, null, resFnc);
         }
       }
     };
@@ -63,7 +56,6 @@
         var selected = $filter('filter')($scope.list, {id: id}, true);
         $scope.slcted = selected[0];
         $scope.request = selected[0];
-        $scope.loadDetailsList($scope.request.id);
       }
     }
 
@@ -71,19 +63,8 @@
       if (id != undefined) {
         var selected = $filter('filter')($scope.list, {id: id}, true);
         $scope.slcted = selected[0];
-
-        $scope.loadDetailsList($scope.slcted.id);
       }
     };
-
-    $scope.loadDetailsList = function (id) {
-
-      function getImages(res) {
-        $scope.slcted.images = res.data;
-      }
-
-      ajaxCall($http, "objects/get-images?id=" + id, null, getImages);
-    }
 
     $scope.handleDoubleClick = function (id) {
       $scope.showDetails(id);
@@ -109,8 +90,6 @@
       $scope.req = {};
 
       $scope.req.id = $scope.request.id;
-      $scope.req.personPrice = $scope.request.personPrice;
-      $scope.req.typeId = $scope.request.typeId;
       $scope.req.nameEn = $scope.request.nameEn;
       $scope.req.nameGe = $scope.request.nameGe;
       $scope.req.nameFr = $scope.request.nameFr;
@@ -128,7 +107,7 @@
       $scope.req.placeId = $scope.request.placeId;
 
       console.log(angular.toJson($scope.req));
-      ajaxCall($http, "objects/save", angular.toJson($scope.req), resFunc);
+      ajaxCall($http, "restaurants/save", angular.toJson($scope.req), resFunc);
     };
 
 
@@ -148,124 +127,8 @@
       $scope.loadMainData();
     }
 
-    $scope.uploadFiles = function (files) {
-      $scope.files = files;
-      angular.forEach(files, function (file) {
-
-        $scope.slcted.images.push({name: 'sight' + $scope.slcted.id + '_' + file.name});
-        $scope.imageNames.push('sight' + $scope.slcted.id + '_' + file.name);
-
-        if (file && !file.$error) {
-          file.upload = Upload.upload({
-            url: 'objects/add-images?id=sight' + $scope.slcted.id,
-            file: file
-          });
-
-          file.upload.then(function (response) {
-            $timeout(function () {
-              file.result = response.data;
-            });
-          }, function (response) {
-            if (response.status > 0)
-              $scope.errorMsg = response.status + ': ' + response.data;
-          });
-        }
-      });
-      console.log($scope.files);
-    }
-
-    $scope.removeDoc = function (docname) {
-
-      var index = $scope.imageNames.indexOf(docname);
-      $scope.imageNames.splice(index, 1);
-
-      var selected = $filter('filter')($scope.slcted.images, {name: docname}, true);
-      var index = $scope.slcted.images.indexOf(selected);
-      $scope.slcted.images.splice(index, 1);
-    }
-
-    $scope.saveImages = function () {
-      function onImageSave(res) {
-        if (res.errorCode == 0) {
-          successMsg('Operation Successfull');
-          closeModal('imageModal');
-        } else {
-          errorMsg('Operation Failed');
-        }
-      }
-
-      angular.forEach($scope.slcted.images, function (v) {
-        var index = $scope.imageNames.indexOf(v.name);
-        if (index < 0) {
-          $scope.imageNames.push(v.name);
-        }
-      });
-
-      console.log(angular.toJson($scope.imageNames));
-
-      ajaxCall($http, "objects/save-images?id=" + $scope.slcted.id, angular.toJson($scope.imageNames), onImageSave);
-    }
-
   }]);
 </script>
-
-<div class="modal fade bs-example-modal-lg not-printable" id="imageModal" role="dialog"
-     aria-labelledby="imageModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Upload Images</h4>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <form class="form-horizontal" name="ediFormName">
-            <table class="table table-striped">
-              <tr ng-repeat="item in slcted.images">
-                <th class="text-right col-sm-3"></th>
-                <td class="col-sm-6">
-                  <a href="misc/get-file?name={{'uploads/' + item.name.split('.')[0]}}" target="_blank">
-                    <img src="misc/get-file?name={{'uploads/' + item.name.split('.')[0]}}&" + new Date().getTime();
-                         class="thumbnail img-responsive"/>
-                  </a>
-                </td>
-                <td class="col-sm-3">
-                  <a><span class="fa fa-trash-o fa-lg" style="cursor: pointer;"
-                           ng-click="removeDoc(item.name)"></span></a>
-                </td>
-              </tr>
-            </table>
-            <div class="form-group col-sm-10 ">
-              <label class="control-label col-sm-3">Images</label>
-              <div class="col-sm-9">
-                <div class="input-group input-file">
-                  <input type="text" id="uploadDocNameInput" class="form-control"
-                         onclick="$('#documentId').trigger('click');"
-                         placeholder='Choose files...'/>
-                  <span class="input-group-btn">
-                    <button class="btn btn-default btn-choose" id="documentId"
-                            type="file" ngf-select="uploadFiles($files)" ng-model="files" multiple
-                            accept="*/*" ngf-max-size="30MB">
-                      Browse</button>
-    		           </span>
-                </div>
-              </div>
-            </div>
-            <div class="form-group col-sm-10"></div>
-            <div class="form-group col-sm-10"></div>
-            <div class="form-group col-sm-12 text-center">
-              <a class="btn btn-app" ng-click="saveImages()">
-                <i class="fa fa-save"></i> Save
-              </a>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 <div class="modal fade bs-example-modal-lg" id="detailModal" tabindex="-1" role="dialog"
      aria-labelledby="editModalLabel" aria-hidden="true">
@@ -285,15 +148,7 @@
             </tr>
             <tr>
               <th class="col-md-4 text-right">Place</th>
-              <td>{{slcted.place.name}}</td>
-            </tr>
-            <tr>
-              <th class="col-md-4 text-right">Person Price</th>
-              <td>{{slcted.personPrice}}</td>
-            </tr>
-            <tr>
-              <th class="col-md-4 text-right">Type</th>
-              <td>{{slcted.type.name}}</td>
+              <td>{{slcted.place.nameEn}}</td>
             </tr>
             <tr>
               <th class="text-right">Name English</th>
@@ -351,21 +206,6 @@
               <th class="text-right">Description Russian</th>
               <td>{{slcted.descriptionRu}}</td>
             </tr>
-            <tr>
-              <th class="text-right">Record Created</th>
-              <td>{{slcted.createDate}}</td>
-            </tr>
-            <tr>
-              <th class="text-right">images</th>
-              <td>
-                <ul>
-                  <li ng-repeat="item in slcted.images">
-                    <a href="misc/get-file?name=uploads/{{item.name.split('.')[0]}}"
-                       target="_blank">{{item.name}}</a>
-                  </li>
-                </ul>
-              </td>
-            </tr>
           </table>
           <div class="form-group"><br/></div>
         </div>
@@ -397,25 +237,6 @@
                           value="{{v.id}}">{{v.nameEn}}
                   </option>
                 </select>
-              </div>
-            </div>
-            <div class="form-group col-sm-10 ">
-              <label class="control-label col-sm-3">Type</label>
-              <div class="col-sm-9">
-                <select class="form-control" ng-model="request.typeId"
-                        required>
-                  <option ng-repeat="v in types"
-                          ng-selected="v.id === request.typeId"
-                          value="{{v.id}}">{{v.name}}
-                  </option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group col-sm-10 ">
-              <label class="control-label col-sm-3">Person Price</label>
-              <div class="col-sm-9">
-                <input type="text" ng-model="request.personPrice" required
-                       class="form-control input-sm">
               </div>
             </div>
             <div class="form-group col-sm-10 ">
@@ -567,22 +388,13 @@
           <div id="filter-panel" class="filter-panel">
             <div class="panel panel-default">
               <div class="panel-body">
-                <div class="form-group col-md-1">
+                <div class="form-group col-md-3">
                   <input type="text" class="form-control srch" ng-model="srchCase.id"
                          placeholder="ID">
                 </div>
                 <div class="form-group col-md-3">
                   <input type="text" class="form-control srch" ng-model="srchCase.nameEn"
                          placeholder="Name">
-                </div>
-                <div class="form-group col-md-2">
-                  <select class="form-control" ng-model="srchCase.typeId"
-                          ng-change="loadMainData()">
-                    <option value="" selected="selected">Type</option>
-                    <option ng-repeat="v in types" ng-selected="v === srchCase.typeId"
-                            value="{{v.id}}">{{v.name}}
-                    </option>
-                  </select>
                 </div>
                 <div class="form-group col-md-3">
                   <select class="form-control" ng-model="srchCase.placeId"
@@ -609,8 +421,7 @@
             <tr>
               <th>ID</th>
               <th>Name</th>
-              <th>Type</th>
-              <th>Person Price</th>
+              <th>Place</th>
               <th class="col-md-3 text-center">Action</th>
             </tr>
             </thead>
@@ -618,8 +429,7 @@
             <tr ng-repeat="r in list" ng-dblclick="handleDoubleClick(r.id)">
               <td>{{r.id}}</td>
               <td>{{r.nameEn}}</td>
-              <td>{{r.type.name}}</td>
-              <td>{{r.personPrice}}</td>
+              <td>{{r.place.nameEn}}</td>
               <td class="text-center">
                 <a ng-click="showDetails(r.id)" data-toggle="modal" title="Details"
                    data-target="#detailModal" class="btn btn-xs">

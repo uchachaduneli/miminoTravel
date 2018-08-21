@@ -37,6 +37,9 @@ public class GeoObjectDAO extends AbstractDAO {
         if (srchRequest.getTypeId() != null && srchRequest.getTypeId() > 0) {
             q.append(" and e.type.id ='").append(srchRequest.getTypeId()).append("'");
         }
+        if (srchRequest.getPlaceId() != null && srchRequest.getPlaceId() > 0) {
+            q.append(" and e.place.id ='").append(srchRequest.getPlaceId()).append("'");
+        }
         if (srchRequest.getNameEn() != null) {
             q.append(" and e.nameEn like '%").append(srchRequest.getNameEn()).append("%'");
         }

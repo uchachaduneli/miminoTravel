@@ -1,24 +1,15 @@
 package ge.mimino.travel.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import ge.mimino.travel.misc.JsonDateTimeSerializeSupport;
-import ge.mimino.travel.model.GeoObject;
+import ge.mimino.travel.model.Restaurant;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GeoObjectDTO {
+public class RestaurantDTO {
 
     private Integer id;
-    private Double personPrice;
-    private GeoObjectTypesDTO type;
     private PlaceDTO place;
     private Integer placeId;
-    private Integer typeId;
-    @JsonSerialize(using = JsonDateTimeSerializeSupport.class)
-    private Timestamp createDate;
-
     private String nameEn;
     private String nameGe;
     private String nameFr;
@@ -33,11 +24,10 @@ public class GeoObjectDTO {
     private String descriptionSp;
     private String descriptionPo;
     private String descriptionRu;
-    private List<String> images;
 
 
-    public static GeoObjectDTO parse(GeoObject record) {
-        GeoObjectDTO dto = new GeoObjectDTO();
+    public static RestaurantDTO parse(Restaurant record) {
+        RestaurantDTO dto = new RestaurantDTO();
         dto.setId(record.getId());
         dto.setNameEn(record.getNameEn());
         dto.setNameGe(record.getNameGe());
@@ -53,22 +43,26 @@ public class GeoObjectDTO {
         dto.setDescriptionSp(record.getDescriptionSp());
         dto.setDescriptionPo(record.getDescriptionPo());
         dto.setDescriptionRu(record.getDescriptionRu());
-        dto.setPersonPrice(record.getPersonPrice());
-        dto.setType(GeoObjectTypesDTO.parse(record.getType()));
-        dto.setTypeId(record.getType().getId());
-        dto.setCreateDate(record.getCreateDate());
         dto.setPlace(PlaceDTO.parse(record.getPlace()));
         dto.setPlaceId(record.getPlace().getId());
         return dto;
     }
 
 
-    public static List<GeoObjectDTO> parseToList(List<GeoObject> records) {
-        ArrayList<GeoObjectDTO> list = new ArrayList<GeoObjectDTO>();
-        for (GeoObject record : records) {
-            list.add(GeoObjectDTO.parse(record));
+    public static List<RestaurantDTO> parseToList(List<Restaurant> records) {
+        ArrayList<RestaurantDTO> list = new ArrayList<RestaurantDTO>();
+        for (Restaurant record : records) {
+            list.add(RestaurantDTO.parse(record));
         }
         return list;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public PlaceDTO getPlace() {
@@ -85,54 +79,6 @@ public class GeoObjectDTO {
 
     public void setPlaceId(Integer placeId) {
         this.placeId = placeId;
-    }
-
-    public List<String> getImages() {
-        return images;
-    }
-
-    public void setImages(List<String> images) {
-        this.images = images;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Double getPersonPrice() {
-        return personPrice;
-    }
-
-    public void setPersonPrice(Double personPrice) {
-        this.personPrice = personPrice;
-    }
-
-    public GeoObjectTypesDTO getType() {
-        return type;
-    }
-
-    public void setType(GeoObjectTypesDTO type) {
-        this.type = type;
-    }
-
-    public Integer getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(Integer typeId) {
-        this.typeId = typeId;
-    }
-
-    public Timestamp getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Timestamp createDate) {
-        this.createDate = createDate;
     }
 
     public String getNameEn() {

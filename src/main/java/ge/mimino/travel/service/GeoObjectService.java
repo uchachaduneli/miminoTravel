@@ -9,6 +9,7 @@ import ge.mimino.travel.dto.GeoObjectTypesDTO;
 import ge.mimino.travel.model.GeoObject;
 import ge.mimino.travel.model.GeoObjectImages;
 import ge.mimino.travel.model.GeoObjectTypes;
+import ge.mimino.travel.model.Place;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +51,7 @@ public class GeoObjectService {
         obj.setDescriptionSp(request.getDescriptionSp());
         obj.setDescriptionPo(request.getDescriptionPo());
         obj.setDescriptionRu(request.getDescriptionRu());
+        obj.setPlace((Place) geoObjectDAO.find(Place.class, request.getPlaceId()));
 
         if (request.getId() != null) {
             obj.setId(request.getId());

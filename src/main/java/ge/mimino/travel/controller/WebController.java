@@ -65,6 +65,11 @@ public class WebController {
         return "product";
     }
 
+    @RequestMapping("/restaurants")
+    public String restaurants() {
+        return "restaurants";
+    }
+
     @RequestMapping("/")
     public String defaultFnc() {
         return "";

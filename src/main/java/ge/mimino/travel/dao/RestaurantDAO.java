@@ -1,9 +1,8 @@
 package ge.mimino.travel.dao;
 
 
-import ge.mimino.travel.dto.PlaceDTO;
-import ge.mimino.travel.model.Place;
-import ge.mimino.travel.model.PlaceImages;
+import ge.mimino.travel.dto.RestaurantDTO;
+import ge.mimino.travel.model.Restaurant;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -16,7 +15,7 @@ import java.util.List;
  */
 
 @Repository
-public class PlaceDAO extends AbstractDAO {
+public class RestaurantDAO extends AbstractDAO {
 
     @PersistenceContext(unitName = "mimino")
     private EntityManager entityManager;
@@ -27,15 +26,15 @@ public class PlaceDAO extends AbstractDAO {
     }
 
 
-    public List<Place> getPlaces(int start, int limit, PlaceDTO srchRequest) {
+    public List<Restaurant> getRestaurants(int start, int limit, RestaurantDTO srchRequest) {
         StringBuilder q = new StringBuilder();
-        q.append("Select e From ").append(Place.class.getSimpleName()).append(" e Where 1=1 ");
+        q.append("Select e From ").append(Restaurant.class.getSimpleName()).append(" e Where 1=1 ");
 
         if (srchRequest.getId() != null && srchRequest.getId() > 0) {
             q.append(" and e.id ='").append(srchRequest.getId()).append("'");
         }
-        if (srchRequest.getRegionId() != null && srchRequest.getRegionId() > 0) {
-            q.append(" and e.region.id ='").append(srchRequest.getRegionId()).append("'");
+        if (srchRequest.getPlaceId() != null && srchRequest.getPlaceId() > 0) {
+            q.append(" and e.place.id ='").append(srchRequest.getPlaceId()).append("'");
         }
         if (srchRequest.getNameEn() != null) {
             q.append(" and e.nameEn like '%").append(srchRequest.getNameEn()).append("%'");
@@ -59,11 +58,8 @@ public class PlaceDAO extends AbstractDAO {
             q.append(" and e.nameRu like '%").append(srchRequest.getNameRu()).append("%'");
         }
 
-        TypedQuery<Place> query = entityManager.createQuery(q.toString(), Place.class);
+        TypedQuery<Restaurant> query = entityManager.createQuery(q.toString(), Restaurant.class);
         return query.setFirstResult(start).setMaxResults(limit).getResultList();
     }
 
-    public int removeImages(Integer id) {
-        return entityManager.createQuery("delete from " + PlaceImages.class.getSimpleName() + " c where c.placeId=" + id).executeUpdate();
-    }
 }

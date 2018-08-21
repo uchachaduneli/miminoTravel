@@ -43,4 +43,8 @@ public class MiscService {
         return LanguageDTO.parseToList(miscDAO.getAll(Language.class));
     }
 
+    public List<RegionDTO> getRegions() {
+        return RegionDTO.parseToList(miscDAO.getAll(Region.class));
+    }
+
 }

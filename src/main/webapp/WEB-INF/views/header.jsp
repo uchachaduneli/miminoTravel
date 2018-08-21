@@ -63,6 +63,8 @@
         $('#selected_item').text("Places(Towns, Districts, Resorts, etc.)");
       } else if (url.pathname.indexOf("nonstandarts") > -1) {
         $('#selected_item').text("Non Standart Services(Delica, Horse, ...)");
+      } else if (url.pathname.indexOf("restaurants") > -1) {
+        $('#selected_item').text("Restaurants");
       }
 
 
@@ -215,6 +217,12 @@
             <a class="menuItem" href="hotels">
               <i class="fa fa-bed"></i>
               <span>Hotels</span>
+            </a>
+          </li>
+          <li>
+            <a class="menuItem" href="restaurants">
+              <i class="fa fa-cutlery"></i>
+              <span>Restaurants</span>
             </a>
           </li>
           <li>

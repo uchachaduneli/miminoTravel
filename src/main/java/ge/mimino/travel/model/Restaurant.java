@@ -1,12 +1,10 @@
-package ge.mimino.travel.dto;
+package ge.mimino.travel.model;
 
-import ge.mimino.travel.model.Place;
+import javax.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class PlaceDTO {
-
+@Entity
+@Table(name = "restaurant", schema = "mimino")
+public class Restaurant {
     private Integer id;
     private String nameEn;
     private String nameGe;
@@ -22,57 +20,11 @@ public class PlaceDTO {
     private String descriptionSp;
     private String descriptionPo;
     private String descriptionRu;
-    private RegionDTO region;
-    private Integer regionId;
+    private Place place;
 
-
-    public static PlaceDTO parse(Place record) {
-        PlaceDTO dto = new PlaceDTO();
-        dto.setId(record.getId());
-        dto.setNameEn(record.getNameEn());
-        dto.setNameGe(record.getNameGe());
-        dto.setNameFr(record.getNameFr());
-        dto.setNameIt(record.getNameIt());
-        dto.setNameSp(record.getNameSp());
-        dto.setNamePo(record.getNamePo());
-        dto.setNameRu(record.getNameRu());
-        dto.setDescriptionEn(record.getDescriptionEn());
-        dto.setDescriptionGe(record.getDescriptionGe());
-        dto.setDescriptionFr(record.getDescriptionFr());
-        dto.setDescriptionIt(record.getDescriptionIt());
-        dto.setDescriptionSp(record.getDescriptionSp());
-        dto.setDescriptionPo(record.getDescriptionPo());
-        dto.setDescriptionRu(record.getDescriptionRu());
-        dto.setRegion(RegionDTO.parse(record.getRegion()));
-        dto.setRegionId(record.getRegion().getId());
-        return dto;
-    }
-
-
-    public static List<PlaceDTO> parseToList(List<Place> records) {
-        ArrayList<PlaceDTO> list = new ArrayList<PlaceDTO>();
-        for (Place record : records) {
-            list.add(PlaceDTO.parse(record));
-        }
-        return list;
-    }
-
-    public Integer getRegionId() {
-        return regionId;
-    }
-
-    public void setRegionId(Integer regionId) {
-        this.regionId = regionId;
-    }
-
-    public RegionDTO getRegion() {
-        return region;
-    }
-
-    public void setRegion(RegionDTO region) {
-        this.region = region;
-    }
-
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {
         return id;
     }
@@ -81,6 +33,8 @@ public class PlaceDTO {
         this.id = id;
     }
 
+    @Basic
+    @Column(name = "name_en")
     public String getNameEn() {
         return nameEn;
     }
@@ -89,6 +43,8 @@ public class PlaceDTO {
         this.nameEn = nameEn;
     }
 
+    @Basic
+    @Column(name = "name_ge")
     public String getNameGe() {
         return nameGe;
     }
@@ -97,6 +53,8 @@ public class PlaceDTO {
         this.nameGe = nameGe;
     }
 
+    @Basic
+    @Column(name = "name_fr")
     public String getNameFr() {
         return nameFr;
     }
@@ -105,6 +63,8 @@ public class PlaceDTO {
         this.nameFr = nameFr;
     }
 
+    @Basic
+    @Column(name = "name_it")
     public String getNameIt() {
         return nameIt;
     }
@@ -113,6 +73,8 @@ public class PlaceDTO {
         this.nameIt = nameIt;
     }
 
+    @Basic
+    @Column(name = "name_sp")
     public String getNameSp() {
         return nameSp;
     }
@@ -121,6 +83,8 @@ public class PlaceDTO {
         this.nameSp = nameSp;
     }
 
+    @Basic
+    @Column(name = "name_po")
     public String getNamePo() {
         return namePo;
     }
@@ -129,6 +93,8 @@ public class PlaceDTO {
         this.namePo = namePo;
     }
 
+    @Basic
+    @Column(name = "name_ru")
     public String getNameRu() {
         return nameRu;
     }
@@ -137,6 +103,8 @@ public class PlaceDTO {
         this.nameRu = nameRu;
     }
 
+    @Basic
+    @Column(name = "description_en")
     public String getDescriptionEn() {
         return descriptionEn;
     }
@@ -145,6 +113,8 @@ public class PlaceDTO {
         this.descriptionEn = descriptionEn;
     }
 
+    @Basic
+    @Column(name = "description_ge")
     public String getDescriptionGe() {
         return descriptionGe;
     }
@@ -153,6 +123,8 @@ public class PlaceDTO {
         this.descriptionGe = descriptionGe;
     }
 
+    @Basic
+    @Column(name = "description_fr")
     public String getDescriptionFr() {
         return descriptionFr;
     }
@@ -161,6 +133,8 @@ public class PlaceDTO {
         this.descriptionFr = descriptionFr;
     }
 
+    @Basic
+    @Column(name = "description_it")
     public String getDescriptionIt() {
         return descriptionIt;
     }
@@ -169,6 +143,8 @@ public class PlaceDTO {
         this.descriptionIt = descriptionIt;
     }
 
+    @Basic
+    @Column(name = "description_sp")
     public String getDescriptionSp() {
         return descriptionSp;
     }
@@ -177,6 +153,8 @@ public class PlaceDTO {
         this.descriptionSp = descriptionSp;
     }
 
+    @Basic
+    @Column(name = "description_po")
     public String getDescriptionPo() {
         return descriptionPo;
     }
@@ -185,11 +163,23 @@ public class PlaceDTO {
         this.descriptionPo = descriptionPo;
     }
 
+    @Basic
+    @Column(name = "description_ru")
     public String getDescriptionRu() {
         return descriptionRu;
     }
 
     public void setDescriptionRu(String descriptionRu) {
         this.descriptionRu = descriptionRu;
+    }
+
+    @JoinColumn(name = "place_id")
+    @OneToOne
+    public Place getPlace() {
+        return place;
+    }
+
+    public void setPlace(Place place) {
+        this.place = place;
     }
 }
