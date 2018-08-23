@@ -1,6 +1,7 @@
 package ge.mimino.travel.controller;
 
 import ge.mimino.travel.dto.RequestDTO;
+import ge.mimino.travel.dto.RequestMessageDTO;
 import ge.mimino.travel.dto.UsersDTO;
 import ge.mimino.travel.misc.Response;
 import ge.mimino.travel.request.AddRequest;
@@ -64,6 +65,12 @@ public class RequestController {
         return Response.withSuccess(requestService.getRequestDetails(id));
     }
 
+    @RequestMapping("/get-request-messages")
+    @ResponseBody
+    private Response getRequestMessages(@RequestParam Integer id) throws Exception {
+        return Response.withSuccess(requestService.getRequestMessages(id));
+    }
+
     @RequestMapping("/get-details")
     @ResponseBody
     private Response getDetails() throws Exception {
@@ -81,6 +88,13 @@ public class RequestController {
     @ResponseBody
     public Response saveUser(@RequestBody ProductRequest request) throws Exception {
         requestService.saveProduct(request);
+        return Response.ok();
+    }
+
+    @RequestMapping({"/save-message"})
+    @ResponseBody
+    public Response saveUser(@RequestBody RequestMessageDTO request) throws Exception {
+        requestService.saveMessage(request);
         return Response.ok();
     }
 

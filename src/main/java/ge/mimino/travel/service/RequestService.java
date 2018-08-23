@@ -88,6 +88,13 @@ public class RequestService {
         return obj;
     }
 
+    @Transactional(rollbackFor = Throwable.class)
+    public void saveMessage(RequestMessageDTO request) throws Exception {
+        RequestMessage msg = new RequestMessage();
+        msg.setRequestId(request.getRequestId());
+        msg.setUser((Users) requestDAO.find(Users.class, request.getUserId()));
+        requestDAO.create(msg);
+    }
 
     @Transactional(rollbackFor = Throwable.class)
     public void saveProduct(ProductRequest request) throws Exception {
@@ -146,6 +153,12 @@ public class RequestService {
         List<ParamValuePair> paramValues = new ArrayList<>();
         paramValues.add(new ParamValuePair("requestId", caseId));
         return RequestDetailsDTO.parseToList(requestDAO.getAllByParamValue(RequestDetails.class, paramValues, null));
+    }
+
+    public List<RequestMessageDTO> getRequestMessages(int id) {
+        List<ParamValuePair> paramValues = new ArrayList<>();
+        paramValues.add(new ParamValuePair("requestId", id));
+        return RequestMessageDTO.parseToList(requestDAO.getAllByParamValue(RequestMessage.class, paramValues, null));
     }
 
     public List<DetailsDTO> getDetails() {
