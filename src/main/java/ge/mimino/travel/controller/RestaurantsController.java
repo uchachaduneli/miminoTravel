@@ -44,4 +44,10 @@ public class RestaurantsController {
         restaurantService.delete(id);
         return Response.withSuccess(true);
     }
+
+    @RequestMapping("/get-restaurant-packages")
+    @ResponseBody
+    private Response getRestaurantPackages(@RequestParam Integer id) throws Exception {
+        return Response.withSuccess(restaurantService.getRestaurantPackages(id));
+    }
 }

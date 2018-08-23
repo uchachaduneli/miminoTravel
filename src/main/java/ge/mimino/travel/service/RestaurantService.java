@@ -1,14 +1,18 @@
 package ge.mimino.travel.service;
 
 
+import ge.mimino.travel.dao.ParamValuePair;
 import ge.mimino.travel.dao.RestaurantDAO;
 import ge.mimino.travel.dto.RestaurantDTO;
+import ge.mimino.travel.dto.RestaurantPackageDTO;
 import ge.mimino.travel.model.Place;
 import ge.mimino.travel.model.Restaurant;
+import ge.mimino.travel.model.RestaurantPackage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -52,6 +56,13 @@ public class RestaurantService {
             obj = (Restaurant) restaurantDAO.create(obj);
         }
 
+        restaurantDAO.removeRestaurantPackages(obj.getId());
+        if (request.getRestaurantPackages() != null && !request.getRestaurantPackages().isEmpty()) {
+            for (String pack : request.getRestaurantPackages()) {
+                restaurantDAO.create(new RestaurantPackage(obj.getId(), pack));
+            }
+        }
+
         return obj;
     }
 
@@ -61,6 +72,12 @@ public class RestaurantService {
         if (obj != null) {
             restaurantDAO.delete(obj);
         }
+    }
+
+    public List<RestaurantPackageDTO> getRestaurantPackages(int restaurantId) {
+        List<ParamValuePair> paramValues = new ArrayList<>();
+        paramValues.add(new ParamValuePair("restaurantId", restaurantId));
+        return RestaurantPackageDTO.parseToList(restaurantDAO.getAllByParamValue(RestaurantPackage.class, paramValues, null));
     }
 
 }

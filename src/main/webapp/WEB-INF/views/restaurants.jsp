@@ -13,8 +13,9 @@
     $scope.start = 0;
     $scope.page = 1;
     $scope.limit = "10";
-    $scope.request = {};
+    $scope.request = {restaurantPackages: []};
     $scope.srchCase = {};
+    $scope.packageRow = [1];
 
     $scope.loadMainData = function () {
       $('#loadingModal').modal('show');
@@ -56,6 +57,7 @@
         var selected = $filter('filter')($scope.list, {id: id}, true);
         $scope.slcted = selected[0];
         $scope.request = selected[0];
+        $scope.loadCaseDetailsList($scope.slcted.id);
       }
     }
 
@@ -63,6 +65,40 @@
       if (id != undefined) {
         var selected = $filter('filter')($scope.list, {id: id}, true);
         $scope.slcted = selected[0];
+        $scope.loadCaseDetailsList($scope.slcted.id);
+      }
+    };
+
+    $scope.loadCaseDetailsList = function (id) {
+
+      function getRestaurantPackages(res) {
+        $scope.packageRow = [];
+        $scope.request.restaurantPackages = [];
+        $scope.slcted.restPacks = [];
+
+        angular.forEach(res.data, function (v, k) {
+          $scope.packageRow.push(k + 1);
+          $scope.request.restaurantPackages.push(v.name);
+          $scope.slcted.restPacks.push(v.name);
+        });
+
+        if ($scope.request.restaurantPackages.length === 0) {
+          $scope.packageRow = [1];
+        }
+      }
+
+      ajaxCall($http, "restaurants/get-restaurant-packages?id=" + id, null, getRestaurantPackages);
+    }
+
+    $scope.addDynamicRow = function () {
+      var size = $scope.packageRow.length;
+      $scope.packageRow.push(size + 1);
+    };
+
+    $scope.removeRestaurantPackage = function (index) {
+      $scope.packageRow.splice(index, 1);
+      if ($scope.request.restaurantPackages) {
+        $scope.request.restaurantPackages.splice(index, 1);
       }
     };
 
@@ -72,7 +108,7 @@
     };
 
     $scope.init = function () {
-      $scope.request = {types: []};
+      $scope.request = {restaurantPackages: []};
     };
 
     $scope.save = function () {
@@ -87,7 +123,7 @@
         }
       }
 
-      $scope.req = {};
+      $scope.req = {restaurantPackages: []};
 
       $scope.req.id = $scope.request.id;
       $scope.req.nameEn = $scope.request.nameEn;
@@ -105,6 +141,10 @@
       $scope.req.descriptionPo = $scope.request.descriptionPo;
       $scope.req.descriptionRu = $scope.request.descriptionRu;
       $scope.req.placeId = $scope.request.placeId;
+
+      angular.forEach($scope.request.restaurantPackages, function (v) {
+        $scope.req.restaurantPackages.push(v);
+      });
 
       console.log(angular.toJson($scope.req));
       ajaxCall($http, "restaurants/save", angular.toJson($scope.req), resFunc);
@@ -205,6 +245,16 @@
             <tr>
               <th class="text-right">Description Russian</th>
               <td>{{slcted.descriptionRu}}</td>
+            </tr>
+            <tr>
+              <th class="text-right">Packages</th>
+              <td>
+                <ul>
+                  <li ng-repeat="item in slcted.restPacks track by $index">
+                    {{item}}
+                  </li>
+                </ul>
+              </td>
             </tr>
           </table>
           <div class="form-group"><br/></div>
@@ -342,6 +392,29 @@
                 <textarea rows="5" cols="10" ng-model="request.descriptionRu"
                           name="source" required class="form-control input-sm">
                 </textarea>
+              </div>
+            </div>
+            <div class="form-group col-sm-10">
+              <label class="control-label col-sm-3">Packages</label>
+              <div class="col-sm-9">
+                <div class="form-group" ng-repeat="r in packageRow">
+                  <div class="col-sm-11">
+                    <input ng-model="request.restaurantPackages[r-1]" type="text"
+                           placeholder="Package Desc" class="form-control input-sm"/>
+                  </div>
+                  <div class="col-sm-1">
+                    <div class="col-md-1" ng-show="$index == 0">
+                      <a class="btn btn-sm row" style="vertical-align: bottom;">
+                        <span class="fa fa-plus" ng-click="addDynamicRow()"></span>
+                      </a>
+                    </div>
+                    <div class="col-md-1" ng-show="$index > 0">
+                      <a class="btn btn-sm row">
+                        <span class="fa fa-trash" ng-click="removeRestaurantPackage($index)"></span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="form-group col-sm-10"></div>
