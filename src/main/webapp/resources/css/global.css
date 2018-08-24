@@ -179,7 +179,7 @@ input[type="radio"] {
 
 .outgoing_msg {
     overflow: hidden;
-    margin: 26px 0 26px;
+    /*margin: 26px 0 26px;*/
 }
 
 .sent_msg {
@@ -210,7 +210,7 @@ input[type="radio"] {
     font-size: 17px;
     height: 33px;
     position: absolute;
-    right: 0;
+    right: 10px;
     top: 11px;
     width: 33px;
 }
