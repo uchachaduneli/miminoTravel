@@ -65,7 +65,7 @@ public class RequestController {
         return Response.withSuccess(requestService.getRequestDetails(id));
     }
 
-    @RequestMapping("/get-request-messages")
+    @RequestMapping("/get-requests-messages")
     @ResponseBody
     private Response getRequestMessages(@RequestParam Integer id) throws Exception {
         return Response.withSuccess(requestService.getRequestMessages(id));

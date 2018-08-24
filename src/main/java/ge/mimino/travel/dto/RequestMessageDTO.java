@@ -1,7 +1,7 @@
 package ge.mimino.travel.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import ge.mimino.travel.misc.JsonDateSerializeSupport;
+import ge.mimino.travel.misc.JsonGeoDateTimeSerializeSupport;
 import ge.mimino.travel.model.RequestMessage;
 
 import java.sql.Timestamp;
@@ -15,7 +15,7 @@ public class RequestMessageDTO {
     private String message;
     private UsersDTO user;
     private Integer userId;
-    @JsonSerialize(using = JsonDateSerializeSupport.class)
+    @JsonSerialize(using = JsonGeoDateTimeSerializeSupport.class)
     private Timestamp createDate;
 
 

@@ -181,6 +181,14 @@
 
       ajaxCall($http, "requests/get-requests-countries?id=" + id, null, getCaseCountries);
 
+
+      function getCaseMessages(res) {
+        $scope.messages = res.data;
+        console.log(res.data);
+      }
+
+      ajaxCall($http, "requests/get-requests-messages?id=" + id, null, getCaseMessages);
+
       function getCaseDetailes(res) {
         $scope.slcted.details = res.data;
         angular.forEach($scope.slcted.details, function (v) {
@@ -447,7 +455,41 @@
               <td>{{slcted.createDate}}</td>
             </tr>
           </table>
-          <div class="form-group"><br/></div>
+          <div class="form-group"><br/>
+
+            <div class="messaging">
+              <div class="mesgs col-md-12">
+                <div class="msg_history">
+                  <div ng-repeat="m in messages">
+                    <div class="received_msg" ng-if="$index %2 == 0">
+                      <span class="time_date"> {{m.user.userDesc}}</span>
+                      <p>{{m.message}}</p>
+                      <span class="time_date"> {{m.createDate}}</span>
+                    </div>
+
+                    <div class="outgoing_msg" ng-if="$index %2 > 0">
+                      <div class="sent_msg">
+                        <span class="time_date"> {{m.user.userDesc}}</span>
+                        <p>{{m.message}}</p>
+                        <span class="time_date"> {{m.createDate}}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <br/>
+                <div class="type_msg">
+                  <div class="input_msg_write">
+                    <input type="text" class="write_msg" placeholder="Type a message"/>
+                    <button class="msg_send_btn" type="button">
+                      <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="form-group"><br/><br/><br/></div>
         </div>
       </div>
     </div>
