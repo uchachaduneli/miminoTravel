@@ -103,7 +103,7 @@
       $scope.req.userDesc = $scope.request.userDesc;
       $scope.req.userName = $scope.request.userName;
       $scope.req.userPassword = $scope.request.userPassword;
-      $scope.req.typeId = $scope.request.type == undefined ? $scope.request.typeId : $scope.request.type.userTypeId;
+      $scope.req.typeId = $scope.request.typeId;
       $scope.req.deleted = $scope.request.deleted;
       $scope.req.email = $scope.request.email;
       $scope.req.emailPassword = $scope.request.emailPassword;

@@ -15,6 +15,7 @@ public class UsersDTO {
     private String userName;
     private String userPassword;
     private UsersTypeDTO type;
+    private Integer typeId;
     private Integer deleted;
     private String email;
     private String emailPassword;
@@ -41,6 +42,7 @@ public class UsersDTO {
             dto.setEmail(record.getEmail());
             dto.setEmailPassword(record.getEmailPassword());
             dto.setType(UsersTypeDTO.parse(record.getType()));
+            dto.setTypeId(record.getType().getUserTypeId());
             dto.setDeleted(record.getDeleted());
             dto.setCreateDate(record.getCreateDate());
             return dto;
@@ -53,6 +55,70 @@ public class UsersDTO {
             list.add(UsersDTO.parse(record));
         }
         return list;
+    }
+
+    public static int getADMINISTRATOR() {
+        return ADMINISTRATOR;
+    }
+
+    public static void setADMINISTRATOR(int ADMINISTRATOR) {
+        UsersDTO.ADMINISTRATOR = ADMINISTRATOR;
+    }
+
+    public static int getComunicationManager() {
+        return COMUNICATION_MANAGER;
+    }
+
+    public static void setComunicationManager(int comunicationManager) {
+        COMUNICATION_MANAGER = comunicationManager;
+    }
+
+    public static int getProductManager() {
+        return PRODUCT_MANAGER;
+    }
+
+    public static void setProductManager(int productManager) {
+        PRODUCT_MANAGER = productManager;
+    }
+
+    public static int getFinancialManager() {
+        return FINANCIAL_MANAGER;
+    }
+
+    public static void setFinancialManager(int financialManager) {
+        FINANCIAL_MANAGER = financialManager;
+    }
+
+    public static int getReservationManager() {
+        return RESERVATION_MANAGER;
+    }
+
+    public static void setReservationManager(int reservationManager) {
+        RESERVATION_MANAGER = reservationManager;
+    }
+
+    public static int getDELETED() {
+        return DELETED;
+    }
+
+    public static void setDELETED(int DELETED) {
+        UsersDTO.DELETED = DELETED;
+    }
+
+    public static int getACTIVE() {
+        return ACTIVE;
+    }
+
+    public static void setACTIVE(int ACTIVE) {
+        UsersDTO.ACTIVE = ACTIVE;
+    }
+
+    public Integer getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(Integer typeId) {
+        this.typeId = typeId;
     }
 
     public Integer getUserId() {

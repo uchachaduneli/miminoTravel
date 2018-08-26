@@ -93,7 +93,8 @@ public class RequestController {
 
     @RequestMapping({"/save-message"})
     @ResponseBody
-    public Response saveUser(@RequestBody RequestMessageDTO request) throws Exception {
+    public Response saveUser(@RequestBody RequestMessageDTO request, HttpServletRequest servletRequest) throws Exception {
+        request.setUserId((Integer) servletRequest.getSession().getAttribute("userId"));
         requestService.saveMessage(request);
         return Response.ok();
     }

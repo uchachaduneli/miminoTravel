@@ -92,6 +92,7 @@ public class RequestService {
     public void saveMessage(RequestMessageDTO request) throws Exception {
         RequestMessage msg = new RequestMessage();
         msg.setRequestId(request.getRequestId());
+        msg.setMessage(request.getMessage());
         msg.setUser((Users) requestDAO.find(Users.class, request.getUserId()));
         requestDAO.create(msg);
     }

@@ -58,6 +58,7 @@
     $scope.page = 1;
     $scope.limit = "10";
     $scope.request = {countries: [], details: [], combined: 2};
+    $scope.message = {};
     $scope.srchCase = {};
     $scope.countryRow = [1];
 //        $scope.request.docs = [];
@@ -161,6 +162,15 @@
       }
     };
 
+    $scope.getMessages = function (id) {
+      function getCaseMessages(res) {
+        $scope.messages = res.data;
+        console.log(res.data);
+      }
+
+      ajaxCall($http, "requests/get-requests-messages?id=" + id, null, getCaseMessages);
+    }
+
     $scope.loadCaseDetailsList = function (id) {
       function getCaseCountries(res) {
         $scope.slcted.countries = res.data;
@@ -179,15 +189,8 @@
         }
       }
 
+      $scope.getMessages(id);
       ajaxCall($http, "requests/get-requests-countries?id=" + id, null, getCaseCountries);
-
-
-      function getCaseMessages(res) {
-        $scope.messages = res.data;
-        console.log(res.data);
-      }
-
-      ajaxCall($http, "requests/get-requests-messages?id=" + id, null, getCaseMessages);
 
       function getCaseDetailes(res) {
         $scope.slcted.details = res.data;
@@ -270,6 +273,26 @@
 
       console.log(angular.toJson($scope.req));
       ajaxCall($http, "requests/save", angular.toJson($scope.req), resFunc);
+    };
+
+    $scope.sendMessage = function () {
+
+      function resFunc(res) {
+        if (res.errorCode == 0) {
+          successMsg('Operation Successfull');
+          $scope.getMessages($scope.slcted.id);
+          $scope.message = {};
+        } else {
+          errorMsg('Operation Failed');
+        }
+      }
+
+      $scope.req = {};
+      $scope.req.requestId = $scope.slcted.id;
+      $scope.req.message = $scope.message.msg;
+
+      console.log(angular.toJson($scope.req));
+      ajaxCall($http, "requests/save-message", angular.toJson($scope.req), resFunc);
     };
 
 
@@ -479,8 +502,9 @@
                 <br/>
                 <div class="type_msg">
                   <div class="input_msg_write">
-                    <input type="text" style="padding-left: 10px" class="write_msg" placeholder="Type a message"/>
-                    <button class="msg_send_btn" type="button">
+                    <input type="text" style="padding-left: 10px" class="write_msg" ng-model="message.msg"
+                           placeholder="Type a message"/>
+                    <button class="msg_send_btn" type="button" ng-click="sendMessage()">
                       <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
                     </button>
                   </div>
