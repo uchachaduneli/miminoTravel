@@ -2,10 +2,13 @@ package ge.mimino.travel.service;
 
 
 import ge.mimino.travel.dao.MailDAO;
+import ge.mimino.travel.dao.ParamValuePair;
+import ge.mimino.travel.dto.EmailAttachmentsDTO;
 import ge.mimino.travel.dto.EmailDTO;
 import ge.mimino.travel.dto.EmailFolderDTO;
 import ge.mimino.travel.dto.UsersDTO;
 import ge.mimino.travel.model.Email;
+import ge.mimino.travel.model.EmailAttachments;
 import ge.mimino.travel.model.EmailFolders;
 import ge.mimino.travel.model.Users;
 import ge.mimino.travel.request.MailRequest;
@@ -314,5 +317,11 @@ public class MailService {
         public PasswordAuthentication getPasswordAuthentication() {
             return new PasswordAuthentication(login, password);
         }
+    }
+
+    public List<EmailAttachmentsDTO> getEmailAttachments(Integer id) {
+        List<ParamValuePair> criteria = new ArrayList<>();
+        criteria.add(new ParamValuePair("emailId", id));
+        return EmailAttachmentsDTO.parseToList(mailDAO.getAllByParamValue(EmailAttachments.class, criteria, null));
     }
 }

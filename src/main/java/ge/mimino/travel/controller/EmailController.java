@@ -48,8 +48,14 @@ public class EmailController {
 
     @RequestMapping("/add-attachment")
     @ResponseBody
-    private Response addImage(@RequestParam("file") MultipartFile file) throws IOException {
-        return Response.withSuccess(fileService.addFile(file, "attachments", ""));
+    private Response addImage(@RequestParam("file") MultipartFile file, @RequestParam String id) throws IOException {
+        return Response.withSuccess(fileService.addFile(file, "attachments", id));
+    }
+
+    @RequestMapping("/get-attachment")
+    @ResponseBody
+    private Response getHotelImages(@RequestParam Integer id) throws Exception {
+        return Response.withSuccess(mailService.getEmailAttachments(id));
     }
 
 }

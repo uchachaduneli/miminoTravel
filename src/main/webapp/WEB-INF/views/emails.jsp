@@ -30,6 +30,8 @@
     $scope.page = 1;
     $scope.limit = "10";
     $scope.srchCase = {};
+    $scope.fileNames = [];
+    $scope.attachmentNames = [];
 
     $scope.loadMainData = function () {
       $('#loadingModal').modal('show');
@@ -109,9 +111,13 @@
     $scope.uploadFiles = function (files) {
       $scope.files = files;
       angular.forEach(files, function (file) {
+
+        $scope.slcted.images.push({name: 'hotel' + $scope.slcted.id + '_' + file.name});
+        $scope.imageNames.push('hotel' + $scope.slcted.id + '_' + file.name);
+
         if (file && !file.$error) {
           file.upload = Upload.upload({
-            url: 'emails/add-attachment',
+            url: 'emails/add-attachment?id=hotel' + $scope.slcted.id,
             file: file
           });
 
@@ -127,23 +133,31 @@
       });
       console.log($scope.files);
     }
+
+//    $scope.saveImages = function () {
+//      function onImageSave(res) {
+//        if (res.errorCode == 0) {
+//          successMsg('Operation Successfull');
+//          closeModal('imageModal');
+//        } else {
+//          errorMsg('Operation Failed');
+//        }
+//      }
+//
+//      angular.forEach($scope.slcted.images, function (v) {
+//        var index = $scope.imageNames.indexOf(v.name);
+//        if (index < 0) {
+//          $scope.imageNames.push(v.name);
+//        }
+//      });
+//
+//      console.log(angular.toJson($scope.imageNames));
+//
+//      ajaxCall($http, "hotels/save-images?id=" + $scope.slcted.id, angular.toJson($scope.imageNames), onImageSave);
+//    };
   }]);
 
 </script>
-
-<button type="file" ngf-select="uploadFiles($files)" ng-model="files" multiple
-        accept="*/*" ngf-max-size="30MB">
-  Select Files
-</button>
-<br>
-Files:
-<ul>
-  <li ng-repeat="f in files">{{f.name}} {{f.$error}} {{f.$errorParam}}
-  </li>
-</ul>
-{{errorMsg}}
-
-<br><br><br><br>
 
 <div class="modal fade bs-example-modal-lg not-printable" id="editModal" role="dialog" aria-labelledby="editModalLabel"
      aria-hidden="true">
@@ -173,17 +187,30 @@ Files:
             <div class="form-group col-sm-10 ">
               <label class="control-label col-sm-3">Attachments</label>
               <div class="col-sm-9">
-                <textarea cols="5" rows="5" type="text" ng-model="request.content" name="info" required
-                          class="form-control input-sm"> </textarea>
+                <ul>
+                  <li ng-repeat="item in slcted.attachmentNames">
+                    <a href="misc/get-file?name=attachments/{{item.name.split('.')[0]}}"
+                       target="_blank">{{item.name}}</a>
+                  </li>
+                </ul>
               </div>
             </div>
-            <%--<div class="form-group col-sm-10">--%>
-            <%--<ul>--%>
-            <%--<li ng-repeat="item in request.attachments">--%>
-            <%--<a href="misc/get-file?name=attachments/{{item.split('.')[0].trim()}}" target="_blank">{{item}}</a>--%>
-            <%--</li>--%>
-            <%--</ul>--%>
-            <%--</div>--%>
+            <div class="form-group col-sm-10 ">
+              <label class="control-label col-sm-3">Images</label>
+              <div class="col-sm-9">
+                <div class="input-group input-file">
+                  <input type="text" id="uploadDocNameInput" class="form-control"
+                         onclick="$('#documentId').trigger('click');"
+                         placeholder='Choose files...'/>
+                  <span class="input-group-btn">
+                    <button class="btn btn-default btn-choose" id="documentId"
+                            type="file" ngf-select="uploadFiles($files)" ng-model="files" multiple
+                            accept="*/*" ngf-max-size="30MB">
+                      Browse</button>
+    		           </span>
+                </div>
+              </div>
+            </div>
             <div class="form-group col-sm-10"></div>
             <div class="form-group col-sm-12 text-center">
               <a class="btn btn-app" ng-click="save()">
