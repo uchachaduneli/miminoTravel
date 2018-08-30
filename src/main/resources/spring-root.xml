@@ -76,8 +76,8 @@
     </bean>
 
     <bean name="fileService" class="ge.mimino.travel.service.FileService">
-        <property name="rootDir" value="/usr/binaries/tomcat9/webapps/ROOT/"/>
-        <!--<property name="rootDir" value="C:/Users/home/Desktop/"/>-->
+        <!--<property name="rootDir" value="/usr/binaries/tomcat9/webapps/ROOT/"/>-->
+        <property name="rootDir" value="C:/Users/home/Desktop/"/>
         <!--<property name="rootDir" value="C:/Users/ME/Desktop/"/>-->
     </bean>
 

@@ -2,7 +2,6 @@ package ge.mimino.travel.model;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Objects;
 
 @Entity
 @Table(name = "email")
@@ -99,7 +98,7 @@ public class Email {
     }
 
     @Basic
-    @Column(name = "receive_date")
+    @Column(name = "receive_date", nullable = true)
     public Timestamp getReceiveDate() {
         return receiveDate;
     }
@@ -129,7 +128,7 @@ public class Email {
     }
 
     @Basic
-    @Column(name = "uid")
+    @Column(name = "uid", nullable = true)
     public String getUid() {
         return uid;
     }

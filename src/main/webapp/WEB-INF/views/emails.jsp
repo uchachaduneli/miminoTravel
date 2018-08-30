@@ -23,12 +23,23 @@
     }).on('changeDate', function (ev) {
     });
 
+    $('#ccInputId').blur(function () {
+      $('#ccInputId').val($('#ccInputId').val() + ';');
+    });
+
+    $('#ccInputId').keypress(function (e) {
+      if (e.keyCode == 0 || e.keyCode == 32) {
+        $('#ccInputId').val($('#ccInputId').val() + ';');
+      }
+    });
+
   });
 
   app.controller("angController", ['$scope', '$http', '$filter', '$window', 'Upload', '$timeout', function ($scope, $http, $filter, $window, Upload, $timeout) {
     $scope.start = 0;
     $scope.page = 1;
     $scope.limit = "10";
+    $scope.request = {};
     $scope.srchCase = {};
     $scope.fileNames = [];
     $scope.attachmentNames = [];
@@ -53,6 +64,50 @@
     }
 
     $scope.loadMainData();
+
+    $scope.reply = function (obj) {
+      $scope.request.to = obj.from;
+      $scope.request.reply = obj.from;
+    }
+
+    $scope.sendMail = function () {
+      function resFunc(res) {
+        $('#loadingModal').modal('hide');
+        if (res.errorCode == 0) {
+          successMsg('Operation Successfull');
+          $scope.loadMainData();
+          closeModal('editModal');
+        } else {
+          errorMsg('Operation Failed');
+        }
+      }
+
+      $scope.req = {};
+
+      if ($scope.attachmentNames.length > 0) {
+        $scope.req.attachments = '';
+        angular.forEach($scope.attachmentNames, function (v) {
+          if (v !== false) {
+            $scope.req.attachments += v + ';';
+          }
+        });
+      }
+
+      $scope.req.to = $scope.request.to;
+      $scope.req.cc = $scope.request.cc;
+      $scope.req.reply = $scope.request.reply;
+      $scope.req.subject = $scope.request.subject;
+      $scope.req.content = $scope.request.content;
+
+      console.log(angular.toJson($scope.req));
+      ajaxCall($http, "emails/send", angular.toJson($scope.req), resFunc);
+      $('#loadingModal').modal('show');
+    }
+
+    $scope.init = function () {
+      $scope.request = {};
+      $scope.attachmentNames = [];
+    };
 
     function getUsers(res) {
       $scope.users = res.data;
@@ -112,12 +167,11 @@
       $scope.files = files;
       angular.forEach(files, function (file) {
 
-        $scope.slcted.images.push({name: 'hotel' + $scope.slcted.id + '_' + file.name});
-        $scope.imageNames.push('hotel' + $scope.slcted.id + '_' + file.name);
+        $scope.attachmentNames.push(file.name);
 
         if (file && !file.$error) {
           file.upload = Upload.upload({
-            url: 'emails/add-attachment?id=hotel' + $scope.slcted.id,
+            url: 'emails/add-attachment',
             file: file
           });
 
@@ -131,31 +185,10 @@
           });
         }
       });
-      console.log($scope.files);
+      console.log($scope.attachmentNames);
     }
-
-//    $scope.saveImages = function () {
-//      function onImageSave(res) {
-//        if (res.errorCode == 0) {
-//          successMsg('Operation Successfull');
-//          closeModal('imageModal');
-//        } else {
-//          errorMsg('Operation Failed');
-//        }
-//      }
-//
-//      angular.forEach($scope.slcted.images, function (v) {
-//        var index = $scope.imageNames.indexOf(v.name);
-//        if (index < 0) {
-//          $scope.imageNames.push(v.name);
-//        }
-//      });
-//
-//      console.log(angular.toJson($scope.imageNames));
-//
-//      ajaxCall($http, "hotels/save-images?id=" + $scope.slcted.id, angular.toJson($scope.imageNames), onImageSave);
-//    };
   }]);
+
 
 </script>
 
@@ -172,9 +205,21 @@
         <div class="row">
           <form class="form-horizontal" name="ediFormName">
             <div class="form-group col-sm-10 ">
-              <label class="control-label col-sm-3">To, Cc</label>
+              <label class="control-label col-sm-3">To</label>
               <div class="col-sm-9">
-                <input type="text" ng-model="request.to" class="form-control input-sm">
+                <input type="email" ng-model="request.to" class="form-control input-sm">
+              </div>
+            </div>
+            <div class="form-group col-sm-10 ">
+              <label class="control-label col-sm-3">Cc</label>
+              <div class="col-sm-9">
+                <input type="text" ng-model="request.cc" id="ccInputId" class="form-control input-sm">
+              </div>
+            </div>
+            <div class="form-group col-sm-10 ">
+              <label class="control-label col-sm-3">Subject</label>
+              <div class="col-sm-9">
+                <input type="text" ng-model="request.subject" class="form-control input-sm">
               </div>
             </div>
             <div class="form-group col-sm-10 ">
@@ -185,18 +230,7 @@
               </div>
             </div>
             <div class="form-group col-sm-10 ">
-              <label class="control-label col-sm-3">Attachments</label>
-              <div class="col-sm-9">
-                <ul>
-                  <li ng-repeat="item in slcted.attachmentNames">
-                    <a href="misc/get-file?name=attachments/{{item.name.split('.')[0]}}"
-                       target="_blank">{{item.name}}</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="form-group col-sm-10 ">
-              <label class="control-label col-sm-3">Images</label>
+              <label class="control-label col-sm-3">Attach file</label>
               <div class="col-sm-9">
                 <div class="input-group input-file">
                   <input type="text" id="uploadDocNameInput" class="form-control"
@@ -211,10 +245,21 @@
                 </div>
               </div>
             </div>
+            <div class="form-group col-sm-10 ">
+              <label class="control-label col-sm-3">Attachments</label>
+              <div class="col-sm-9">
+                <ul style="min-height: 30px; border: 1px solid #d2d6de;">
+                  <li ng-repeat="item in attachmentNames">
+                    <a href="misc/get-file?name=attachments/{{item.name.split('.')[0]}}"
+                       target="_blank">{{item}}</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
             <div class="form-group col-sm-10"></div>
             <div class="form-group col-sm-12 text-center">
-              <a class="btn btn-app" ng-click="save()">
-                <i class="fa fa-save"></i> Save
+              <a class="btn btn-app" ng-click="sendMail()">
+                <i class="fa fa-send"></i> Send
               </a>
             </div>
 
@@ -429,6 +474,10 @@
                 <a ng-click="showDetails(r.id)" data-toggle="modal" title="Details"
                    data-target="#detailModal" class="btn btn-xs">
                   <i class="fa fa-sticky-note-o"></i>&nbsp; Details
+                </a>&nbsp;&nbsp;
+                <a ng-click="reply(r)" data-toggle="modal" title="Reply"
+                   data-target="#editModal" class="btn btn-xs">
+                  <i class="fa fa-reply-all"></i>&nbsp; Reply
                 </a>&nbsp;&nbsp;
               </td>
             </tr>

@@ -46,6 +46,9 @@ public class MailService {
     @Autowired
     private UsersService userService;
 
+    @Autowired
+    private FileService fileService;
+
 
     public List<EmailDTO> getEmails(int start, int limit, MailRequest srchRequest) throws ParseException {
         return EmailDTO.parseToList(mailDAO.getEMails(start, limit, srchRequest));
@@ -108,8 +111,9 @@ public class MailService {
         return mbp;
     }
 
-    public boolean sendEmail(String senderEmail, String senderPass, List<String> to, String reply,
-                             List<String> filePaths, String subject, String text) {
+    @Transactional(rollbackFor = Throwable.class)
+    public boolean sendEmail(String senderEmail, String senderPass, String to, List<String> cc, String reply,
+                             List<String> filePaths, String subject, String text, String attachmentsAsStr, Users user) throws Exception {
         boolean result = false;
 
         Properties properties = new Properties();
@@ -121,40 +125,47 @@ public class MailService {
                 "javax.net.ssl.SSLSocketFactory");
 
         MimeMessage message;
-        try {
+        Authenticator auth = new EmailAuthenticator(senderEmail, senderPass);
+        Session session = Session.getDefaultInstance(properties, auth);
+        session.setDebug(false);
 
-            Authenticator auth = new EmailAuthenticator(senderEmail, senderPass);
-            Session session = Session.getDefaultInstance(properties, auth);
-            session.setDebug(false);
+        InternetAddress email_from = new InternetAddress(senderEmail);
+        InternetAddress email_to = new InternetAddress(to);
+        InternetAddress reply_to = (reply != null) ? new InternetAddress(reply) : null;
 
-            InternetAddress email_from = new InternetAddress(senderEmail);
-            InternetAddress email_to = new InternetAddress(to.get(0));
-            InternetAddress reply_to = (reply != null) ? new InternetAddress(reply) : null;
+        message = new MimeMessage(session);
+        message.setFrom(email_from);
+        message.setRecipient(Message.RecipientType.TO, email_to);
+        message.setSubject(subject);
 
-            message = new MimeMessage(session);
-            message.setFrom(email_from);
-            message.setRecipient(Message.RecipientType.TO, email_to);
-            message.setSubject(subject);
-
-            if (reply_to != null) {
-                message.setReplyTo(new Address[]{reply_to});
+        if (!cc.isEmpty()) {
+            for (String c : cc) {
+                message.addRecipient(Message.RecipientType.CC, new InternetAddress(c.replace(";", "")));
             }
+        }
 
-            Multipart mmp = new MimeMultipart();
-            MimeBodyPart bodyPart = new MimeBodyPart();
-            bodyPart.setContent(text, "text/plain; charset=utf-8");
-            mmp.addBodyPart(bodyPart);
+        if (reply_to != null) {
+            message.setReplyTo(new Address[]{reply_to});
+        }
 
-            if (!filePaths.isEmpty()) {
-                MimeBodyPart mbr = createFileAttachment(filePaths.get(0));
+        Multipart mmp = new MimeMultipart();
+        MimeBodyPart bodyPart = new MimeBodyPart();
+        bodyPart.setContent(text, "text/plain; charset=utf-8");
+        mmp.addBodyPart(bodyPart);
+
+        if (!filePaths.isEmpty()) {
+            for (String path : filePaths) {
+                MimeBodyPart mbr = createFileAttachment(fileService.getFileFullPath("attachments/_" + path));
                 mmp.addBodyPart(mbr);
             }
-            message.setContent(mmp);
-            Transport.send(message);
-            result = true;
-        } catch (MessagingException e) {
-            System.err.println(e.getMessage());
         }
+        message.setContent(mmp);
+        Transport.send(message);
+        result = true;
+        EmailFolders emailFolder = (EmailFolders) mailDAO.find(EmailFolders.class, 2);//Sent -ია 2 აიდიზე
+        mailDAO.create(new Email(senderEmail, to, subject, new Timestamp(new Date().getTime()),
+                null, text, attachmentsAsStr.replaceAll(";", ""), null, user, emailFolder));
+
         return result;
     }
 

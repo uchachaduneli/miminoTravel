@@ -12,8 +12,11 @@ public class EmailDTO {
 
     private Integer id;
     private UsersDTO user;
+    private Integer userId;
     private String from;
+    private String reply;
     private String to;
+    private String cc;
     private String subject;
     @JsonSerialize(using = JsonDateTimeSerializeSupport.class)
     private Date sendDate;
@@ -47,6 +50,30 @@ public class EmailDTO {
             list.add(EmailDTO.parse(record));
         }
         return list;
+    }
+
+    public String getCc() {
+        return cc;
+    }
+
+    public void setCc(String cc) {
+        this.cc = cc;
+    }
+
+    public String getReply() {
+        return reply;
+    }
+
+    public void setReply(String reply) {
+        this.reply = reply;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public Integer getId() {

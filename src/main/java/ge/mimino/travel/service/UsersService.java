@@ -40,6 +40,17 @@ public class UsersService {
         return UserLanguagesDTO.parseToList(userDAO.getAllByParamValue(UserLanguages.class, paramValues, null));
     }
 
+    public Users getUserById(int id) {
+        List<ParamValuePair> paramValues = new ArrayList<>();
+        paramValues.add(new ParamValuePair("userId", id));
+        List<Users> res = userDAO.getAllByParamValue(Users.class, paramValues, null);
+        if (res.isEmpty()) {
+            return null;
+        } else {
+            return res.get(0);
+        }
+    }
+
     @Transactional(rollbackFor = Throwable.class)
     public Users saveUser(AddUserRequest request) throws Exception {
 
