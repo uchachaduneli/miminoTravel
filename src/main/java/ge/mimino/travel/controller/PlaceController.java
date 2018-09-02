@@ -36,6 +36,12 @@ public class PlaceController {
         return Response.withSuccess(placeService.getPlaces(start, limit, request));
     }
 
+    @RequestMapping("/get-places-by-region")
+    @ResponseBody
+    private Response getPlaces(@RequestBody List<Integer> ids) throws Exception {
+        return Response.withSuccess(placeService.getPlacesByRegion(ids));
+    }
+
     @RequestMapping({"/save"})
     @ResponseBody
     public Response saveUser(@RequestBody PlaceDTO request) throws Exception {

@@ -66,4 +66,11 @@ public class HotelDAO extends AbstractDAO {
     public int removeImages(Integer id) {
         return entityManager.createQuery("delete from " + HotelImages.class.getSimpleName() + " c where c.hotelId=" + id).executeUpdate();
     }
+
+    public List<Hotel> getHotelsByPlaces(List<Integer> placeIds) {
+        TypedQuery<Hotel> query = getEntityManager().createQuery("select c from " + Hotel.class.getSimpleName()
+                + " c where c.place.id in :listOfIds", Hotel.class);
+        query.setParameter("listOfIds", placeIds);
+        return query.getResultList();
+    }
 }

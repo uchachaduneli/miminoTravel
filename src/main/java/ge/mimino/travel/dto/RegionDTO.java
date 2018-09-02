@@ -9,6 +9,7 @@ public class RegionDTO {
 
     private Integer id;
     private String name;
+    private boolean selected;
 
 
     public static RegionDTO parse(Region record) {
@@ -41,5 +42,13 @@ public class RegionDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 }

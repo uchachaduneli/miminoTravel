@@ -32,7 +32,7 @@
 
     $scope.getProductDetails = function () {
       function getProdDet(res) {
-        $scope.product = {sights: [], places: [], hotels: [], transports: [], nonstandarts: []};
+        $scope.product = {sights: [], places: [], hotels: [], transports: [], nonstandarts: [], regions: []};
         $scope.product.sights = res.data.sights;
         $scope.product.places = res.data.places;
         $scope.product.hotels = res.data.hotels;
@@ -49,30 +49,17 @@
 
       $scope.loadRequest();
 
+      function getRegions(res) {
+        $scope.regions = res.data;
+      }
+
+      ajaxCall($http, "misc/get-regions", null, getRegions);
+
       function getMealcategories(res) {
         $scope.mealCategories = res.data;
       }
 
       ajaxCall($http, "misc/get-mealcategories", null, getMealcategories);
-
-
-      function loadPlaces(res) {
-        $scope.places = res.data;
-      }
-
-      ajaxCall($http, "places/get-places?start=0&limit=999999", {}, loadPlaces);
-
-      function getHotels(res) {
-        $scope.hotels = res.data;
-      }
-
-      ajaxCall($http, "hotels/get-hotels?start=0&limit=99999", {}, getHotels);
-
-      function getSights(res) {
-        $scope.sights = res.data;
-      }
-
-      ajaxCall($http, "objects/get-objects?start=0&limit=99999", {}, getSights);
 
       function getTransports(res) {
         $scope.transports = res.data;
@@ -101,7 +88,6 @@
       $scope.getProductDetails();
     };
 
-
     $scope.save = function () {
 
       function resFunc(res) {
@@ -120,18 +106,133 @@
       ajaxCall($http, "requests/save-product", angular.toJson($scope.product), resFunc);
     };
 
+    $scope.searchByRegion = function () {
+      var slctedRegions = $filter('filter')($scope.regions, {selected: true}, true);
+      var ids = [];
+      angular.forEach(slctedRegions, function (v) {
+        ids.push(v.id);
+      })
+      console.log(angular.toJson(ids));
+      if (ids.length > 0) {
+        function loadPlaces(res) {
+          $scope.places = res.data;
+        }
+
+        ajaxCall($http, "places/get-places-by-region", angular.toJson(ids), loadPlaces);
+      } else {
+        $scope.places = [];
+      }
+    };
+
+    $scope.searchByPlace = function () {
+      var slctedPlaces = $filter('filter')($scope.places, {selected: true}, true);
+      var ids = [];
+      angular.forEach(slctedPlaces, function (v) {
+        ids.push(v.id);
+      })
+      console.log(angular.toJson(ids));
+      if (ids.length > 0) {
+        function getHotels(res) {
+          $scope.hotels = res.data;
+        }
+
+        ajaxCall($http, "hotels/get-hotels-by-place", angular.toJson(ids), getHotels);
+
+        function getSights(res) {
+          $scope.sights = res.data;
+        }
+
+        ajaxCall($http, "objects/get-objects-by-place", angular.toJson(ids), getSights);
+      } else {
+        $scope.hotels = [];
+        $scope.sights = [];
+      }
+    };
+
   });
 </script>
 
 
 <div class="row">
   <div class="col-xs-12">
-    <%--<div ng-repeat="n in [].constructor(request.daysCount) track by $index" class="box">--%>
     <div class="box">
-      <div class="box-header text-center">
-        <b><h4>Day ({{daysList[dayIndex]}})</h4></b>
+      <div class="box-header">
+        <div class="col-xs-12 text-center">
+          <b><h4>Day ({{daysList[dayIndex]}})</h4></b>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <a class="btn btn-app">
+              <i class="fa fa-briefcase"></i> Request Details
+            </a>
+            <table class="table table-striped">
+              <tr>
+                <th class="col-md-1">Tour Code</th>
+                <td>{{request.tourCode}}</td>
+              </tr>
+              <tr>
+                <th>Tour Starts</th>
+                <td>{{request.tourStart}} / {{request.strTourStart}}</td>
+              </tr>
+              <tr>
+                <th>Tour Ends</th>
+                <td>{{request.tourEnd}} / {{request.strTourEnd}}</td>
+              </tr>
+              <tr>
+                <th>Days Count</th>
+                <td>{{request.daysCount}}</td>
+              </tr>
+              <tr>
+                <th>Nights Count</th>
+                <td>{{request.nightsCount}}</td>
+              </tr>
+              <tr>
+                <th>Tourists Count</th>
+                <td>{{request.touristsCount}}</td>
+              </tr>
+              <tr>
+                <th>Tourists Count Note</th>
+                <td>{{request.touristsCountNote}}</td>
+              </tr>
+              <tr>
+                <th>Arrival City</th>
+                <td>{{request.arrivalCity.name}}</td>
+              </tr>
+              <tr>
+                <th>Arrival Time</th>
+                <td>{{request.arrivalTime}} / {{request.strArrivalTime}}</td>
+              </tr>
+              <tr>
+                <th>Leave City</th>
+                <td>{{request.leaveCity.name}}</td>
+              </tr>
+              <tr>
+                <th>Leave Time</th>
+                <td>{{request.leaveTime}} / {{request.strLeaveTime}}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
       </div>
       <div class="box-body">
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <a class="btn btn-app">
+              <i class="fa fa-map"></i> Regions
+            </a>
+          </div>
+          <div class="panel-body">
+            <div class="form-group col-sm-12 ">
+              <div class="col-sm-12">
+                <label ng-repeat="t in regions" class="col-sm-3">
+                  <input type="checkbox" id="regionchecks{{t.id}}" ng-model="t.selected" ng-click="searchByRegion()"
+                         checklist-model="product.regions" checklist-value="t.id">&nbsp; {{t.name}}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <div class="panel panel-default">
           <div class="panel-heading">
@@ -143,7 +244,7 @@
             <div class="form-group col-sm-12 ">
               <div class="col-sm-12">
                 <label ng-repeat="t in places" class="col-sm-3">
-                  <input type="checkbox" id="placechecks{{t.id}}"
+                  <input type="checkbox" id="placechecks{{t.id}}" ng-model="t.selected" ng-click="searchByPlace()"
                          checklist-model="product.places" checklist-value="t.id">&nbsp; {{t.nameEn}}
                 </label>
               </div>

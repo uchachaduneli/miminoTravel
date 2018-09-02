@@ -69,4 +69,11 @@ public class GeoObjectDAO extends AbstractDAO {
     public int removeImages(Integer id) {
         return entityManager.createQuery("delete from " + GeoObjectImages.class.getSimpleName() + " c where c.geoObjectId=" + id).executeUpdate();
     }
+
+    public List<GeoObject> getGeoObjectsByPlaces(List<Integer> placeIds) {
+        TypedQuery<GeoObject> query = getEntityManager().createQuery("select c from " + GeoObject.class.getSimpleName()
+                + " c where c.place.id in :listOfIds", GeoObject.class);
+        query.setParameter("listOfIds", placeIds);
+        return query.getResultList();
+    }
 }

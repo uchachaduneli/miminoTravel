@@ -29,6 +29,10 @@ public class PlaceService {
         return PlaceDTO.parseToList(placeDAO.getPlaces(start, limit, srchRequest));
     }
 
+    public List<PlaceDTO> getPlacesByRegion(List<Integer> regionIds) {
+        return PlaceDTO.parseToList(placeDAO.getPlacesByRegion(regionIds));
+    }
+
     @Transactional(rollbackFor = Throwable.class)
     public Place save(PlaceDTO request) throws Exception {
 

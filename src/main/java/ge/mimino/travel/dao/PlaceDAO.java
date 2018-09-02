@@ -66,4 +66,11 @@ public class PlaceDAO extends AbstractDAO {
     public int removeImages(Integer id) {
         return entityManager.createQuery("delete from " + PlaceImages.class.getSimpleName() + " c where c.placeId=" + id).executeUpdate();
     }
+
+    public List<Place> getPlacesByRegion(List<Integer> regionIds) {
+        TypedQuery<Place> query = getEntityManager().createQuery("select c from " + Place.class.getSimpleName()
+                + " c where c.region.id in :listOfIds", Place.class);
+        query.setParameter("listOfIds", regionIds);
+        return query.getResultList();
+    }
 }

@@ -29,6 +29,10 @@ public class HotelService {
         return HotelDTO.parseToList(hotelDAO.getHotels(start, limit, srchRequest));
     }
 
+    public List<HotelDTO> getHotelsByPlaces(List<Integer> placeIds) {
+        return HotelDTO.parseToList(hotelDAO.getHotelsByPlaces(placeIds));
+    }
+
     @Transactional(rollbackFor = Throwable.class)
     public Hotel save(HotelDTO request) throws Exception {
 

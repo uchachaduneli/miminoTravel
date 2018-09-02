@@ -36,6 +36,12 @@ public class HotelController {
         return Response.withSuccess(hotelService.getHotels(start, limit, request));
     }
 
+    @RequestMapping("/get-hotels-by-place")
+    @ResponseBody
+    private Response getHotelsByPlaces(@RequestBody List<Integer> ids) throws Exception {
+        return Response.withSuccess(hotelService.getHotelsByPlaces(ids));
+    }
+
     @RequestMapping({"/save"})
     @ResponseBody
     public Response saveUser(@RequestBody HotelDTO request) throws Exception {

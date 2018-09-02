@@ -31,6 +31,10 @@ public class GeoObjectService {
         return GeoObjectDTO.parseToList(geoObjectDAO.getGeoObjects(start, limit, srchRequest));
     }
 
+    public List<GeoObjectDTO> getGeoObjectsByPlaces(List<Integer> placeIds) {
+        return GeoObjectDTO.parseToList(geoObjectDAO.getGeoObjectsByPlaces(placeIds));
+    }
+
     @Transactional(rollbackFor = Throwable.class)
     public GeoObject save(GeoObjectDTO request) throws Exception {
 

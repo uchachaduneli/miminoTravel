@@ -36,6 +36,12 @@ public class GeoObjectController {
         return Response.withSuccess(geoObjectService.getGeoObjects(start, limit, request));
     }
 
+    @RequestMapping("/get-objects-by-place")
+    @ResponseBody
+    private Response getGeoObjectsByPlaces(@RequestBody List<Integer> ids) throws Exception {
+        return Response.withSuccess(geoObjectService.getGeoObjectsByPlaces(ids));
+    }
+
     @RequestMapping({"/save"})
     @ResponseBody
     public Response saveUser(@RequestBody GeoObjectDTO request) throws Exception {
