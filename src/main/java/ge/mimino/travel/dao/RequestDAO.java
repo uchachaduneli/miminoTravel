@@ -91,6 +91,13 @@ public class RequestDAO extends AbstractDAO {
         query.executeUpdate();
     }
 
+    public void removeProductRegions(Integer requestId, List<Integer> regions, Integer day) {
+        Query query = getEntityManager().createQuery("delete from " + ProductRegions.class.getSimpleName()
+                + " c where c.requestId=" + requestId + " and c.day=" + day + " and c.regionId in :listOfIds");
+        query.setParameter("listOfIds", regions);
+        query.executeUpdate();
+    }
+
     public void removeProductSights(Integer requestId, List<Integer> sights, Integer day) {
         Query query = getEntityManager().createQuery("delete from " + ProductSights.class.getSimpleName()
                 + " c where c.requestId=" + requestId + " and c.day=" + day + " and c.sightId in :listOfIds");

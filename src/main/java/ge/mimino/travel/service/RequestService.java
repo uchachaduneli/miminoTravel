@@ -121,6 +121,13 @@ public class RequestService {
             }
         }
 
+        if (request.getRegions() != null && !request.getRegions().isEmpty()) {
+            requestDAO.removeProductRegions(request.getRequestId(), request.getRegions(), request.getDay());
+            for (Integer obj : request.getRegions()) {
+                requestDAO.create(new ProductRegions(obj, request.getRequestId(), request.getDay()));
+            }
+        }
+
         if (request.getSights() != null && !request.getSights().isEmpty()) {
             requestDAO.removeProductSights(request.getRequestId(), request.getSights(), request.getDay());
             for (Integer obj : request.getSights()) {
@@ -178,6 +185,7 @@ public class RequestService {
         res.setHotels(new ArrayList<>());
         res.setNonstandarts(new ArrayList<>());
         res.setPlaces(new ArrayList<>());
+        res.setRegions(new ArrayList<>());
         res.setSights(new ArrayList<>());
         res.setTransports(new ArrayList<>());
 
@@ -203,6 +211,10 @@ public class RequestService {
 
         for (ProductTransports obj : (List<ProductTransports>) requestDAO.getAllByParamValue(ProductTransports.class, paramValues, null)) {
             res.getTransports().add(obj.getTransportId());
+        }
+
+        for (ProductRegions obj : (List<ProductRegions>) requestDAO.getAllByParamValue(ProductRegions.class, paramValues, null)) {
+            res.getRegions().add(obj.getRegionId());
         }
 
         return res;

@@ -32,12 +32,38 @@
 
     $scope.getProductDetails = function () {
       function getProdDet(res) {
-        $scope.product = {sights: [], places: [], hotels: [], transports: [], nonstandarts: [], regions: []};
+        $scope.product = {
+          regions: [],
+          sights: [],
+          places: [],
+          hotels: [],
+          transports: [],
+          nonstandarts: [],
+          regions: []
+        };
         $scope.product.sights = res.data.sights;
+        $scope.product.regions = res.data.regions;
         $scope.product.places = res.data.places;
         $scope.product.hotels = res.data.hotels;
         $scope.product.transports = res.data.transports;
         $scope.product.nonstandarts = res.data.nonstandarts;
+
+        var regionIds = [];
+        var placeIds = [];
+        angular.forEach($scope.product.regions, function (v) {
+          var slctedRegions = $filter('filter')($scope.regions, {id: v}, true);
+          if (slctedRegions.length > 0) {
+            regionIds.push(v);
+          }
+        });
+
+        if (regionIds.length > 0) {
+          function loadPlaces(res) {
+            $scope.places = res.data;
+          }
+
+          ajaxCall($http, "places/get-places-by-region", angular.toJson(regionIds), loadPlaces);
+        }
       }
 
       ajaxCall($http, "requests/get-product-details?requestId=" + $scope.request.id + "&day=" + ($scope.dayIndex + 1), null, getProdDet);

@@ -3,6 +3,7 @@ package ge.mimino.travel.request;
 import java.util.List;
 
 public class ProductRequest {
+    private List<Integer> regions;
     private List<Integer> sights;
     private List<Integer> places;
     private List<Integer> hotels;
@@ -10,6 +11,14 @@ public class ProductRequest {
     private List<Integer> nonstandarts;
     private Integer day;
     private Integer requestId;
+
+    public List<Integer> getRegions() {
+        return regions;
+    }
+
+    public void setRegions(List<Integer> regions) {
+        this.regions = regions;
+    }
 
     public List<Integer> getSights() {
         return sights;
