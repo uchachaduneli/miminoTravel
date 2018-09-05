@@ -49,7 +49,6 @@
         $scope.product.nonstandarts = res.data.nonstandarts;
 
         var regionIds = [];
-        var placeIds = [];
         angular.forEach($scope.product.regions, function (v) {
           var slctedRegions = $filter('filter')($scope.regions, {id: v}, true);
           if (slctedRegions.length > 0) {
@@ -63,6 +62,20 @@
           }
 
           ajaxCall($http, "places/get-places-by-region", angular.toJson(regionIds), loadPlaces);
+        }
+
+        if ($scope.product.places.length > 0) {
+          function getHotels(res) {
+            $scope.hotels = res.data;
+          }
+
+          ajaxCall($http, "hotels/get-hotels-by-place", angular.toJson($scope.product.places), getHotels);
+
+          function getSights(res) {
+            $scope.sights = res.data;
+          }
+
+          ajaxCall($http, "objects/get-objects-by-place", angular.toJson($scope.product.places), getSights);
         }
       }
 
