@@ -12,6 +12,7 @@ public class ProductRestaurantsDTO {
     private Integer requestId;
     private Integer day;
     private String mealCategories;
+    private String packages;
 
 
     public static ProductRestaurantsDTO parse(ProductRestaurants record) {
@@ -21,6 +22,7 @@ public class ProductRestaurantsDTO {
         dto.setRequestId(record.getRequestId());
         dto.setDay(record.getDay());
         dto.setMealCategories(record.getMealCategories());
+        dto.setPackages(record.getPackages());
         return dto;
     }
 
@@ -31,6 +33,14 @@ public class ProductRestaurantsDTO {
             list.add(ProductRestaurantsDTO.parse(record));
         }
         return list;
+    }
+
+    public String getPackages() {
+        return packages;
+    }
+
+    public void setPackages(String packages) {
+        this.packages = packages;
     }
 
     public String getMealCategories() {

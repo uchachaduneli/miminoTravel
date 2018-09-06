@@ -16,8 +16,9 @@
     $scope.FbMealCats = ['Breakfast', 'Lunch', 'Picnick Lunch', 'Lunch with degustation', 'Dinner', 'Dinner Folk Show', 'Gala Dinner', 'Dinner At hotel'];
     $scope.dayIndex = 0;
     $scope.mealCategories = [];
-    $scope.restaurantRow = [1];
+    $scope.restaurantRow = [];
     $scope.prod = {restaurants: []};
+    $scope.restPackages = [];
 
     function getMealCategories(res) {
       $scope.mealCategories = res.data;
@@ -59,14 +60,23 @@
         $scope.product.transports = res.data.transports;
         $scope.product.nonstandarts = res.data.nonstandarts;
 
-        $scope.restaurantRow = [];
+        if (res.data.restaurants == undefined || res.data.restaurants.length == 0) {
+          $scope.restaurantRow = [1];
+        }
         angular.forEach(res.data.restaurants, function (v, k) {
           var meal = (v.mealCategories.split('-')[0] != undefined ? v.mealCategories.split('-')[0] : '');
           var mealCats = (v.mealCategories.split('-')[1] != undefined ? v.mealCategories.split('-')[1].split(',') : '');
+          var packs = '';
+          if (v.packages != undefined) {
+            $scope.loadRestaurantPackages(v.restaurantId, k);
+            packs = v.packages.split(',')
+          }
+          ;
           $scope.prod.restaurants.push({
             "restaurantId": v.restaurantId,
             "meal": meal,
-            "mealCats": mealCats
+            "mealCats": mealCats,
+            "packages": packs
           });
           $scope.restaurantRow.push(k + 1);
         });
@@ -109,6 +119,14 @@
       }
 
       ajaxCall($http, "requests/get-product-details?requestId=" + $scope.request.id + "&day=" + ($scope.dayIndex + 1), null, getProdDet);
+    };
+
+    $scope.loadRestaurantPackages = function (id, indx) {
+      function getPacks(res) {
+        $scope.restPackages[indx] = res.data;
+      }
+
+      ajaxCall($http, "restaurants/get-restaurant-packages?id=" + id, null, getPacks);
     };
 
     $scope.loadLists = function () {
@@ -161,7 +179,6 @@
       function resFunc(res) {
         if (res.errorCode == 0) {
           successMsg('Operation Successfull');
-          $location.reload();
         } else {
           errorMsg('Operation Failed');
         }
@@ -170,14 +187,17 @@
       $scope.product.requestId = $scope.request.id;
       $scope.product.day = $scope.dayIndex + 1;
 
-      console.log(angular.toJson($scope.prod));
+//      console.log(angular.toJson($scope.prod));
       $scope.product.restaurants = [];
-      angular.forEach($scope.prod.restaurants, function (v) {
+      angular.forEach($scope.prod.restaurants, function (v, k) {
+        var packages = v.packages != undefined ? v.packages.join(',') : '';
+        console.log(angular.toJson(packages));
         $scope.product.restaurants.push({
           restaurantId: v.restaurantId,
-          mealCategories: v.meal + '-' + v.mealCats.join(',')
+          mealCategories: v.meal + '-' + v.mealCats.join(','),
+          packages: packages
         });
-      })
+      });
       console.log(angular.toJson($scope.product));
       ajaxCall($http, "requests/save-product", angular.toJson($scope.product), resFunc);
     };
@@ -391,6 +411,7 @@
                   <div class="col-sm-11" id="divId_{{r}}">
                     <div class="col-sm-6" id="dv_{{r}}">
                       <select id="restaurantSelect{{r}}" class="form-control input-sm"
+                              ng-change="loadRestaurantPackages(prod.restaurants[r - 1].restaurantId, r-1)"
                               ng-model="prod.restaurants[r - 1].restaurantId">
                         <option ng-repeat="c in restaurants" value="{{c.id}}" ng-value="c.id"
                                 ng-selected="c.id === prod.restaurants[r - 1].restaurantId">
@@ -426,6 +447,18 @@
                       <a class="btn btn-sm row">
                         <span class="fa fa-trash" ng-click="removeRestaurantRows($index)"></span>
                       </a>
+                    </div>
+                  </div>
+                  <div class="col-sm-12" ng-if="prod.restaurants[r - 1].restaurantId > 0">
+                    <div class="panel panel-default">
+                      <div class="panel-heading">Restaurant Packages</div>
+                      <div class="panel-body">
+                        <label ng-repeat="t in restPackages[r - 1]" class="col-sm-3">
+                          <input type="checkbox" id="restPackageschecks{{t.id}}"
+                                 checklist-model="prod.restaurants[r - 1].packages" checklist-value="t.name">&nbsp;
+                          {{t.name}}
+                        </label>
+                      </div>
                     </div>
                   </div>
                   <hr class="col-sm-12"/>

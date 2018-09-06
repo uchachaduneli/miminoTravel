@@ -145,7 +145,7 @@ public class RequestService {
         if (request.getRestaurants() != null && !request.getRestaurants().isEmpty()) {
             requestDAO.removeProductRestaurants(request.getRequestId(), request.getRestaurants(), request.getDay());
             for (ProductRestaurantsDTO obj : request.getRestaurants()) {
-                requestDAO.create(new ProductRestaurants(obj.getRestaurantId(), request.getRequestId(), request.getDay(), obj.getMealCategories()));
+                requestDAO.create(new ProductRestaurants(obj.getRestaurantId(), request.getRequestId(), request.getDay(), obj.getMealCategories(), obj.getPackages()));
             }
         }
     }
