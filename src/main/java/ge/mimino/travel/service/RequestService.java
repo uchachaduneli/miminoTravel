@@ -141,6 +141,13 @@ public class RequestService {
                 requestDAO.create(new ProductTransports(obj, request.getRequestId(), request.getDay()));
             }
         }
+
+        if (request.getRestaurants() != null && !request.getRestaurants().isEmpty()) {
+            requestDAO.removeProductRestaurants(request.getRequestId(), request.getRestaurants(), request.getDay());
+            for (ProductRestaurantsDTO obj : request.getRestaurants()) {
+                requestDAO.create(new ProductRestaurants(obj.getRestaurantId(), request.getRequestId(), request.getDay(), obj.getMealCategories()));
+            }
+        }
     }
 
     @Transactional(rollbackFor = Throwable.class)
@@ -188,6 +195,7 @@ public class RequestService {
         res.setRegions(new ArrayList<>());
         res.setSights(new ArrayList<>());
         res.setTransports(new ArrayList<>());
+        res.setRestaurants(new ArrayList<>());
 
         List<ParamValuePair> paramValues = new ArrayList<>();
         paramValues.add(new ParamValuePair("requestId", requestId));
@@ -216,6 +224,8 @@ public class RequestService {
         for (ProductRegions obj : (List<ProductRegions>) requestDAO.getAllByParamValue(ProductRegions.class, paramValues, null)) {
             res.getRegions().add(obj.getRegionId());
         }
+
+        res.setRestaurants(ProductRestaurantsDTO.parseToList((List<ProductRestaurants>) requestDAO.getAllByParamValue(ProductRestaurants.class, paramValues, null)));
 
         return res;
     }

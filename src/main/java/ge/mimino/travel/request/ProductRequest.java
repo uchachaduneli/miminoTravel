@@ -1,5 +1,7 @@
 package ge.mimino.travel.request;
 
+import ge.mimino.travel.dto.ProductRestaurantsDTO;
+
 import java.util.List;
 
 public class ProductRequest {
@@ -9,6 +11,7 @@ public class ProductRequest {
     private List<Integer> hotels;
     private List<Integer> transports;
     private List<Integer> nonstandarts;
+    private List<ProductRestaurantsDTO> restaurants;
     private Integer day;
     private Integer requestId;
 
@@ -58,6 +61,14 @@ public class ProductRequest {
 
     public void setNonstandarts(List<Integer> nonstandarts) {
         this.nonstandarts = nonstandarts;
+    }
+
+    public List<ProductRestaurantsDTO> getRestaurants() {
+        return restaurants;
+    }
+
+    public void setRestaurants(List<ProductRestaurantsDTO> restaurants) {
+        this.restaurants = restaurants;
     }
 
     public Integer getDay() {

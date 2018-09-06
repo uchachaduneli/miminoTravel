@@ -12,7 +12,18 @@
 
     $scope.product = {sights: [], places: [], hotels: [], transports: [], nonstandarts: []};
     $scope.daysList = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+    $scope.HbMealCats = ['Lunch', 'Picnick Lunch', 'Lunch with degustation', 'Dinner', 'Dinner Folk Show', 'Gala Dinner', 'Dinner At hotel'];
+    $scope.FbMealCats = ['Breakfast', 'Lunch', 'Picnick Lunch', 'Lunch with degustation', 'Dinner', 'Dinner Folk Show', 'Gala Dinner', 'Dinner At hotel'];
     $scope.dayIndex = 0;
+    $scope.mealCategories = [];
+    $scope.restaurantRow = [1];
+    $scope.prod = {restaurants: []};
+
+    function getMealCategories(res) {
+      $scope.mealCategories = res.data;
+    }
+
+    ajaxCall($http, "misc/get-mealcategories", null, getMealCategories);
 
     $scope.loadRequest = function () {
       var absUrl = $location.absUrl();
@@ -39,7 +50,7 @@
           hotels: [],
           transports: [],
           nonstandarts: [],
-          regions: []
+          restaurants: []
         };
         $scope.product.sights = res.data.sights;
         $scope.product.regions = res.data.regions;
@@ -48,10 +59,22 @@
         $scope.product.transports = res.data.transports;
         $scope.product.nonstandarts = res.data.nonstandarts;
 
+        $scope.restaurantRow = [];
+        angular.forEach(res.data.restaurants, function (v, k) {
+          var meal = (v.mealCategories.split('-')[0] != undefined ? v.mealCategories.split('-')[0] : '');
+          var mealCats = (v.mealCategories.split('-')[1] != undefined ? v.mealCategories.split('-')[1].split(',') : '');
+          $scope.prod.restaurants.push({
+            "restaurantId": v.restaurantId,
+            "meal": meal,
+            "mealCats": mealCats
+          });
+          $scope.restaurantRow.push(k + 1);
+        });
+
         var regionIds = [];
         angular.forEach($scope.product.regions, function (v) {
           var slctedRegions = $filter('filter')($scope.regions, {id: v}, true);
-          if (slctedRegions.length > 0) {
+          if (slctedRegions != undefined && slctedRegions.length > 0) {
             regionIds.push(v);
           }
         });
@@ -76,6 +99,12 @@
           }
 
           ajaxCall($http, "objects/get-objects-by-place", angular.toJson($scope.product.places), getSights);
+
+          function getRestaurants(res) {
+            $scope.restaurants = res.data;
+          }
+
+          ajaxCall($http, "restaurants/get-restaurants-by-place", angular.toJson($scope.product.places), getRestaurants);
         }
       }
 
@@ -141,6 +170,14 @@
       $scope.product.requestId = $scope.request.id;
       $scope.product.day = $scope.dayIndex + 1;
 
+      console.log(angular.toJson($scope.prod));
+      $scope.product.restaurants = [];
+      angular.forEach($scope.prod.restaurants, function (v) {
+        $scope.product.restaurants.push({
+          restaurantId: v.restaurantId,
+          mealCategories: v.meal + '-' + v.mealCats.join(',')
+        });
+      })
       console.log(angular.toJson($scope.product));
       ajaxCall($http, "requests/save-product", angular.toJson($scope.product), resFunc);
     };
@@ -185,6 +222,18 @@
       } else {
         $scope.hotels = [];
         $scope.sights = [];
+      }
+    };
+
+    $scope.addRestaurantRow = function () {
+      var size = $scope.restaurantRow.length;
+      $scope.restaurantRow.push(size + 1);
+    };
+
+    $scope.removeRestaurantRows = function (index) {
+      $scope.restaurantRow.splice(index, 1);
+      if ($scope.product.restaurants) {
+        $scope.product.restaurants.splice(index, 1);
       }
     };
 
@@ -322,6 +371,65 @@
                   <input type="checkbox" id="hotelschecks{{t.id}}"
                          checklist-model="product.hotels" checklist-value="t.id">&nbsp; {{t.nameEn}}
                 </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel panel-success ">
+          <div class="panel-heading">
+            <a class="btn btn-app">
+              <i class="fa fa-cutlery"></i> Restaurants
+            </a>
+          </div>
+          <div class="panel-body">
+
+            <div class="form-group col-sm-12 ">
+              <label class="control-label col-sm-3">Add Restaurants </label>
+              <div class="col-sm-9">
+                <div class="form-group" ng-repeat="r in restaurantRow">
+                  <div class="col-sm-11" id="divId_{{r}}">
+                    <div class="col-sm-6" id="dv_{{r}}">
+                      <select id="restaurantSelect{{r}}" class="form-control input-sm"
+                              ng-model="prod.restaurants[r - 1].restaurantId">
+                        <option ng-repeat="c in restaurants" value="{{c.id}}" ng-value="c.id"
+                                ng-selected="c.id === prod.restaurants[r - 1].restaurantId">
+                          {{c.id}}. {{c.nameEn}}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="radio col-sm-6">
+                      <label><input type="radio" ng-model="prod.restaurants[r - 1].meal" value="BB" class="input-sm">BB</label>&nbsp;
+                      <label><input type="radio" ng-model="prod.restaurants[r - 1].meal" value="HB" class="input-sm">HB</label>&nbsp;
+                      <label><input type="radio" ng-model="prod.restaurants[r - 1].meal" value="FB" class="input-sm">FB</label>
+                    </div>
+                    <div class="col-sm-12" ng-if="prod.restaurants[r - 1].meal == 'HB'">
+                      <label ng-repeat="t in HbMealCats" class="col-sm-3">
+                        <input type="checkbox" id="restMealsChecks{{t.id}}"
+                               checklist-model="prod.restaurants[r - 1].mealCats" checklist-value="t">&nbsp; {{t}}
+                      </label>
+                    </div>
+                    <div class="col-sm-12" ng-if="prod.restaurants[r - 1].meal === 'FB'">
+                      <label ng-repeat="t in FbMealCats" class="col-sm-3">
+                        <input type="checkbox" id="restFbMealsChecks{{t.id}}"
+                               checklist-model="prod.restaurants[r - 1].mealCats" checklist-value="t">&nbsp; {{t}}
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-sm-1">
+                    <div class="col-md-1" ng-show="$index == 0">
+                      <a class="btn btn-sm row" style="vertical-align: bottom;">
+                        <span class="fa fa-plus" ng-click="addRestaurantRow()"></span>
+                      </a>
+                    </div>
+                    <div class="col-md-1" ng-show="$index > 0">
+                      <a class="btn btn-sm row">
+                        <span class="fa fa-trash" ng-click="removeRestaurantRows($index)"></span>
+                      </a>
+                    </div>
+                  </div>
+                  <hr class="col-sm-12"/>
+                </div>
               </div>
             </div>
           </div>

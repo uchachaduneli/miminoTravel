@@ -29,6 +29,10 @@ public class RestaurantService {
         return RestaurantDTO.parseToList(restaurantDAO.getRestaurants(start, limit, srchRequest));
     }
 
+    public List<RestaurantDTO> getRestaurantsByPlaces(List<Integer> placeIds) {
+        return RestaurantDTO.parseToList(restaurantDAO.getRestaurantsByPlaces(placeIds));
+    }
+
     @Transactional(rollbackFor = Throwable.class)
     public Restaurant save(RestaurantDTO request) throws Exception {
 

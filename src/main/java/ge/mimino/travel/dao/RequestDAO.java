@@ -1,5 +1,6 @@
 package ge.mimino.travel.dao;
 
+import ge.mimino.travel.dto.ProductRestaurantsDTO;
 import ge.mimino.travel.model.*;
 import ge.mimino.travel.request.AddRequest;
 import org.springframework.stereotype.Repository;
@@ -8,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -109,6 +111,17 @@ public class RequestDAO extends AbstractDAO {
         Query query = getEntityManager().createQuery("delete from " + ProductTransports.class.getSimpleName()
                 + " c where c.requestId=" + requestId + " and c.day=" + day + " and c.transportId in :listOfIds");
         query.setParameter("listOfIds", transports);
+        query.executeUpdate();
+    }
+
+    public void removeProductRestaurants(Integer requestId, List<ProductRestaurantsDTO> restaurants, Integer day) {
+        List<Integer> restaurantIds = new ArrayList<>();
+        for (ProductRestaurantsDTO rest : restaurants) {
+            restaurantIds.add(rest.getRestaurantId());
+        }
+        Query query = getEntityManager().createQuery("delete from " + ProductRestaurants.class.getSimpleName()
+                + " c where c.requestId=" + requestId + " and c.day=" + day + " and c.restaurantId in :listOfIds");
+        query.setParameter("listOfIds", restaurantIds);
         query.executeUpdate();
     }
 }

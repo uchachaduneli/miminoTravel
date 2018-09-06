@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 
 /**
  * @author ucha
@@ -49,5 +51,11 @@ public class RestaurantsController {
     @ResponseBody
     private Response getRestaurantPackages(@RequestParam Integer id) throws Exception {
         return Response.withSuccess(restaurantService.getRestaurantPackages(id));
+    }
+
+    @RequestMapping("/get-restaurants-by-place")
+    @ResponseBody
+    private Response getRestaurantsByPlaces(@RequestBody List<Integer> ids) throws Exception {
+        return Response.withSuccess(restaurantService.getRestaurantsByPlaces(ids));
     }
 }

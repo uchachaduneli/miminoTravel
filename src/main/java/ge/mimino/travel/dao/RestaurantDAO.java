@@ -64,7 +64,14 @@ public class RestaurantDAO extends AbstractDAO {
     }
 
     public int removeRestaurantPackages(Integer restaurantId) {
-        return entityManager.createQuery("delete from " + RestaurantPackage.class.getSimpleName() + " c where c.restaurantId=" + restaurantId).executeUpdate();
+        return entityManager.createQuery("delete from " + RestaurantPackage.class.getSimpleName()
+                + " c where c.restaurantId=" + restaurantId).executeUpdate();
     }
 
+    public List<Restaurant> getRestaurantsByPlaces(List<Integer> placeIds) {
+        TypedQuery<Restaurant> query = getEntityManager().createQuery("select c from " + Restaurant.class.getSimpleName()
+                + " c where c.place.id in :listOfIds", Restaurant.class);
+        query.setParameter("listOfIds", placeIds);
+        return query.getResultList();
+    }
 }
