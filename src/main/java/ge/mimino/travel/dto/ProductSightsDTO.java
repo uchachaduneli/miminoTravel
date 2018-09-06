@@ -11,6 +11,7 @@ public class ProductSightsDTO {
     private Integer sightId;
     private Integer requestId;
     private Integer day;
+    private Integer photoOrVisit;
 
 
     public static ProductSightsDTO parse(ProductSights record) {
@@ -19,6 +20,7 @@ public class ProductSightsDTO {
         dto.setSightId(record.getSightId());
         dto.setRequestId(record.getRequestId());
         dto.setDay(record.getDay());
+        dto.setPhotoOrVisit(record.getPhotoOrVisit());
         return dto;
     }
 
@@ -29,6 +31,14 @@ public class ProductSightsDTO {
             list.add(ProductSightsDTO.parse(record));
         }
         return list;
+    }
+
+    public Integer getPhotoOrVisit() {
+        return photoOrVisit;
+    }
+
+    public void setPhotoOrVisit(Integer photoOrVisit) {
+        this.photoOrVisit = photoOrVisit;
     }
 
     public Integer getId() {

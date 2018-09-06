@@ -3,12 +3,13 @@ package ge.mimino.travel.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "product_sights", schema = "mimino")
+@Table(name = "product_sights", schema = "mimino", catalog = "")
 public class ProductSights {
     private Integer id;
     private Integer sightId;
     private Integer requestId;
     private Integer day;
+    private Integer photoOrVisit;
 
     public ProductSights() {
     }
@@ -82,5 +83,15 @@ public class ProductSights {
         result = 31 * result + (requestId != null ? requestId.hashCode() : 0);
         result = 31 * result + (day != null ? day.hashCode() : 0);
         return result;
+    }
+
+    @Basic
+    @Column(name = "photo_or_visit")
+    public Integer getPhotoOrVisit() {
+        return photoOrVisit;
+    }
+
+    public void setPhotoOrVisit(Integer photoOrVisit) {
+        this.photoOrVisit = photoOrVisit;
     }
 }
