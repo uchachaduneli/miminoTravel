@@ -19,6 +19,8 @@
     $scope.restaurantRow = [];
     $scope.prod = {restaurants: []};
     $scope.restPackages = [];
+    $scope.tmpSights = [];
+    $scope.combSights = [];
 
     function getMealCategories(res) {
       $scope.mealCategories = res.data;
@@ -53,12 +55,19 @@
           nonstandarts: [],
           restaurants: []
         };
-        $scope.product.sights = res.data.sights;
+
         $scope.product.regions = res.data.regions;
         $scope.product.places = res.data.places;
         $scope.product.hotels = res.data.hotels;
         $scope.product.transports = res.data.transports;
         $scope.product.nonstandarts = res.data.nonstandarts;
+
+        angular.forEach(res.data.sights, function (v, k) {
+          $scope.product.sights[v.id] = v.id;
+          $scope.combSights[v.id] = {id: v.id, photoOrVisit: v.photoOrVisit};
+        });
+        console.log($scope.product.sights);
+        console.log($scope.combSights);
 
         if (res.data.restaurants == undefined || res.data.restaurants.length == 0) {
           $scope.restaurantRow = [1];
@@ -69,9 +78,9 @@
           var packs = '';
           if (v.packages != undefined) {
             $scope.loadRestaurantPackages(v.restaurantId, k);
-            packs = v.packages.split(',')
+            packs = v.packages.split(',');
           }
-          ;
+
           $scope.prod.restaurants.push({
             "restaurantId": v.restaurantId,
             "meal": meal,
@@ -106,6 +115,10 @@
 
           function getSights(res) {
             $scope.sights = res.data;
+//            $scope.sights = [];
+//            angular.forEach(res.data, function (v, k) {
+//              $scope.sights[k] = {id: v.id, photoOrVisit: undefined};
+//            });
           }
 
           ajaxCall($http, "objects/get-objects-by-place", angular.toJson($scope.product.places), getSights);
@@ -187,18 +200,20 @@
       $scope.product.requestId = $scope.request.id;
       $scope.product.day = $scope.dayIndex + 1;
 
-//      console.log(angular.toJson($scope.prod));
       $scope.product.restaurants = [];
       angular.forEach($scope.prod.restaurants, function (v, k) {
         var packages = v.packages != undefined ? v.packages.join(',') : '';
-        console.log(angular.toJson(packages));
         $scope.product.restaurants.push({
           restaurantId: v.restaurantId,
           mealCategories: v.meal + '-' + v.mealCats.join(','),
           packages: packages
         });
       });
+      $scope.product.sights = $filter('filter')($scope.combSights, '!null', true);
       console.log(angular.toJson($scope.product));
+//      console.log(angular.toJson($scope.product.sights));
+//      console.log(angular.toJson($scope.combSights));
+
       ajaxCall($http, "requests/save-product", angular.toJson($scope.product), resFunc);
     };
 
@@ -248,6 +263,16 @@
     $scope.addRestaurantRow = function () {
       var size = $scope.restaurantRow.length;
       $scope.restaurantRow.push(size + 1);
+    };
+
+    $scope.sightPhotoVisithandler = function (val, sightId) {
+      var slcted = $filter('filter')($scope.product.sights, sightId, true);
+      if (slcted != undefined && slcted.length > 0) {
+        $scope.combSights[sightId].id = sightId;
+      } else {
+        errorMsg('Please Check Current Sight At First!');
+        $scope.combSights[sightId] = undefined;
+      }
     };
 
     $scope.removeRestaurantRows = function (index) {
@@ -369,9 +394,21 @@
           <div class="panel-body">
             <div class="form-group col-sm-12 ">
               <div class="col-sm-12">
-                <label ng-repeat="t in sights" class="col-sm-3">
+                <label ng-repeat="t in sights" class="col-sm-3 panel"
+                       style="background-color: {{($index%2 == 0 ? '#f5f5f5':'')}}">
+
                   <input type="checkbox" id="sightschecks{{t.id}}"
-                         checklist-model="product.sights" checklist-value="t.id">&nbsp; {{t.nameEn}}
+                         checklist-model="product.sights" checklist-value="t.id">&nbsp; {{t.nameEn}}/{{$index}}/{{t.id}}
+
+                  <div class="radio text-right">
+                    <label><input type="radio" ng-model="combSights[t.id].photoOrVisit" value="1"
+                                  ng-change="sightPhotoVisithandler(combSights[t.id].photoOrVisit, t.id)"
+                                  class="input-sm">Visit</label>&nbsp;
+                    <label><input type="radio" ng-model="combSights[t.id].photoOrVisit" value="2"
+                                  ng-change="sightPhotoVisithandler(combSights[t.id].photoOrVisit, t.id)"
+                                  class="input-sm">Photo
+                      Stop</label>&nbsp;
+                  </div>
                 </label>
               </div>
             </div>

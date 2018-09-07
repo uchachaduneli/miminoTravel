@@ -16,6 +16,7 @@ public class GeoObjectDTO {
     private PlaceDTO place;
     private Integer placeId;
     private Integer typeId;
+    private Integer photoOrVisit;// 2 photo stop / 1 visit with price
     @JsonSerialize(using = JsonDateTimeSerializeSupport.class)
     private Timestamp createDate;
 
@@ -69,6 +70,22 @@ public class GeoObjectDTO {
             list.add(GeoObjectDTO.parse(record));
         }
         return list;
+    }
+
+    public GeoObjectDTO() {
+    }
+
+    public GeoObjectDTO(Integer id, Integer photoOrVisit) {
+        this.id = id;
+        this.photoOrVisit = photoOrVisit;
+    }
+
+    public Integer getPhotoOrVisit() {
+        return photoOrVisit;
+    }
+
+    public void setPhotoOrVisit(Integer photoOrVisit) {
+        this.photoOrVisit = photoOrVisit;
     }
 
     public PlaceDTO getPlace() {

@@ -1,12 +1,13 @@
 package ge.mimino.travel.request;
 
+import ge.mimino.travel.dto.GeoObjectDTO;
 import ge.mimino.travel.dto.ProductRestaurantsDTO;
 
 import java.util.List;
 
 public class ProductRequest {
     private List<Integer> regions;
-    private List<Integer> sights;
+    private List<GeoObjectDTO> sights;
     private List<Integer> places;
     private List<Integer> hotels;
     private List<Integer> transports;
@@ -23,11 +24,11 @@ public class ProductRequest {
         this.regions = regions;
     }
 
-    public List<Integer> getSights() {
+    public List<GeoObjectDTO> getSights() {
         return sights;
     }
 
-    public void setSights(List<Integer> sights) {
+    public void setSights(List<GeoObjectDTO> sights) {
         this.sights = sights;
     }
 

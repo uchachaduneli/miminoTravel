@@ -1,5 +1,6 @@
 package ge.mimino.travel.dao;
 
+import ge.mimino.travel.dto.GeoObjectDTO;
 import ge.mimino.travel.dto.ProductRestaurantsDTO;
 import ge.mimino.travel.model.*;
 import ge.mimino.travel.request.AddRequest;
@@ -100,10 +101,14 @@ public class RequestDAO extends AbstractDAO {
         query.executeUpdate();
     }
 
-    public void removeProductSights(Integer requestId, List<Integer> sights, Integer day) {
+    public void removeProductSights(Integer requestId, List<GeoObjectDTO> sights, Integer day) {
+        List<Integer> sightsIds = new ArrayList<>();
+        for (GeoObjectDTO rest : sights) {
+            sightsIds.add(rest.getId());
+        }
         Query query = getEntityManager().createQuery("delete from " + ProductSights.class.getSimpleName()
                 + " c where c.requestId=" + requestId + " and c.day=" + day + " and c.sightId in :listOfIds");
-        query.setParameter("listOfIds", sights);
+        query.setParameter("listOfIds", sightsIds);
         query.executeUpdate();
     }
 
