@@ -67,10 +67,16 @@ public class HotelDAO extends AbstractDAO {
         return entityManager.createQuery("delete from " + HotelImages.class.getSimpleName() + " c where c.hotelId=" + id).executeUpdate();
     }
 
-    public List<Hotel> getHotelsByPlaces(List<Integer> placeIds) {
-        TypedQuery<Hotel> query = getEntityManager().createQuery("select c from " + Hotel.class.getSimpleName()
-                + " c where c.place.id in :listOfIds", Hotel.class);
-        query.setParameter("listOfIds", placeIds);
-        return query.getResultList();
+    public List<Hotel> getHotelsByPlaces(List<Integer> placeIds, String stars) {
+        String query = "select c from " + Hotel.class.getSimpleName() + " c where 1=1 ";
+        if (!placeIds.isEmpty()) {
+            query += "and c.place.id in :listOfIds ";
+        }
+        if (stars != null && stars.length() > 0) {
+            query += " and c.starsCount = " + stars;
+        }
+        TypedQuery<Hotel> tquery = getEntityManager().createQuery(query, Hotel.class);
+        tquery.setParameter("listOfIds", placeIds);
+        return tquery.getResultList();
     }
 }

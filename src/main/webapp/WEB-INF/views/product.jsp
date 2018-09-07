@@ -21,6 +21,8 @@
     $scope.restPackages = [];
     $scope.tmpSights = [];
     $scope.combSights = [];
+    $scope.hotelStars = {};
+    $scope.stars = ['*', '**', '***', '****', '*****'];
 
     function getMealCategories(res) {
       $scope.mealCategories = res.data;
@@ -111,7 +113,7 @@
             $scope.hotels = res.data;
           }
 
-          ajaxCall($http, "hotels/get-hotels-by-place", angular.toJson($scope.product.places), getHotels);
+          ajaxCall($http, "hotels/get-hotels-by-place", angular.toJson($scope.product.places,), getHotels);
 
           function getSights(res) {
             $scope.sights = res.data;
@@ -417,9 +419,22 @@
 
         <div class="panel panel-success ">
           <div class="panel-heading">
-            <a class="btn btn-app">
-              <i class="fa fa-bed"></i> Hotels
-            </a>
+            <div class="col-sm-2">
+              <a class="btn btn-app">
+                <i class="fa fa-bed"></i> Hotels
+              </a>
+            </div>
+            <div class="col-sm-10">
+              <div class="form-group">
+                <select class="form-control" ng-model="hotelStars"
+                        ng-change="filterWithStars()">
+                  <option value="" selected="selected">Stars Count</option>
+                  <option ng-repeat="v in stars" ng-selected="v === hotelStars"
+                          value="{{v}}">{{v}}
+                  </option>
+                </select>
+              </div>
+            </div>
           </div>
           <div class="panel-body">
             <div class="form-group col-sm-12 ">
