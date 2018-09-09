@@ -38,7 +38,7 @@ public class HotelController {
 
     @RequestMapping("/get-hotels-by-place")
     @ResponseBody
-    private Response getHotelsByPlaces(@RequestBody List<Integer> ids, @RequestBody String stars) throws Exception {
+    private Response getHotelsByPlaces(@RequestBody List<Integer> ids, @RequestParam String stars) throws Exception {
         return Response.withSuccess(hotelService.getHotelsByPlaces(ids, stars));
     }
 
