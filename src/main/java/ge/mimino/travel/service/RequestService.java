@@ -180,6 +180,10 @@ public class RequestService {
         return DetailsDTO.parseToList(requestDAO.getAll(Details.class));
     }
 
+  public List<ProductImagesDTO> getProductImages() {
+    return ProductImagesDTO.parseToList(requestDAO.getAll(ProductImages.class));
+  }
+
     public Request getRequestByKey(String key) throws IndexOutOfBoundsException {
         List<ParamValuePair> paramValues = new ArrayList<>();
         paramValues.add(new ParamValuePair("requestKey", key));

@@ -6,6 +6,7 @@ import ge.mimino.travel.dto.UsersDTO;
 import ge.mimino.travel.misc.Response;
 import ge.mimino.travel.request.AddRequest;
 import ge.mimino.travel.request.ProductRequest;
+import ge.mimino.travel.service.FileService;
 import ge.mimino.travel.service.RequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 
 /**
@@ -26,6 +29,9 @@ public class RequestController {
 
     @Autowired
     private RequestService requestService;
+
+  @Autowired
+  private FileService fileService;
 
     @RequestMapping("/get-requests")
     @ResponseBody
@@ -105,5 +111,17 @@ public class RequestController {
         requestService.delete(id);
         return Response.withSuccess(true);
     }
+
+  @RequestMapping("/get-product-images")
+  @ResponseBody
+  private Response getProductImages(@RequestParam Integer id) throws Exception {
+    return Response.withSuccess(requestService.getProductImages(id));
+  }
+
+  @RequestMapping("/add-images")
+  @ResponseBody
+  private Response addImage(@RequestParam("file") MultipartFile file, @RequestParam String id) throws IOException {
+    return Response.withSuccess(fileService.addFile(file, "uploads", id));
+  }
 
 }

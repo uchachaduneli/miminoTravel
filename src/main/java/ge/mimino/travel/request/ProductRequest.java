@@ -1,6 +1,7 @@
 package ge.mimino.travel.request;
 
 import ge.mimino.travel.dto.GeoObjectDTO;
+import ge.mimino.travel.dto.ProductDTO;
 import ge.mimino.travel.dto.ProductRestaurantsDTO;
 
 import java.util.List;
@@ -15,6 +16,15 @@ public class ProductRequest {
     private List<ProductRestaurantsDTO> restaurants;
     private Integer day;
     private Integer requestId;
+  private ProductDTO product;
+
+  public ProductDTO getProduct() {
+    return product;
+  }
+
+  public void setProduct(ProductDTO product) {
+    this.product = product;
+  }
 
     public List<Integer> getRegions() {
         return regions;
