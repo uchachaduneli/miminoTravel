@@ -22,7 +22,7 @@ public class DistancesDTO {
         dto.setFromPlace(PlaceDTO.parse(record.getFromPlace()));
         dto.setToPlace(PlaceDTO.parse(record.getToPlace()));
         dto.setFromPlaceId(record.getFromPlace().getId());
-        dto.setToPlaceId(record.getFromPlace().getId());
+        dto.setToPlaceId(record.getToPlace().getId());
         return dto;
     }
 

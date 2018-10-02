@@ -70,6 +70,11 @@ public class WebController {
         return "restaurants";
     }
 
+    @RequestMapping("/distances")
+    public String distances() {
+        return "distances";
+    }
+
     @RequestMapping("/")
     public String defaultFnc() {
         return "";
