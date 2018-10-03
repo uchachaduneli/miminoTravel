@@ -227,9 +227,9 @@
                 });
             });
             $scope.product.sights = $filter('filter')($scope.combSights, '!null', true);
+            $scope.product.product.requestId = $scope.request.id;
             console.log(angular.toJson($scope.product));
 //      console.log(angular.toJson($scope.product.sights));
-//      console.log(angular.toJson($scope.combSights));
 
             ajaxCall($http, "requests/save-product", angular.toJson($scope.product), resFunc);
         };
@@ -410,28 +410,25 @@
                     </div>
                     <div class="panel-body">
                         <div class="form-group col-sm-12 ">
-                            <div class="form-group col-sm-10 ">
-                                <label class="control-label col-sm-3">Thematic Image</label>
-                                <div class="col-sm-9">
-                                    <div class="input-group input-file">
-                                        <input type="text" id="uploadDocNameInput" class="form-control"
-                                               onclick="$('#documentId').trigger('click');"
-                                               placeholder='Upload New Or Choose One Below ...'/>
-                                        <span class="input-group-btn">
+                            <div class="form-group col-sm-10 col-sm-offset-2">
+                                <div class="input-group input-file col-sm-9">
+                                    <input type="text" id="uploadDocNameInput" class="form-control"
+                                           onclick="$('#documentId').trigger('click');"
+                                           placeholder='Upload New Or Choose One Below ...'/>
+                                    <span class="input-group-btn">
                                             <button class="btn btn-default btn-choose" id="documentId"
                                                     type="file" ngf-select="uploadFiles($files)" ng-model="files"
                                                     multiple
                                                     accept="*/*" ngf-max-size="30MB">Browse
                                             </button>
     		                            </span>
-                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-12">
 
                                 <label ng-repeat="item in slcted.images" class="panel col-sm-4">
                                     <div class="col-sm-1">
-                                        <input type="radio" ng-model="product.introImg" value="{{item.name}}"
+                                        <input type="radio" ng-model="product.product.introImg" value="{{item.name}}"
                                                class="input-sm">&nbsp;
                                     </div>
                                     <a href="misc/get-file?name={{'uploads/' + item.name.split('.')[0]}}"
@@ -442,6 +439,10 @@
                                     </a>
                                 </label>
                             </div>
+                        </div>
+                        <div class="form-group col-sm-12 ">
+                                <textarea rows="5" ng-model="product.product.introText" placeholder="Intro Description"
+                                          class="input-sm col-sm-8 col-sm-offset-2"></textarea>
                         </div>
                     </div>
                 </div>
