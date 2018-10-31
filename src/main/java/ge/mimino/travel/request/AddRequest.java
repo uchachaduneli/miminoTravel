@@ -1,6 +1,7 @@
 package ge.mimino.travel.request;
 
 import ge.mimino.travel.dto.CombinedCountry;
+import ge.mimino.travel.model.TouristCount;
 
 import java.sql.Date;
 import java.util.List;
@@ -15,8 +16,6 @@ public class AddRequest {
     private Date tourEndTo;
     private Integer daysCount;
     private Integer nightsCount;
-    private Integer touristsCount;
-    private String touristsCountNote;
     private String arrivalTime;
     private String leaveTime;
     private Integer arrivalCityId;
@@ -34,6 +33,7 @@ public class AddRequest {
     private Integer userId;
     private List<Integer> otherDetails;
     private List<CombinedCountry> combinedCountries;
+  private List<TouristCount> touristCount;
     private String strTourStart;
     private String strTourEnd;
     private String strArrivalTime;
@@ -111,22 +111,6 @@ public class AddRequest {
 
     public void setNightsCount(Integer nightsCount) {
         this.nightsCount = nightsCount;
-    }
-
-    public Integer getTouristsCount() {
-        return touristsCount;
-    }
-
-    public void setTouristsCount(Integer touristsCount) {
-        this.touristsCount = touristsCount;
-    }
-
-    public String getTouristsCountNote() {
-        return touristsCountNote;
-    }
-
-    public void setTouristsCountNote(String touristsCountNote) {
-        this.touristsCountNote = touristsCountNote;
     }
 
     public String getArrivalTime() {
@@ -264,6 +248,14 @@ public class AddRequest {
     public void setCombinedCountries(List<CombinedCountry> combinedCountries) {
         this.combinedCountries = combinedCountries;
     }
+
+  public List<TouristCount> getTouristCount() {
+    return touristCount;
+  }
+
+  public void setTouristCount(List<TouristCount> touristCount) {
+    this.touristCount = touristCount;
+  }
 
     public String getStrTourStart() {
         return strTourStart;

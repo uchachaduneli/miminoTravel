@@ -32,6 +32,10 @@ public class RequestDAO extends AbstractDAO {
         return entityManager.createQuery("delete from " + RequestCountry.class.getSimpleName() + " c where c.requestId=" + requestId).executeUpdate();
     }
 
+    public int removeTouristCounts(Integer requestId) {
+        return entityManager.createQuery("delete from " + TouristCount.class.getSimpleName() + " c where c.requestId=" + requestId).executeUpdate();
+    }
+
     public List<Request> getRequests(int start, int limit, AddRequest srchRequest) {
         StringBuilder q = new StringBuilder();
         q.append("Select e From ").append(Request.class.getSimpleName()).append(" e Where 1=1 ");

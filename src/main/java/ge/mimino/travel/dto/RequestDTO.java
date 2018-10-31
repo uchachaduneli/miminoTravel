@@ -21,8 +21,6 @@ public class RequestDTO {
     private Date tourEnd;
     private Integer daysCount;
     private Integer nightsCount;
-    private Integer touristsCount;
-    private String touristsCountNote;
     @JsonSerialize(using = JsonDateTimeSerializeSupport.class)
     private Date arrivalTime;
     @JsonSerialize(using = JsonDateTimeSerializeSupport.class)
@@ -67,8 +65,6 @@ public class RequestDTO {
         dto.setTourEnd(record.getTourEnd());
         dto.setDaysCount(record.getDaysCount());
         dto.setNightsCount(record.getNightsCount());
-        dto.setTouristsCount(record.getTouristsCount());
-        dto.setTouristsCountNote(record.getTouristsCountNote());
         dto.setArrivalTime(record.getArrivalTime());
         dto.setLeaveTime(record.getLeaveTime());
         dto.setArrivalCity(CityDTO.parse(record.getArrivalCity()));
@@ -165,22 +161,6 @@ public class RequestDTO {
 
     public void setNightsCount(Integer nightsCount) {
         this.nightsCount = nightsCount;
-    }
-
-    public Integer getTouristsCount() {
-        return touristsCount;
-    }
-
-    public void setTouristsCount(Integer touristsCount) {
-        this.touristsCount = touristsCount;
-    }
-
-    public String getTouristsCountNote() {
-        return touristsCountNote;
-    }
-
-    public void setTouristsCountNote(String touristsCountNote) {
-        this.touristsCountNote = touristsCountNote;
     }
 
     public Date getArrivalTime() {

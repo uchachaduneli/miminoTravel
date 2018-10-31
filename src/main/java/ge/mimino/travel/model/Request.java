@@ -14,8 +14,6 @@ public class Request {
     private Date tourEnd;
     private Integer daysCount;
     private Integer nightsCount;
-    private Integer touristsCount;
-    private String touristsCountNote;
     private Timestamp arrivalTime;
     private Timestamp leaveTime;
     private City arrivalCity;
@@ -109,26 +107,6 @@ public class Request {
 
     public void setNightsCount(Integer nightsCount) {
         this.nightsCount = nightsCount;
-    }
-
-    @Basic
-    @Column(name = "tourists_count")
-    public Integer getTouristsCount() {
-        return touristsCount;
-    }
-
-    public void setTouristsCount(Integer touristsCount) {
-        this.touristsCount = touristsCount;
-    }
-
-    @Basic
-    @Column(name = "tourists_count_note")
-    public String getTouristsCountNote() {
-        return touristsCountNote;
-    }
-
-    public void setTouristsCountNote(String touristsCountNote) {
-        this.touristsCountNote = touristsCountNote;
     }
 
     @Basic
@@ -361,21 +339,4 @@ public class Request {
         this.strArrivalTime = strArrivalTime;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Request request = (Request) o;
-
-        if (strArrivalTime != null ? !strArrivalTime.equals(request.strArrivalTime) : request.strArrivalTime != null)
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return strArrivalTime != null ? strArrivalTime.hashCode() : 0;
-    }
 }

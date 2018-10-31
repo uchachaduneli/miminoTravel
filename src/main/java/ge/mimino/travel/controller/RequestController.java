@@ -49,6 +49,12 @@ public class RequestController {
     return Response.withSuccess(requestService.getRequestCountries(id));
   }
 
+  @RequestMapping("/get-tourist-counts")
+  @ResponseBody
+  private Response getTouristCounts(@RequestParam Integer id) throws Exception {
+    return Response.withSuccess(requestService.getTouristCounts(id));
+  }
+
   @RequestMapping("/get-request-by-key")
   @ResponseBody
   private Response getRequestByKey(@RequestParam String id) {

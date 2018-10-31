@@ -5,7 +5,6 @@ import ge.mimino.travel.dao.ParamValuePair;
 import ge.mimino.travel.dao.RequestDAO;
 import ge.mimino.travel.dto.*;
 import ge.mimino.travel.model.*;
-import ge.mimino.travel.model.Currency;
 import ge.mimino.travel.request.AddRequest;
 import ge.mimino.travel.request.ProductRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * @author ucha
@@ -43,8 +45,6 @@ public class RequestService {
     obj.setStrTourEnd(request.getStrTourEnd());
     obj.setDaysCount(request.getDaysCount());
     obj.setNightsCount(request.getNightsCount());
-    obj.setTouristsCount(request.getTouristsCount());
-    obj.setTouristsCountNote(request.getTouristsCountNote());
     obj.setArrivalTime(new Timestamp(sdf.parse(request.getArrivalTime()).getTime()));//request.getArrivalTime()
     obj.setStrArrivalTime(request.getStrArrivalTime());
     obj.setLeaveTime(new Timestamp(sdf.parse(request.getLeaveTime()).getTime()));//request.getLeaveTime()
@@ -66,13 +66,12 @@ public class RequestService {
     obj.setGuideLanguage((Language) requestDAO.find(Language.class, request.getGuideLanguageId()));
     obj.setUser((Users) requestDAO.find(Users.class, request.getUserId()));
 //
+
+
     if (request.getId() != null) {
       obj.setId(request.getId());
       obj = (Request) requestDAO.update(obj);
     } else {
-      Calendar cal = Calendar.getInstance();
-      cal.setTime(new Date());
-      obj.setTourCode(cal.get(Calendar.DAY_OF_MONTH) + "." + cal.get(Calendar.MONTH) + "-" + request.getTouristsCount());
       obj.setRequestKey(UUID.randomUUID() + "");
       obj = (Request) requestDAO.create(obj);
     }
@@ -83,6 +82,18 @@ public class RequestService {
         requestDAO.create(new RequestCountry(obj.getId(), ((Country) requestDAO.find(Country.class, combCntr.getCountryId())),
                 combCntr.getDaysCount(), combCntr.getNote()));
       }
+    }
+
+    requestDAO.removeTouristCounts(obj.getId());
+    String tmpCount = "";
+    if (request.getTouristCount() != null && !request.getTouristCount().isEmpty()) {
+      for (TouristCount tc : request.getTouristCount()) {
+        tmpCount += tc.getCount() + ",";
+        requestDAO.create(new TouristCount(obj.getId(), tc.getCount(), tc.getStrCount()));
+      }
+      Calendar cal = Calendar.getInstance();
+      obj.setTourCode(cal.get(Calendar.DAY_OF_MONTH) + "." + cal.get(Calendar.MONTH) + "-" + tmpCount);
+      requestDAO.update(obj);
     }
 
     return obj;
@@ -169,6 +180,13 @@ public class RequestService {
     List<ParamValuePair> paramValues = new ArrayList<>();
     paramValues.add(new ParamValuePair("requestId", caseId));
     return RequestCountryDTO.parseToList(requestDAO.getAllByParamValue(RequestCountry.class, paramValues, null));
+  }
+
+
+  public List<TouristCountDTO> getTouristCounts(int caseId) {
+    List<ParamValuePair> paramValues = new ArrayList<>();
+    paramValues.add(new ParamValuePair("requestId", caseId));
+    return TouristCountDTO.parseToList(requestDAO.getAllByParamValue(TouristCount.class, paramValues, null));
   }
 
   public List<RequestDetailsDTO> getRequestDetails(int caseId) {
