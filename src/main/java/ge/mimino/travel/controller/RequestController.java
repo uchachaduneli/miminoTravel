@@ -89,6 +89,12 @@ public class RequestController {
     return Response.withSuccess(requestService.getDetails());
   }
 
+  @RequestMapping("/get-tourists-count")
+  @ResponseBody
+  private Response getTouristsCount(@RequestParam Integer id) throws Exception {
+    return Response.withSuccess(requestService.getTouristsCount(id));
+  }
+
   @RequestMapping({"/save"})
   @ResponseBody
   public Response saveUser(@RequestBody AddRequest request, HttpServletRequest servletRequest) throws Exception {
@@ -116,19 +122,6 @@ public class RequestController {
   public Response delete(@RequestParam int id) {
     requestService.delete(id);
     return Response.withSuccess(true);
-  }
-
-  @RequestMapping("/save-images")
-  @ResponseBody
-  private Response getSaveImages(@RequestParam String imgName) throws Exception {
-    requestService.saveImages(imgName);
-    return Response.ok();
-  }
-
-  @RequestMapping("/get-product-images")
-  @ResponseBody
-  private Response getProductImages() throws Exception {
-    return Response.withSuccess(requestService.getProductImages());
   }
 
   @RequestMapping("/add-images")

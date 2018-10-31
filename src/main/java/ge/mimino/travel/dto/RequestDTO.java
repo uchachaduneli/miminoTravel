@@ -55,6 +55,8 @@ public class RequestDTO {
     private String tourCode;
     private String nationality;
 
+    public static String NAT_FOR_TRANSPORT = "German/Italian/Spain/France";
+
 
     public static RequestDTO parse(Request record) {
         RequestDTO dto = new RequestDTO();

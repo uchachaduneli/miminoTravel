@@ -1,5 +1,6 @@
 package ge.mimino.travel.request;
 
+import ge.mimino.travel.controller.TmpHotelGroup;
 import ge.mimino.travel.dto.GeoObjectDTO;
 import ge.mimino.travel.dto.ProductDTO;
 import ge.mimino.travel.dto.ProductRestaurantsDTO;
@@ -10,21 +11,13 @@ public class ProductRequest {
   private List<Integer> regions;
   private List<GeoObjectDTO> sights;
   private List<Integer> places;
-  private List<Integer> hotels;
+  private List<TmpHotelGroup> hotels;
   private List<Integer> transports;
   private List<Integer> nonstandarts;
   private List<ProductRestaurantsDTO> restaurants;
   private Integer day;
   private Integer requestId;
   private ProductDTO product;
-
-  public ProductDTO getProduct() {
-    return product;
-  }
-
-  public void setProduct(ProductDTO product) {
-    this.product = product;
-  }
 
   public List<Integer> getRegions() {
     return regions;
@@ -50,11 +43,11 @@ public class ProductRequest {
     this.places = places;
   }
 
-  public List<Integer> getHotels() {
+  public List<TmpHotelGroup> getHotels() {
     return hotels;
   }
 
-  public void setHotels(List<Integer> hotels) {
+  public void setHotels(List<TmpHotelGroup> hotels) {
     this.hotels = hotels;
   }
 
@@ -96,5 +89,13 @@ public class ProductRequest {
 
   public void setRequestId(Integer requestId) {
     this.requestId = requestId;
+  }
+
+  public ProductDTO getProduct() {
+    return product;
+  }
+
+  public void setProduct(ProductDTO product) {
+    this.product = product;
   }
 }

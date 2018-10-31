@@ -7,59 +7,69 @@ import java.util.List;
 
 public class ProductTransportsDTO {
 
-    private Integer id;
-    private Integer transportId;
-    private Integer requestId;
-    private Integer day;
+  private Integer id;
+  private Integer transportId;
+  private Integer requestId;
+  private Integer count;
+  private Integer touristCount;
 
 
-    public static ProductTransportsDTO parse(ProductTransports record) {
-        ProductTransportsDTO dto = new ProductTransportsDTO();
-        dto.setId(record.getId());
-        dto.setTransportId(record.getTransportId());
-        dto.setRequestId(record.getRequestId());
-        dto.setDay(record.getDay());
-        return dto;
+  public static ProductTransportsDTO parse(ProductTransports record) {
+    ProductTransportsDTO dto = new ProductTransportsDTO();
+    dto.setId(record.getId());
+    dto.setTransportId(record.getTransportId());
+    dto.setRequestId(record.getRequestId());
+    dto.setCount(record.getCount());
+    dto.setTouristCount(record.getTouristCount());
+    return dto;
+  }
+
+
+  public static List<ProductTransportsDTO> parseToList(List<ProductTransports> records) {
+    ArrayList<ProductTransportsDTO> list = new ArrayList<ProductTransportsDTO>();
+    for (ProductTransports record : records) {
+      list.add(ProductTransportsDTO.parse(record));
     }
+    return list;
+  }
 
+  public Integer getTouristCount() {
+    return touristCount;
+  }
 
-    public static List<ProductTransportsDTO> parseToList(List<ProductTransports> records) {
-        ArrayList<ProductTransportsDTO> list = new ArrayList<ProductTransportsDTO>();
-        for (ProductTransports record : records) {
-            list.add(ProductTransportsDTO.parse(record));
-        }
-        return list;
-    }
+  public void setTouristCount(Integer touristCount) {
+    this.touristCount = touristCount;
+  }
 
-    public Integer getId() {
-        return id;
-    }
+  public Integer getCount() {
+    return count;
+  }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+  public void setCount(Integer count) {
+    this.count = count;
+  }
 
-    public Integer getTransportId() {
-        return transportId;
-    }
+  public Integer getId() {
+    return id;
+  }
 
-    public void setTransportId(Integer transportId) {
-        this.transportId = transportId;
-    }
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    public Integer getRequestId() {
-        return requestId;
-    }
+  public Integer getTransportId() {
+    return transportId;
+  }
 
-    public void setRequestId(Integer requestId) {
-        this.requestId = requestId;
-    }
+  public void setTransportId(Integer transportId) {
+    this.transportId = transportId;
+  }
 
-    public Integer getDay() {
-        return day;
-    }
+  public Integer getRequestId() {
+    return requestId;
+  }
 
-    public void setDay(Integer day) {
-        this.day = day;
-    }
+  public void setRequestId(Integer requestId) {
+    this.requestId = requestId;
+  }
 }

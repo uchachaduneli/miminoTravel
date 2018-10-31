@@ -10,40 +10,28 @@
 <script>
     app.controller("angController", ['$scope', '$http', '$filter', '$location', '$window', 'Upload', '$timeout', function ($scope, $http, $filter, $location, $window, Upload, $timeout) {
 
-        $scope.product = {sights: [], places: [], hotels: [], transports: [], nonstandarts: []};
+        $scope.product = {sights: [], places: [], hotels: [], nonstandarts: []};
         $scope.daysList = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
         $scope.HbMealCats = ['Lunch', 'Picnick Lunch', 'Lunch with degustation', 'Dinner', 'Dinner Folk Show', 'Gala Dinner', 'Dinner At hotel'];
         $scope.FbMealCats = ['Breakfast', 'Lunch', 'Picnick Lunch', 'Lunch with degustation', 'Dinner', 'Dinner Folk Show', 'Gala Dinner', 'Dinner At hotel'];
         $scope.dayIndex = 0;
         $scope.mealCategories = [];
         $scope.restaurantRow = [];
-        $scope.prod = {restaurants: []};
+        $scope.prod = {restaurants: [], hotels1: [], hotels2: [], hotels3: []};
         $scope.restPackages = [];
         $scope.tmpSights = [];
         $scope.combSights = [];
-        $scope.hotelStars = {};
         $scope.stars = ['*', '**', '***', '****', '*****'];
-        $scope.hotelStars = '';
+        $scope.hotelStars1 = '';
+        $scope.hotelStars2 = '';
+        $scope.hotelStars3 = '';
         $scope.imageNames = [];
-        $scope.slcted = {images: []};
 
         function getMealCategories(res) {
             $scope.mealCategories = res.data;
         }
 
         ajaxCall($http, "misc/get-mealcategories", null, getMealCategories);
-
-        $scope.loadSharedImages = function () {
-            $scope.slcted.images = [];
-
-            function getImages(res) {
-                $scope.slcted.images = res.data;
-            }
-
-            ajaxCall($http, "requests/get-product-images", null, getImages);
-        }
-
-        $scope.loadSharedImages();
 
         $scope.loadRequest = function () {
             var absUrl = $location.absUrl();
@@ -68,15 +56,22 @@
                     sights: [],
                     places: [],
                     hotels: [],
-                    transports: [],
                     nonstandarts: [],
                     restaurants: []
                 };
 
                 $scope.product.regions = res.data.regions;
                 $scope.product.places = res.data.places;
-                $scope.product.hotels = res.data.hotels;
-                $scope.product.transports = res.data.transports;
+                angular.forEach($filter('filter')(res.data.hotels, {groupId: 1}, true), function (v) {
+                    $scope.prod.hotels1.push(v.hotelId);
+                });
+                angular.forEach($filter('filter')(res.data.hotels, {groupId: 2}, true), function (v) {
+                    $scope.prod.hotels2.push(v.hotelId);
+                });
+                angular.forEach($filter('filter')(res.data.hotels, {groupId: 3}, true), function (v) {
+                    $scope.prod.hotels3.push(v.hotelId);
+                });
+
                 $scope.product.nonstandarts = res.data.nonstandarts;
 
                 angular.forEach(res.data.sights, function (v, k) {
@@ -125,7 +120,9 @@
 
                 if ($scope.product.places.length > 0) {
                     function getHotels(res) {
-                        $scope.hotels = res.data;
+                        $scope.hotels1 = res.data;
+                        $scope.hotels2 = res.data;
+                        $scope.hotels3 = res.data;
                     }
 
                     ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars, angular.toJson($scope.product.places), getHotels);
@@ -177,12 +174,6 @@
 
             ajaxCall($http, "misc/get-mealcategories", null, getMealcategories);
 
-            function getTransports(res) {
-                $scope.transports = res.data;
-            }
-
-            ajaxCall($http, "transports/get-transports?start=0&limit=99999", {}, getTransports);
-
             function getNonstandarts(res) {
                 $scope.nonstandarts = res.data;
                 $('#loadingModal').modal('hide');
@@ -218,6 +209,8 @@
             $scope.product.day = $scope.dayIndex + 1;
 
             $scope.product.restaurants = [];
+            $scope.product.hotels = [];
+
             angular.forEach($scope.prod.restaurants, function (v, k) {
                 var packages = v.packages != undefined ? v.packages.join(',') : '';
                 $scope.product.restaurants.push({
@@ -226,8 +219,27 @@
                     packages: packages
                 });
             });
+            angular.forEach($scope.prod.hotels1, function (v) {
+                $scope.product.hotels.push({
+                    hotelId: v,
+                    groupId: 1
+                });
+            });
+            angular.forEach($scope.prod.hotels2, function (v) {
+                $scope.product.hotels.push({
+                    hotelId: v,
+                    groupId: 2
+                });
+            });
+            angular.forEach($scope.prod.hotels3, function (v) {
+                $scope.product.hotels.push({
+                    hotelId: v,
+                    groupId: 3
+                });
+            });
+
             $scope.product.sights = $filter('filter')($scope.combSights, '!null', true);
-            $scope.product.product.requestId = $scope.request.id;
+            // $scope.product.product.requestId = $scope.request.id;
             console.log(angular.toJson($scope.product));
 //      console.log(angular.toJson($scope.product.sights));
 
@@ -252,6 +264,49 @@
             }
         };
 
+        $scope.filterHotels1 = function () {
+            var slctedPlaces = $filter('filter')($scope.places, {selected: true}, true);
+            var ids = [];
+            angular.forEach(slctedPlaces, function (v) {
+                ids.push(v.id);
+            });
+            if (ids.length > 0 || $scope.hotelStars1.length > 0) {
+                function getHotels(res) {
+                    $scope.hotels1 = res.data;
+                }
+
+                ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars1, angular.toJson(ids), getHotels);
+            }
+        }
+        $scope.filterHotels2 = function () {
+            var slctedPlaces = $filter('filter')($scope.places, {selected: true}, true);
+            var ids = [];
+            angular.forEach(slctedPlaces, function (v) {
+                ids.push(v.id);
+            });
+            if (ids.length > 0 || $scope.hotelStars2.length > 0) {
+                function getHotels(res) {
+                    $scope.hotels2 = res.data;
+                }
+
+                ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars2, angular.toJson(ids), getHotels);
+            }
+        }
+        $scope.filterHotels3 = function () {
+            var slctedPlaces = $filter('filter')($scope.places, {selected: true}, true);
+            var ids = [];
+            angular.forEach(slctedPlaces, function (v) {
+                ids.push(v.id);
+            });
+            if (ids.length > 0 || $scope.hotelStars3.length > 0) {
+                function getHotels(res) {
+                    $scope.hotels3 = res.data;
+                }
+
+                ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars3, angular.toJson(ids), getHotels);
+            }
+        }
+
         $scope.searchByPlace = function () {
             var slctedPlaces = $filter('filter')($scope.places, {selected: true}, true);
             var ids = [];
@@ -260,11 +315,11 @@
             })
             console.log(angular.toJson(ids));
             if (ids.length > 0 || $scope.hotelStars.length > 0) {
-                function getHotels(res) {
-                    $scope.hotels = res.data;
-                }
-
-                ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars, angular.toJson(ids), getHotels);
+                // function getHotels(res) {
+                //     $scope.hotels = res.data;
+                // }
+                //
+                // ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars, angular.toJson(ids), getHotels);
 
                 function getSights(res) {
                     $scope.sights = res.data;
@@ -272,7 +327,7 @@
 
                 ajaxCall($http, "objects/get-objects-by-place", angular.toJson(ids), getSights);
             } else {
-                $scope.hotels = [];
+                // $scope.hotels = [];
                 $scope.sights = [];
             }
         };
@@ -298,43 +353,6 @@
                 $scope.product.restaurants.splice(index, 1);
             }
         };
-
-        $scope.uploadFiles = function (files) {
-            $scope.files = files;
-            angular.forEach(files, function (file) {
-
-                $scope.slcted.images.push({name: 'product_' + file.name});
-                $scope.imageNames.push('product_' + file.name);
-
-                if (file && !file.$error) {
-                    file.upload = Upload.upload({
-                        url: 'requests/add-images?id=product',
-                        file: file
-                    });
-
-                    file.upload.then(function (response) {
-                        $timeout(function () {
-                            file.result = response.data;
-                        });
-
-                        function onImageSave(res) {
-                            if (res.errorCode == 0) {
-                                successMsg('Image Template Saved');
-                            } else {
-                                errorMsg('Image Save Operation Failed');
-                            }
-                        }
-
-                        ajaxCall($http, "requests/save-images?imgName=product_" + file.name, null, onImageSave);
-                    }, function (response) {
-                        if (response.status > 0)
-                            $scope.errorMsg = response.status + ': ' + response.data;
-                    });
-                }
-            });
-            console.log($scope.files);
-        };
-
     }]);
 </script>
 
@@ -397,56 +415,17 @@
                                 <td>{{request.leaveTime}} / {{request.strLeaveTime}}</td>
                             </tr>
                         </table>
+
+                        <a class="btn btn-app">
+                            <i class="fa fa-car"></i> Transports
+                        </a>
+                        <table class="table table-striped">
+
+                        </table>
                     </div>
                 </div>
             </div>
             <div class="box-body">
-
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <a class="btn btn-app">
-                            <i class="fa fa-share-alt"></i> Shared details
-                        </a>
-                    </div>
-                    <div class="panel-body">
-                        <div class="form-group col-sm-12 ">
-                            <div class="form-group col-sm-10 col-sm-offset-2">
-                                <div class="input-group input-file col-sm-9">
-                                    <input type="text" id="uploadDocNameInput" class="form-control"
-                                           onclick="$('#documentId').trigger('click');"
-                                           placeholder='Upload New Or Choose One Below ...'/>
-                                    <span class="input-group-btn">
-                                            <button class="btn btn-default btn-choose" id="documentId"
-                                                    type="file" ngf-select="uploadFiles($files)" ng-model="files"
-                                                    multiple
-                                                    accept="*/*" ngf-max-size="30MB">Browse
-                                            </button>
-    		                            </span>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-
-                                <label ng-repeat="item in slcted.images" class="panel col-sm-4">
-                                    <div class="col-sm-1">
-                                        <input type="radio" ng-model="product.product.introImg" value="{{item.name}}"
-                                               class="input-sm">&nbsp;
-                                    </div>
-                                    <a href="misc/get-file?name={{'uploads/' + item.name.split('.')[0]}}"
-                                       class="col-sm-3" target="_blank">
-                                        <img src="misc/get-file?name={{'uploads/' + item.name.split('.')[0]}}&"
-                                             + new Date().getTime();
-                                             class="thumbnail img-responsive"/>
-                                    </a>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-12 ">
-                                <textarea rows="5" ng-model="product.product.introText" placeholder="Intro Description"
-                                          class="input-sm col-sm-8 col-sm-offset-2"></textarea>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <a class="btn btn-app">
@@ -521,24 +500,63 @@
                         <a class="btn btn-app">
                             <i class="fa fa-bed"></i> Hotels
                         </a>
-                        <div class="form-group">
-                            <select class="form-control" ng-model="hotelStars"
-                                    ng-change="searchByPlace()">
-                                <option value="" selected="selected">Stars Count</option>
-                                <option ng-repeat="v in stars" ng-selected="v === hotelStars"
-                                        value="{{v}}">{{v}}
-                                </option>
-                            </select>
-                        </div>
                     </div>
                 </div>
                 <div class="panel-body">
                     <div class="form-group col-sm-12 ">
                         <div class="col-sm-12">
-                            <label ng-repeat="t in hotels" class="col-sm-3">
-                                <input type="checkbox" id="hotelschecks{{t.id}}"
-                                       checklist-model="product.hotels" checklist-value="t.id">&nbsp; {{t.nameEn}}
-                            </label>
+                            <fieldset class="border p-2">
+                                <legend class="w-auto">Group N1</legend>
+
+                                <div class="form-group">
+                                    <select class="form-control" ng-model="hotelStars1"
+                                            ng-change="filterHotels1()">
+                                        <option value="" selected="selected">Stars Count</option>
+                                        <option ng-repeat="v in stars" ng-selected="v === hotelStars1"
+                                                value="{{v}}">{{v}}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <label ng-repeat="t in hotels1" class="col-sm-3">
+                                    <input type="checkbox" id="gr1hotelschecks{{t.id}}"
+                                           checklist-model="prod.hotels1" checklist-value="t.id">&nbsp; {{t.nameEn}}
+                                </label>
+                            </fieldset>
+                            <fieldset class="border p-2">
+                                <legend class="w-auto">Group N2</legend>
+
+                                <div class="form-group">
+                                    <select class="form-control" ng-model="hotelStars2"
+                                            ng-change="filterHotels2()">
+                                        <option value="" selected="selected">Stars Count</option>
+                                        <option ng-repeat="v in stars" ng-selected="v === hotelStars2"
+                                                value="{{v}}">{{v}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <label ng-repeat="t in hotels2" class="col-sm-3">
+                                    <input type="checkbox" id="gr2hotelschecks{{t.id}}"
+                                           checklist-model="prod.hotels2" checklist-value="t.id">&nbsp; {{t.nameEn}}
+                                </label>
+                            </fieldset>
+                            <fieldset class="border p-2">
+                                <legend class="w-auto">Group N3</legend>
+
+                                <div class="form-group">
+                                    <select class="form-control" ng-model="hotelStars3"
+                                            ng-change="filterHotels3()">
+                                        <option value="" selected="selected">Stars Count</option>
+                                        <option ng-repeat="v in stars" ng-selected="v === hotelStars3"
+                                                value="{{v}}">{{v}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <label ng-repeat="t in hotels3" class="col-sm-3">
+                                    <input type="checkbox" id="gr3hotelschecks{{t.id}}"
+                                           checklist-model="prod.hotels3" checklist-value="t.id">&nbsp; {{t.nameEn}}
+                                </label>
+                            </fieldset>
                         </div>
                     </div>
                 </div>
@@ -618,25 +636,6 @@
                                 </div>
                                 <hr class="col-sm-12"/>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel panel-warning ">
-                <div class="panel-heading">
-                    <a class="btn btn-app">
-                        <i class="fa fa-car"></i> Transports
-                    </a>
-                </div>
-                <div class="panel-body">
-                    <div class="form-group col-sm-12 ">
-                        <div class="col-sm-12">
-                            <label ng-repeat="t in transports" class="col-sm-3">
-                                <input type="checkbox" id="transportschecks{{t.id}}"
-                                       checklist-model="product.transports" checklist-value="t.id">&nbsp;
-                                {{t.nameEn}}
-                            </label>
                         </div>
                     </div>
                 </div>

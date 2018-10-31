@@ -3,84 +3,72 @@ package ge.mimino.travel.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "product_transports", schema = "mimino")
+@Table(name = "product_transports")
 public class ProductTransports {
-    private Integer id;
-    private Integer transportId;
-    private Integer requestId;
-    private Integer day;
+  private Integer id;
+  private Integer transportId;
+  private Integer requestId;
+  private Integer count;
+  private Integer touristCount;
 
-    public ProductTransports() {
-    }
+  public ProductTransports() {
+  }
 
-    public ProductTransports(Integer transportId, Integer requestId, Integer day) {
-        this.transportId = transportId;
-        this.requestId = requestId;
-        this.day = day;
-    }
+  public ProductTransports(Integer transportId, Integer requestId, Integer count, Integer touristCount) {
+    this.transportId = transportId;
+    this.requestId = requestId;
+    this.count = count;
+    this.touristCount = touristCount;
+  }
 
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Integer getId() {
-        return id;
-    }
+  @Id
+  @Column(name = "id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  public Integer getId() {
+    return id;
+  }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    @Basic
-    @Column(name = "transport_id")
-    public Integer getTransportId() {
-        return transportId;
-    }
+  @Basic
+  @Column(name = "transport_id")
+  public Integer getTransportId() {
+    return transportId;
+  }
 
-    public void setTransportId(Integer transportId) {
-        this.transportId = transportId;
-    }
+  public void setTransportId(Integer transportId) {
+    this.transportId = transportId;
+  }
 
-    @Basic
-    @Column(name = "request_id")
-    public Integer getRequestId() {
-        return requestId;
-    }
+  @Basic
+  @Column(name = "request_id")
+  public Integer getRequestId() {
+    return requestId;
+  }
 
-    public void setRequestId(Integer requestId) {
-        this.requestId = requestId;
-    }
+  public void setRequestId(Integer requestId) {
+    this.requestId = requestId;
+  }
 
-    @Basic
-    @Column(name = "day")
-    public Integer getDay() {
-        return day;
-    }
+  @Basic
+  @Column(name = "count")
+  public Integer getCount() {
+    return count;
+  }
 
-    public void setDay(Integer day) {
-        this.day = day;
-    }
+  public void setCount(Integer count) {
+    this.count = count;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+  @Basic
+  @Column(name = "touristCount")
+  public Integer getTouristCount() {
+    return touristCount;
+  }
 
-        ProductTransports that = (ProductTransports) o;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (transportId != null ? !transportId.equals(that.transportId) : that.transportId != null) return false;
-        if (requestId != null ? !requestId.equals(that.requestId) : that.requestId != null) return false;
-        if (day != null ? !day.equals(that.day) : that.day != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (transportId != null ? transportId.hashCode() : 0);
-        result = 31 * result + (requestId != null ? requestId.hashCode() : 0);
-        result = 31 * result + (day != null ? day.hashCode() : 0);
-        return result;
-    }
+  public void setTouristCount(Integer touristCount) {
+    this.touristCount = touristCount;
+  }
 }

@@ -830,8 +830,16 @@
                         <div class="form-group col-sm-10 ">
                             <label class="control-label col-sm-3">Nationality</label>
                             <div class="col-sm-9">
-                                <input ng-model="request.nationality" type="text"
-                                       class="form-control input-sm"/>
+                                <select class="form-control" ng-model="request.nationality">
+                                    <option ng-selected="'English' === request.nationality" value="English">English
+                                    <option ng-selected="'German' === request.nationality" value="German">German
+                                    <option ng-selected="'France' === request.nationality" value="France">France
+                                    <option ng-selected="'Italian' === request.nationality" value="Italian">Italian
+                                    <option ng-selected="'Spain' === request.nationality" value="Spain">Spain
+                                    <option ng-selected="'Poland' === request.nationality" value="Poland">Poland
+                                    <option ng-selected="'Russian' === request.nationality" value="Russian">Russian
+                                    </option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">

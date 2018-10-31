@@ -1,6 +1,7 @@
 package ge.mimino.travel.service;
 
 
+import ge.mimino.travel.controller.TmpHotelGroup;
 import ge.mimino.travel.dao.ParamValuePair;
 import ge.mimino.travel.dao.RequestDAO;
 import ge.mimino.travel.dto.*;
@@ -100,13 +101,6 @@ public class RequestService {
   }
 
   @Transactional(rollbackFor = Throwable.class)
-  public void saveImages(String imgName) throws Exception {
-    ProductImages img = new ProductImages();
-    img.setName(imgName);
-    requestDAO.create(img);
-  }
-
-  @Transactional(rollbackFor = Throwable.class)
   public void saveMessage(RequestMessageDTO request) throws Exception {
     RequestMessage msg = new RequestMessage();
     msg.setRequestId(request.getRequestId());
@@ -119,9 +113,9 @@ public class RequestService {
   public void saveProduct(ProductRequest request) throws Exception {
 
     if (request.getHotels() != null && !request.getHotels().isEmpty()) {
-      requestDAO.removeProductHotels(request.getRequestId(), request.getHotels(), request.getDay());
-      for (Integer obj : request.getHotels()) {
-        requestDAO.create(new ProductHotels(obj, request.getRequestId(), request.getDay()));
+      requestDAO.removeProductHotels(request.getRequestId(), request.getDay());
+      for (TmpHotelGroup obj : request.getHotels()) {
+        requestDAO.create(new ProductHotels(obj.getHotelId(), request.getRequestId(), request.getDay(), obj.getGroupId()));
       }
     }
 
@@ -150,13 +144,6 @@ public class RequestService {
       requestDAO.removeProductSights(request.getRequestId(), request.getSights(), request.getDay());
       for (GeoObjectDTO obj : request.getSights()) {
         requestDAO.create(new ProductSights(obj.getId(), request.getRequestId(), request.getDay(), obj.getPhotoOrVisit()));
-      }
-    }
-
-    if (request.getTransports() != null && !request.getTransports().isEmpty()) {
-      requestDAO.removeProductTransports(request.getRequestId(), request.getTransports(), request.getDay());
-      for (Integer obj : request.getTransports()) {
-        requestDAO.create(new ProductTransports(obj, request.getRequestId(), request.getDay()));
       }
     }
 
@@ -205,8 +192,10 @@ public class RequestService {
     return DetailsDTO.parseToList(requestDAO.getAll(Details.class));
   }
 
-  public List<ProductImagesDTO> getProductImages() {
-    return ProductImagesDTO.parseToList(requestDAO.getAll(ProductImages.class));
+  public List<TouristCountDTO> getTouristsCount(int requestId) {
+    List<ParamValuePair> paramValues = new ArrayList<>();
+    paramValues.add(new ParamValuePair("requestId", requestId));
+    return TouristCountDTO.parseToList(requestDAO.getAllByParamValue(TouristCount.class, paramValues, null));
   }
 
   public Request getRequestByKey(String key) throws IndexOutOfBoundsException {
@@ -215,10 +204,63 @@ public class RequestService {
     return (Request) requestDAO.getAllByParamValue(Request.class, paramValues, null).get(0);
   }
 
+  @Transactional(rollbackFor = Throwable.class)
+  public void defineTransportForRequest(Integer requestId, boolean deleteOld) {
+
+    List<ParamValuePair> paramValues = new ArrayList<>();
+    paramValues.add(new ParamValuePair("requestId", requestId));
+
+    List<Integer> touristCounts = new ArrayList<>();
+
+    for (TouristCount tc : ((List<TouristCount>) requestDAO.getAllByParamValue(TouristCount.class, paramValues, null))) {
+      touristCounts.add(tc.getCount());
+    }
+
+    if (deleteOld) {
+      for (ProductTransports obj : (List<ProductTransports>) requestDAO.getAllByParamValue(ProductTransports.class, paramValues, null)) {
+        requestDAO.delete(obj);
+      }
+    }
+
+    List<ProductTransports> transportsForSave = new ArrayList<>();
+
+    Request request = (Request) requestDAO.find(Request.class, requestId);
+    for (Integer count : touristCounts) {
+      if (count > 0) {
+        if (RequestDTO.NAT_FOR_TRANSPORT.contains(request.getNationality())) {
+          if (count < 3) {
+            transportsForSave.add(new ProductTransports(TransportDTO.SEDAN, requestId, 1, count));
+          } else if (count > 2 && count < 5) {
+            transportsForSave.add(new ProductTransports(TransportDTO.VIANO, requestId, 1, count));
+          } else if (count > 4 && count < 13) {
+            transportsForSave.add(new ProductTransports(TransportDTO.SPRINTER, requestId, 1, count));
+          } else if (count > 12 && count < 49) {
+            transportsForSave.add(new ProductTransports(TransportDTO.BUS, requestId, 1, count));
+          } else {
+            transportsForSave.add(new ProductTransports(TransportDTO.BUS, requestId, (int) count / 48, count));
+          }
+        } else {
+          if (count < 3) {
+            transportsForSave.add(new ProductTransports(TransportDTO.SEDAN, requestId, 1, count));
+          } else if (count > 2 && count < 6) {
+            transportsForSave.add(new ProductTransports(TransportDTO.VIANO, requestId, 1, count));
+          } else if (count > 5 && count < 15) {
+            transportsForSave.add(new ProductTransports(TransportDTO.SPRINTER, requestId, 1, count));
+          } else if (count > 14 && count < 49) {
+            transportsForSave.add(new ProductTransports(TransportDTO.BUS, requestId, 1, count));
+          } else {
+            transportsForSave.add(new ProductTransports(TransportDTO.BUS, requestId, (int) count / 48, count));
+          }
+        }
+      }
+    }
+
+  }
+
   public ProductRequest getProductDetailsById(Integer requestId, Integer day) {
 
     ProductRequest res = new ProductRequest();
-    res.setHotels(new ArrayList<>());
+    res.setHotels(new ArrayList<TmpHotelGroup>());
     res.setNonstandarts(new ArrayList<>());
     res.setPlaces(new ArrayList<>());
     res.setRegions(new ArrayList<>());
@@ -231,7 +273,7 @@ public class RequestService {
     paramValues.add(new ParamValuePair("day", day));
 
     for (ProductHotels obj : (List<ProductHotels>) requestDAO.getAllByParamValue(ProductHotels.class, paramValues, null)) {
-      res.getHotels().add(obj.getHotelId());
+      res.getHotels().add(new TmpHotelGroup(obj.getHotelId(), obj.getGroupId()));
     }
 
     for (ProductNonstandarts obj : (List<ProductNonstandarts>) requestDAO.getAllByParamValue(ProductNonstandarts.class, paramValues, null)) {
@@ -246,13 +288,20 @@ public class RequestService {
       res.getSights().add(new GeoObjectDTO(obj.getSightId(), obj.getPhotoOrVisit()));
     }
 
+    for (ProductRegions obj : (List<ProductRegions>) requestDAO.getAllByParamValue(ProductRegions.class, paramValues, null)) {
+      res.getRegions().add(obj.getRegionId());
+    }
+
+    paramValues.clear();
+    paramValues.add(new ParamValuePair("requestId", requestId));
+    List<ProductTransports> transports = (List<ProductTransports>) requestDAO.getAllByParamValue(ProductTransports.class, paramValues, null);
+    if (transports.isEmpty()) {
+      defineTransportForRequest(requestId, false);
+    }
     for (ProductTransports obj : (List<ProductTransports>) requestDAO.getAllByParamValue(ProductTransports.class, paramValues, null)) {
       res.getTransports().add(obj.getTransportId());
     }
 
-    for (ProductRegions obj : (List<ProductRegions>) requestDAO.getAllByParamValue(ProductRegions.class, paramValues, null)) {
-      res.getRegions().add(obj.getRegionId());
-    }
 
     res.setRestaurants(ProductRestaurantsDTO.parseToList((List<ProductRestaurants>) requestDAO.getAllByParamValue(ProductRestaurants.class, paramValues, null)));
 
