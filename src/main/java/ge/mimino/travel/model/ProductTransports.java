@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Table(name = "product_transports")
 public class ProductTransports {
   private Integer id;
-  private Integer transportId;
+  private Transport transport;
   private Integer requestId;
   private Integer count;
   private Integer touristCount;
@@ -14,8 +14,8 @@ public class ProductTransports {
   public ProductTransports() {
   }
 
-  public ProductTransports(Integer transportId, Integer requestId, Integer count, Integer touristCount) {
-    this.transportId = transportId;
+  public ProductTransports(Transport transport, Integer requestId, Integer count, Integer touristCount) {
+    this.transport = transport;
     this.requestId = requestId;
     this.count = count;
     this.touristCount = touristCount;
@@ -32,14 +32,14 @@ public class ProductTransports {
     this.id = id;
   }
 
-  @Basic
-  @Column(name = "transport_id")
-  public Integer getTransportId() {
-    return transportId;
+  @JoinColumn(name = "transport_id")
+  @OneToOne
+  public Transport getTransport() {
+    return transport;
   }
 
-  public void setTransportId(Integer transportId) {
-    this.transportId = transportId;
+  public void setTransport(Transport transport) {
+    this.transport = transport;
   }
 
   @Basic

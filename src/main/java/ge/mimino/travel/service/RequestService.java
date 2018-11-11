@@ -81,7 +81,7 @@ public class RequestService {
     if (request.getCombinedCountries() != null && !request.getCombinedCountries().isEmpty()) {
       for (CombinedCountry combCntr : request.getCombinedCountries()) {
         requestDAO.create(new RequestCountry(obj.getId(), ((Country) requestDAO.find(Country.class, combCntr.getCountryId())),
-                combCntr.getDaysCount(), combCntr.getNote()));
+            combCntr.getDaysCount(), combCntr.getNote()));
       }
     }
 
@@ -96,6 +96,9 @@ public class RequestService {
       obj.setTourCode(cal.get(Calendar.DAY_OF_MONTH) + "." + cal.get(Calendar.MONTH) + "-" + tmpCount);
       requestDAO.update(obj);
     }
+
+    /* Generate Transports for This Request Tourist Counts*/
+    defineTransportForRequest(obj.getId(), true);
 
     return obj;
   }
@@ -229,32 +232,35 @@ public class RequestService {
       if (count > 0) {
         if (RequestDTO.NAT_FOR_TRANSPORT.contains(request.getNationality())) {
           if (count < 3) {
-            transportsForSave.add(new ProductTransports(TransportDTO.SEDAN, requestId, 1, count));
+            transportsForSave.add(new ProductTransports((Transport) requestDAO.find(Transport.class, TransportDTO.SEDAN), requestId, 1, count));
           } else if (count > 2 && count < 5) {
-            transportsForSave.add(new ProductTransports(TransportDTO.VIANO, requestId, 1, count));
+            transportsForSave.add(new ProductTransports((Transport) requestDAO.find(Transport.class, TransportDTO.VIANO), requestId, 1, count));
           } else if (count > 4 && count < 13) {
-            transportsForSave.add(new ProductTransports(TransportDTO.SPRINTER, requestId, 1, count));
+            transportsForSave.add(new ProductTransports((Transport) requestDAO.find(Transport.class, TransportDTO.SPRINTER), requestId, 1, count));
           } else if (count > 12 && count < 49) {
-            transportsForSave.add(new ProductTransports(TransportDTO.BUS, requestId, 1, count));
+            transportsForSave.add(new ProductTransports((Transport) requestDAO.find(Transport.class, TransportDTO.BUS), requestId, 1, count));
           } else {
-            transportsForSave.add(new ProductTransports(TransportDTO.BUS, requestId, (int) count / 48, count));
+            transportsForSave.add(new ProductTransports((Transport) requestDAO.find(Transport.class, TransportDTO.BUS), requestId, (int) count / 48, count));
           }
         } else {
           if (count < 3) {
-            transportsForSave.add(new ProductTransports(TransportDTO.SEDAN, requestId, 1, count));
+            transportsForSave.add(new ProductTransports((Transport) requestDAO.find(Transport.class, TransportDTO.SEDAN), requestId, 1, count));
           } else if (count > 2 && count < 6) {
-            transportsForSave.add(new ProductTransports(TransportDTO.VIANO, requestId, 1, count));
+            transportsForSave.add(new ProductTransports((Transport) requestDAO.find(Transport.class, TransportDTO.VIANO), requestId, 1, count));
           } else if (count > 5 && count < 15) {
-            transportsForSave.add(new ProductTransports(TransportDTO.SPRINTER, requestId, 1, count));
+            transportsForSave.add(new ProductTransports((Transport) requestDAO.find(Transport.class, TransportDTO.SPRINTER), requestId, 1, count));
           } else if (count > 14 && count < 49) {
-            transportsForSave.add(new ProductTransports(TransportDTO.BUS, requestId, 1, count));
+            transportsForSave.add(new ProductTransports((Transport) requestDAO.find(Transport.class, TransportDTO.BUS), requestId, 1, count));
           } else {
-            transportsForSave.add(new ProductTransports(TransportDTO.BUS, requestId, (int) count / 48, count));
+            transportsForSave.add(new ProductTransports((Transport) requestDAO.find(Transport.class, TransportDTO.BUS), requestId, (int) count / 48, count));
           }
         }
       }
     }
 
+    for (ProductTransports tr : transportsForSave) {
+      requestDAO.create(tr);
+    }
   }
 
   public ProductRequest getProductDetailsById(Integer requestId, Integer day) {
@@ -298,10 +304,7 @@ public class RequestService {
     if (transports.isEmpty()) {
       defineTransportForRequest(requestId, false);
     }
-    for (ProductTransports obj : (List<ProductTransports>) requestDAO.getAllByParamValue(ProductTransports.class, paramValues, null)) {
-      res.getTransports().add(obj.getTransportId());
-    }
-
+    res.setTransports(transports);
 
     res.setRestaurants(ProductRestaurantsDTO.parseToList((List<ProductRestaurants>) requestDAO.getAllByParamValue(ProductRestaurants.class, paramValues, null)));
 

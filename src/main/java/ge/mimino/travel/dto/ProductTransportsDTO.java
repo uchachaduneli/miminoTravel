@@ -8,7 +8,7 @@ import java.util.List;
 public class ProductTransportsDTO {
 
   private Integer id;
-  private Integer transportId;
+  private TransportDTO transport;
   private Integer requestId;
   private Integer count;
   private Integer touristCount;
@@ -17,7 +17,7 @@ public class ProductTransportsDTO {
   public static ProductTransportsDTO parse(ProductTransports record) {
     ProductTransportsDTO dto = new ProductTransportsDTO();
     dto.setId(record.getId());
-    dto.setTransportId(record.getTransportId());
+    dto.setTransport(TransportDTO.parse(record.getTransport()));
     dto.setRequestId(record.getRequestId());
     dto.setCount(record.getCount());
     dto.setTouristCount(record.getTouristCount());
@@ -33,12 +33,28 @@ public class ProductTransportsDTO {
     return list;
   }
 
-  public Integer getTouristCount() {
-    return touristCount;
+  public Integer getId() {
+    return id;
   }
 
-  public void setTouristCount(Integer touristCount) {
-    this.touristCount = touristCount;
+  public void setId(Integer id) {
+    this.id = id;
+  }
+
+  public TransportDTO getTransport() {
+    return transport;
+  }
+
+  public void setTransport(TransportDTO transport) {
+    this.transport = transport;
+  }
+
+  public Integer getRequestId() {
+    return requestId;
+  }
+
+  public void setRequestId(Integer requestId) {
+    this.requestId = requestId;
   }
 
   public Integer getCount() {
@@ -49,27 +65,11 @@ public class ProductTransportsDTO {
     this.count = count;
   }
 
-  public Integer getId() {
-    return id;
+  public Integer getTouristCount() {
+    return touristCount;
   }
 
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
-  public Integer getTransportId() {
-    return transportId;
-  }
-
-  public void setTransportId(Integer transportId) {
-    this.transportId = transportId;
-  }
-
-  public Integer getRequestId() {
-    return requestId;
-  }
-
-  public void setRequestId(Integer requestId) {
-    this.requestId = requestId;
+  public void setTouristCount(Integer touristCount) {
+    this.touristCount = touristCount;
   }
 }
