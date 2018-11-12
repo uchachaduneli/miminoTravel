@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 
 /**
  * @author ucha
@@ -32,6 +34,13 @@ public class DistanceController {
   @ResponseBody
   public Response saveUser(@RequestBody DistancesDTO request) throws Exception {
     return Response.withSuccess(DistancesDTO.parse(distanceService.save(request)));
+  }
+
+
+  @RequestMapping({"/get-distances-by-place"})
+  @ResponseBody
+  public Response getDistancesByPlace(@RequestBody List<Integer> request) throws Exception {
+    return Response.withSuccess(distanceService.getDistancesByPlace(request));
   }
 
   @RequestMapping({"/delete-distance"})

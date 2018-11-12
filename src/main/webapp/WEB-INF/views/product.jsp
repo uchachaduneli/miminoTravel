@@ -8,354 +8,382 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="header.jsp" %>
 <script>
-  app.controller("angController", ['$scope', '$http', '$filter', '$location', '$window', 'Upload', '$timeout', function ($scope, $http, $filter, $location, $window, Upload, $timeout) {
+    app.controller("angController", ['$scope', '$http', '$filter', '$location', '$window', 'Upload', '$timeout', function ($scope, $http, $filter, $location, $window, Upload, $timeout) {
 
-    $scope.product = {sights: [], places: [], hotels: [], nonstandarts: []};
-    $scope.daysList = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
-    $scope.HbMealCats = ['Lunch', 'Picnick Lunch', 'Lunch with degustation', 'Dinner', 'Dinner Folk Show', 'Gala Dinner', 'Dinner At hotel'];
-    $scope.FbMealCats = ['Breakfast', 'Lunch', 'Picnick Lunch', 'Lunch with degustation', 'Dinner', 'Dinner Folk Show', 'Gala Dinner', 'Dinner At hotel'];
-    $scope.dayIndex = 0;
-    $scope.mealCategories = [];
-    $scope.restaurantRow = [];
-    $scope.prod = {restaurants: [], hotels1: [], hotels2: [], hotels3: []};
-    $scope.restPackages = [];
-    $scope.tmpSights = [];
-    $scope.combSights = [];
-    $scope.stars = ['*', '**', '***', '****', '*****'];
-    $scope.hotelStars1 = '';
-    $scope.hotelStars2 = '';
-    $scope.hotelStars3 = '';
-    $scope.imageNames = [];
-    $scope.transports = [];
+        $scope.product = {sights: [], places: [], hotels: [], nonstandarts: []};
+        $scope.daysList = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+        $scope.HbMealCats = ['Lunch', 'Picnick Lunch', 'Lunch with degustation', 'Dinner', 'Dinner Folk Show', 'Gala Dinner', 'Dinner At hotel'];
+        $scope.FbMealCats = ['Breakfast', 'Lunch', 'Picnick Lunch', 'Lunch with degustation', 'Dinner', 'Dinner Folk Show', 'Gala Dinner', 'Dinner At hotel'];
+        $scope.dayIndex = 0;
+        $scope.mealCategories = [];
+        $scope.restaurantRow = [];
+        $scope.prod = {restaurants: [], hotels1: [], hotels2: [], hotels3: []};
+        $scope.restPackages = [];
+        $scope.tmpSights = [];
+        $scope.combSights = [];
+        $scope.stars = ['*', '**', '***', '****', '*****'];
+        $scope.hotelStars1 = '';
+        $scope.hotelStars2 = '';
+        $scope.hotelStars3 = '';
+        $scope.imageNames = [];
+        $scope.transports = [];
 
-    function getMealCategories(res) {
-      $scope.mealCategories = res.data;
-    }
-
-    ajaxCall($http, "misc/get-mealcategories", null, getMealCategories);
-
-    $scope.loadRequest = function () {
-      var absUrl = $location.absUrl();
-      if (absUrl.split("?")[1]) {
-        $scope.requestKey = absUrl.split("?")[1].split("=")[1];
-        console.log($scope.requestKey);
-      }
-
-      function getRequestData(res) {
-        $scope.request = res.data;
-
-        $scope.getProductDetails();
-      }
-
-      ajaxCall($http, "requests/get-request-by-key?id=" + $scope.requestKey, null, getRequestData);
-    }
-
-    $scope.getProductDetails = function () {
-      function getProdDet(res) {
-        $scope.product = {
-          regions: [],
-          sights: [],
-          places: [],
-          hotels: [],
-          nonstandarts: [],
-          restaurants: []
-        };
-        $scope.transports = res.data.transports;
-
-        $scope.product.regions = res.data.regions;
-        $scope.product.places = res.data.places;
-        angular.forEach($filter('filter')(res.data.hotels, {groupId: 1}, true), function (v) {
-          $scope.prod.hotels1.push(v.hotelId);
-        });
-        angular.forEach($filter('filter')(res.data.hotels, {groupId: 2}, true), function (v) {
-          $scope.prod.hotels2.push(v.hotelId);
-        });
-        angular.forEach($filter('filter')(res.data.hotels, {groupId: 3}, true), function (v) {
-          $scope.prod.hotels3.push(v.hotelId);
-        });
-
-        $scope.product.nonstandarts = res.data.nonstandarts;
-
-        angular.forEach(res.data.sights, function (v, k) {
-          $scope.product.sights[v.id] = v.id;
-          $scope.combSights[v.id] = {id: v.id, photoOrVisit: v.photoOrVisit};
-        });
-        console.log($scope.product.sights);
-        console.log($scope.combSights);
-
-        if (res.data.restaurants == undefined || res.data.restaurants.length == 0) {
-          $scope.restaurantRow = [1];
-        }
-        angular.forEach(res.data.restaurants, function (v, k) {
-          var meal = (v.mealCategories.split('-')[0] != undefined ? v.mealCategories.split('-')[0] : '');
-          var mealCats = (v.mealCategories.split('-')[1] != undefined ? v.mealCategories.split('-')[1].split(',') : '');
-          var packs = '';
-          if (v.packages != undefined) {
-            $scope.loadRestaurantPackages(v.restaurantId, k);
-            packs = v.packages.split(',');
-          }
-
-          $scope.prod.restaurants.push({
-            "restaurantId": v.restaurantId,
-            "meal": meal,
-            "mealCats": mealCats,
-            "packages": packs
-          });
-          $scope.restaurantRow.push(k + 1);
-        });
-
-        var regionIds = [];
-        angular.forEach($scope.product.regions, function (v) {
-          var slctedRegions = $filter('filter')($scope.regions, {id: v}, true);
-          if (slctedRegions != undefined && slctedRegions.length > 0) {
-            regionIds.push(v);
-          }
-        });
-
-        if (regionIds.length > 0) {
-          function loadPlaces(res) {
-            $scope.places = res.data;
-          }
-
-          ajaxCall($http, "places/get-places-by-region", angular.toJson(regionIds), loadPlaces);
+        function getMealCategories(res) {
+            $scope.mealCategories = res.data;
         }
 
-        if ($scope.product.places.length > 0) {
-          function getHotels(res) {
-            $scope.hotels1 = res.data;
-            $scope.hotels2 = res.data;
-            $scope.hotels3 = res.data;
-          }
+        ajaxCall($http, "misc/get-mealcategories", null, getMealCategories);
 
-          ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars, angular.toJson($scope.product.places), getHotels);
+        $scope.loadRequest = function () {
+            var absUrl = $location.absUrl();
+            if (absUrl.split("?")[1]) {
+                $scope.requestKey = absUrl.split("?")[1].split("=")[1];
+                console.log($scope.requestKey);
+            }
 
-          function getSights(res) {
-            $scope.sights = res.data;
+            function getRequestData(res) {
+                $scope.request = res.data;
+
+                $scope.getProductDetails();
+            }
+
+            ajaxCall($http, "requests/get-request-by-key?id=" + $scope.requestKey, null, getRequestData);
+        }
+
+        $scope.getProductDetails = function () {
+            function getProdDet(res) {
+                $scope.product = {
+                    regions: [],
+                    sights: [],
+                    places: [],
+                    hotels: [],
+                    nonstandarts: [],
+                    restaurants: []
+                };
+                $scope.transports = res.data.transports;
+
+                $scope.product.regions = res.data.regions;
+                $scope.product.places = res.data.places;
+                angular.forEach($filter('filter')(res.data.hotels, {groupId: 1}, true), function (v) {
+                    $scope.prod.hotels1.push(v.hotelId);
+                });
+                angular.forEach($filter('filter')(res.data.hotels, {groupId: 2}, true), function (v) {
+                    $scope.prod.hotels2.push(v.hotelId);
+                });
+                angular.forEach($filter('filter')(res.data.hotels, {groupId: 3}, true), function (v) {
+                    $scope.prod.hotels3.push(v.hotelId);
+                });
+
+                $scope.loadDistances($scope.product.places);
+
+                $scope.product.nonstandarts = res.data.nonstandarts;
+
+                angular.forEach(res.data.sights, function (v, k) {
+                    $scope.product.sights[v.id] = v.id;
+                    $scope.combSights[v.id] = {id: v.id, photoOrVisit: v.photoOrVisit};
+                });
+                console.log($scope.product.sights);
+                console.log($scope.combSights);
+
+                if (res.data.restaurants == undefined || res.data.restaurants.length == 0) {
+                    $scope.restaurantRow = [1];
+                }
+                angular.forEach(res.data.restaurants, function (v, k) {
+                    var meal = (v.mealCategories.split('-')[0] != undefined ? v.mealCategories.split('-')[0] : '');
+                    var mealCats = (v.mealCategories.split('-')[1] != undefined ? v.mealCategories.split('-')[1].split(',') : '');
+                    var packs = '';
+                    if (v.packages != undefined) {
+                        $scope.loadRestaurantPackages(v.restaurantId, k);
+                        packs = v.packages.split(',');
+                    }
+
+                    $scope.prod.restaurants.push({
+                        "restaurantId": v.restaurantId,
+                        "meal": meal,
+                        "mealCats": mealCats,
+                        "packages": packs
+                    });
+                    $scope.restaurantRow.push(k + 1);
+                });
+
+                console.log($scope.prod.restaurants);
+
+                var regionIds = [];
+                angular.forEach($scope.product.regions, function (v) {
+                    var slctedRegions = $filter('filter')($scope.regions, {id: v}, true);
+                    if (slctedRegions != undefined && slctedRegions.length > 0) {
+                        regionIds.push(v);
+                    }
+                });
+
+                if (regionIds.length > 0) {
+                    function loadPlaces(res) {
+                        $scope.places = res.data;
+                    }
+
+                    ajaxCall($http, "places/get-places-by-region", angular.toJson(regionIds), loadPlaces);
+                }
+
+                if ($scope.product.places.length > 0) {
+                    function getHotels(res) {
+                        $scope.hotels1 = res.data;
+                        $scope.hotels2 = res.data;
+                        $scope.hotels3 = res.data;
+
+                        $scope.filterHotels1();
+                        $scope.filterHotels2();
+                        $scope.filterHotels3();
+                    }
+
+                    ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars, angular.toJson($scope.product.places), getHotels);
+
+                    function getSights(res) {
+                        $scope.sights = res.data;
 //            $scope.sights = [];
 //            angular.forEach(res.data, function (v, k) {
 //              $scope.sights[k] = {id: v.id, photoOrVisit: undefined};
 //            });
-          }
+                    }
 
-          ajaxCall($http, "objects/get-objects-by-place", angular.toJson($scope.product.places), getSights);
+                    ajaxCall($http, "objects/get-objects-by-place", angular.toJson($scope.product.places), getSights);
 
-          function getRestaurants(res) {
-            $scope.restaurants = res.data;
-          }
+                    function getRestaurants(res) {
+                        $scope.restaurants = res.data;
+                    }
 
-          ajaxCall($http, "restaurants/get-restaurants-by-place", angular.toJson($scope.product.places), getRestaurants);
-        }
-      }
+                    ajaxCall($http, "restaurants/get-restaurants-by-place", angular.toJson($scope.product.places), getRestaurants);
+                }
+            }
 
-      ajaxCall($http, "requests/get-product-details?requestId=" + $scope.request.id + "&day=" + ($scope.dayIndex + 1), null, getProdDet);
-    };
+            ajaxCall($http, "requests/get-product-details?requestId=" + $scope.request.id + "&day=" + ($scope.dayIndex + 1), null, getProdDet);
+        };
 
-    $scope.loadRestaurantPackages = function (id, indx) {
-      function getPacks(res) {
-        $scope.restPackages[indx] = res.data;
-      }
+        $scope.loadRestaurantPackages = function (id, indx) {
+            function getPacks(res) {
+                $scope.restPackages[indx] = res.data;
+            }
 
-      ajaxCall($http, "restaurants/get-restaurant-packages?id=" + id, null, getPacks);
-    };
+            ajaxCall($http, "restaurants/get-restaurant-packages?id=" + id, null, getPacks);
+        };
 
-    $scope.loadLists = function () {
+        $scope.loadDistances = function (array) {
+            $scope.distances = [];
+            $scope.distanceSum = 0.0;
 
-      $('#loadingModal').modal('show');
+            function getDists(res) {
+                angular.forEach(res.data, function (value, key) {
+                    $scope.distances.push(key);
+                    $scope.distanceSum += value;
+                });
+                console.log(res.data);
+            }
 
-      $scope.loadRequest();
+            ajaxCall($http, "distances/get-distances-by-place", angular.toJson(array), getDists);
+        };
 
-      function getRegions(res) {
-        $scope.regions = res.data;
-      }
+        $scope.loadLists = function () {
 
-      ajaxCall($http, "misc/get-regions", null, getRegions);
+            $('#loadingModal').modal('show');
 
-      function getMealcategories(res) {
-        $scope.mealCategories = res.data;
-      }
+            $scope.loadRequest();
 
-      ajaxCall($http, "misc/get-mealcategories", null, getMealcategories);
+            function getRegions(res) {
+                $scope.regions = res.data;
+            }
 
-      function getNonstandarts(res) {
-        $scope.nonstandarts = res.data;
-        $('#loadingModal').modal('hide');
-      }
+            ajaxCall($http, "misc/get-regions", null, getRegions);
 
-      ajaxCall($http, "nonstandarts/get-nonstandart-services?start=0&limit=99999", {}, getNonstandarts);
-    };
+            function getMealcategories(res) {
+                $scope.mealCategories = res.data;
+            }
 
-    $scope.loadLists();
+            ajaxCall($http, "misc/get-mealcategories", null, getMealcategories);
 
-    $scope.handleDayChange = function (h) {
-      console.log($scope.dayIndex);
-      if (parseInt(h) > 0) {
-        $scope.dayIndex += 1;
+            function getNonstandarts(res) {
+                $scope.nonstandarts = res.data;
+                $('#loadingModal').modal('hide');
+            }
 
-      } else {
-        $scope.dayIndex = parseInt($scope.dayIndex - 1) == -1 ? 0 : ($scope.dayIndex - 1);
-      }
-      $scope.getProductDetails();
-    };
+            ajaxCall($http, "nonstandarts/get-nonstandart-services?start=0&limit=99999", {}, getNonstandarts);
+        };
 
-    $scope.save = function () {
+        $scope.loadLists();
 
-      function resFunc(res) {
-        if (res.errorCode == 0) {
-          successMsg('Operation Successfull');
-        } else {
-          errorMsg('Operation Failed');
-        }
-      }
+        $scope.handleDayChange = function (h) {
+            console.log($scope.dayIndex);
+            if (parseInt(h) > 0) {
+                $scope.dayIndex += 1;
 
-      $scope.product.requestId = $scope.request.id;
-      $scope.product.day = $scope.dayIndex + 1;
+            } else {
+                $scope.dayIndex = parseInt($scope.dayIndex - 1) == -1 ? 0 : ($scope.dayIndex - 1);
+            }
+            $scope.getProductDetails();
+        };
 
-      $scope.product.restaurants = [];
-      $scope.product.hotels = [];
+        $scope.save = function () {
 
-      angular.forEach($scope.prod.restaurants, function (v, k) {
-        var packages = v.packages != undefined ? v.packages.join(',') : '';
-        $scope.product.restaurants.push({
-          restaurantId: v.restaurantId,
-          mealCategories: v.meal + '-' + v.mealCats.join(','),
-          packages: packages
-        });
-      });
-      angular.forEach($scope.prod.hotels1, function (v) {
-        $scope.product.hotels.push({
-          hotelId: v,
-          groupId: 1
-        });
-      });
-      angular.forEach($scope.prod.hotels2, function (v) {
-        $scope.product.hotels.push({
-          hotelId: v,
-          groupId: 2
-        });
-      });
-      angular.forEach($scope.prod.hotels3, function (v) {
-        $scope.product.hotels.push({
-          hotelId: v,
-          groupId: 3
-        });
-      });
+            function resFunc(res) {
+                if (res.errorCode == 0) {
+                    successMsg('Operation Successfull');
+                } else {
+                    errorMsg('Operation Failed');
+                }
+            }
 
-      $scope.product.sights = $filter('filter')($scope.combSights, '!null', true);
-      // $scope.product.product.requestId = $scope.request.id;
-      console.log(angular.toJson($scope.product));
+            $scope.product.requestId = $scope.request.id;
+            $scope.product.day = $scope.dayIndex + 1;
+
+            $scope.product.restaurants = [];
+            $scope.product.hotels = [];
+
+            angular.forEach($scope.prod.restaurants, function (v, k) {
+                var packages = v.packages != undefined ? v.packages.join(',') : '';
+                var mealCats = v.meal + '-';
+                if (v.mealCats != undefined && v.mealCats.length > 0) {
+                    mealCats += (v.mealCats == undefined ? '' : (v.mealCats.join(',')));
+                }
+                $scope.product.restaurants.push({
+                    restaurantId: v.restaurantId,
+                    mealCategories: mealCats,
+                    packages: packages
+                });
+            });
+            angular.forEach($scope.prod.hotels1, function (v) {
+                $scope.product.hotels.push({
+                    hotelId: v,
+                    groupId: 1
+                });
+            });
+            angular.forEach($scope.prod.hotels2, function (v) {
+                $scope.product.hotels.push({
+                    hotelId: v,
+                    groupId: 2
+                });
+            });
+            angular.forEach($scope.prod.hotels3, function (v) {
+                $scope.product.hotels.push({
+                    hotelId: v,
+                    groupId: 3
+                });
+            });
+
+            $scope.product.sights = $filter('filter')($scope.combSights, '!null', true);
+            // $scope.product.product.requestId = $scope.request.id;
+            console.log(angular.toJson($scope.product));
 //      console.log(angular.toJson($scope.product.sights));
 
-      ajaxCall($http, "requests/save-product", angular.toJson($scope.product), resFunc);
-    };
+            ajaxCall($http, "requests/save-product", angular.toJson($scope.product), resFunc);
+        };
 
-    $scope.searchByRegion = function () {
-      var slctedRegions = $filter('filter')($scope.regions, {selected: true}, true);
-      var ids = [];
-      angular.forEach(slctedRegions, function (v) {
-        ids.push(v.id);
-      })
-      console.log(angular.toJson(ids));
-      if (ids.length > 0) {
-        function loadPlaces(res) {
-          $scope.places = res.data;
+        $scope.searchByRegion = function () {
+            var slctedRegions = $filter('filter')($scope.regions, {selected: true}, true);
+            var ids = [];
+            angular.forEach(slctedRegions, function (v) {
+                ids.push(v.id);
+            })
+            console.log(angular.toJson(ids));
+            if (ids.length > 0) {
+                function loadPlaces(res) {
+                    $scope.places = res.data;
+                }
+
+                ajaxCall($http, "places/get-places-by-region", angular.toJson(ids), loadPlaces);
+            } else {
+                $scope.places = [];
+            }
+        };
+
+        $scope.filterHotels1 = function () {
+            var slctedPlaces = $filter('filter')($scope.places, {selected: true}, true);
+            var ids = [];
+            angular.forEach(slctedPlaces, function (v) {
+                ids.push(v.id);
+            });
+            if (ids.length > 0 || $scope.hotelStars1.length > 0) {
+                function getHotels(res) {
+                    $scope.hotels1 = res.data;
+                }
+
+                ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars1, angular.toJson(ids), getHotels);
+            }
+        }
+        $scope.filterHotels2 = function () {
+            var slctedPlaces = $filter('filter')($scope.places, {selected: true}, true);
+            var ids = [];
+            angular.forEach(slctedPlaces, function (v) {
+                ids.push(v.id);
+            });
+            if (ids.length > 0 || $scope.hotelStars2.length > 0) {
+                function getHotels(res) {
+                    $scope.hotels2 = res.data;
+                }
+
+                ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars2, angular.toJson(ids), getHotels);
+            }
+        }
+        $scope.filterHotels3 = function () {
+            var slctedPlaces = $filter('filter')($scope.places, {selected: true}, true);
+            var ids = [];
+            angular.forEach(slctedPlaces, function (v) {
+                ids.push(v.id);
+            });
+            if (ids.length > 0 || $scope.hotelStars3.length > 0) {
+                function getHotels(res) {
+                    $scope.hotels3 = res.data;
+                }
+
+                ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars3, angular.toJson(ids), getHotels);
+            }
         }
 
-        ajaxCall($http, "places/get-places-by-region", angular.toJson(ids), loadPlaces);
-      } else {
-        $scope.places = [];
-      }
-    };
+        $scope.searchByPlace = function () {
+            var slctedPlaces = $filter('filter')($scope.places, {selected: true}, true);
+            var ids = [];
+            angular.forEach(slctedPlaces, function (v) {
+                ids.push(v.id);
+            });
+            $scope.loadDistances(ids);
+            console.log(angular.toJson(ids));
+            if (ids.length > 0 || $scope.hotelStars.length > 0) {
+                // function getHotels(res) {
+                //     $scope.hotels = res.data;
+                // }
+                //
+                // ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars, angular.toJson(ids), getHotels);
 
-    $scope.filterHotels1 = function () {
-      var slctedPlaces = $filter('filter')($scope.places, {selected: true}, true);
-      var ids = [];
-      angular.forEach(slctedPlaces, function (v) {
-        ids.push(v.id);
-      });
-      if (ids.length > 0 || $scope.hotelStars1.length > 0) {
-        function getHotels(res) {
-          $scope.hotels1 = res.data;
-        }
+                function getSights(res) {
+                    $scope.sights = res.data;
+                }
 
-        ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars1, angular.toJson(ids), getHotels);
-      }
-    }
-    $scope.filterHotels2 = function () {
-      var slctedPlaces = $filter('filter')($scope.places, {selected: true}, true);
-      var ids = [];
-      angular.forEach(slctedPlaces, function (v) {
-        ids.push(v.id);
-      });
-      if (ids.length > 0 || $scope.hotelStars2.length > 0) {
-        function getHotels(res) {
-          $scope.hotels2 = res.data;
-        }
+                ajaxCall($http, "objects/get-objects-by-place", angular.toJson(ids), getSights);
+            } else {
+                // $scope.hotels = [];
+                $scope.sights = [];
+            }
+        };
 
-        ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars2, angular.toJson(ids), getHotels);
-      }
-    }
-    $scope.filterHotels3 = function () {
-      var slctedPlaces = $filter('filter')($scope.places, {selected: true}, true);
-      var ids = [];
-      angular.forEach(slctedPlaces, function (v) {
-        ids.push(v.id);
-      });
-      if (ids.length > 0 || $scope.hotelStars3.length > 0) {
-        function getHotels(res) {
-          $scope.hotels3 = res.data;
-        }
+        $scope.addRestaurantRow = function () {
+            var size = $scope.restaurantRow.length;
+            $scope.restaurantRow.push(size + 1);
+        };
 
-        ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars3, angular.toJson(ids), getHotels);
-      }
-    }
+        $scope.sightPhotoVisithandler = function (val, sightId) {
+            var slcted = $filter('filter')($scope.product.sights, sightId, true);
+            if (slcted != undefined && slcted.length > 0) {
+                $scope.combSights[sightId].id = sightId;
+            } else {
+                errorMsg('Please Check Current Sight At First!');
+                $scope.combSights[sightId] = undefined;
+            }
+        };
 
-    $scope.searchByPlace = function () {
-      var slctedPlaces = $filter('filter')($scope.places, {selected: true}, true);
-      var ids = [];
-      angular.forEach(slctedPlaces, function (v) {
-        ids.push(v.id);
-      })
-      console.log(angular.toJson(ids));
-      if (ids.length > 0 || $scope.hotelStars.length > 0) {
-        // function getHotels(res) {
-        //     $scope.hotels = res.data;
-        // }
-        //
-        // ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars, angular.toJson(ids), getHotels);
-
-        function getSights(res) {
-          $scope.sights = res.data;
-        }
-
-        ajaxCall($http, "objects/get-objects-by-place", angular.toJson(ids), getSights);
-      } else {
-        // $scope.hotels = [];
-        $scope.sights = [];
-      }
-    };
-
-    $scope.addRestaurantRow = function () {
-      var size = $scope.restaurantRow.length;
-      $scope.restaurantRow.push(size + 1);
-    };
-
-    $scope.sightPhotoVisithandler = function (val, sightId) {
-      var slcted = $filter('filter')($scope.product.sights, sightId, true);
-      if (slcted != undefined && slcted.length > 0) {
-        $scope.combSights[sightId].id = sightId;
-      } else {
-        errorMsg('Please Check Current Sight At First!');
-        $scope.combSights[sightId] = undefined;
-      }
-    };
-
-    $scope.removeRestaurantRows = function (index) {
-      $scope.restaurantRow.splice(index, 1);
-      if ($scope.product.restaurants) {
-        $scope.product.restaurants.splice(index, 1);
-      }
-    };
-  }]);
+        $scope.removeRestaurantRows = function (index) {
+            $scope.restaurantRow.splice(index, 1);
+            if ($scope.product.restaurants) {
+                $scope.product.restaurants.splice(index, 1);
+            }
+        };
+    }]);
 </script>
 
 
@@ -467,6 +495,14 @@
                         <a class="btn btn-app">
                             <i class="fa fa-map-marker"></i> Places
                         </a>
+                        <div class="progress">
+                            <div class="progress-bar {{$index %2 == 0 ? 'progress-bar-success':'progress-bar-primary'}}"
+                                 role="progressbar" ng-repeat="key in distances | orderBy : '[]': true"
+                                 style="{{'width:'+100/distances.length+'%;'}}">
+                                {{key}}
+                            </div>
+                        </div>
+                        Sum Of Day({{daysList[dayIndex]}}) Distance: {{distanceSum}} Kilometers
                     </div>
                     <div class="panel-body">
                         <div class="form-group col-sm-12 ">

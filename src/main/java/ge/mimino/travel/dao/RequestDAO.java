@@ -83,24 +83,24 @@ public class RequestDAO extends AbstractDAO {
     query.executeUpdate();
   }
 
-  public void removeProductNonstandarts(Integer requestId, List<Integer> nonstandarts, Integer day) {
+  public void removeProductNonstandarts(Integer requestId, Integer day) {
     Query query = getEntityManager().createQuery("delete from " + ProductNonstandarts.class.getSimpleName()
-            + " c where c.requestId=" + requestId + " and c.day=" + day + " and c.nonstandartServiceId in :listOfIds");
-    query.setParameter("listOfIds", nonstandarts);
+            + " c where c.requestId=" + requestId + " and c.day=" + day);
+//    query.setParameter("listOfIds", nonstandarts);
     query.executeUpdate();
   }
 
-  public void removeProductPlaces(Integer requestId, List<Integer> places, Integer day) {
+  public void removeProductPlaces(Integer requestId, Integer day) {
     Query query = getEntityManager().createQuery("delete from " + ProductPlaces.class.getSimpleName()
-            + " c where c.requestId=" + requestId + " and c.day=" + day + " and c.placeId in :listOfIds");
-    query.setParameter("listOfIds", places);
+            + " c where c.requestId=" + requestId + " and c.day=" + day);
+//    query.setParameter("listOfIds", places);
     query.executeUpdate();
   }
 
-  public void removeProductRegions(Integer requestId, List<Integer> regions, Integer day) {
+  public void removeProductRegions(Integer requestId, Integer day) {
     Query query = getEntityManager().createQuery("delete from " + ProductRegions.class.getSimpleName()
-            + " c where c.requestId=" + requestId + " and c.day=" + day + " and c.regionId in :listOfIds");
-    query.setParameter("listOfIds", regions);
+            + " c where c.requestId=" + requestId + " and c.day=" + day);
+//    query.setParameter("listOfIds", regions);
     query.executeUpdate();
   }
 

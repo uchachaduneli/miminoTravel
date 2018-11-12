@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ucha
@@ -23,6 +24,11 @@ public class DistanceService {
 
   public List<DistancesDTO> getDistances(int start, int limit, DistancesDTO srchRequest) {
     return DistancesDTO.parseToList(distanceDAO.getDistances(start, limit, srchRequest));
+  }
+
+
+  public Map<String, Double> getDistancesByPlace(List<Integer> srchRequest) {
+    return distanceDAO.getDistancesByPlace(srchRequest);
   }
 
   @Transactional(rollbackFor = Throwable.class)

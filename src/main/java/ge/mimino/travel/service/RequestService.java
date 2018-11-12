@@ -123,21 +123,21 @@ public class RequestService {
     }
 
     if (request.getNonstandarts() != null && !request.getNonstandarts().isEmpty()) {
-      requestDAO.removeProductNonstandarts(request.getRequestId(), request.getNonstandarts(), request.getDay());
+      requestDAO.removeProductNonstandarts(request.getRequestId(), request.getDay());
       for (Integer obj : request.getNonstandarts()) {
         requestDAO.create(new ProductNonstandarts(obj, request.getRequestId(), request.getDay()));
       }
     }
 
     if (request.getPlaces() != null && !request.getPlaces().isEmpty()) {
-      requestDAO.removeProductPlaces(request.getRequestId(), request.getPlaces(), request.getDay());
+      requestDAO.removeProductPlaces(request.getRequestId(), request.getDay());
       for (Integer obj : request.getPlaces()) {
         requestDAO.create(new ProductPlaces(obj, request.getRequestId(), request.getDay()));
       }
     }
 
     if (request.getRegions() != null && !request.getRegions().isEmpty()) {
-      requestDAO.removeProductRegions(request.getRequestId(), request.getRegions(), request.getDay());
+      requestDAO.removeProductRegions(request.getRequestId(), request.getDay());
       for (Integer obj : request.getRegions()) {
         requestDAO.create(new ProductRegions(obj, request.getRequestId(), request.getDay()));
       }
