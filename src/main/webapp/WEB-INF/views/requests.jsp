@@ -358,7 +358,7 @@
         };
 
         $scope.removeTouristCount = function (index) {
-            $scope.countryRow.splice(index, 1);
+          $scope.touristCountRow.splice(index, 1);
             if ($scope.request.touristCount) {
                 $scope.request.touristCount.splice(index, 1);
             }

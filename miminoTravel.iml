@@ -24,7 +24,8 @@
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
           <factory-entry name="Entities" />
-          <factory-entry name="mimino" value="9bda5326-cdbd-49a9-badc-cf4d0d45f9b1" />
+          <factory-entry name="mimino" value="f3fbd899-5d1d-4f36-b0c2-ba5283175b6a" />
+          <factory-entry name="noname-a.xml@0" value="f3fbd899-5d1d-4f36-b0c2-ba5283175b6a" />
         </datasource-mapping>
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/main/java/META-INF/persistence.xml" />
       </configuration>

@@ -67,6 +67,8 @@
                 $('#selected_item').text("Restaurants");
             } else if (url.pathname.indexOf("distances") > -1) {
                 $('#selected_item').text("Distances");
+            } else if (url.pathname.indexOf("guides") > -1) {
+              $('#selected_item').text("Guides");
             }
 
 
@@ -243,6 +245,12 @@
                         <a class="menuItem" href="nonstandarts">
                             <i class="fa fa-server"></i>
                             <span>Non St. Serv.</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="menuItem" href="guides">
+                            <i class="fa fa-blind"></i>
+                            <span>Guides</span>
                         </a>
                     </li>
                     <c:if test="<%= isAdmin %>">

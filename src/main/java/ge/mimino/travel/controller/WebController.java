@@ -75,6 +75,11 @@ public class WebController {
         return "distances";
     }
 
+    @RequestMapping("/guides")
+    public String guides() {
+        return "guides";
+    }
+
     @RequestMapping("/")
     public String defaultFnc() {
         return "";
