@@ -8,12 +8,12 @@ public class TouristCount {
   private Integer id;
   private Integer requestId;
   private Integer count;
-  private String strCount;
+  private Integer plusCount;
 
-  public TouristCount(Integer requestId, Integer count, String strCount) {
+  public TouristCount(Integer requestId, Integer count, Integer plusCount) {
     this.requestId = requestId;
     this.count = count;
-    this.strCount = strCount;
+    this.plusCount = plusCount;
   }
 
   public TouristCount() {
@@ -51,13 +51,13 @@ public class TouristCount {
   }
 
   @Basic
-  @Column(name = "str_count")
-  public String getStrCount() {
-    return strCount;
+  @Column(name = "plus_count")
+  public Integer getPlusCount() {
+    return plusCount;
   }
 
-  public void setStrCount(String strCount) {
-    this.strCount = strCount;
+  public void setPlusCount(Integer plusCount) {
+    this.plusCount = plusCount;
   }
 
 }

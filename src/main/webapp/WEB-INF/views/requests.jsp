@@ -202,7 +202,7 @@
                     $scope.touristCountRow.push(k + 1);
                     $scope.request.touristCount.push({
                         'count': v.count,
-                        'strCount': v.strCount
+                      'plusCount': v.plusCount
                     });
                 });
                 $scope.slcted.touristCount = asd.data;
@@ -295,7 +295,7 @@
             angular.forEach($scope.request.touristCount, function (v) {
                 $scope.req.touristCount.push({
                     'count': v.count,
-                    'strCount': v.strCount
+                  'plusCount': v.plusCount
                 });
             });
 
@@ -445,14 +445,14 @@
                                 <table class="table table-hover col-sm-8">
                                     <thead>
                                     <tr>
-                                        <th>Count</th>
-                                        <th>Note</th>
+                                        <th>Tourist Coun</th>
+                                        <th>Leaders Coun</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr ng-repeat="r in slcted.touristCount">
                                         <td>{{r.count}}</td>
-                                        <td>{{r.strCount}}</td>
+                                        <td>{{r.plusCount}}</td>
                                     </tbody>
                                 </table>
                             </td>
@@ -693,12 +693,16 @@
                                 <div class="form-group" ng-repeat="r in touristCountRow">
                                     <div class="col-sm-11" id="div1Id_{{r}}">
                                         <div class="col-sm-6">
-                                            <input ng-model="request.touristCount[r - 1].count" type="number"
+                                            <span class="col-sm-12">Tourist Count</span>
+                                            <input class="col-sm-12" ng-model="request.touristCount[r - 1].count"
+                                                   type="number"
                                                    placeholder="Tourists Count" name="activity" required
                                                    class="form-control input-sm"/>
                                         </div>
                                         <div class="col-sm-6">
-                                            <input ng-model="request.touristCount[r - 1].strCount" type="text"
+                                            <span class="col-sm-12">Leader Count</span>
+                                            <input class="col-sm-12" ng-model="request.touristCount[r - 1].plusCount"
+                                                   type="text"
                                                    placeholder="Count As Text ex.(30+1)" name="activity" required
                                                    class="form-control input-sm"/>
                                         </div>

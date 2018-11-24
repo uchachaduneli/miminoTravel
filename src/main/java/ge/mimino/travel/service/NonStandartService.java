@@ -43,6 +43,9 @@ public class NonStandartService {
         obj.setDescriptionPo(request.getDescriptionPo());
         obj.setDescriptionRu(request.getDescriptionRu());
         obj.setPrice(request.getPrice());
+        obj.setDaily(request.getDaily());
+        obj.setIndividual(request.getIndividual());
+        obj.setMulty(request.getMulty());
 
         if (request.getId() != null) {
             obj.setId(request.getId());

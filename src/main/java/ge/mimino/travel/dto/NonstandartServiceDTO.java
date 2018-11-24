@@ -24,6 +24,9 @@ public class NonstandartServiceDTO {
     private String descriptionSp;
     private String descriptionPo;
     private String descriptionRu;
+    private Integer daily;
+    private Integer individual;
+    private Integer multy;
 
 
     public static NonstandartServiceDTO parse(NonstandartService record) {
@@ -44,6 +47,9 @@ public class NonstandartServiceDTO {
         dto.setDescriptionPo(record.getDescriptionPo());
         dto.setDescriptionRu(record.getDescriptionRu());
         dto.setPrice(record.getPrice());
+        dto.setMulty(record.getMulty());
+        dto.setIndividual(record.getIndividual());
+        dto.setDaily(record.getDaily());
         return dto;
     }
 
@@ -54,6 +60,30 @@ public class NonstandartServiceDTO {
             list.add(NonstandartServiceDTO.parse(record));
         }
         return list;
+    }
+
+    public Integer getDaily() {
+        return daily;
+    }
+
+    public void setDaily(Integer daily) {
+        this.daily = daily;
+    }
+
+    public Integer getIndividual() {
+        return individual;
+    }
+
+    public void setIndividual(Integer individual) {
+        this.individual = individual;
+    }
+
+    public Integer getMulty() {
+        return multy;
+    }
+
+    public void setMulty(Integer multy) {
+        this.multy = multy;
     }
 
     public Integer getId() {

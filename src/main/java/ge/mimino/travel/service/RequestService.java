@@ -90,7 +90,7 @@ public class RequestService {
     if (request.getTouristCount() != null && !request.getTouristCount().isEmpty()) {
       for (TouristCount tc : request.getTouristCount()) {
         tmpCount += tc.getCount() + ",";
-        requestDAO.create(new TouristCount(obj.getId(), tc.getCount(), tc.getStrCount()));
+        requestDAO.create(new TouristCount(obj.getId(), tc.getCount(), tc.getPlusCount()));
       }
       Calendar cal = Calendar.getInstance();
       obj.setTourCode(cal.get(Calendar.DAY_OF_MONTH) + "." + cal.get(Calendar.MONTH) + "-" + tmpCount);
