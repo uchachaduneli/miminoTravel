@@ -80,6 +80,11 @@ public class WebController {
         return "guides";
     }
 
+    @RequestMapping("/financial")
+    public String financial() {
+        return "financial";
+    }
+
     @RequestMapping("/")
     public String defaultFnc() {
         return "";

@@ -14,11 +14,20 @@ public class ProductRequest {
   private List<Integer> places;
   private List<TmpHotelGroup> hotels;
   private List<ProductTransports> transports;
+  private List<String> transportDays;
   private List<Integer> nonstandarts;
   private List<ProductRestaurantsDTO> restaurants;
   private Integer day;
   private Integer requestId;
   private ProductDTO product;
+
+  public List<String> getTransportDays() {
+    return transportDays;
+  }
+
+  public void setTransportDays(List<String> transportDays) {
+    this.transportDays = transportDays;
+  }
 
   public List<Integer> getRegions() {
     return regions;

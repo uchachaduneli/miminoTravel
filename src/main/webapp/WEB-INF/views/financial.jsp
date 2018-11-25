@@ -395,7 +395,7 @@
 
     $scope.sendToFinance = function () {
       if (confirm("Pleace confirm Sending to Finance")) {
-        $window.location.href = "/financial?key=" + $scope.request.requestKey;
+        $window.location.href = "/financial";
       }
     };
 
@@ -407,9 +407,6 @@
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
-                <div class="col-xs-12 text-center">
-                    <b><h4>Day ({{daysList[dayIndex]}})</h4></b>
-                </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <a class="btn btn-app">
@@ -469,7 +466,6 @@
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>Transport</th>
                                 <th>Price</th>
                                 <th>Tourists Count</th>
@@ -477,23 +473,23 @@
                             </thead>
                             <tbody>
                             <tr ng-repeat="r in transports">
-                                <td>{{r.id}}</td>
                                 <td>{{r.transport.nameEn}}</td>
                                 <td>{{r.transport.price}}</td>
                                 <td>{{r.touristCount}}</td>
                             </tr>
                             </tbody>
                         </table>
-                        <label ng-repeat="t in daysList | limitTo:request.daysCount"
-                               style="display: inline !important;">
+                        Selected Days: &nbsp;
+                        <label ng-repeat="t in transportDaysList" style="display: inline !important;">
                             <input type="checkbox" id="daysListchecks{{t.id}}"
-                                   ng-click="saveTransportDaysList()"
-                                   checklist-model="transportDaysList" checklist-value="t">&nbsp; Day -
+                                   disabled="true" checklist-model="transportDaysList" checklist-value="t">&nbsp; Day -
                             {{t}}&nbsp;&nbsp;
                         </label>
                     </div>
                 </div>
             </div>
+
+            <%--
             <div class="box-body">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -740,29 +736,16 @@
 
         </div>
         <div class="panel-footer">
-            <div class="row">
-                <div class="col col-md-12">
-                    <ul class="pagination pull-right">
-                        <li>
-                            <a>(Day {{daysList[dayIndex]}}) </a>
-                        </li>
-                        <li>
-                            <a ng-click="handleDayChange(-1)">« &nbsp; Prev</a>
-                        </li>
-                        <li ng-show="dayIndex < (request.daysCount-1)">
-                            <a ng-click="handleDayChange(1)">» &nbsp; Next</a>
-                        </li>
-                    </ul>
-                </div>
+            <div class="row"><br/>
                 <div class="form-group col-sm-12">
                     <div class="col-sm-6 text-right">
-                    <a class="btn btn-app" ng-click="save()">
-                        <i class="fa fa-save"></i> Save
-                    </a>
+                        <a class="btn btn-app" ng-click="save()">
+                            <i class="fa fa-save"></i> Save
+                        </a>
                     </div>
                     <div class="col-sm-6 text-right">
-                        <a class="btn btn-app" ng-click="sendToFinance()">
-                            <i class="fa fa-send"></i> Send To Finance
+                        <a class="btn btn-app" ng-click="sendToManager()">
+                            <i class="fa fa-send"></i> Send To Manager
                         </a>
                     </div>
                 </div>
@@ -770,5 +753,5 @@
         </div>
     </div>
 </div>
-</div>
+</div>--%>
 <%@include file="footer.jsp" %>

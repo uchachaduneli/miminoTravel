@@ -10,6 +10,7 @@ public class ProductTransports {
   private Integer requestId;
   private Integer count;
   private Integer touristCount;
+  private String days;
 
   public ProductTransports() {
   }
@@ -70,5 +71,15 @@ public class ProductTransports {
 
   public void setTouristCount(Integer touristCount) {
     this.touristCount = touristCount;
+  }
+
+  @Basic
+  @Column(name = "days")
+  public String getDays() {
+    return days;
+  }
+
+  public void setDays(String days) {
+    this.days = days;
   }
 }

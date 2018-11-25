@@ -66,11 +66,11 @@ public class RequestDAO extends AbstractDAO {
     }
     if (srchRequest.getTourStart() != null && srchRequest.getTourStartTo() != null) {
       q.append(" and e.tourStart between '").append(srchRequest.getTourStart())
-              .append("' and '").append(srchRequest.getTourStartTo()).append("'");
+          .append("' and '").append(srchRequest.getTourStartTo()).append("'");
     }
     if (srchRequest.getTourEnd() != null && srchRequest.getTourEndTo() != null) {
       q.append(" and e.tourEnd between '").append(srchRequest.getTourEnd())
-              .append("' and '").append(srchRequest.getTourEndTo()).append("'");
+          .append("' and '").append(srchRequest.getTourEndTo()).append("'");
     }
 
     TypedQuery<Request> query = entityManager.createQuery(q.toString(), Request.class);
@@ -79,27 +79,27 @@ public class RequestDAO extends AbstractDAO {
 
   public void removeProductHotels(Integer requestId, Integer day) {
     Query query = getEntityManager().createQuery("delete from " + ProductHotels.class.getSimpleName()
-            + " c where c.requestId=" + requestId + " and c.day=" + day);
+        + " c where c.requestId=" + requestId + " and c.day=" + day);
     query.executeUpdate();
   }
 
   public void removeProductNonstandarts(Integer requestId, Integer day) {
     Query query = getEntityManager().createQuery("delete from " + ProductNonstandarts.class.getSimpleName()
-            + " c where c.requestId=" + requestId + " and c.day=" + day);
+        + " c where c.requestId=" + requestId + " and c.day=" + day);
 //    query.setParameter("listOfIds", nonstandarts);
     query.executeUpdate();
   }
 
   public void removeProductPlaces(Integer requestId, Integer day) {
     Query query = getEntityManager().createQuery("delete from " + ProductPlaces.class.getSimpleName()
-            + " c where c.requestId=" + requestId + " and c.day=" + day);
+        + " c where c.requestId=" + requestId + " and c.day=" + day);
 //    query.setParameter("listOfIds", places);
     query.executeUpdate();
   }
 
   public void removeProductRegions(Integer requestId, Integer day) {
     Query query = getEntityManager().createQuery("delete from " + ProductRegions.class.getSimpleName()
-            + " c where c.requestId=" + requestId + " and c.day=" + day);
+        + " c where c.requestId=" + requestId + " and c.day=" + day);
 //    query.setParameter("listOfIds", regions);
     query.executeUpdate();
   }
@@ -110,14 +110,14 @@ public class RequestDAO extends AbstractDAO {
       sightsIds.add(rest.getId());
     }
     Query query = getEntityManager().createQuery("delete from " + ProductSights.class.getSimpleName()
-            + " c where c.requestId=" + requestId + " and c.day=" + day + " and c.sightId in :listOfIds");
+        + " c where c.requestId=" + requestId + " and c.day=" + day + " and c.sightId in :listOfIds");
     query.setParameter("listOfIds", sightsIds);
     query.executeUpdate();
   }
 
   public void removeProductTransports(Integer requestId, List<Integer> transports, Integer day) {
     Query query = getEntityManager().createQuery("delete from " + ProductTransports.class.getSimpleName()
-            + " c where c.requestId=" + requestId + " and c.day=" + day + " and c.transportId in :listOfIds");
+        + " c where c.requestId=" + requestId + " and c.day=" + day + " and c.transportId in :listOfIds");
     query.setParameter("listOfIds", transports);
     query.executeUpdate();
   }
@@ -128,8 +128,14 @@ public class RequestDAO extends AbstractDAO {
       restaurantIds.add(rest.getRestaurantId());
     }
     Query query = getEntityManager().createQuery("delete from " + ProductRestaurants.class.getSimpleName()
-            + " c where c.requestId=" + requestId + " and c.day=" + day + " and c.restaurantId in :listOfIds");
+        + " c where c.requestId=" + requestId + " and c.day=" + day + " and c.restaurantId in :listOfIds");
     query.setParameter("listOfIds", restaurantIds);
+    query.executeUpdate();
+  }
+
+  public void updateTransportDays(Integer requestId, String days) {
+    Query query = getEntityManager().createQuery("update " + ProductTransports.class.getSimpleName()
+        + " c set c.days='" + days + "' where c.requestId=" + requestId);
     query.executeUpdate();
   }
 }

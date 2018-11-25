@@ -49,6 +49,13 @@ public class RequestController {
     return Response.withSuccess(requestService.getRequestCountries(id));
   }
 
+  @RequestMapping("/update-transport-days")
+  @ResponseBody
+  private Response updateTransportDays(@RequestParam Integer reqId, @RequestParam String checkedDays) throws Exception {
+    requestService.updateTransportDays(reqId, checkedDays);
+    return Response.ok();
+  }
+
   @RequestMapping("/get-tourist-counts")
   @ResponseBody
   private Response getTouristCounts(@RequestParam Integer id) throws Exception {
@@ -97,21 +104,21 @@ public class RequestController {
 
   @RequestMapping({"/save"})
   @ResponseBody
-  public Response saveUser(@RequestBody AddRequest request, HttpServletRequest servletRequest) throws Exception {
+  public Response save(@RequestBody AddRequest request, HttpServletRequest servletRequest) throws Exception {
     request.setUserId((Integer) servletRequest.getSession().getAttribute("userId"));
     return Response.withSuccess(RequestDTO.parse(requestService.save(request)));
   }
 
   @RequestMapping({"/save-product"})
   @ResponseBody
-  public Response saveUser(@RequestBody ProductRequest request) throws Exception {
+  public Response saveProduct(@RequestBody ProductRequest request) throws Exception {
     requestService.saveProduct(request);
     return Response.ok();
   }
 
   @RequestMapping({"/save-message"})
   @ResponseBody
-  public Response saveUser(@RequestBody RequestMessageDTO request, HttpServletRequest servletRequest) throws Exception {
+  public Response saveMessage(@RequestBody RequestMessageDTO request, HttpServletRequest servletRequest) throws Exception {
     request.setUserId((Integer) servletRequest.getSession().getAttribute("userId"));
     requestService.saveMessage(request);
     return Response.ok();

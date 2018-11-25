@@ -6,6 +6,7 @@ import ge.mimino.travel.dao.ParamValuePair;
 import ge.mimino.travel.dao.RequestDAO;
 import ge.mimino.travel.dto.*;
 import ge.mimino.travel.model.*;
+import ge.mimino.travel.model.Currency;
 import ge.mimino.travel.request.AddRequest;
 import ge.mimino.travel.request.ProductRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author ucha
@@ -208,6 +206,15 @@ public class RequestService {
   }
 
   @Transactional(rollbackFor = Throwable.class)
+  public void updateTransportDays(Integer requestId, String checkedDays) {
+//    String days = "";
+//    for (String s : checkedDays) {
+//      days += s + ",";
+//    }
+    requestDAO.updateTransportDays(requestId, checkedDays);
+  }
+
+  @Transactional(rollbackFor = Throwable.class)
   public void defineTransportForRequest(Integer requestId, boolean deleteOld) {
 
     List<ParamValuePair> paramValues = new ArrayList<>();
@@ -272,6 +279,7 @@ public class RequestService {
     res.setRegions(new ArrayList<>());
     res.setSights(new ArrayList<>());
     res.setTransports(new ArrayList<>());
+    res.setTransportDays(new ArrayList<>());
     res.setRestaurants(new ArrayList<>());
 
     List<ParamValuePair> paramValues = new ArrayList<>();
@@ -303,8 +311,14 @@ public class RequestService {
     List<ProductTransports> transports = (List<ProductTransports>) requestDAO.getAllByParamValue(ProductTransports.class, paramValues, null);
     if (transports.isEmpty()) {
       defineTransportForRequest(requestId, false);
+      transports = (List<ProductTransports>) requestDAO.getAllByParamValue(ProductTransports.class, paramValues, null);
     }
     res.setTransports(transports);
+    if (!transports.isEmpty()) {
+      List<String> tmp = Arrays.asList(transports.get(0).getDays().split(","));
+//      tmp.removeAll(Arrays.asList("", null));
+      res.setTransportDays(tmp);
+    }
 
     res.setRestaurants(ProductRestaurantsDTO.parseToList((List<ProductRestaurants>) requestDAO.getAllByParamValue(ProductRestaurants.class, paramValues, null)));
 
