@@ -395,7 +395,7 @@
 
     $scope.sendToFinance = function () {
       if (confirm("Pleace confirm Sending to Finance")) {
-        $window.location.href = "/financial?key=" + $scope.request.requestKey;
+        $window.location.href = "/miminoTravel/financial?key=" + $scope.request.requestKey;
       }
     };
 
