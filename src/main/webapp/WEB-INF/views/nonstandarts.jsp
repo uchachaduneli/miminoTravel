@@ -263,7 +263,7 @@
                             </div>
                         </div>
                         <div class="form-group col-sm-10">
-                            <label class="control-label col-sm-3">Individual</label>
+                            <label class="control-label col-sm-3">Individual (Set Price During Prodaction)</label>
                             <div class="col-xs-9 btn-group">
                                 <div class="radio col-xs-6">
                                     <label><input type="radio" ng-model="request.individual" value="1"
