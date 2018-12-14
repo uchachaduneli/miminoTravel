@@ -263,8 +263,13 @@
                             </div>
                         </div>
                         <div class="form-group col-sm-10">
-                            <label class="control-label col-sm-3">Individual (Set Price During Prodaction)</label>
+                            <label class="control-label col-sm-3">Individual Price</label>
                             <div class="col-xs-9 btn-group">
+                                <div class="col-xs-1">
+                                    <i class="fa fa-info-circle" data-container="body" tabindex="0"
+                                       data-toggle="popover" data-placement="right" data-trigger="focus"
+                                       data-content="Check 'Yes' If The Price Of For This Service Should Be Defined During Prodaction."></i>
+                                </div>
                                 <div class="radio col-xs-6">
                                     <label><input type="radio" ng-model="request.individual" value="1"
                                                   class="input-sm">No</label>&nbsp;
@@ -274,8 +279,13 @@
                             </div>
                         </div>
                         <div class="form-group col-sm-10">
-                            <label class="control-label col-sm-3">Daily</label>
+                            <label class="control-label col-sm-3">Daily Price</label>
                             <div class="col-xs-9 btn-group">
+                                <div class="col-xs-1">
+                                    <i class="fa fa-info-circle" data-container="body" tabindex="0"
+                                       data-toggle="popover" data-placement="right" data-trigger="focus"
+                                       data-content="Check 'Yes' If The Price Of This Item Is Daily"></i>
+                                </div>
                                 <div class="radio col-xs-6">
                                     <label><input type="radio" ng-model="request.daily" value="1"
                                                   class="input-sm">No</label>&nbsp;
@@ -287,12 +297,18 @@
                         <div class="form-group col-sm-10">
                             <label class="control-label col-sm-3">Multy Count Support</label>
                             <div class="col-xs-9 btn-group">
+                                <div class="col-xs-1">
+                                    <i class="fa fa-info-circle" data-container="body" tabindex="0"
+                                       data-toggle="popover" data-placement="right" data-trigger="focus"
+                                       data-content="Check 'Yes' If The Count Of This Item Should Be Defined During Prodaction."></i>
+                                </div>
                                 <div class="radio col-xs-6">
                                     <label><input type="radio" ng-model="request.multy" value="1"
                                                   class="input-sm">No</label>&nbsp;
                                     <label><input type="radio" ng-model="request.multy" value="2"
                                                   class="input-sm">Yes</label>
                                 </div>
+
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">

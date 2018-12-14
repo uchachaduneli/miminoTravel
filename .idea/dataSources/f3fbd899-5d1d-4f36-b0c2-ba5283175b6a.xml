@@ -921,7 +921,7 @@ requsets -ს თავისი ლოსთი აქვს, appointments -ს
       <Comment>რექუესთის დეტალები რაც ცნობილია რომ სტანდარტულად აქვთ(დეგუსტაციები, სნექები, პიკნიკ ლანჩები, დელიკა - სად? ა.შ.)  დინამიური დამატებაც აქვთ და შუალედურ ცხრილში იყრება ბმები</Comment>
     </table>
     <table id="237" parent="3" name="distances">
-      <Comment>ადგილებს შორის კილომენტრაჟები შეინახება ამ ცხრილში </Comment>
+      <Comment>ადგილებს შორის კილომენტრაჟები შეინახება ამ ცხრილში</Comment>
     </table>
     <table id="238" parent="3" name="email"/>
     <table id="239" parent="3" name="email_attachments"/>
@@ -1971,7 +1971,7 @@ requsets -ს თავისი ლოსთი აქვს, appointments -ს
     </column>
     <column id="448" parent="251" name="daily">
       <Position>17</Position>
-      <Comment> 2 არა / 1 დღიური მომსახურებაა </Comment>
+      <Comment> 2 არა / 1 დღიური მომსახურებაა</Comment>
       <DataType>int(11)|0s</DataType>
       <DefaultExpression>&apos;1&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>

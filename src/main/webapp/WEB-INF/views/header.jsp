@@ -88,6 +88,9 @@
 
             $('input').attr('autocomplete', 'off');
 
+          $(function () {
+            $('[data-toggle="popover"]').popover()
+          });
         });
 
         var app = angular.module("app", ["checklist-model", "ngFileUpload"]);
