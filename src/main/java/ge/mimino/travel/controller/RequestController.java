@@ -8,6 +8,7 @@ import ge.mimino.travel.request.AddRequest;
 import ge.mimino.travel.request.ProductRequest;
 import ge.mimino.travel.service.FileService;
 import ge.mimino.travel.service.RequestService;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
@@ -135,6 +137,13 @@ public class RequestController {
   @ResponseBody
   private Response addImage(@RequestParam("file") MultipartFile file, @RequestParam String id) throws IOException {
     return Response.withSuccess(fileService.addFile(file, "uploads", id));
+  }
+
+  @RequestMapping("/generate-word")
+  @ResponseBody
+  public Response downlodExcell(@RequestBody Integer requestId, HttpServletResponse response) throws IOException, InvalidFormatException {
+    fileService.generateWord(requestId);
+    return Response.ok();
   }
 
 }
