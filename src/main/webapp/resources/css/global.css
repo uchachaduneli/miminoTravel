@@ -219,4 +219,8 @@ input[type="radio"] {
     padding: 0 0 50px 0;
 }
 
+.markAsSelected {
+    background-color: #00e765 !important;
+}
+
 /*end of messaging box*/

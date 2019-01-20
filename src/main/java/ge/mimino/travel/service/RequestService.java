@@ -319,7 +319,7 @@ public class RequestService {
 //      tmp.removeAll(Arrays.asList("", null));
       res.setTransportDays(tmp);
     }
-
+    paramValues.add(new ParamValuePair("day", day));
     res.setRestaurants(ProductRestaurantsDTO.parseToList((List<ProductRestaurants>) requestDAO.getAllByParamValue(ProductRestaurants.class, paramValues, null)));
 
     return res;

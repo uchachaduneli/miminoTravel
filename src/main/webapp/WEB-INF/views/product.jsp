@@ -8,6 +8,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="header.jsp" %>
 <script>
+    // $(document).ready(function () {
+    //     $('input[type=checkbox]').each(function (i, obj) {
+    //         console.log($(this));
+    //         // if ($(this).hasClass('ng-not-empty')) {
+    //         if ($(this).is(':checked')) {
+    //             console.log('yes');
+    //             $(this).parent().addClass('markAsSelected');
+    //         }
+    //     });
+    // });
+
     app.controller("angController", ['$scope', '$http', '$filter', '$location', '$window', 'Upload', '$timeout', function ($scope, $http, $filter, $location, $window, Upload, $timeout) {
 
         $scope.product = {sights: [], places: [], hotels: [], nonstandarts: []};
@@ -51,6 +62,7 @@
         }
 
         $scope.getProductDetails = function () {
+
             function getProdDet(res) {
                 $scope.product = {
                     regions: [],
@@ -86,6 +98,8 @@
 
                 if (res.data.restaurants == undefined || res.data.restaurants.length == 0) {
                     $scope.restaurantRow = [1];
+                } else {
+                    $scope.restaurantRow = [];
                 }
                 angular.forEach(res.data.restaurants, function (v, k) {
                     var meal = (v.mealCategories.split('-')[0] != undefined ? v.mealCategories.split('-')[0] : '');
@@ -206,6 +220,7 @@
         $scope.loadLists();
 
         $scope.handleDayChange = function (h) {
+            $('#loadingModal').modal('show');
             if (parseInt(h) > 0) {
                 $scope.dayIndex += 1;
 
@@ -213,6 +228,7 @@
                 $scope.dayIndex = parseInt($scope.dayIndex - 1) == -1 ? 0 : ($scope.dayIndex - 1);
             }
             $scope.getProductDetails();
+            $('#loadingModal').modal('hide');
         };
 
         $scope.saveTransportDaysList = function () {
@@ -404,6 +420,10 @@
             ajaxCall($http, "requests/generate-word", angular.toJson($scope.request.id), redirectToFile);
         }
 
+        $scope.checkInList = function (item, list) {
+            return $filter('filter')(list, item, true).length;
+        }
+
         $scope.sendToFinance = function () {
             if (confirm("Pleace confirm Sending to Finance")) {
                 $window.location.href = "/miminoTravel/financial?key=" + $scope.request.requestKey;
@@ -515,7 +535,8 @@
                     <div class="panel-body">
                         <div class="form-group col-sm-12 ">
                             <div class="col-sm-12">
-                                <label ng-repeat="t in regions" class="col-sm-3">
+                                <label ng-repeat="t in regions"
+                                       class="col-sm-3 {{t.selected == true ? ' markAsSelected':''}}">
                                     <input type="checkbox" id="regionchecks{{t.id}}" ng-model="t.selected"
                                            ng-click="searchByRegion()"
                                            checklist-model="product.regions" checklist-value="t.id">&nbsp; {{t.name}}
@@ -542,7 +563,8 @@
                     <div class="panel-body">
                         <div class="form-group col-sm-12 ">
                             <div class="col-sm-12">
-                                <label ng-repeat="t in places" class="col-sm-3">
+                                <label ng-repeat="t in places"
+                                       class="col-sm-3 {{t.selected == true ? ' markAsSelected':''}}">
                                     <input type="checkbox" id="placechecks{{t.id}}" ng-model="t.selected"
                                            ng-click="searchByPlace()"
                                            checklist-model="product.places" checklist-value="t.id">&nbsp; {{t.nameEn}}
@@ -561,12 +583,11 @@
                     <div class="panel-body">
                         <div class="form-group col-sm-12 ">
                             <div class="col-sm-12">
-                                <label ng-repeat="t in sights" class="col-sm-3 panel"
-                                       style="background-color: {{($index%2 == 0 ? '#f5f5f5':'')}}">
+                                <label ng-repeat="t in sights" class="col-sm-3 panel {{checkInList(t.id, product.sights) > 0 ? 'markAsSelected':''}}">
 
                                     <input type="checkbox" id="sightschecks{{t.id}}"
                                            checklist-model="product.sights" checklist-value="t.id">&nbsp;
-                                    {{t.nameEn}}/{{$index}}/{{t.id}}
+                                    {{t.nameEn}}
 
                                     <div class="radio text-right">
                                         <label><input type="radio" ng-model="combSights[t.id].photoOrVisit" value="1"
@@ -606,7 +627,7 @@
                                     </select>
                                 </div>
 
-                                <label ng-repeat="t in hotels1" class="col-sm-3">
+                                <label ng-repeat="t in hotels1" class="col-sm-3 {{checkInList(t.id, prod.hotels1) > 0 ? 'markAsSelected':''}}">
                                     <input type="checkbox" id="gr1hotelschecks{{t.id}}"
                                            checklist-model="prod.hotels1" checklist-value="t.id">&nbsp; {{t.nameEn}}
                                 </label>
@@ -623,7 +644,7 @@
                                         </option>
                                     </select>
                                 </div>
-                                <label ng-repeat="t in hotels2" class="col-sm-3">
+                                <label ng-repeat="t in hotels2" class="col-sm-3 {{checkInList(t.id, prod.hotels2) > 0 ? 'markAsSelected':''}}">
                                     <input type="checkbox" id="gr2hotelschecks{{t.id}}"
                                            checklist-model="prod.hotels2" checklist-value="t.id">&nbsp; {{t.nameEn}}
                                 </label>
@@ -640,7 +661,7 @@
                                         </option>
                                     </select>
                                 </div>
-                                <label ng-repeat="t in hotels3" class="col-sm-3">
+                                <label ng-repeat="t in hotels3" class="col-sm-3 {{checkInList(t.id, prod.hotels3) > 0 ? 'markAsSelected':''}}">
                                     <input type="checkbox" id="gr3hotelschecks{{t.id}}"
                                            checklist-model="prod.hotels3" checklist-value="t.id">&nbsp; {{t.nameEn}}
                                 </label>
@@ -682,14 +703,14 @@
                                                       value="FB" class="input-sm">FB</label>
                                     </div>
                                     <div class="col-sm-12" ng-if="prod.restaurants[r - 1].meal == 'HB'">
-                                        <label ng-repeat="t in HbMealCats" class="col-sm-3">
+                                        <label ng-repeat="t in HbMealCats" class="col-sm-3 {{checkInList(t, prod.restaurants[r - 1].mealCats) > 0 ? 'markAsSelected':''}}">
                                             <input type="checkbox" id="restMealsChecks{{t.id}}"
                                                    checklist-model="prod.restaurants[r - 1].mealCats"
                                                    checklist-value="t">&nbsp; {{t}}
                                         </label>
                                     </div>
                                     <div class="col-sm-12" ng-if="prod.restaurants[r - 1].meal === 'FB'">
-                                        <label ng-repeat="t in FbMealCats" class="col-sm-3">
+                                        <label ng-repeat="t in FbMealCats" class="col-sm-3 {{checkInList(t, prod.restaurants[r - 1].mealCats) > 0 ? 'markAsSelected':''}}">
                                             <input type="checkbox" id="restFbMealsChecks{{t.id}}"
                                                    checklist-model="prod.restaurants[r - 1].mealCats"
                                                    checklist-value="t">&nbsp; {{t}}
@@ -713,7 +734,7 @@
                                     <div class="panel panel-default">
                                         <div class="panel-heading">Restaurant Packages</div>
                                         <div class="panel-body">
-                                            <label ng-repeat="t in restPackages[r - 1]" class="col-sm-3">
+                                            <label ng-repeat="t in restPackages[r - 1]" class="col-sm-3 {{checkInList(t.name, prod.restaurants[r - 1].packages) > 0 ? 'markAsSelected':''}}">
                                                 <input type="checkbox" id="restPackageschecks{{t.id}}"
                                                        checklist-model="prod.restaurants[r - 1].packages"
                                                        checklist-value="t.name">&nbsp;
@@ -738,7 +759,7 @@
                 <div class="panel-body">
                     <div class="form-group col-sm-12 ">
                         <div class="col-sm-12">
-                            <label ng-repeat="t in nonstandarts" class="col-sm-3">
+                            <label ng-repeat="t in nonstandarts" class="col-sm-3 {{checkInList(t.id, product.nonstandarts) > 0 ? 'markAsSelected':''}}">
                                 <input type="checkbox" id="nonstandartschecks{{t.id}}"
                                        checklist-model="product.nonstandarts" checklist-value="t.id">&nbsp;
                                 {{t.nameEn}}
