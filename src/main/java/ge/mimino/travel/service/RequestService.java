@@ -144,7 +144,7 @@ public class RequestService {
     if (request.getSights() != null && !request.getSights().isEmpty()) {
       requestDAO.removeProductSights(request.getRequestId(), request.getSights(), request.getDay());
       for (GeoObjectDTO obj : request.getSights()) {
-        requestDAO.create(new ProductSights(obj.getId(), request.getRequestId(), request.getDay(), obj.getPhotoOrVisit()));
+        requestDAO.create(new ProductSights((GeoObject) requestDAO.find(GeoObject.class, obj.getId()), request.getRequestId(), request.getDay(), obj.getPhotoOrVisit()));
       }
     }
 
@@ -299,7 +299,9 @@ public class RequestService {
     }
 
     for (ProductSights obj : (List<ProductSights>) requestDAO.getAllByParamValue(ProductSights.class, paramValues, null)) {
-      res.getSights().add(new GeoObjectDTO(obj.getSightId(), obj.getPhotoOrVisit()));
+      GeoObjectDTO objectDTO = GeoObjectDTO.parse(obj.getSight());
+      obj.setPhotoOrVisit(obj.getPhotoOrVisit());
+      res.getSights().add(objectDTO);
     }
 
     for (ProductRegions obj : (List<ProductRegions>) requestDAO.getAllByParamValue(ProductRegions.class, paramValues, null)) {

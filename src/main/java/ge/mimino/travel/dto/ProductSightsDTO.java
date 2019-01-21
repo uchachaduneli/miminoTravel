@@ -7,69 +7,81 @@ import java.util.List;
 
 public class ProductSightsDTO {
 
-    private Integer id;
-    private Integer sightId;
-    private Integer requestId;
-    private Integer day;
-    private Integer photoOrVisit;
+  private Integer id;
+  private Integer sightId;
+  private GeoObjectDTO sight;
+  private Integer requestId;
+  private Integer day;
+  private Integer photoOrVisit;
 
 
-    public static ProductSightsDTO parse(ProductSights record) {
-        ProductSightsDTO dto = new ProductSightsDTO();
-        dto.setId(record.getId());
-        dto.setSightId(record.getSightId());
-        dto.setRequestId(record.getRequestId());
-        dto.setDay(record.getDay());
-        dto.setPhotoOrVisit(record.getPhotoOrVisit());
-        return dto;
+  public static ProductSightsDTO parse(ProductSights record) {
+    ProductSightsDTO dto = new ProductSightsDTO();
+    dto.setId(record.getId());
+    if (record.getSight() != null) {
+      dto.setSightId(record.getSight().getId());
+      dto.setSight(GeoObjectDTO.parse(record.getSight()));
     }
+    dto.setRequestId(record.getRequestId());
+    dto.setDay(record.getDay());
+    dto.setPhotoOrVisit(record.getPhotoOrVisit());
+    return dto;
+  }
 
 
-    public static List<ProductSightsDTO> parseToList(List<ProductSights> records) {
-        ArrayList<ProductSightsDTO> list = new ArrayList<ProductSightsDTO>();
-        for (ProductSights record : records) {
-            list.add(ProductSightsDTO.parse(record));
-        }
-        return list;
+  public static List<ProductSightsDTO> parseToList(List<ProductSights> records) {
+    ArrayList<ProductSightsDTO> list = new ArrayList<ProductSightsDTO>();
+    for (ProductSights record : records) {
+      list.add(ProductSightsDTO.parse(record));
     }
+    return list;
+  }
 
-    public Integer getPhotoOrVisit() {
-        return photoOrVisit;
-    }
+  public GeoObjectDTO getSight() {
+    return sight;
+  }
 
-    public void setPhotoOrVisit(Integer photoOrVisit) {
-        this.photoOrVisit = photoOrVisit;
-    }
+  public void setSight(GeoObjectDTO sight) {
+    this.sight = sight;
+  }
 
-    public Integer getId() {
-        return id;
-    }
+  public Integer getPhotoOrVisit() {
+    return photoOrVisit;
+  }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+  public void setPhotoOrVisit(Integer photoOrVisit) {
+    this.photoOrVisit = photoOrVisit;
+  }
 
-    public Integer getSightId() {
-        return sightId;
-    }
+  public Integer getId() {
+    return id;
+  }
 
-    public void setSightId(Integer sightId) {
-        this.sightId = sightId;
-    }
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    public Integer getRequestId() {
-        return requestId;
-    }
+  public Integer getSightId() {
+    return sightId;
+  }
 
-    public void setRequestId(Integer requestId) {
-        this.requestId = requestId;
-    }
+  public void setSightId(Integer sightId) {
+    this.sightId = sightId;
+  }
 
-    public Integer getDay() {
-        return day;
-    }
+  public Integer getRequestId() {
+    return requestId;
+  }
 
-    public void setDay(Integer day) {
-        this.day = day;
-    }
+  public void setRequestId(Integer requestId) {
+    this.requestId = requestId;
+  }
+
+  public Integer getDay() {
+    return day;
+  }
+
+  public void setDay(Integer day) {
+    this.day = day;
+  }
 }

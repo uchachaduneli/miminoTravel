@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Table(name = "product_sights", schema = "mimino")
 public class ProductSights {
     private Integer id;
-    private Integer sightId;
+    private GeoObject sight;
     private Integer requestId;
     private Integer day;
     private Integer photoOrVisit;
@@ -14,8 +14,8 @@ public class ProductSights {
     public ProductSights() {
     }
 
-    public ProductSights(Integer sightId, Integer requestId, Integer day, Integer photoOrVisit) {
-        this.sightId = sightId;
+    public ProductSights(GeoObject sight, Integer requestId, Integer day, Integer photoOrVisit) {
+        this.sight = sight;
         this.requestId = requestId;
         this.day = day;
         this.photoOrVisit = photoOrVisit;
@@ -32,14 +32,14 @@ public class ProductSights {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "sight_id")
-    public Integer getSightId() {
-        return sightId;
+    @JoinColumn(name = "sight_id")
+    @OneToOne
+    public GeoObject getSight() {
+        return sight;
     }
 
-    public void setSightId(Integer sightId) {
-        this.sightId = sightId;
+    public void setSight(GeoObject sight) {
+        this.sight = sight;
     }
 
     @Basic

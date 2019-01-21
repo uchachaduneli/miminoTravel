@@ -4,7 +4,9 @@ package ge.mimino.travel.service;
 //import org.apache.commons.codec.binary.Base64;
 
 import ge.mimino.travel.dao.RequestDAO;
+import ge.mimino.travel.dto.GeoObjectDTO;
 import ge.mimino.travel.model.Request;
+import ge.mimino.travel.request.ProductRequest;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
@@ -23,6 +25,8 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.math.BigInteger;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author ucha
@@ -31,14 +35,16 @@ import java.util.Base64;
 public class FileService {
 
   final static Logger logger = Logger.getLogger(FileService.class);
+
   @Autowired
   private RequestDAO requestDAO;
+
+  @Autowired
+  private RequestService requestService;
+
+
   private String rootDir;
 
-  public static void main(String[] args) {
-    FileService a = new FileService();
-    a.generateWord(1);
-  }
 
   public byte[] readFile(String identifier) {
     try {
@@ -168,13 +174,21 @@ public class FileService {
     try {
       logger.info("Generating Of Word Start");
 
+      Map<Integer, ProductRequest> dataMap = new HashMap<>();
+
       Request request = (Request) requestDAO.find(Request.class, requestId);
 
+      logger.info("Retrieving Data From DB for Word");
+
       int[] days = new int[request.getDaysCount()];
-      String[] dayText = new String[5];
-      for (int day = 0; day < days.length; day++) {
-        dayText[day] = "Day " + day;
+      String[] dayText = new String[request.getDaysCount()];
+      for (int i = 1; i <= request.getDaysCount(); i++) {
+        dayText[i - 1] = "Day " + i;
+        days[i - 1] = i;
+        dataMap.put(i-1, requestService.getProductDetailsById(request.getId(), i));
       }
+
+      logger.info("Have Got Data From DB, Rows Count By Days Is: " + dataMap.size() + " Starting Doc Generation ");
 
       //Blank Document
       XWPFDocument document = new XWPFDocument();
@@ -206,8 +220,8 @@ public class FileService {
       //Write the Document in file system
 //        File resource = new ClassPathResource("poiResources/requestDoc.docx").getFile();
 
-//      FileOutputStream out = new FileOutputStream(new File(rootDir + "/requestDoc.docx"));
-      FileOutputStream out = new FileOutputStream(new File("C:\\Users\\home\\Desktop\\requestDoc.docx"));
+      FileOutputStream out = new FileOutputStream(new File(rootDir + "/requestDoc.docx"));
+//      FileOutputStream out = new FileOutputStream(new File("C:\\Users\\ucha.chaduneli\\Desktop\\requestDoc.docx"));
 
       //create Paragraph
       XWPFParagraph paragraph = document.createParagraph();
@@ -240,7 +254,7 @@ public class FileService {
       headerParagraph = header.createParagraph();
       InputStream in = new FileInputStream(lineImage);
       headerParagraph.createRun().addPicture(in, Document.PICTURE_TYPE_PNG, "line.png",
-          Units.toEMU(40), Units.toEMU(5));
+              Units.toEMU(40), Units.toEMU(5));
       in.close();
 
 
@@ -254,7 +268,7 @@ public class FileService {
       in = new FileInputStream(preImage);
       paragraph.setAlignment(ParagraphAlignment.CENTER);
       paragraph.createRun().addPicture(in, Document.PICTURE_TYPE_PNG, "background.png",
-          Units.toEMU(width * scaling), Units.toEMU(height * scaling));
+              Units.toEMU(width * scaling), Units.toEMU(height * scaling));
       in.close();
 
 //    File imgFile = new File("C:\\Users\\ucha\\IdeaProjects\\poi\\src\\main\\resources\\background.png");
@@ -277,30 +291,30 @@ public class FileService {
 //        footeParagraph.setBorderTop(Borders.THICK);
       in = new FileInputStream(lineImage);
       footeParagraph.createRun().addPicture(in, Document.PICTURE_TYPE_PNG, "line.png",
-          Units.toEMU(700), Units.toEMU(5));
+              Units.toEMU(700), Units.toEMU(5));
       in.close();
       footeParagraph = footer.createParagraph();
       footeParagraph.setAlignment(ParagraphAlignment.CENTER);
       run = footeParagraph.createRun();
       in = new FileInputStream(phoneIcon);
       run.addPicture(in, Document.PICTURE_TYPE_PNG, "mail.png",
-          Units.toEMU(10), Units.toEMU(10));
+              Units.toEMU(10), Units.toEMU(10));
       in.close();
       run.setText("  598 46-56-17         ");
       in = new FileInputStream(mailIcon);
       run.addPicture(in, Document.PICTURE_TYPE_PNG, "mail.png",
-          Units.toEMU(12), Units.toEMU(10));
+              Units.toEMU(12), Units.toEMU(10));
       in.close();
       run.setText("  info@miminotravel.com          ");
       in = new FileInputStream(siteLinkIcon);
       run.addPicture(in, Document.PICTURE_TYPE_PNG, "siteLink.png",
-          Units.toEMU(10), Units.toEMU(10));
+              Units.toEMU(10), Units.toEMU(10));
       in.close();
       run.setText("  www.miminotravel.com  ");
 
 //      *************************************   ყოველი დღის ინფორმაციის ჩაწერა *****************************************
 
-      for (int day : days) {
+      for (int i = 0; i < days.length; i++) {
         paragraph = document.createParagraph();
         //Day Indexes
         run = paragraph.createRun();
@@ -308,19 +322,26 @@ public class FileService {
         run.setFontFamily("Arial");
         run.setBold(true);
         run.setFontSize(17);
-        run.setText(dayText[day] + ": ");
+        run.setText(dayText[i] + ": ");
         // Sight Labels
         run = paragraph.createRun();
         run.setBold(true);
         run.setFontSize(17);
         run.setColor("1b256c");
-        run.setText("Tbilisi city tour ");
-        // main text
-        run = paragraph.createRun();
-        run.setFontSize(14);
-        run.setFontFamily("Arial");
-        run.setColor("0d0d0d");
-        run.setText("Breakfast at the hotel. along the Georgian Military Highway towards Kazbegi region. On the way we will drive across the Cross Pass (2 395m.) and along the Tergi River that brings us to Kazbegi – main town in this region. From the centre of Kazbegi drive by 4x4 through beautiful valleys and woodland leads us to Gergeti Holy Trinity church (14th century), stunningly located on a hilltop (2170 m.) ");
+        if(dataMap.get(i) != null) {
+          for (GeoObjectDTO sight : dataMap.get(i).getSights()) {
+            //იმ დღის ტური დასახელება Tbilisi city tour მაგალითად, სავარაუდოდ ინფუთი მოუწევს
+            run.setText(sight.getNameEn()+" - ");
+          }
+          for (GeoObjectDTO sight : dataMap.get(i).getSights()) {
+            paragraph = document.createParagraph();
+            run = paragraph.createRun();
+            run.setFontSize(14);
+            run.setFontFamily("Arial");
+            run.setColor("0d0d0d");
+            run.setText(sight.getDescriptionEn());
+          }
+        }
       }
 
       paragraph = document.createParagraph();
@@ -334,7 +355,7 @@ public class FileService {
       paragraph.setAlignment(ParagraphAlignment.CENTER);
       run = paragraph.createRun();
       run.addPicture(in, Document.PICTURE_TYPE_PNG, "line.png",
-          Units.toEMU(40), Units.toEMU(5));
+              Units.toEMU(40), Units.toEMU(5));
       in.close();
 
       paragraph = document.createParagraph();
@@ -350,7 +371,7 @@ public class FileService {
       paragraph.setAlignment(ParagraphAlignment.LEFT);
       run = paragraph.createRun();
       run.addPicture(in, Document.PICTURE_TYPE_PNG, "blueline.png",
-          Units.toEMU(40), Units.toEMU(5));
+              Units.toEMU(40), Units.toEMU(5));
       in.close();
 
       paragraph = document.createParagraph();
@@ -496,7 +517,7 @@ public class FileService {
       paragraph.setAlignment(ParagraphAlignment.LEFT);
       run = paragraph.createRun();
       run.addPicture(in, Document.PICTURE_TYPE_PNG, "blueline.png",
-          Units.toEMU(40), Units.toEMU(5));
+              Units.toEMU(40), Units.toEMU(5));
       in.close();
 
       paragraph = document.createParagraph();
@@ -539,7 +560,7 @@ public class FileService {
       paragraph.setAlignment(ParagraphAlignment.LEFT);
       run = paragraph.createRun();
       run.addPicture(in, Document.PICTURE_TYPE_PNG, "blueline.png",
-          Units.toEMU(40), Units.toEMU(5));
+              Units.toEMU(40), Units.toEMU(5));
       in.close();
       paragraph = document.createParagraph();
       run = paragraph.createRun();
@@ -585,7 +606,7 @@ public class FileService {
       in = new FileInputStream(footerImage);
       paragraph.setAlignment(ParagraphAlignment.CENTER);
       paragraph.createRun().addPicture(in, Document.PICTURE_TYPE_PNG, "footerImg.png",
-          Units.toEMU(width * scaling), Units.toEMU(height * scaling));
+              Units.toEMU(width * scaling), Units.toEMU(height * scaling));
       in.close();
 
       document.write(out);
@@ -593,15 +614,13 @@ public class FileService {
       //Close document
       out.close();
       logger.info("Doc Generated successfully");
+
+//      if (Desktop.isDesktopSupported()) {
+//        Desktop.getDesktop().open(new File("C:\\Users\\ucha.chaduneli\\Desktop\\requestDoc.docx"));
+//      }
     } catch (Exception e) {
-      logger.fatal("During Doc Generation FAILED");
-    }
-    if (Desktop.isDesktopSupported()) {
-      try {
-        Desktop.getDesktop().open(new File("C:\\Users\\home\\Desktop\\requestDoc.docx"));
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
+      logger.fatal("During Doc Generation FAILED " + e.getMessage());
+      e.printStackTrace();
     }
   }
 }
