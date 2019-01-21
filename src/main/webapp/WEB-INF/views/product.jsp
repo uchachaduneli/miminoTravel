@@ -516,7 +516,7 @@
                             </tbody>
                         </table>
                         <label ng-repeat="t in daysList | limitTo:request.daysCount"
-                               style="display: inline !important;">
+                               style="display: inline !important; margin-left: 10px;" class="{{checkInList(t, transportDaysList) > 0 ? 'markAsSelected':''}}">
                             <input type="checkbox" id="daysListchecks{{t.id}}"
                                    ng-click="saveTransportDaysList()"
                                    checklist-model="transportDaysList" checklist-value="t">&nbsp; Day -
