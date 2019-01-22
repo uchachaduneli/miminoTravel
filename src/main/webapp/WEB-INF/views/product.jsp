@@ -603,7 +603,11 @@
                                            checklist-model="product.sights" checklist-value="t.id">&nbsp;
                                     {{t.nameEn}}
 
-                                    <div class="radio text-right">
+                                    <button class="btn btn-xs" type="button" data-toggle="collapse" data-target="#collapsibleDiv{{t.id}}">
+                                        <span class="caret"></span>
+                                    </button>
+
+                                    <div id="collapsibleDiv{{t.id}}" class="radio text-right collapse">
                                         <label><input type="radio" ng-model="combSights[t.id].photoOrVisit" value="1"
                                                       ng-change="sightPhotoVisithandler(combSights[t.id].photoOrVisit, t.id)"
                                                       class="input-sm">Visit</label>&nbsp;
