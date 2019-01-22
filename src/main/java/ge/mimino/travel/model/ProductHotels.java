@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Table(name = "product_hotels")
 public class ProductHotels {
   private Integer id;
-  private Integer hotelId;
+  private Hotel hotel;
   private Integer requestId;
   private Integer day;
   private Integer groupId;
@@ -14,8 +14,8 @@ public class ProductHotels {
   public ProductHotels() {
   }
 
-  public ProductHotels(Integer hotelId, Integer requestId, Integer day, Integer groupId) {
-    this.hotelId = hotelId;
+  public ProductHotels(Hotel hotel, Integer requestId, Integer day, Integer groupId) {
+    this.hotel = hotel;
     this.requestId = requestId;
     this.day = day;
     this.groupId = groupId;
@@ -32,14 +32,14 @@ public class ProductHotels {
     this.id = id;
   }
 
-  @Basic
-  @Column(name = "hotel_id")
-  public Integer getHotelId() {
-    return hotelId;
+  @JoinColumn(name = "hotel_id")
+  @OneToOne
+  public Hotel getHotel() {
+    return hotel;
   }
 
-  public void setHotelId(Integer hotelId) {
-    this.hotelId = hotelId;
+  public void setHotel(Hotel hotel) {
+    this.hotel = hotel;
   }
 
   @Basic

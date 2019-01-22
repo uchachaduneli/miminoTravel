@@ -432,9 +432,23 @@
 
     }]);
 </script>
-
+<style>
+    #myBtn {
+        position: fixed;
+        bottom: 40%;
+        right: 0.8%;
+        z-index: 99999;
+        border: 1px solid #ebccd1;
+        outline: none;
+        background-color: #f5f5f5;
+        cursor: pointer;
+        padding: 15px;
+        border-radius: 4px;
+    }
+</style>
 
 <div class="row">
+    <button id="myBtn">Day ({{daysList[dayIndex]}})</button>
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">

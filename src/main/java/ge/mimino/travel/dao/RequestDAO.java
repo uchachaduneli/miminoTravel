@@ -110,14 +110,14 @@ public class RequestDAO extends AbstractDAO {
       sightsIds.add(rest.getId());
     }
     Query query = getEntityManager().createQuery("delete from " + ProductSights.class.getSimpleName()
-        + " c where c.requestId=" + requestId + " and c.day=" + day + " and c.sightId in :listOfIds");
+        + " c where c.requestId=" + requestId + " and c.day=" + day + " and c.sight.id in :listOfIds");
     query.setParameter("listOfIds", sightsIds);
     query.executeUpdate();
   }
 
   public void removeProductTransports(Integer requestId, List<Integer> transports, Integer day) {
     Query query = getEntityManager().createQuery("delete from " + ProductTransports.class.getSimpleName()
-        + " c where c.requestId=" + requestId + " and c.day=" + day + " and c.transportId in :listOfIds");
+        + " c where c.requestId=" + requestId + " and c.day=" + day + " and c.transport.id in :listOfIds");
     query.setParameter("listOfIds", transports);
     query.executeUpdate();
   }
@@ -128,7 +128,7 @@ public class RequestDAO extends AbstractDAO {
       restaurantIds.add(rest.getRestaurantId());
     }
     Query query = getEntityManager().createQuery("delete from " + ProductRestaurants.class.getSimpleName()
-        + " c where c.requestId=" + requestId + " and c.day=" + day + " and c.restaurantId in :listOfIds");
+        + " c where c.requestId=" + requestId + " and c.day=" + day + " and c.restaurant.id in :listOfIds");
     query.setParameter("listOfIds", restaurantIds);
     query.executeUpdate();
   }

@@ -9,6 +9,7 @@ public class ProductPlacesDTO {
 
     private Integer id;
     private Integer placeId;
+    private PlaceDTO place;
     private Integer requestId;
     private Integer day;
 
@@ -16,7 +17,8 @@ public class ProductPlacesDTO {
     public static ProductPlacesDTO parse(ProductPlaces record) {
         ProductPlacesDTO dto = new ProductPlacesDTO();
         dto.setId(record.getId());
-        dto.setPlaceId(record.getPlaceId());
+        dto.setPlaceId(record.getPlace().getId());
+        dto.setPlace(PlaceDTO.parse(record.getPlace()));
         dto.setRequestId(record.getRequestId());
         dto.setDay(record.getDay());
         return dto;
@@ -29,6 +31,14 @@ public class ProductPlacesDTO {
             list.add(ProductPlacesDTO.parse(record));
         }
         return list;
+    }
+
+    public PlaceDTO getPlace() {
+        return place;
+    }
+
+    public void setPlace(PlaceDTO place) {
+        this.place = place;
     }
 
     public Integer getId() {

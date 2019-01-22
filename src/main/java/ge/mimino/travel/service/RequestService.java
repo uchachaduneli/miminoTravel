@@ -79,7 +79,7 @@ public class RequestService {
     if (request.getCombinedCountries() != null && !request.getCombinedCountries().isEmpty()) {
       for (CombinedCountry combCntr : request.getCombinedCountries()) {
         requestDAO.create(new RequestCountry(obj.getId(), ((Country) requestDAO.find(Country.class, combCntr.getCountryId())),
-            combCntr.getDaysCount(), combCntr.getNote()));
+                combCntr.getDaysCount(), combCntr.getNote()));
       }
     }
 
@@ -116,21 +116,21 @@ public class RequestService {
     if (request.getHotels() != null && !request.getHotels().isEmpty()) {
       requestDAO.removeProductHotels(request.getRequestId(), request.getDay());
       for (TmpHotelGroup obj : request.getHotels()) {
-        requestDAO.create(new ProductHotels(obj.getHotelId(), request.getRequestId(), request.getDay(), obj.getGroupId()));
+        requestDAO.create(new ProductHotels((Hotel) requestDAO.find(Hotel.class, obj.getHotelId()), request.getRequestId(), request.getDay(), obj.getGroupId()));
       }
     }
 
     if (request.getNonstandarts() != null && !request.getNonstandarts().isEmpty()) {
       requestDAO.removeProductNonstandarts(request.getRequestId(), request.getDay());
       for (Integer obj : request.getNonstandarts()) {
-        requestDAO.create(new ProductNonstandarts(obj, request.getRequestId(), request.getDay()));
+        requestDAO.create(new ProductNonstandarts((NonstandartService) requestDAO.find(NonstandartService.class, obj), request.getRequestId(), request.getDay()));
       }
     }
 
     if (request.getPlaces() != null && !request.getPlaces().isEmpty()) {
       requestDAO.removeProductPlaces(request.getRequestId(), request.getDay());
       for (Integer obj : request.getPlaces()) {
-        requestDAO.create(new ProductPlaces(obj, request.getRequestId(), request.getDay()));
+        requestDAO.create(new ProductPlaces((Place) requestDAO.find(Place.class, obj), request.getRequestId(), request.getDay()));
       }
     }
 
@@ -144,14 +144,14 @@ public class RequestService {
     if (request.getSights() != null && !request.getSights().isEmpty()) {
       requestDAO.removeProductSights(request.getRequestId(), request.getSights(), request.getDay());
       for (GeoObjectDTO obj : request.getSights()) {
-        requestDAO.create(new ProductSights((GeoObject) requestDAO.find(GeoObject.class, obj.getId()), request.getRequestId(), request.getDay(), obj.getPhotoOrVisit()));
+        requestDAO.create(new ProductSights((GeoObject) requestDAO.find(GeoObject.class, obj.getId()), request.getRequestId(), request.getDay(), obj.getPhotoOrVisit() == null ? 1 : obj.getPhotoOrVisit()));
       }
     }
 
     if (request.getRestaurants() != null && !request.getRestaurants().isEmpty()) {
       requestDAO.removeProductRestaurants(request.getRequestId(), request.getRestaurants(), request.getDay());
       for (ProductRestaurantsDTO obj : request.getRestaurants()) {
-        requestDAO.create(new ProductRestaurants(obj.getRestaurantId(), request.getRequestId(), request.getDay(), obj.getMealCategories(), obj.getPackages()));
+        requestDAO.create(new ProductRestaurants((Restaurant) requestDAO.find(Restaurant.class, obj.getRestaurantId()), request.getRequestId(), request.getDay(), obj.getMealCategories(), obj.getPackages()));
       }
     }
   }
@@ -287,15 +287,15 @@ public class RequestService {
     paramValues.add(new ParamValuePair("day", day));
 
     for (ProductHotels obj : (List<ProductHotels>) requestDAO.getAllByParamValue(ProductHotels.class, paramValues, null)) {
-      res.getHotels().add(new TmpHotelGroup(obj.getHotelId(), obj.getGroupId()));
+      res.getHotels().add(new TmpHotelGroup(obj.getHotel(), obj.getGroupId()));
     }
 
     for (ProductNonstandarts obj : (List<ProductNonstandarts>) requestDAO.getAllByParamValue(ProductNonstandarts.class, paramValues, null)) {
-      res.getNonstandarts().add(obj.getNonstandartServiceId());
+      res.getNonstandarts().add(obj.getNonstandartService().getId());
     }
 
     for (ProductPlaces obj : (List<ProductPlaces>) requestDAO.getAllByParamValue(ProductPlaces.class, paramValues, null)) {
-      res.getPlaces().add(obj.getPlaceId());
+      res.getPlaces().add(obj.getPlace().getId());
     }
 
     for (ProductSights obj : (List<ProductSights>) requestDAO.getAllByParamValue(ProductSights.class, paramValues, null)) {

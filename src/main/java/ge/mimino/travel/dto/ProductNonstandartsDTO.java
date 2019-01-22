@@ -9,6 +9,7 @@ public class ProductNonstandartsDTO {
 
     private Integer id;
     private Integer nonstandartServiceId;
+    private NonstandartServiceDTO nonstandartService;
     private Integer requestId;
     private Integer day;
 
@@ -16,7 +17,8 @@ public class ProductNonstandartsDTO {
     public static ProductNonstandartsDTO parse(ProductNonstandarts record) {
         ProductNonstandartsDTO dto = new ProductNonstandartsDTO();
         dto.setId(record.getId());
-        dto.setNonstandartServiceId(record.getNonstandartServiceId());
+        dto.setNonstandartServiceId(record.getNonstandartService().getId());
+        dto.setNonstandartService(NonstandartServiceDTO.parse(record.getNonstandartService()));
         dto.setRequestId(record.getRequestId());
         dto.setDay(record.getDay());
         return dto;
@@ -29,6 +31,14 @@ public class ProductNonstandartsDTO {
             list.add(ProductNonstandartsDTO.parse(record));
         }
         return list;
+    }
+
+    public NonstandartServiceDTO getNonstandartService() {
+        return nonstandartService;
+    }
+
+    public void setNonstandartService(NonstandartServiceDTO nonstandartService) {
+        this.nonstandartService = nonstandartService;
     }
 
     public Integer getId() {
