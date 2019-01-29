@@ -72,7 +72,7 @@ public class GeoObjectDAO extends AbstractDAO {
 
     public List<GeoObject> getGeoObjectsByPlaces(List<Integer> placeIds) {
         TypedQuery<GeoObject> query = getEntityManager().createQuery("select c from " + GeoObject.class.getSimpleName()
-                + " c where c.place.id in :listOfIds", GeoObject.class);
+                + " c where c.place.id in :listOfIds order by c.place.id asc, c.nameEn asc", GeoObject.class);
         query.setParameter("listOfIds", placeIds);
         return query.getResultList();
     }

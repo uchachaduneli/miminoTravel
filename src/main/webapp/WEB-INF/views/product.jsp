@@ -79,13 +79,22 @@
                 $scope.product.places = res.data.places;
                 angular.forEach($filter('filter')(res.data.hotels, {groupId: 1}, true), function (v) {
                     $scope.prod.hotels1.push(v.hotelId);
+                    if($scope.hotelStars1 == '')
+                        $scope.hotelStars1 = v.hotel.starsCount;
                 });
+                $scope.filterHotels1();
                 angular.forEach($filter('filter')(res.data.hotels, {groupId: 2}, true), function (v) {
                     $scope.prod.hotels2.push(v.hotelId);
+                    if($scope.hotelStars2 == '')
+                        $scope.hotelStars2 = v.hotel.starsCount;
                 });
+                $scope.filterHotels2();
                 angular.forEach($filter('filter')(res.data.hotels, {groupId: 3}, true), function (v) {
                     $scope.prod.hotels3.push(v.hotelId);
+                    if($scope.hotelStars3 == '')
+                        $scope.hotelStars3 = v.hotel.starsCount;
                 });
+                $scope.filterHotels3();
 
                 $scope.loadDistances($scope.product.places);
 
@@ -136,17 +145,17 @@
                 }
 
                 if ($scope.product.places.length > 0) {
-                    function getHotels(res) {
-                        $scope.hotels1 = res.data;
-                        $scope.hotels2 = res.data;
-                        $scope.hotels3 = res.data;
-
-                        $scope.filterHotels1();
-                        $scope.filterHotels2();
-                        $scope.filterHotels3();
-                    }
-
-                    ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars, angular.toJson($scope.product.places), getHotels);
+                    // function getHotels(res) {
+                    //     $scope.hotels1 = res.data;
+                    //     $scope.hotels2 = res.data;
+                    //     $scope.hotels3 = res.data;
+                    //
+                    //     $scope.filterHotels1();
+                    //     $scope.filterHotels2();
+                    //     $scope.filterHotels3();
+                    // }
+                    //
+                    // ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars, angular.toJson($scope.product.places), getHotels);
 
                     function getSights(res) {
                         $scope.sights = res.data;
@@ -184,7 +193,7 @@
             function getDists(res) {
                 angular.forEach(res.data, function (value, key) {
                     $scope.distances.push(key);
-                    $scope.distanceSum += value;
+                    $scope.distanceSum = value + $scope.distanceSum;
                 });
             }
 
@@ -222,6 +231,8 @@
         $scope.handleDayChange = function (h) {
             $('#loadingModal').modal('show');
             if (parseInt(h) > 0) {
+                $scope.save();
+
                 $scope.dayIndex += 1;
 
             } else {
@@ -249,7 +260,7 @@
 
             function resFunc(res) {
                 if (res.errorCode == 0) {
-                    successMsg('Operation Successfull');
+                    successMsg('Data Saved Successfully');
                 } else {
                     errorMsg('Operation Failed');
                 }
@@ -321,9 +332,10 @@
         $scope.filterHotels1 = function () {
             var slctedPlaces = $filter('filter')($scope.places, {selected: true}, true);
             var ids = [];
-            angular.forEach(slctedPlaces, function (v) {
-                ids.push(v.id);
-            });
+            // angular.forEach(slctedPlaces, function (v) {
+            if(slctedPlaces != undefined){
+                ids.push(slctedPlaces[slctedPlaces.length - 1].id);
+            // });
             if (ids.length > 0 || $scope.hotelStars1.length > 0) {
                 function getHotels(res) {
                     $scope.hotels1 = res.data;
@@ -331,33 +343,38 @@
 
                 ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars1, angular.toJson(ids), getHotels);
             }
+            }
         }
         $scope.filterHotels2 = function () {
             var slctedPlaces = $filter('filter')($scope.places, {selected: true}, true);
             var ids = [];
-            angular.forEach(slctedPlaces, function (v) {
-                ids.push(v.id);
-            });
-            if (ids.length > 0 || $scope.hotelStars2.length > 0) {
-                function getHotels(res) {
-                    $scope.hotels2 = res.data;
-                }
+            // angular.forEach(slctedPlaces, function (v) {
+            if(slctedPlaces != undefined) {
+                ids.push(slctedPlaces[slctedPlaces.length - 1].id);
+                // });
+                if (ids.length > 0 || $scope.hotelStars2.length > 0) {
+                    function getHotels(res) {
+                        $scope.hotels2 = res.data;
+                    }
 
-                ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars2, angular.toJson(ids), getHotels);
+                    ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars2, angular.toJson(ids), getHotels);
+                }
             }
         }
         $scope.filterHotels3 = function () {
             var slctedPlaces = $filter('filter')($scope.places, {selected: true}, true);
             var ids = [];
-            angular.forEach(slctedPlaces, function (v) {
-                ids.push(v.id);
-            });
-            if (ids.length > 0 || $scope.hotelStars3.length > 0) {
-                function getHotels(res) {
-                    $scope.hotels3 = res.data;
-                }
+            // angular.forEach(slctedPlaces, function (v) {
+            if(slctedPlaces != undefined) {
+                ids.push(slctedPlaces[slctedPlaces.length - 1].id);
+                // });
+                if (ids.length > 0 || $scope.hotelStars3.length > 0) {
+                    function getHotels(res) {
+                        $scope.hotels3 = res.data;
+                    }
 
-                ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars3, angular.toJson(ids), getHotels);
+                    ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars3, angular.toJson(ids), getHotels);
+                }
             }
         }
 
@@ -425,6 +442,7 @@
         }
 
         $scope.sendToFinance = function () {
+            $scope.save();
             if (confirm("Pleace confirm Sending to Finance")) {
                 $window.location.href = "/miminoTravel/financial?key=" + $scope.request.requestKey;
             }
@@ -567,7 +585,7 @@
                         </a>
                         <div class="progress">
                             <div class="progress-bar {{$index %2 == 0 ? 'progress-bar-success':'progress-bar-primary'}}"
-                                 role="progressbar" ng-repeat="key in distances | orderBy : '[]': true"
+                                 role="progressbar" ng-repeat="key in distances"
                                  style="{{'width:'+100/distances.length+'%;'}}">
                                 {{key}}
                             </div>
@@ -794,11 +812,6 @@
                 <div class="col col-md-12">
                     <ul class="pagination pull-right">
                         <li>
-                            <a ng-click="generateWord()" title="ფაილის დაგენერირება" class="btn btn-default pull-left">
-                                <i class="fa fa-file-word-o"></i>
-                            </a>
-                        </li>
-                        <li>
                             <a>(Day {{daysList[dayIndex]}}) </a>
                         </li>
                         <li>
@@ -816,6 +829,9 @@
                         </a>
                     </div>
                     <div class="col-sm-6 text-right">
+                        <a class="btn btn-app" ng-click="generateWord()" title="ფაილის დაგენერირება">
+                            <i class="fa fa-file-word-o"></i>
+                        </a>
                         <a class="btn btn-app" ng-click="sendToFinance()">
                             <i class="fa fa-send"></i> Send To Finance
                         </a>

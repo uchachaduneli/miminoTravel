@@ -52,6 +52,15 @@ public class DistancesDAO extends AbstractDAO {
   }
 
   public Map<String, Double> getDistancesByPlace(List<Integer> ids) {
+
+//    Collections.sort(nodeList, new Comparator<DataNode>(){
+//      public int compare(DataNode o1, DataNode o2){
+//        if(o1.degree == o2.degree)
+//          return 0;
+//        return o1.degree < o2.degree ? -1 : 1;
+//      }
+//    });
+
     String q = "";
     List<Distances> distances = new ArrayList<>();
     Map<String, Double> res = new HashMap<>();
