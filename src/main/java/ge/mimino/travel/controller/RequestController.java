@@ -29,121 +29,127 @@ import java.io.IOException;
 @Controller
 public class RequestController {
 
-  @Autowired
-  private RequestService requestService;
+    @Autowired
+    private RequestService requestService;
 
-  @Autowired
-  private FileService fileService;
+    @Autowired
+    private FileService fileService;
 
-  @RequestMapping("/get-requests")
-  @ResponseBody
-  private Response getRequests(@RequestParam("start") int start, @RequestParam("limit") int limit,
-                               @RequestBody AddRequest request, HttpServletRequest servletRequest) throws Exception {
-    if (((Integer) servletRequest.getSession().getAttribute("typeId")) == UsersDTO.COMUNICATION_MANAGER) {
-      request.setUserId((Integer) servletRequest.getSession().getAttribute("userId"));
+    @RequestMapping("/get-requests")
+    @ResponseBody
+    private Response getRequests(@RequestParam("start") int start, @RequestParam("limit") int limit,
+                                 @RequestBody AddRequest request, HttpServletRequest servletRequest) throws Exception {
+        if (((Integer) servletRequest.getSession().getAttribute("typeId")) == UsersDTO.COMUNICATION_MANAGER) {
+            request.setUserId((Integer) servletRequest.getSession().getAttribute("userId"));
+        }
+        return Response.withSuccess(requestService.getRequests(start, limit, request));
     }
-    return Response.withSuccess(requestService.getRequests(start, limit, request));
-  }
 
-  @RequestMapping("/get-requests-countries")
-  @ResponseBody
-  private Response getRequestsCountries(@RequestParam Integer id) throws Exception {
-    return Response.withSuccess(requestService.getRequestCountries(id));
-  }
-
-  @RequestMapping("/update-transport-days")
-  @ResponseBody
-  private Response updateTransportDays(@RequestParam Integer reqId, @RequestParam String checkedDays) throws Exception {
-    requestService.updateTransportDays(reqId, checkedDays);
-    return Response.ok();
-  }
-
-  @RequestMapping("/get-tourist-counts")
-  @ResponseBody
-  private Response getTouristCounts(@RequestParam Integer id) throws Exception {
-    return Response.withSuccess(requestService.getTouristCounts(id));
-  }
-
-  @RequestMapping("/get-request-by-key")
-  @ResponseBody
-  private Response getRequestByKey(@RequestParam String id) {
-    try {
-      return Response.withSuccess(RequestDTO.parse(requestService.getRequestByKey(id)));
-    } catch (IndexOutOfBoundsException ex) {
-      return Response.withError("Incorrect Key");
+    @RequestMapping("/get-requests-countries")
+    @ResponseBody
+    private Response getRequestsCountries(@RequestParam Integer id) throws Exception {
+        return Response.withSuccess(requestService.getRequestCountries(id));
     }
-  }
 
-  @RequestMapping("/get-product-details")
-  @ResponseBody
-  private Response getProductDetailsById(@RequestParam Integer requestId, @RequestParam Integer day) {
-    return Response.withSuccess(requestService.getProductDetailsById(requestId, day));
-  }
+    @RequestMapping("/update-transport-days")
+    @ResponseBody
+    private Response updateTransportDays(@RequestParam Integer reqId, @RequestParam String checkedDays) throws Exception {
+        requestService.updateTransportDays(reqId, checkedDays);
+        return Response.ok();
+    }
 
-  @RequestMapping("/get-requests-details")
-  @ResponseBody
-  private Response getRequestsDetails(@RequestParam Integer id) throws Exception {
-    return Response.withSuccess(requestService.getRequestDetails(id));
-  }
+    @RequestMapping("/get-tourist-counts")
+    @ResponseBody
+    private Response getTouristCounts(@RequestParam Integer id) throws Exception {
+        return Response.withSuccess(requestService.getTouristCounts(id));
+    }
 
-  @RequestMapping("/get-requests-messages")
-  @ResponseBody
-  private Response getRequestMessages(@RequestParam Integer id) throws Exception {
-    return Response.withSuccess(requestService.getRequestMessages(id));
-  }
+    @RequestMapping("/get-request-by-key")
+    @ResponseBody
+    private Response getRequestByKey(@RequestParam String id) {
+        try {
+            return Response.withSuccess(RequestDTO.parse(requestService.getRequestByKey(id)));
+        } catch (IndexOutOfBoundsException ex) {
+            return Response.withError("Incorrect Key");
+        }
+    }
 
-  @RequestMapping("/get-details")
-  @ResponseBody
-  private Response getDetails() throws Exception {
-    return Response.withSuccess(requestService.getDetails());
-  }
+    @RequestMapping("/get-product-details")
+    @ResponseBody
+    private Response getProductDetailsById(@RequestParam Integer requestId, @RequestParam Integer day) {
+        return Response.withSuccess(requestService.getProductDetailsById(requestId, day));
+    }
 
-  @RequestMapping("/get-tourists-count")
-  @ResponseBody
-  private Response getTouristsCount(@RequestParam Integer id) throws Exception {
-    return Response.withSuccess(requestService.getTouristsCount(id));
-  }
+    @RequestMapping("/get-requests-details")
+    @ResponseBody
+    private Response getRequestsDetails(@RequestParam Integer id) throws Exception {
+        return Response.withSuccess(requestService.getRequestDetails(id));
+    }
 
-  @RequestMapping({"/save"})
-  @ResponseBody
-  public Response save(@RequestBody AddRequest request, HttpServletRequest servletRequest) throws Exception {
-    request.setUserId((Integer) servletRequest.getSession().getAttribute("userId"));
-    return Response.withSuccess(RequestDTO.parse(requestService.save(request)));
-  }
+    @RequestMapping("/get-requests-messages")
+    @ResponseBody
+    private Response getRequestMessages(@RequestParam Integer id) throws Exception {
+        return Response.withSuccess(requestService.getRequestMessages(id));
+    }
 
-  @RequestMapping({"/save-product"})
-  @ResponseBody
-  public Response saveProduct(@RequestBody ProductRequest request) throws Exception {
-    requestService.saveProduct(request);
-    return Response.ok();
-  }
+    @RequestMapping("/get-details")
+    @ResponseBody
+    private Response getDetails() throws Exception {
+        return Response.withSuccess(requestService.getDetails());
+    }
 
-  @RequestMapping({"/save-message"})
-  @ResponseBody
-  public Response saveMessage(@RequestBody RequestMessageDTO request, HttpServletRequest servletRequest) throws Exception {
-    request.setUserId((Integer) servletRequest.getSession().getAttribute("userId"));
-    requestService.saveMessage(request);
-    return Response.ok();
-  }
+    @RequestMapping("/get-tourists-count")
+    @ResponseBody
+    private Response getTouristsCount(@RequestParam Integer id) throws Exception {
+        return Response.withSuccess(requestService.getTouristsCount(id));
+    }
 
-  @RequestMapping({"/delete"})
-  @ResponseBody
-  public Response delete(@RequestParam int id) {
-    requestService.delete(id);
-    return Response.withSuccess(true);
-  }
+    @RequestMapping({"/save"})
+    @ResponseBody
+    public Response save(@RequestBody AddRequest request, HttpServletRequest servletRequest) throws Exception {
+        request.setUserId((Integer) servletRequest.getSession().getAttribute("userId"));
+        return Response.withSuccess(RequestDTO.parse(requestService.save(request)));
+    }
 
-  @RequestMapping("/add-images")
-  @ResponseBody
-  private Response addImage(@RequestParam("file") MultipartFile file, @RequestParam String id) throws IOException {
-    return Response.withSuccess(fileService.addFile(file, "uploads", id));
-  }
+    @RequestMapping({"/save-product"})
+    @ResponseBody
+    public Response saveProduct(@RequestBody ProductRequest request) throws Exception {
+        requestService.saveProduct(request);
+        return Response.ok();
+    }
 
-  @RequestMapping("/generate-word")
-  @ResponseBody
-  public Response downlodExcell(@RequestBody Integer requestId, HttpServletResponse response) throws IOException, InvalidFormatException {
-    fileService.generateWord(requestId);
-    return Response.ok();
-  }
+    @RequestMapping({"/save-message"})
+    @ResponseBody
+    public Response saveMessage(@RequestBody RequestMessageDTO request, HttpServletRequest servletRequest) throws Exception {
+        request.setUserId((Integer) servletRequest.getSession().getAttribute("userId"));
+        requestService.saveMessage(request);
+        return Response.ok();
+    }
+
+    @RequestMapping({"/delete"})
+    @ResponseBody
+    public Response delete(@RequestParam int id) {
+        requestService.delete(id);
+        return Response.withSuccess(true);
+    }
+
+    @RequestMapping("/add-images")
+    @ResponseBody
+    private Response addImage(@RequestParam("file") MultipartFile file, @RequestParam String id) throws IOException {
+        return Response.withSuccess(fileService.addFile(file, "uploads", id));
+    }
+
+    @RequestMapping("/generate-word")
+    @ResponseBody
+    public Response downlodExcell(@RequestBody Integer requestId, HttpServletResponse response) throws IOException, InvalidFormatException {
+        fileService.generateWord(requestId);
+        return Response.ok();
+    }
+
+    @RequestMapping("/get-currencies")
+    @ResponseBody
+    public Response getCurrenciesByService() {
+        return Response.withSuccess(requestService.getCurrency());
+    }
 
 }
