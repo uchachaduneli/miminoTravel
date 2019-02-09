@@ -37,6 +37,8 @@ public class Request {
     private String tourCode;
     private String nationality;
     private String strArrivalTime;
+    private Double eur;
+    private Double usd;
 
     @Id
     @Column(name = "id")
@@ -339,4 +341,23 @@ public class Request {
         this.strArrivalTime = strArrivalTime;
     }
 
+    @Basic
+    @Column(name = "eur")
+    public Double getEur() {
+        return eur;
+    }
+
+    public void setEur(Double eur) {
+        this.eur = eur;
+    }
+
+    @Basic
+    @Column(name = "usd")
+    public Double getUsd() {
+        return usd;
+    }
+
+    public void setUsd(Double usd) {
+        this.usd = usd;
+    }
 }

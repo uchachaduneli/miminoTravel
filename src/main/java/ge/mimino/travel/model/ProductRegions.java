@@ -6,15 +6,15 @@ import javax.persistence.*;
 @Table(name = "product_regions", schema = "mimino")
 public class ProductRegions {
     private Integer id;
-    private Integer regionId;
+    private Region region;
     private Integer requestId;
     private Integer day;
 
     public ProductRegions() {
     }
 
-    public ProductRegions(Integer regionId, Integer requestId, Integer day) {
-        this.regionId = regionId;
+    public ProductRegions(Region region, Integer requestId, Integer day) {
+        this.region = region;
         this.requestId = requestId;
         this.day = day;
     }
@@ -30,14 +30,14 @@ public class ProductRegions {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "region_id", nullable = false)
-    public Integer getRegionId() {
-        return regionId;
+    @JoinColumn(name = "region_id")
+    @OneToOne
+    public Region getRegion() {
+        return region;
     }
 
-    public void setRegionId(Integer regionId) {
-        this.regionId = regionId;
+    public void setRegion(Region region) {
+        this.region = region;
     }
 
     @Basic

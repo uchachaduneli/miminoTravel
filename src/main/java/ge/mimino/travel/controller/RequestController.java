@@ -80,6 +80,12 @@ public class RequestController {
         return Response.withSuccess(requestService.getProductDetailsById(requestId, day));
     }
 
+    @RequestMapping("/get-product-details-for-finaince")
+    @ResponseBody
+    private Response getProductDetailsForFinancialById(@RequestParam Integer requestId, @RequestParam Integer day) {
+        return Response.withSuccess(requestService.getProductDetailsForFinancialById(requestId, day));
+    }
+
     @RequestMapping("/get-requests-details")
     @ResponseBody
     private Response getRequestsDetails(@RequestParam Integer id) throws Exception {

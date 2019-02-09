@@ -33,13 +33,31 @@ public class AddRequest {
     private Integer userId;
     private List<Integer> otherDetails;
     private List<CombinedCountry> combinedCountries;
-  private List<TouristCount> touristCount;
+    private List<TouristCount> touristCount;
     private String strTourStart;
     private String strTourEnd;
     private String strArrivalTime;
     private String strLeaveTime;
     private String tourCode;
     private String nationality;
+    private Double eur;
+    private Double usd;
+
+    public Double getEur() {
+        return eur;
+    }
+
+    public void setEur(Double eur) {
+        this.eur = eur;
+    }
+
+    public Double getUsd() {
+        return usd;
+    }
+
+    public void setUsd(Double usd) {
+        this.usd = usd;
+    }
 
     public Integer getId() {
         return id;
@@ -249,13 +267,13 @@ public class AddRequest {
         this.combinedCountries = combinedCountries;
     }
 
-  public List<TouristCount> getTouristCount() {
-    return touristCount;
-  }
+    public List<TouristCount> getTouristCount() {
+        return touristCount;
+    }
 
-  public void setTouristCount(List<TouristCount> touristCount) {
-    this.touristCount = touristCount;
-  }
+    public void setTouristCount(List<TouristCount> touristCount) {
+        this.touristCount = touristCount;
+    }
 
     public String getStrTourStart() {
         return strTourStart;

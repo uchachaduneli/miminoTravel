@@ -54,6 +54,8 @@ public class RequestDTO {
     private String strLeaveTime;
     private String tourCode;
     private String nationality;
+    private Double eur;
+    private Double usd;
 
     public static String NAT_FOR_TRANSPORT = "German/Italian/Spain/France";
 
@@ -97,6 +99,8 @@ public class RequestDTO {
         dto.setStrLeaveTime(record.getStrLeaveTime());
         dto.setStrTourStart(record.getStrTourStart());
         dto.setStrTourEnd(record.getStrTourEnd());
+        dto.setEur(record.getEur());
+        dto.setUsd(record.getUsd());
         return dto;
     }
 
@@ -107,6 +111,30 @@ public class RequestDTO {
             list.add(RequestDTO.parse(record));
         }
         return list;
+    }
+
+    public static String getNatForTransport() {
+        return NAT_FOR_TRANSPORT;
+    }
+
+    public static void setNatForTransport(String natForTransport) {
+        NAT_FOR_TRANSPORT = natForTransport;
+    }
+
+    public Double getEur() {
+        return eur;
+    }
+
+    public void setEur(Double eur) {
+        this.eur = eur;
+    }
+
+    public Double getUsd() {
+        return usd;
+    }
+
+    public void setUsd(Double usd) {
+        this.usd = usd;
     }
 
     public Integer getId() {

@@ -4,22 +4,52 @@ import ge.mimino.travel.controller.TmpHotelGroup;
 import ge.mimino.travel.dto.GeoObjectDTO;
 import ge.mimino.travel.dto.ProductDTO;
 import ge.mimino.travel.dto.ProductRestaurantsDTO;
+import ge.mimino.travel.model.ProductNonstandarts;
+import ge.mimino.travel.model.ProductPlaces;
+import ge.mimino.travel.model.ProductRegions;
 import ge.mimino.travel.model.ProductTransports;
 
 import java.util.List;
 
 public class ProductRequest {
   private List<Integer> regions;
+  private List<ProductRegions> regionsList;
   private List<GeoObjectDTO> sights;
   private List<Integer> places;
+  private List<ProductPlaces> placesList;
   private List<TmpHotelGroup> hotels;
   private List<ProductTransports> transports;
   private List<String> transportDays;
   private List<Integer> nonstandarts;
+  private List<ProductNonstandarts> nonstandartsList;
   private List<ProductRestaurantsDTO> restaurants;
   private Integer day;
   private Integer requestId;
   private ProductDTO product;
+
+  public List<ProductRegions> getRegionsList() {
+    return regionsList;
+  }
+
+  public void setRegionsList(List<ProductRegions> regionsList) {
+    this.regionsList = regionsList;
+  }
+
+  public List<ProductPlaces> getPlacesList() {
+    return placesList;
+  }
+
+  public void setPlacesList(List<ProductPlaces> placesList) {
+    this.placesList = placesList;
+  }
+
+  public List<ProductNonstandarts> getNonstandartsList() {
+    return nonstandartsList;
+  }
+
+  public void setNonstandartsList(List<ProductNonstandarts> nonstandartsList) {
+    this.nonstandartsList = nonstandartsList;
+  }
 
   public List<String> getTransportDays() {
     return transportDays;

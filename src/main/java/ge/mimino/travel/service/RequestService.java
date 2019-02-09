@@ -5,8 +5,8 @@ import ge.mimino.travel.controller.TmpHotelGroup;
 import ge.mimino.travel.dao.ParamValuePair;
 import ge.mimino.travel.dao.RequestDAO;
 import ge.mimino.travel.dto.*;
-import ge.mimino.travel.model.*;
 import ge.mimino.travel.model.Currency;
+import ge.mimino.travel.model.*;
 import ge.mimino.travel.request.AddRequest;
 import ge.mimino.travel.request.ProductRequest;
 import org.apache.log4j.Logger;
@@ -64,6 +64,8 @@ public class RequestService {
         obj.setBudget(request.getBudget());
         obj.setTourCode(request.getTourCode());
         obj.setNationality(request.getNationality());
+        obj.setEur(request.getEur());
+        obj.setUsd(request.getUsd());
 //
         obj.setCurrency((Currency) requestDAO.find(Currency.class, request.getCurrencyId()));
         obj.setArrivalCity((City) requestDAO.find(City.class, request.getArrivalCityId()));
@@ -145,7 +147,7 @@ public class RequestService {
         if (request.getRegions() != null && !request.getRegions().isEmpty()) {
             requestDAO.removeProductRegions(request.getRequestId(), request.getDay());
             for (Integer obj : request.getRegions()) {
-                requestDAO.create(new ProductRegions(obj, request.getRequestId(), request.getDay()));
+                requestDAO.create(new ProductRegions((Region) requestDAO.find(Region.class, obj), request.getRequestId(), request.getDay()));
             }
         }
 
@@ -313,7 +315,7 @@ public class RequestService {
         }
 
         for (ProductRegions obj : (List<ProductRegions>) requestDAO.getAllByParamValue(ProductRegions.class, paramValues, null)) {
-            res.getRegions().add(obj.getRegionId());
+            res.getRegions().add(obj.getRegion().getId());
         }
 
         paramValues.clear();
@@ -332,6 +334,52 @@ public class RequestService {
         paramValues.add(new ParamValuePair("day", day));
         res.setRestaurants(ProductRestaurantsDTO.parseToList((List<ProductRestaurants>) requestDAO.getAllByParamValue(ProductRestaurants.class, paramValues, null)));
 
+        return res;
+    }
+
+    public ProductRequest getProductDetailsForFinancialById(Integer requestId, Integer day) {
+
+        ProductRequest res = new ProductRequest();
+        res.setHotels(new ArrayList<TmpHotelGroup>());
+        res.setNonstandartsList(new ArrayList<>());
+        res.setPlacesList(new ArrayList<>());
+        res.setRegionsList(new ArrayList<>());
+        res.setSights(new ArrayList<>());
+        res.setTransports(new ArrayList<>());
+        res.setTransportDays(new ArrayList<>());
+        res.setRestaurants(new ArrayList<>());
+
+        List<ParamValuePair> paramValues = new ArrayList<>();
+        paramValues.add(new ParamValuePair("requestId", requestId));
+        paramValues.add(new ParamValuePair("day", day));
+
+        for (ProductHotels obj : (List<ProductHotels>) requestDAO.getAllByParamValue(ProductHotels.class, paramValues, null)) {
+            res.getHotels().add(new TmpHotelGroup(obj.getHotel(), obj.getGroupId()));
+        }
+
+        res.getNonstandartsList().addAll((List<ProductNonstandarts>) requestDAO.getAllByParamValue(ProductNonstandarts.class, paramValues, null));
+
+        res.getPlacesList().addAll((List<ProductPlaces>) requestDAO.getAllByParamValue(ProductPlaces.class, paramValues, null));
+
+
+        for (ProductSights obj : (List<ProductSights>) requestDAO.getAllByParamValue(ProductSights.class, paramValues, null)) {
+            GeoObjectDTO objectDTO = GeoObjectDTO.parse(obj.getSight());
+            obj.setPhotoOrVisit(obj.getPhotoOrVisit());
+            res.getSights().add(objectDTO);
+        }
+
+        res.getRegionsList().addAll((List<ProductRegions>) requestDAO.getAllByParamValue(ProductRegions.class, paramValues, null));
+
+        res.setRestaurants(ProductRestaurantsDTO.parseToList((List<ProductRestaurants>) requestDAO.getAllByParamValue(ProductRestaurants.class, paramValues, null)));
+
+        paramValues.clear();
+        paramValues.add(new ParamValuePair("requestId", requestId));
+
+        res.getTransports().addAll((List<ProductTransports>) requestDAO.getAllByParamValue(ProductTransports.class, paramValues, null));
+        if (!res.getTransports().isEmpty()) {
+            List<String> tmp = Arrays.asList(res.getTransports().get(0).getDays().split(","));
+            res.setTransportDays(tmp);
+        }
         return res;
     }
 
