@@ -829,7 +829,7 @@
                         </a>
                     </div>
                     <div class="col-sm-6 text-right">
-                        <a class="btn btn-app" ng-click="generateWord()" title="ფაილის დაგენერირება">
+                        <a class="btn btn-app" ng-click="generateWord()" title="Generate File(Word)">
                             <i class="fa fa-file-word-o"></i>
                         </a>
                         <a class="btn btn-app" ng-click="sendToFinance()">

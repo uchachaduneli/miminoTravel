@@ -7,6 +7,20 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="header.jsp" %>
+<style>
+    #myBtn {
+        position: fixed;
+        bottom: 40%;
+        right: 0.8%;
+        z-index: 99999;
+        border: 1px solid #ebccd1;
+        outline: none;
+        background-color: #f5f5f5;
+        cursor: pointer;
+        padding: 15px;
+        border-radius: 4px;
+    }
+</style>
 <script>
     app.controller("angController", ['$scope', '$http', '$filter', '$location', '$window', 'Upload', '$timeout', function ($scope, $http, $filter, $location, $window, Upload, $timeout) {
 
@@ -77,8 +91,8 @@
                 $scope.product.hotels1 = $filter('filter')(res.data.hotels, {groupId: 1}, true);
                 $scope.product.hotels2 = $filter('filter')(res.data.hotels, {groupId: 2}, true);
                 $scope.product.hotels3 = $filter('filter')(res.data.hotels, {groupId: 3}, true);
-
-
+                $scope.product.restaurants = res.data.restaurants;
+                $scope.product.nonstandarts = res.data.nonstandartsList;
             };
 
             ajaxCall($http, "requests/get-product-details-for-finaince?requestId=" + $scope.request.id + "&day=" + ($scope.dayIndex + 1), null, getProdDet);
@@ -148,11 +162,20 @@
             ajaxCall($http, "requests/save-product", angular.toJson($scope.product), resFunc);
         };
 
+        $scope.sendToReservation = function () {
+            // $scope.save();
+            if (confirm("Pleace confirm Sending to Reservation")) {
+                alert("Will be Active Soon ;)");
+                // $window.location.href = "/miminoTravel/financial?key=" + $scope.request.requestKey;
+            }
+        };
+
     }]);
 </script>
 
 
 <div class="row">
+    <button id="myBtn">Day ({{daysList[dayIndex]}})</button>
     <div class="col-xs-12">
         <div class="box">
             <div class="box-header">
@@ -355,7 +378,6 @@
                 </div>
             </div>
 
-            <%--
 
             <div class="panel panel-success ">
                 <div class="panel-heading">
@@ -364,74 +386,30 @@
                     </a>
                 </div>
                 <div class="panel-body">
-
                     <div class="form-group col-sm-12 ">
-                        <label class="control-label col-sm-3">Add Restaurants </label>
-                        <div class="col-sm-9">
-                            <div class="form-group" ng-repeat="r in restaurantRow">
-                                <div class="col-sm-11" id="divId_{{r}}">
-                                    <div class="col-sm-6" id="dv_{{r}}">
-                                        <select id="restaurantSelect{{r}}" class="form-control input-sm"
-                                                ng-change="loadRestaurantPackages(prod.restaurants[r - 1].restaurantId, r-1)"
-                                                ng-model="prod.restaurants[r - 1].restaurantId">
-                                            <option ng-repeat="c in restaurants" value="{{c.id}}" ng-value="c.id"
-                                                    ng-selected="c.id === prod.restaurants[r - 1].restaurantId">
-                                                {{c.id}}. {{c.nameEn}}
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="radio col-sm-6">
-                                        <label><input type="radio" ng-model="prod.restaurants[r - 1].meal"
-                                                      value="BB" class="input-sm">BB</label>&nbsp;
-                                        <label><input type="radio" ng-model="prod.restaurants[r - 1].meal"
-                                                      value="HB" class="input-sm">HB</label>&nbsp;
-                                        <label><input type="radio" ng-model="prod.restaurants[r - 1].meal"
-                                                      value="FB" class="input-sm">FB</label>
-                                    </div>
-                                    <div class="col-sm-12" ng-if="prod.restaurants[r - 1].meal == 'HB'">
-                                        <label ng-repeat="t in HbMealCats" class="col-sm-3">
-                                            <input type="checkbox" id="restMealsChecks{{t.id}}"
-                                                   checklist-model="prod.restaurants[r - 1].mealCats"
-                                                   checklist-value="t">&nbsp; {{t}}
+                        <div class="col-sm-12">
+                            <div class="panel panel-default" ng-repeat="r in product.restaurants">
+                                <div class="panel-heading">{{r.restaurant.nameEn}}</div>
+                                <div class="panel-body">
+                                    <div class="col-sm-6">
+                                        <label>
+                                            Meal Category: {{r.mealCategories}}
                                         </label>
                                     </div>
-                                    <div class="col-sm-12" ng-if="prod.restaurants[r - 1].meal === 'FB'">
-                                        <label ng-repeat="t in FbMealCats" class="col-sm-3">
-                                            <input type="checkbox" id="restFbMealsChecks{{t.id}}"
-                                                   checklist-model="prod.restaurants[r - 1].mealCats"
-                                                   checklist-value="t">&nbsp; {{t}}
+                                    <div class="col-sm-6">
+                                        <label class="control-label col-sm-2">
+                                            Packages:
                                         </label>
+                                        <ul class="col-sm-9">
+                                            <li ng-if="r.packages.length > 0" ng-repeat="t in r.packages.split(',')">
+                                                {{t}}
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
-                                <div class="col-sm-1">
-                                    <div class="col-md-1" ng-show="$index == 0">
-                                        <a class="btn btn-sm row" style="vertical-align: bottom;">
-                                            <span class="fa fa-plus" ng-click="addRestaurantRow()"></span>
-                                        </a>
-                                    </div>
-                                    <div class="col-md-1" ng-show="$index > 0">
-                                        <a class="btn btn-sm row">
-                                                <span class="fa fa-trash"
-                                                      ng-click="removeRestaurantRows($index)"></span>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12" ng-if="prod.restaurants[r - 1].restaurantId > 0">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">Restaurant Packages</div>
-                                        <div class="panel-body">
-                                            <label ng-repeat="t in restPackages[r - 1]" class="col-sm-3">
-                                                <input type="checkbox" id="restPackageschecks{{t.id}}"
-                                                       checklist-model="prod.restaurants[r - 1].packages"
-                                                       checklist-value="t.name">&nbsp;
-                                                {{t.name}}
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr class="col-sm-12"/>
                             </div>
                         </div>
+                        <hr class="col-sm-12"/>
                     </div>
                 </div>
             </div>
@@ -445,29 +423,42 @@
                 <div class="panel-body">
                     <div class="form-group col-sm-12 ">
                         <div class="col-sm-12">
-                            <label ng-repeat="t in nonstandarts" class="col-sm-3">
-                                <input type="checkbox" id="nonstandartschecks{{t.id}}"
-                                       checklist-model="product.nonstandarts" checklist-value="t.id">&nbsp;
-                                {{t.nameEn}}
+                            <label ng-repeat="t in product.nonstandarts" class="col-sm-3">
+                                {{$index+1}}) &nbsp; {{t.nonstandartService.nameEn}}
                             </label>
                         </div>
                     </div>
                 </div>
             </div>
 
-
         </div>
         <div class="panel-footer">
-            <div class="row"><br/>
+            <div class="row">
+                <div class="col col-md-12">
+                    <ul class="pagination pull-right">
+                        <li>
+                            <a>(Day {{daysList[dayIndex]}}) </a>
+                        </li>
+                        <li>
+                            <a ng-click="handleDayChange(-1)">« &nbsp; Prev</a>
+                        </li>
+                        <li ng-show="dayIndex < (request.daysCount-1)">
+                            <a ng-click="handleDayChange(1)">» &nbsp; Next</a>
+                        </li>
+                    </ul>
+                </div>
                 <div class="form-group col-sm-12">
                     <div class="col-sm-6 text-right">
                         <a class="btn btn-app" ng-click="save()">
-                            <i class="fa fa-save"></i> Save
+                            <i class="fa fa-save"></i> Save Data
                         </a>
                     </div>
                     <div class="col-sm-6 text-right">
-                        <a class="btn btn-app" ng-click="sendToManager()">
-                            <i class="fa fa-send"></i> Send To Manager
+                        <a class="btn btn-app" ng-click="generateWord()" title="Generate Word">
+                            <i class="fa fa-file-word-o"></i>
+                        </a>
+                        <a class="btn btn-app" ng-click="sendToReservation()">
+                            <i class="fa fa-send"></i> Send To Reservation
                         </a>
                     </div>
                 </div>
@@ -475,5 +466,4 @@
         </div>
     </div>
 </div>
-</div>--%>
 <%@include file="footer.jsp" %>
