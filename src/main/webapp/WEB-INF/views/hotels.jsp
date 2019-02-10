@@ -160,7 +160,7 @@
     }
 
     $scope.calculateSingleSupply = function (h) {
-      $scope.request.singleSupply = Math.abs($scope.request.singlePrice - $scope.request.doublePrice) / 2;
+        $scope.request.singleSupply = Math.abs($scope.request.singlePrice - $scope.request.doublePrice / 2);
     }
 
     $scope.handlePage = function (h) {
