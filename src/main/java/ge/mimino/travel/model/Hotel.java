@@ -29,6 +29,7 @@ public class Hotel {
     private String descriptionRu;
     private Place place;
     private String link;
+    private Integer currency;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -261,20 +262,13 @@ public class Hotel {
         this.link = link;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Hotel hotel = (Hotel) o;
-
-        if (link != null ? !link.equals(hotel.link) : hotel.link != null) return false;
-
-        return true;
+    @Basic
+    @Column(name = "currency")
+    public Integer getCurrency() {
+        return currency;
     }
 
-    @Override
-    public int hashCode() {
-        return link != null ? link.hashCode() : 0;
+    public void setCurrency(Integer currency) {
+        this.currency = currency;
     }
 }

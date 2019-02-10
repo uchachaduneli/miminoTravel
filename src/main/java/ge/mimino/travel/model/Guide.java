@@ -11,6 +11,7 @@ public class Guide {
   private String name;
   private Double trackingPrice;
   private Integer type;
+  private Language language;
   private Set<GuidePrices> prices = new HashSet<GuidePrices>(0);
 
   @Id
@@ -62,5 +63,15 @@ public class Guide {
 
   public void setPrices(Set<GuidePrices> prices) {
     this.prices = prices;
+  }
+
+  @JoinColumn(name = "language_id")
+  @OneToOne
+  public Language getLanguage() {
+    return language;
+  }
+
+  public void setLanguage(Language language) {
+    this.language = language;
   }
 }

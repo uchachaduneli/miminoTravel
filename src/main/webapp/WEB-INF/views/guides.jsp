@@ -9,146 +9,153 @@
 <%@include file="header.jsp" %>
 <script>
 
-  app.controller("angController", ['$scope', '$http', '$filter', '$window', 'Upload', '$timeout', function ($scope, $http, $filter, $window, Upload, $timeout) {
-    $scope.start = 0;
-    $scope.page = 1;
-    $scope.limit = "10";
-    $scope.request = {type: 1};
-    $scope.srchCase = {};
-    $scope.priceRow = [1];
+    app.controller("angController", ['$scope', '$http', '$filter', '$window', 'Upload', '$timeout', function ($scope, $http, $filter, $window, Upload, $timeout) {
+        $scope.start = 0;
+        $scope.page = 1;
+        $scope.limit = "10";
+        $scope.request = {type: 1};
+        $scope.srchCase = {};
+        $scope.priceRow = [1];
 
-    $scope.loadMainData = function () {
-      $('#loadingModal').modal('show');
+        $scope.loadMainData = function () {
+            $('#loadingModal').modal('show');
 
-      function getMainData(res) {
-        $scope.list = res.data;
-        $('#loadingModal').modal('hide');
-      }
-
-      ajaxCall($http, "guides/get-guides?start=" + $scope.start + "&limit=" + $scope.limit, angular.toJson($scope.srchCase), getMainData);
-    }
-
-    $scope.loadMainData();
-
-    $scope.remove = function (id) {
-      if (confirm("Pleace confirm operation?")) {
-        if (id != undefined) {
-          function resFnc(res) {
-            if (res.errorCode == 0) {
-              successMsg('Operation Successfull');
-              $scope.loadMainData();
+            function getMainData(res) {
+                $scope.list = res.data;
+                $('#loadingModal').modal('hide');
             }
-          }
 
-          ajaxCall($http, "guides/delete?id=" + id, null, resFnc);
+            ajaxCall($http, "guides/get-guides?start=" + $scope.start + "&limit=" + $scope.limit, angular.toJson($scope.srchCase), getMainData);
         }
-      }
-    };
 
-    function getRegions(res) {
-      $scope.regions = res.data;
-    }
+        $scope.loadMainData();
 
-    ajaxCall($http, "misc/get-regions", null, getRegions);
-
-    $scope.edit = function (id) {
-      if (id != undefined) {
-        $scope.selected = $filter('filter')($scope.list, {id: id}, true);
-        $scope.slcted = $scope.selected[0];
-        $scope.request = $scope.selected[0];
-
-        $scope.priceRow = [];
-        // $scope.request.prices = [];
-
-        angular.forEach($scope.slcted.prices, function (v, k) {
-          $scope.priceRow.push(k + 1);
-        });
-        if ($scope.slcted.prices.length === 0) {
-          $scope.priceRow = [1];
+        function getLanguagess(res) {
+            $scope.languages = res.data;
         }
-      }
-    }
 
-    $scope.showDetails = function (id) {
-      if (id != undefined) {
-        var selected = $filter('filter')($scope.list, {id: id}, true);
-        $scope.slcted = selected[0];
-      }
-    };
+        ajaxCall($http, "misc/get-languages", null, getLanguagess);
 
-    $scope.handleDoubleClick = function (id) {
-      $scope.showDetails(id);
-      $('#detailModal').modal('show');
-    };
+        $scope.remove = function (id) {
+            if (confirm("Pleace confirm operation?")) {
+                if (id != undefined) {
+                    function resFnc(res) {
+                        if (res.errorCode == 0) {
+                            successMsg('Operation Successfull');
+                            $scope.loadMainData();
+                        }
+                    }
 
-    $scope.init = function () {
-      $scope.request = {types: []};
-    };
+                    ajaxCall($http, "guides/delete?id=" + id, null, resFnc);
+                }
+            }
+        };
 
-    $scope.save = function () {
-
-      function resFunc(res) {
-        if (res.errorCode == 0) {
-          successMsg('Operation Successfull');
-          $scope.loadMainData();
-          closeModal('editModal');
-        } else {
-          errorMsg('Operation Failed');
+        function getRegions(res) {
+            $scope.regions = res.data;
         }
-      }
 
-      $scope.req = {};
+        ajaxCall($http, "misc/get-regions", null, getRegions);
 
-      $scope.req.id = $scope.request.id;
-      $scope.req.name = $scope.request.name;
-      $scope.req.trackingPrice = $scope.request.trackingPrice;
-      $scope.req.type = $scope.request.type;
-      $scope.req.prices = [];
+        $scope.edit = function (id) {
+            if (id != undefined) {
+                $scope.selected = $filter('filter')($scope.list, {id: id}, true);
+                $scope.slcted = $scope.selected[0];
+                $scope.request = $scope.selected[0];
 
-      angular.forEach($scope.request.prices, function (v) {
-        $scope.req.prices.push({
-          'id': v.id == undefined ? 0 : v.id,
-          'guideId': $scope.req.id,
-          'from': v.from,
-          'to': v.to,
-          'amount': v.amount
-        });
-      });
+                $scope.priceRow = [];
+                // $scope.request.prices = [];
 
-      console.log(angular.toJson($scope.req));
-      ajaxCall($http, "guides/save", angular.toJson($scope.req), resFunc);
-    };
+                angular.forEach($scope.slcted.prices, function (v, k) {
+                    $scope.priceRow.push(k + 1);
+                });
+                if ($scope.slcted.prices.length === 0) {
+                    $scope.priceRow = [1];
+                }
+            }
+        }
+
+        $scope.showDetails = function (id) {
+            if (id != undefined) {
+                var selected = $filter('filter')($scope.list, {id: id}, true);
+                $scope.slcted = selected[0];
+            }
+        };
+
+        $scope.handleDoubleClick = function (id) {
+            $scope.showDetails(id);
+            $('#detailModal').modal('show');
+        };
+
+        $scope.init = function () {
+            $scope.request = {types: []};
+        };
+
+        $scope.save = function () {
+
+            function resFunc(res) {
+                if (res.errorCode == 0) {
+                    successMsg('Operation Successfull');
+                    $scope.loadMainData();
+                    closeModal('editModal');
+                } else {
+                    errorMsg('Operation Failed');
+                }
+            }
+
+            $scope.req = {};
+
+            $scope.req.id = $scope.request.id;
+            $scope.req.name = $scope.request.name;
+            $scope.req.trackingPrice = $scope.request.trackingPrice;
+            $scope.req.type = $scope.request.type;
+            $scope.req.languageId = $scope.request.languageId;
+            $scope.req.prices = [];
+
+            angular.forEach($scope.request.prices, function (v) {
+                $scope.req.prices.push({
+                    'id': v.id == undefined ? 0 : v.id,
+                    'guideId': $scope.req.id,
+                    'from': v.from,
+                    'to': v.to,
+                    'amount': v.amount
+                });
+            });
+
+            console.log(angular.toJson($scope.req));
+            ajaxCall($http, "guides/save", angular.toJson($scope.req), resFunc);
+        };
 
 
-    $scope.rowNumbersChange = function () {
-      $scope.start = 0;
-      $scope.loadMainData();
-    }
+        $scope.rowNumbersChange = function () {
+            $scope.start = 0;
+            $scope.loadMainData();
+        }
 
-    $scope.handlePage = function (h) {
-      if (parseInt(h) >= 0) {
-        $scope.start = $scope.page * parseInt($scope.limit);
-        $scope.page += 1;
-      } else {
-        $scope.page -= 1;
-        $scope.start = ($scope.page * parseInt($scope.limit)) - parseInt($scope.limit);
-      }
-      $scope.loadMainData();
-    }
+        $scope.handlePage = function (h) {
+            if (parseInt(h) >= 0) {
+                $scope.start = $scope.page * parseInt($scope.limit);
+                $scope.page += 1;
+            } else {
+                $scope.page -= 1;
+                $scope.start = ($scope.page * parseInt($scope.limit)) - parseInt($scope.limit);
+            }
+            $scope.loadMainData();
+        }
 
-    $scope.addPriceRow = function () {
-      var size = $scope.priceRow.length;
-      $scope.priceRow.push(size + 1);
-    };
+        $scope.addPriceRow = function () {
+            var size = $scope.priceRow.length;
+            $scope.priceRow.push(size + 1);
+        };
 
-    $scope.removePriceRow = function (index) {
-      $scope.priceRow.splice(index, 1);
-      if ($scope.request.prices) {
-        $scope.request.prices.splice(index, 1);
-      }
-    };
+        $scope.removePriceRow = function (index) {
+            $scope.priceRow.splice(index, 1);
+            if ($scope.request.prices) {
+                $scope.request.prices.splice(index, 1);
+            }
+        };
 
-  }]);
+    }]);
 </script>
 
 <div class="modal fade bs-example-modal-lg" id="detailModal" tabindex="-1" role="dialog"
@@ -227,6 +234,17 @@
                                     <label><input type="radio" ng-model="request.type" value="2"
                                                   class="input-sm">Guide-Driver</label>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10">
+                            <label class="control-label col-sm-3">Language</label>
+                            <div class="col-xs-9 btn-group">
+                                <select class="form-control" ng-model="request.languageId" required>
+                                    <option ng-repeat="v in languages"
+                                            ng-selected="v.id === request.languageId"
+                                            value="{{v.id}}">{{v.name}}
+                                    </option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
@@ -342,6 +360,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
+                            <th>Language</th>
                             <th>Tracking Price</th>
                             <th class="col-md-3 text-center">Action</th>
                         </tr>
@@ -350,6 +369,7 @@
                         <tr ng-repeat="r in list" ng-dblclick="handleDoubleClick(r.id)">
                             <td>{{r.id}}</td>
                             <td>{{r.name}}</td>
+                            <td>{{r.language.name}}</td>
                             <td>{{r.trackingPrice}}</td>
                             <td class="text-center">
                                 <a ng-click="showDetails(r.id)" data-toggle="modal" title="Details"

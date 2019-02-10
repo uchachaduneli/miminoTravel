@@ -36,6 +36,7 @@ public class HotelDTO {
     private String link;
     private PlaceDTO place;
     private Integer placeId;
+    private Integer currency;// 2 usd / 3 eur
 
 
     public static HotelDTO parse(Hotel record) {
@@ -64,6 +65,7 @@ public class HotelDTO {
         dto.setPlace(PlaceDTO.parse(record.getPlace()));
         dto.setPlaceId(record.getPlace().getId());
         dto.setLink(record.getLink());
+        dto.setCurrency(record.getCurrency());
         return dto;
     }
 
@@ -74,6 +76,14 @@ public class HotelDTO {
             list.add(HotelDTO.parse(record));
         }
         return list;
+    }
+
+    public Integer getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Integer currency) {
+        this.currency = currency;
     }
 
     public String getLink() {

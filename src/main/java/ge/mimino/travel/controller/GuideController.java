@@ -1,5 +1,6 @@
 package ge.mimino.travel.controller;
 
+import ge.mimino.travel.dto.GuideDTO;
 import ge.mimino.travel.misc.Response;
 import ge.mimino.travel.model.Guide;
 import ge.mimino.travel.service.GuideService;
@@ -25,12 +26,12 @@ public class GuideController {
   @ResponseBody
   private Response getGuides(@RequestParam("start") int start, @RequestParam("limit") int limit,
                              @RequestBody Guide request) throws Exception {
-    return Response.withSuccess(guideService.getGuides(start, limit, request));
+    return Response.withSuccess(GuideDTO.parseToList(guideService.getGuides(start, limit, request)));
   }
 
   @RequestMapping({"/save"})
   @ResponseBody
-  public Response save(@RequestBody Guide request) throws Exception {
+  public Response save(@RequestBody GuideDTO request) throws Exception {
     return Response.withSuccess(guideService.save(request));
   }
 

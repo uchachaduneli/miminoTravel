@@ -57,6 +57,7 @@ public class HotelService {
         obj.setSingleSupply(request.getSingleSupply());
         obj.setStarsCount(request.getStarsCount());
         obj.setLink(request.getLink());
+        obj.setCurrency(request.getCurrency());
         obj.setPlace((Place) hotelDAO.find(Place.class, request.getPlaceId()));
 
         if (request.getId() != null) {
