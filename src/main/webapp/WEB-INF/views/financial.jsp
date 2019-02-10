@@ -186,9 +186,8 @@
                                 <i class="fa fa-briefcase"></i> Request Details
                             </a>
                         </div>
-                        <div class="col-md-10 text-right"><b>
-                            Currency By National Bank - USD: {{currencyByService['USD']}} | EUR:
-                            {{currencyByService['EUR']}}</b></div>
+                        <div class="col-md-10 text-right">
+                        </div>
 
                         <table class="table table-striped">
                             <tr>
@@ -257,6 +256,49 @@
                             &nbsp; Day -
                             {{t}}&nbsp;&nbsp;
                         </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box-body">
+
+                <div class="panel panel-default col-sm-12"
+                     style="padding-left: 0px !important; padding-right: 0px !important;">
+                    <div class="panel-heading">
+                        <a class="btn btn-app">
+                            <i class="fa fa-money"></i> Custom Charges
+                        </a>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group col-sm-12 ">
+                            <div class="col-sm-12">
+                                <b>
+                                    Live Rate By Nat. Bank:
+                                    <i class="fa fa-usd"></i> - {{currencyByService['USD']}} |
+                                    <i class="fa fa-euro"></i> - {{currencyByService['EUR']}}
+                                </b><br><br>
+                                <div class="col-md-6">
+                                    <input type="number" placeholder="USD Rate of Current Request"
+                                           title="USD Rate of Current Request" class="form-control ">
+                                    <br>
+                                    <input type="number" placeholder="EUR Rate of Current Request"
+                                           title="EUR Rate of Current Request" class="form-control ">
+                                    <br>
+                                    <input type="number" placeholder="Overnight Charge for Guide/Driver"
+                                           title="Overnight Charge for Guide/Driver" class="form-control ">
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="number" placeholder="Phone Charge for Guide/Driver"
+                                           title="Phone Charge for Guide/Driver" class="form-control ">
+                                    <br>
+                                    <input type="number" placeholder="Food Charge for Guide/Driver"
+                                           title="Food Charge for Guide/Driver" class="form-control ">
+                                    <br>
+                                    <input type="number" placeholder="Admin Cost" title="Admin Cost"
+                                           class="form-control ">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
