@@ -202,7 +202,7 @@
                     $scope.touristCountRow.push(k + 1);
                     $scope.request.touristCount.push({
                         'count': v.count,
-                      'plusCount': v.plusCount
+                        'plusCount': v.plusCount
                     });
                 });
                 $scope.slcted.touristCount = asd.data;
@@ -295,7 +295,7 @@
             angular.forEach($scope.request.touristCount, function (v) {
                 $scope.req.touristCount.push({
                     'count': v.count,
-                  'plusCount': v.plusCount
+                    'plusCount': v.plusCount
                 });
             });
 
@@ -358,7 +358,7 @@
         };
 
         $scope.removeTouristCount = function (index) {
-          $scope.touristCountRow.splice(index, 1);
+            $scope.touristCountRow.splice(index, 1);
             if ($scope.request.touristCount) {
                 $scope.request.touristCount.splice(index, 1);
             }
@@ -453,6 +453,7 @@
                                     <tr ng-repeat="r in slcted.touristCount">
                                         <td>{{r.count}}</td>
                                         <td>{{r.plusCount}}</td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </td>

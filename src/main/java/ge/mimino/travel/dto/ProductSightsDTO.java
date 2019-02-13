@@ -13,6 +13,7 @@ public class ProductSightsDTO {
   private Integer requestId;
   private Integer day;
   private Integer photoOrVisit;
+    private Double price;
 
 
   public static ProductSightsDTO parse(ProductSights record) {
@@ -25,6 +26,7 @@ public class ProductSightsDTO {
     dto.setRequestId(record.getRequestId());
     dto.setDay(record.getDay());
     dto.setPhotoOrVisit(record.getPhotoOrVisit());
+      dto.setPrice(record.getPrice());
     return dto;
   }
 
@@ -36,6 +38,14 @@ public class ProductSightsDTO {
     }
     return list;
   }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
 
   public GeoObjectDTO getSight() {
     return sight;

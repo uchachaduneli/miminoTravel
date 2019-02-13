@@ -55,6 +55,12 @@
             function getRequestData(res) {
                 $scope.request = res.data;
 
+                function getTouristCounts(cnt) {
+                    $scope.request.touristCount = cnt.data;
+                }
+
+                ajaxCall($http, "requests/get-tourist-counts?id=" + $scope.request.id, null, getTouristCounts);
+
                 $scope.getProductDetails();
             }
 
@@ -79,19 +85,19 @@
                 $scope.product.places = res.data.places;
                 angular.forEach($filter('filter')(res.data.hotels, {groupId: 1}, true), function (v) {
                     $scope.prod.hotels1.push(v.hotelId);
-                    if($scope.hotelStars1 == '')
+                    if ($scope.hotelStars1 == '')
                         $scope.hotelStars1 = v.hotel.starsCount;
                 });
                 $scope.filterHotels1();
                 angular.forEach($filter('filter')(res.data.hotels, {groupId: 2}, true), function (v) {
                     $scope.prod.hotels2.push(v.hotelId);
-                    if($scope.hotelStars2 == '')
+                    if ($scope.hotelStars2 == '')
                         $scope.hotelStars2 = v.hotel.starsCount;
                 });
                 $scope.filterHotels2();
                 angular.forEach($filter('filter')(res.data.hotels, {groupId: 3}, true), function (v) {
                     $scope.prod.hotels3.push(v.hotelId);
-                    if($scope.hotelStars3 == '')
+                    if ($scope.hotelStars3 == '')
                         $scope.hotelStars3 = v.hotel.starsCount;
                 });
                 $scope.filterHotels3();
@@ -333,23 +339,23 @@
             var slctedPlaces = $filter('filter')($scope.places, {selected: true}, true);
             var ids = [];
             // angular.forEach(slctedPlaces, function (v) {
-            if(slctedPlaces != undefined){
+            if (slctedPlaces != undefined) {
                 ids.push(slctedPlaces[slctedPlaces.length - 1].id);
-            // });
-            if (ids.length > 0 || $scope.hotelStars1.length > 0) {
-                function getHotels(res) {
-                    $scope.hotels1 = res.data;
-                }
+                // });
+                if (ids.length > 0 || $scope.hotelStars1.length > 0) {
+                    function getHotels(res) {
+                        $scope.hotels1 = res.data;
+                    }
 
-                ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars1, angular.toJson(ids), getHotels);
-            }
+                    ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars1, angular.toJson(ids), getHotels);
+                }
             }
         }
         $scope.filterHotels2 = function () {
             var slctedPlaces = $filter('filter')($scope.places, {selected: true}, true);
             var ids = [];
             // angular.forEach(slctedPlaces, function (v) {
-            if(slctedPlaces != undefined) {
+            if (slctedPlaces != undefined) {
                 ids.push(slctedPlaces[slctedPlaces.length - 1].id);
                 // });
                 if (ids.length > 0 || $scope.hotelStars2.length > 0) {
@@ -365,7 +371,7 @@
             var slctedPlaces = $filter('filter')($scope.places, {selected: true}, true);
             var ids = [];
             // angular.forEach(slctedPlaces, function (v) {
-            if(slctedPlaces != undefined) {
+            if (slctedPlaces != undefined) {
                 ids.push(slctedPlaces[slctedPlaces.length - 1].id);
                 // });
                 if (ids.length > 0 || $scope.hotelStars3.length > 0) {
@@ -500,8 +506,26 @@
                                 <td>{{request.nightsCount}}</td>
                             </tr>
                             <tr>
-                                <th>Tourists Count</th>
-                                <td>{{request.touristsCount}}</td>
+                                <th>Counts Of</th>
+                                <td>
+                                    <table class="table text-center">
+                                        <tr>
+                                            <th>
+                                                <small>Tourists</small>
+                                            </th>
+                                            <th>
+                                                <small>Leaders</small>
+                                            </th>
+                                        </tr>
+                                        <tr ng-repeat="r in request.touristCount">
+                                            <td>
+                                                <small>{{r.count}}</small>
+                                            </td>
+                                            <td>
+                                                <small>{{r.plusCount}}</small>
+                                            </td>
+                                        </tr>
+                                    </table>
                             </tr>
                             <tr>
                                 <th>Tourists Count Note</th>
@@ -548,7 +572,8 @@
                             </tbody>
                         </table>
                         <label ng-repeat="t in daysList | limitTo:request.daysCount"
-                               style="display: inline !important; margin-left: 10px;" class="{{checkInList(t, transportDaysList) > 0 ? 'markAsSelected':''}}">
+                               style="display: inline !important; margin-left: 10px;"
+                               class="{{checkInList(t, transportDaysList) > 0 ? 'markAsSelected':''}}">
                             <input type="checkbox" id="daysListchecks{{t.id}}"
                                    ng-click="saveTransportDaysList()"
                                    checklist-model="transportDaysList" checklist-value="t">&nbsp; Day -
@@ -615,13 +640,15 @@
                     <div class="panel-body">
                         <div class="form-group col-sm-12 ">
                             <div class="col-sm-12">
-                                <label ng-repeat="t in sights" class="col-sm-3 panel {{checkInList(t.id, product.sights) > 0 ? 'markAsSelected':''}}">
+                                <label ng-repeat="t in sights"
+                                       class="col-sm-3 panel {{checkInList(t.id, product.sights) > 0 ? 'markAsSelected':''}}">
 
                                     <input type="checkbox" id="sightschecks{{t.id}}"
                                            checklist-model="product.sights" checklist-value="t.id">&nbsp;
                                     {{t.nameEn}}
 
-                                    <button class="btn btn-xs" type="button" data-toggle="collapse" data-target="#collapsibleDiv{{t.id}}">
+                                    <button class="btn btn-xs" type="button" data-toggle="collapse"
+                                            data-target="#collapsibleDiv{{t.id}}">
                                         <span class="caret"></span>
                                     </button>
 
@@ -663,7 +690,8 @@
                                     </select>
                                 </div>
 
-                                <label ng-repeat="t in hotels1" class="col-sm-3 {{checkInList(t.id, prod.hotels1) > 0 ? 'markAsSelected':''}}">
+                                <label ng-repeat="t in hotels1"
+                                       class="col-sm-3 {{checkInList(t.id, prod.hotels1) > 0 ? 'markAsSelected':''}}">
                                     <input type="checkbox" id="gr1hotelschecks{{t.id}}"
                                            checklist-model="prod.hotels1" checklist-value="t.id">&nbsp; {{t.nameEn}}
                                 </label>
@@ -680,7 +708,8 @@
                                         </option>
                                     </select>
                                 </div>
-                                <label ng-repeat="t in hotels2" class="col-sm-3 {{checkInList(t.id, prod.hotels2) > 0 ? 'markAsSelected':''}}">
+                                <label ng-repeat="t in hotels2"
+                                       class="col-sm-3 {{checkInList(t.id, prod.hotels2) > 0 ? 'markAsSelected':''}}">
                                     <input type="checkbox" id="gr2hotelschecks{{t.id}}"
                                            checklist-model="prod.hotels2" checklist-value="t.id">&nbsp; {{t.nameEn}}
                                 </label>
@@ -697,7 +726,8 @@
                                         </option>
                                     </select>
                                 </div>
-                                <label ng-repeat="t in hotels3" class="col-sm-3 {{checkInList(t.id, prod.hotels3) > 0 ? 'markAsSelected':''}}">
+                                <label ng-repeat="t in hotels3"
+                                       class="col-sm-3 {{checkInList(t.id, prod.hotels3) > 0 ? 'markAsSelected':''}}">
                                     <input type="checkbox" id="gr3hotelschecks{{t.id}}"
                                            checklist-model="prod.hotels3" checklist-value="t.id">&nbsp; {{t.nameEn}}
                                 </label>
@@ -739,14 +769,16 @@
                                                       value="FB" class="input-sm">FB</label>
                                     </div>
                                     <div class="col-sm-12" ng-if="prod.restaurants[r - 1].meal == 'HB'">
-                                        <label ng-repeat="t in HbMealCats" class="col-sm-3 {{checkInList(t, prod.restaurants[r - 1].mealCats) > 0 ? 'markAsSelected':''}}">
+                                        <label ng-repeat="t in HbMealCats"
+                                               class="col-sm-3 {{checkInList(t, prod.restaurants[r - 1].mealCats) > 0 ? 'markAsSelected':''}}">
                                             <input type="checkbox" id="restMealsChecks{{t.id}}"
                                                    checklist-model="prod.restaurants[r - 1].mealCats"
                                                    checklist-value="t">&nbsp; {{t}}
                                         </label>
                                     </div>
                                     <div class="col-sm-12" ng-if="prod.restaurants[r - 1].meal === 'FB'">
-                                        <label ng-repeat="t in FbMealCats" class="col-sm-3 {{checkInList(t, prod.restaurants[r - 1].mealCats) > 0 ? 'markAsSelected':''}}">
+                                        <label ng-repeat="t in FbMealCats"
+                                               class="col-sm-3 {{checkInList(t, prod.restaurants[r - 1].mealCats) > 0 ? 'markAsSelected':''}}">
                                             <input type="checkbox" id="restFbMealsChecks{{t.id}}"
                                                    checklist-model="prod.restaurants[r - 1].mealCats"
                                                    checklist-value="t">&nbsp; {{t}}
@@ -770,7 +802,8 @@
                                     <div class="panel panel-default">
                                         <div class="panel-heading">Restaurant Packages</div>
                                         <div class="panel-body">
-                                            <label ng-repeat="t in restPackages[r - 1]" class="col-sm-3 {{checkInList(t.name, prod.restaurants[r - 1].packages) > 0 ? 'markAsSelected':''}}">
+                                            <label ng-repeat="t in restPackages[r - 1]"
+                                                   class="col-sm-3 {{checkInList(t.name, prod.restaurants[r - 1].packages) > 0 ? 'markAsSelected':''}}">
                                                 <input type="checkbox" id="restPackageschecks{{t.id}}"
                                                        checklist-model="prod.restaurants[r - 1].packages"
                                                        checklist-value="t.name">&nbsp;
@@ -795,7 +828,8 @@
                 <div class="panel-body">
                     <div class="form-group col-sm-12 ">
                         <div class="col-sm-12">
-                            <label ng-repeat="t in nonstandarts" class="col-sm-3 {{checkInList(t.id, product.nonstandarts) > 0 ? 'markAsSelected':''}}">
+                            <label ng-repeat="t in nonstandarts"
+                                   class="col-sm-3 {{checkInList(t.id, product.nonstandarts) > 0 ? 'markAsSelected':''}}">
                                 <input type="checkbox" id="nonstandartschecks{{t.id}}"
                                        checklist-model="product.nonstandarts" checklist-value="t.id">&nbsp;
                                 {{t.nameEn}}

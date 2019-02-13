@@ -13,6 +13,7 @@ public class ProductHotelsDTO {
   private Integer requestId;
   private Integer day;
   private Integer groupId;
+    private Double price;
 
 
   public static ProductHotelsDTO parse(ProductHotels record) {
@@ -23,6 +24,7 @@ public class ProductHotelsDTO {
     dto.setRequestId(record.getRequestId());
     dto.setDay(record.getDay());
     dto.setGroupId(record.getGroupId());
+      dto.setPrice(record.getPrice());
     return dto;
   }
 
@@ -34,6 +36,14 @@ public class ProductHotelsDTO {
     }
     return list;
   }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
 
   public HotelDTO getHotel() {
     return hotel;

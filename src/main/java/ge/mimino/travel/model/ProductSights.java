@@ -1,6 +1,7 @@
 package ge.mimino.travel.model;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "product_sights", schema = "mimino")
@@ -10,8 +11,17 @@ public class ProductSights {
     private Integer requestId;
     private Integer day;
     private Integer photoOrVisit;
+    private Double price;
 
     public ProductSights() {
+    }
+
+    public ProductSights(GeoObject sight, Integer requestId, Integer day, Integer photoOrVisit, Double price) {
+        this.sight = sight;
+        this.requestId = requestId;
+        this.day = day;
+        this.photoOrVisit = photoOrVisit;
+        this.price = price;
     }
 
     public ProductSights(GeoObject sight, Integer requestId, Integer day, Integer photoOrVisit) {
@@ -70,5 +80,28 @@ public class ProductSights {
 
     public void setPhotoOrVisit(Integer photoOrVisit) {
         this.photoOrVisit = photoOrVisit;
+    }
+
+    @Basic
+    @Column(name = "price")
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductSights that = (ProductSights) o;
+        return Objects.equals(price, that.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(price);
     }
 }

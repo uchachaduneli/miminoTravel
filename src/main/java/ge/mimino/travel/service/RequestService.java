@@ -344,29 +344,24 @@ public class RequestService {
         res.setNonstandartsList(new ArrayList<>());
         res.setPlacesList(new ArrayList<>());
         res.setRegionsList(new ArrayList<>());
-        res.setSights(new ArrayList<>());
         res.setTransports(new ArrayList<>());
         res.setTransportDays(new ArrayList<>());
         res.setRestaurants(new ArrayList<>());
+        res.setSightsList(new ArrayList<>());
 
         List<ParamValuePair> paramValues = new ArrayList<>();
         paramValues.add(new ParamValuePair("requestId", requestId));
         paramValues.add(new ParamValuePair("day", day));
 
         for (ProductHotels obj : (List<ProductHotels>) requestDAO.getAllByParamValue(ProductHotels.class, paramValues, null)) {
-            res.getHotels().add(new TmpHotelGroup(obj.getHotel(), obj.getGroupId()));
+            res.getHotels().add(new TmpHotelGroup(obj.getHotel(), obj.getGroupId(), obj.getPrice()));
         }
 
         res.getNonstandartsList().addAll((List<ProductNonstandarts>) requestDAO.getAllByParamValue(ProductNonstandarts.class, paramValues, null));
 
         res.getPlacesList().addAll((List<ProductPlaces>) requestDAO.getAllByParamValue(ProductPlaces.class, paramValues, null));
 
-
-        for (ProductSights obj : (List<ProductSights>) requestDAO.getAllByParamValue(ProductSights.class, paramValues, null)) {
-            GeoObjectDTO objectDTO = GeoObjectDTO.parse(obj.getSight());
-            obj.setPhotoOrVisit(obj.getPhotoOrVisit());
-            res.getSights().add(objectDTO);
-        }
+        res.getSightsList().addAll((List<ProductSights>) requestDAO.getAllByParamValue(ProductSights.class, paramValues, null));
 
         res.getRegionsList().addAll((List<ProductRegions>) requestDAO.getAllByParamValue(ProductRegions.class, paramValues, null));
 

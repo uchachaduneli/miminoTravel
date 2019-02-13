@@ -4,10 +4,7 @@ import ge.mimino.travel.controller.TmpHotelGroup;
 import ge.mimino.travel.dto.GeoObjectDTO;
 import ge.mimino.travel.dto.ProductDTO;
 import ge.mimino.travel.dto.ProductRestaurantsDTO;
-import ge.mimino.travel.model.ProductNonstandarts;
-import ge.mimino.travel.model.ProductPlaces;
-import ge.mimino.travel.model.ProductRegions;
-import ge.mimino.travel.model.ProductTransports;
+import ge.mimino.travel.model.*;
 
 import java.util.List;
 
@@ -15,6 +12,7 @@ public class ProductRequest {
   private List<Integer> regions;
   private List<ProductRegions> regionsList;
   private List<GeoObjectDTO> sights;
+    private List<ProductSights> sightsList;
   private List<Integer> places;
   private List<ProductPlaces> placesList;
   private List<TmpHotelGroup> hotels;
@@ -26,6 +24,14 @@ public class ProductRequest {
   private Integer day;
   private Integer requestId;
   private ProductDTO product;
+
+    public List<ProductSights> getSightsList() {
+        return sightsList;
+    }
+
+    public void setSightsList(List<ProductSights> sightsList) {
+        this.sightsList = sightsList;
+    }
 
   public List<ProductRegions> getRegionsList() {
     return regionsList;

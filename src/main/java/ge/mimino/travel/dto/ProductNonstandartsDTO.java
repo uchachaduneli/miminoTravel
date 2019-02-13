@@ -12,6 +12,7 @@ public class ProductNonstandartsDTO {
     private NonstandartServiceDTO nonstandartService;
     private Integer requestId;
     private Integer day;
+    private Double price;
 
 
     public static ProductNonstandartsDTO parse(ProductNonstandarts record) {
@@ -21,6 +22,7 @@ public class ProductNonstandartsDTO {
         dto.setNonstandartService(NonstandartServiceDTO.parse(record.getNonstandartService()));
         dto.setRequestId(record.getRequestId());
         dto.setDay(record.getDay());
+        dto.setPrice(record.getPrice());
         return dto;
     }
 
@@ -31,6 +33,14 @@ public class ProductNonstandartsDTO {
             list.add(ProductNonstandartsDTO.parse(record));
         }
         return list;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     public NonstandartServiceDTO getNonstandartService() {

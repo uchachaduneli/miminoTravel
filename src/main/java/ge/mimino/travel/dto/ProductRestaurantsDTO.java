@@ -14,6 +14,7 @@ public class ProductRestaurantsDTO {
     private Integer day;
     private String mealCategories;
     private String packages;
+    private Double price;
 
 
     public static ProductRestaurantsDTO parse(ProductRestaurants record) {
@@ -25,6 +26,7 @@ public class ProductRestaurantsDTO {
         dto.setDay(record.getDay());
         dto.setMealCategories(record.getMealCategories());
         dto.setPackages(record.getPackages());
+        dto.setPrice(record.getPrice());
         return dto;
     }
 
@@ -35,6 +37,14 @@ public class ProductRestaurantsDTO {
             list.add(ProductRestaurantsDTO.parse(record));
         }
         return list;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     public RestaurantDTO getRestaurant() {

@@ -63,6 +63,13 @@
 
             function getRequestData(res) {
                 $scope.request = res.data;
+
+                function getTouristCounts(cnt) {
+                    $scope.request.touristCount = cnt.data;
+                }
+
+                ajaxCall($http, "requests/get-tourist-counts?id=" + $scope.request.id, null, getTouristCounts);
+
                 $scope.getProductDetails();
             }
 
@@ -87,7 +94,7 @@
                 $scope.transports = res.data.transports;
                 $scope.product.regions = res.data.regionsList;
                 $scope.product.places = res.data.placesList;
-                $scope.product.sights = res.data.sights;
+                $scope.product.sightsList = res.data.sightsList;
                 $scope.product.hotels1 = $filter('filter')(res.data.hotels, {groupId: 1}, true);
                 $scope.product.hotels2 = $filter('filter')(res.data.hotels, {groupId: 2}, true);
                 $scope.product.hotels3 = $filter('filter')(res.data.hotels, {groupId: 3}, true);
@@ -109,6 +116,9 @@
         };
 
         $scope.save = function () {
+
+            successMsg('Will Work In Next Update');
+            return;
 
             function resFunc(res) {
                 if (res.errorCode == 0) {
@@ -191,11 +201,30 @@
 
                         <table class="table table-striped">
                             <tr>
-                                <th class="col-md-2">Tour Code</th>
-                                <td>{{request.tourCode}}</td>
+                                <th class="col-md-2" style="vertical-align: middle !important;">Tour Code</th>
+                                <td style="vertical-align: middle !important;">{{request.tourCode}}</td>
 
-                                <th class="col-md-2">Tourists Count</th>
-                                <td>{{request.touristsCount}}</td>
+                                <th class="col-md-2" style="vertical-align: middle !important;">Count Of</th>
+                                <td>
+                                    <table class="table text-center col-md-3">
+                                        <tr>
+                                            <th>
+                                                <small>Tourists</small>
+                                            </th>
+                                            <th>
+                                                <small>Leaders</small>
+                                            </th>
+                                        </tr>
+                                        <tr ng-repeat="r in request.touristCount">
+                                            <td>
+                                                <small>{{r.count}}</small>
+                                            </td>
+                                            <td>
+                                                <small>{{r.plusCount}}</small>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
                             </tr>
                             <tr>
                                 <th class="col-md-2">Tour Starts</th>
@@ -362,8 +391,9 @@
                     <div class="panel-body">
                         <div class="form-group col-sm-12 ">
                             <div class="col-sm-12">
-                                <label ng-repeat="t in product.sights" class="col-sm-3 panel">
-                                    {{$index+1}}) {{t.nameEn}} {{photoOrVisit == 2?'( Photo )':''}}
+                                <label ng-repeat="t in product.sightsList" class="col-sm-4 panel">
+                                    {{$index+1}}) {{t.sight.nameEn}} {{t.photoOrVisit == 2?'- Photo Stop ':''}}
+                                    <input placeholder="(Crnt. Price: {{t.sight.personPrice}}₾)"/>
                                 </label>
                             </div>
                         </div>
@@ -384,9 +414,30 @@
                                 <legend class="w-auto">Group N1</legend>
 
                                 <div class="form-group">
-                                    <div ng-repeat="t in product.hotels1" class="col-sm-3 panel">
-                                        {{$index+1}}) {{t.hotel.nameEn}}
-                                        <%--<input value="{{t.hotel.singlePrice}}" placeholder="Single Price" title="Single Price">--%>
+                                    <div ng-repeat="t in product.hotels1" class="col-sm-6 panel">
+                                        <b>{{$index+1}}) {{t.hotel.nameEn}}</b>
+                                        <ul>
+                                            <li>Single Price:&nbsp;&nbsp;{{t.hotel.singlePrice == undefined ? ' NOT
+                                                DDEFINED':t.hotel.singlePrice}}
+                                                {{t.hotel.currency == '2' ? '$':''}}
+                                                {{t.hotel.currency == '3' ? '€':''}}
+                                            </li>
+                                            <li>Double Price:&nbsp;&nbsp;{{t.hotel.doublePrice == undefined ? ' NOT
+                                                DDEFINED':t.hotel.doublePrice}}
+                                                {{t.hotel.currency == '2' ? '$':''}}
+                                                {{t.hotel.currency == '3' ? '€':''}}
+                                            </li>
+                                            <li>TriplePrice Price:&nbsp;&nbsp;{{t.hotel.triplePrice == undefined ? ' NOT
+                                                DDEFINED':t.hotel.triplePrice}}
+                                                {{t.hotel.currency == '2' ? '$':''}}
+                                                {{t.hotel.currency == '3' ? '€':''}}
+                                            </li>
+                                            <li>Single Supply :&nbsp;&nbsp;{{t.hotel.singleSupply == undefined ? ' NOT
+                                                DDEFINED':t.hotel.singleSupply}}
+                                                {{t.hotel.currency == '2' ? '$':''}}
+                                                {{t.hotel.currency == '3' ? '€':''}}
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
 
@@ -398,8 +449,27 @@
 
                                 <div class="form-group">
                                     <div ng-repeat="t in product.hotels2" class="col-sm-3 panel">
-                                        {{$index+1}}) {{t.hotel.nameEn}}
-                                        <%--<input value="{{t.hotel.singlePrice}}" placeholder="Single Price" title="Single Price">--%>
+                                        <b>{{$index+1}}) {{t.hotel.nameEn}}</b>
+                                        <li>Single Price:&nbsp;&nbsp;{{t.hotel.singlePrice == undefined ? ' NOT
+                                            DDEFINED':t.hotel.singlePrice}}
+                                            {{t.hotel.currency == '2' ? '$':''}}
+                                            {{t.hotel.currency == '3' ? '€':''}}
+                                        </li>
+                                        <li>Double Price:&nbsp;&nbsp;{{t.hotel.doublePrice == undefined ? ' NOT
+                                            DDEFINED':t.hotel.doublePrice}}
+                                            {{t.hotel.currency == '2' ? '$':''}}
+                                            {{t.hotel.currency == '3' ? '€':''}}
+                                        </li>
+                                        <li>TriplePrice Price:&nbsp;&nbsp;{{t.hotel.triplePrice == undefined ? ' NOT
+                                            DDEFINED':t.hotel.triplePrice}}
+                                            {{t.hotel.currency == '2' ? '$':''}}
+                                            {{t.hotel.currency == '3' ? '€':''}}
+                                        </li>
+                                        <li>Single Supply :&nbsp;&nbsp;{{t.hotel.singleSupply == undefined ? ' NOT
+                                            DDEFINED':t.hotel.singleSupply}}
+                                            {{t.hotel.currency == '2' ? '$':''}}
+                                            {{t.hotel.currency == '3' ? '€':''}}
+                                        </li>
                                     </div>
                                 </div>
                             </fieldset>
@@ -410,8 +480,27 @@
 
                                 <div class="form-group">
                                     <div ng-repeat="t in product.hotels3" class="col-sm-3 panel">
-                                        {{$index+1}}) {{t.hotel.nameEn}}
-                                        <%--<input value="{{t.hotel.singlePrice}}" placeholder="Single Price" title="Single Price">--%>
+                                        <b>{{$index+1}}) {{t.hotel.nameEn}}</b>
+                                        <li>Single Price: &nbsp;&nbsp;{{t.hotel.singlePrice == undefined ? ' NOT
+                                            DDEFINED':t.hotel.singlePrice}}
+                                            {{t.hotel.currency == '2' ? '$':''}}
+                                            {{t.hotel.currency == '3' ? '€':''}}
+                                        </li>
+                                        <li>Double Price:&nbsp;&nbsp;{{t.hotel.doublePrice == undefined ? ' NOT
+                                            DDEFINED':t.hotel.doublePrice}}
+                                            {{t.hotel.currency == '2' ? '$':''}}
+                                            {{t.hotel.currency == '3' ? '€':''}}
+                                        </li>
+                                        <li>TriplePrice Price:&nbsp;&nbsp;{{t.hotel.triplePrice == undefined ? ' NOT
+                                            DDEFINED':t.hotel.triplePrice}}
+                                            {{t.hotel.currency == '2' ? '$':''}}
+                                            {{t.hotel.currency == '3' ? '€':''}}
+                                        </li>
+                                        <li>Single Supply :&nbsp;&nbsp;{{t.hotel.singleSupply == undefined ? ' NOT
+                                            DDEFINED':t.hotel.singleSupply}}
+                                            {{t.hotel.currency == '2' ? '$':''}}
+                                            {{t.hotel.currency == '3' ? '€':''}}
+                                        </li>
                                     </div>
                                 </div>
                             </fieldset>
@@ -448,6 +537,16 @@
                                             </li>
                                         </ul>
                                     </div>
+                                    <hr class="col-md-12"/>
+                                    <div class="form-group col-sm-6 ">
+                                        <label class="control-label col-sm-3">Enter Unit Price Here</label>
+                                        <div class="col-sm-9">
+                                            <input type="number" class="form-control input-sm"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-footer">
+
                                 </div>
                             </div>
                         </div>
@@ -465,9 +564,21 @@
                 <div class="panel-body">
                     <div class="form-group col-sm-12 ">
                         <div class="col-sm-12">
-                            <label ng-repeat="t in product.nonstandarts" class="col-sm-3">
-                                {{$index+1}}) &nbsp; {{t.nonstandartService.nameEn}}
-                            </label>
+                            <div class="form-group">
+                                <div ng-repeat="t in product.nonstandarts" class="col-sm-3 panel">
+                                    <b>{{$index+1}}) {{t.nonstandartService.nameEn}}</b>
+                                    <li>Has Individual Price: &nbsp;&nbsp;<b>{{t.nonstandartService.individual == '2' ?
+                                        'YES':'NO'}}</b></li>
+                                    <li>Has Daily Price:&nbsp;&nbsp;<b>{{t.nonstandartService.daily == '2' ?
+                                        'YES':'NO'}}</b></li>
+                                    <li>Has Multy Count Support:&nbsp;&nbsp;<b>{{t.hotel.nonstandartService.multy == '2'
+                                        ? 'YES':'NO'}}</b></li>
+                                    <li>
+                                        Price:&nbsp;&nbsp;
+                                        <input class="input-sm form-search" value="{{t.nonstandartService.price}}">
+                                    </li>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
