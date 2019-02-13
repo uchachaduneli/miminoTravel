@@ -575,7 +575,8 @@
                                         ? 'YES':'NO'}}</b></li>
                                     <li>
                                         Price:&nbsp;&nbsp;
-                                        <input class="input-sm form-search" value="{{t.nonstandartService.price}}">
+                                        <input class="input-sm form-search manualFormControlInput"
+                                               value="{{t.nonstandartService.price}}">
                                     </li>
                                 </div>
                             </div>
