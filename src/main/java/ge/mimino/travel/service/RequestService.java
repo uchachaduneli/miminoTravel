@@ -224,7 +224,7 @@ public class RequestService {
         requestDAO.updateTransportDays(requestId, checkedDays);
     }
 
-    @Transactional(rollbackFor = Throwable.class)
+    //    @Transactional(rollbackFor = Throwable.class)
     public void defineTransportForRequest(Integer requestId, boolean deleteOld) {
 
         List<ParamValuePair> paramValues = new ArrayList<>();
@@ -280,6 +280,7 @@ public class RequestService {
         }
     }
 
+    @Transactional(rollbackFor = Throwable.class)
     public ProductRequest getProductDetailsById(Integer requestId, Integer day) {
 
         ProductRequest res = new ProductRequest();
@@ -326,7 +327,7 @@ public class RequestService {
             transports = (List<ProductTransports>) requestDAO.getAllByParamValue(ProductTransports.class, paramValues, null);
         }
         res.setTransports(transports);
-        if (!transports.isEmpty()) {
+        if (!transports.isEmpty() && transports.get(0).getDays() != null) {
             List<String> tmp = Arrays.asList(transports.get(0).getDays().split(","));
 //      tmp.removeAll(Arrays.asList("", null));
             res.setTransportDays(tmp);
