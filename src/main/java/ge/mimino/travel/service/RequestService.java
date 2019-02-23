@@ -52,9 +52,15 @@ public class RequestService {
         obj.setStrTourEnd(request.getStrTourEnd());
         obj.setDaysCount(request.getDaysCount());
         obj.setNightsCount(request.getNightsCount());
-        obj.setArrivalTime(new Timestamp(sdf.parse(request.getArrivalTime()).getTime()));//request.getArrivalTime()
+        try {
+            obj.setArrivalTime(new Timestamp(sdf.parse(request.getArrivalTime()).getTime()));//request.getArrivalTime()
+        } catch (Exception e) {
+        }
+        try {
+            obj.setLeaveTime(new Timestamp(sdf.parse(request.getLeaveTime()).getTime()));//request.getLeaveTime()
+        } catch (Exception e) {
+        }
         obj.setStrArrivalTime(request.getStrArrivalTime());
-        obj.setLeaveTime(new Timestamp(sdf.parse(request.getLeaveTime()).getTime()));//request.getLeaveTime()
         obj.setStrLeaveTime(request.getStrLeaveTime());
         obj.setTourType(request.getTourType());
         obj.setGuideDriver(request.getGuideDriver());
@@ -67,12 +73,25 @@ public class RequestService {
         obj.setEur(request.getEur());
         obj.setUsd(request.getUsd());
 //
-        obj.setCurrency((Currency) requestDAO.find(Currency.class, request.getCurrencyId()));
-        obj.setArrivalCity((City) requestDAO.find(City.class, request.getArrivalCityId()));
-        obj.setLeaveCity((City) requestDAO.find(City.class, request.getLeaveCityId()));
-        obj.setMealCategory((MealCategory) requestDAO.find(MealCategory.class, request.getMealCategoryId()));
-        obj.setPackageCategory((PackageCategory) requestDAO.find(PackageCategory.class, request.getPackageCategoryId()));
-        obj.setGuideLanguage((Language) requestDAO.find(Language.class, request.getGuideLanguageId()));
+        if (request.getCurrencyId() != null) {
+            obj.setCurrency((Currency) requestDAO.find(Currency.class, request.getCurrencyId()));
+        }
+        if (request.getArrivalCityId() != null) {
+            obj.setArrivalCity((City) requestDAO.find(City.class, request.getArrivalCityId()));
+        }
+        if (request.getLeaveCityId() != null) {
+            obj.setLeaveCity((City) requestDAO.find(City.class, request.getLeaveCityId()));
+        }
+        if (request.getMealCategoryId() != null) {
+            obj.setMealCategory((MealCategory) requestDAO.find(MealCategory.class, request.getMealCategoryId()));
+        }
+        if (request.getPackageCategoryId() != null) {
+            obj.setPackageCategory((PackageCategory) requestDAO.find(PackageCategory.class, request.getPackageCategoryId()));
+        }
+        if (request.getGuideLanguageId() != null) {
+            obj.setGuideLanguage((Language) requestDAO.find(Language.class, request.getGuideLanguageId()));
+        }
+
         obj.setUser((Users) requestDAO.find(Users.class, request.getUserId()));
 //
 

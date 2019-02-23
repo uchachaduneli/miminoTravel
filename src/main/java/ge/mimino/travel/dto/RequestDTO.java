@@ -71,26 +71,38 @@ public class RequestDTO {
         dto.setNightsCount(record.getNightsCount());
         dto.setArrivalTime(record.getArrivalTime());
         dto.setLeaveTime(record.getLeaveTime());
-        dto.setArrivalCity(CityDTO.parse(record.getArrivalCity()));
-        dto.setArrivalCityId(record.getArrivalCity().getId());
-        dto.setLeaveCity(CityDTO.parse(record.getLeaveCity()));
-        dto.setLeaveCityId(record.getLeaveCity().getId());
+        if (record.getArrivalCity() != null) {
+            dto.setArrivalCity(CityDTO.parse(record.getArrivalCity()));
+            dto.setArrivalCityId(record.getArrivalCity().getId());
+        }
+        if (record.getLeaveCity() != null) {
+            dto.setLeaveCity(CityDTO.parse(record.getLeaveCity()));
+            dto.setLeaveCityId(record.getLeaveCity().getId());
+        }
         dto.setTourType(record.getTourType());
         dto.setGuideDriver(record.getGuideDriver());
         dto.setHotelCategory(record.getHotelCategory());
-        dto.setMealCategory(MealCategoryDTO.parse(record.getMealCategory()));
-        dto.setMealCategoryId(record.getMealCategory().getId());
+        if (record.getMealCategory() != null) {
+            dto.setMealCategory(MealCategoryDTO.parse(record.getMealCategory()));
+            dto.setMealCategoryId(record.getMealCategory().getId());
+        }
         dto.setEntranceFees(record.getEntranceFees());
-        dto.setCurrency(CurrencyDTO.parse(record.getCurrency()));
-        dto.setCurrencyId(record.getCurrency().getId());
+        if (record.getCurrency() != null) {
+            dto.setCurrency(CurrencyDTO.parse(record.getCurrency()));
+            dto.setCurrencyId(record.getCurrency().getId());
+        }
         dto.setComment(record.getComment());
         dto.setBudget(record.getBudget());
-        dto.setPackageCategory(PackageCategoryDTO.parse(record.getPackageCategory()));
-        dto.setPackageCategoryId(record.getPackageCategory().getId());
+        if (record.getPackageCategory() != null) {
+            dto.setPackageCategory(PackageCategoryDTO.parse(record.getPackageCategory()));
+            dto.setPackageCategoryId(record.getPackageCategory().getId());
+        }
         dto.setUser(UsersDTO.parse(record.getUser()));
         dto.setUserId(record.getUser().getUserId());
-        dto.setGuideLanguage(LanguageDTO.parse(record.getGuideLanguage()));
-        dto.setGuideLanguageId(record.getGuideLanguage().getId());
+        if (record.getGuideLanguage() != null) {
+            dto.setGuideLanguage(LanguageDTO.parse(record.getGuideLanguage()));
+            dto.setGuideLanguageId(record.getGuideLanguage().getId());
+        }
         dto.setCreateDate(record.getCreateDate());
         dto.setRequestKey(record.getRequestKey());
         dto.setTourCode(record.getTourCode());
