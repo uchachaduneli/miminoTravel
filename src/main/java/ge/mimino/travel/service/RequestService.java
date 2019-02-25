@@ -368,6 +368,8 @@ public class RequestService {
         res.setTransportDays(new ArrayList<>());
         res.setRestaurants(new ArrayList<>());
         res.setSightsList(new ArrayList<>());
+        res.setGuides(new ArrayList<>());
+        res.setGuideDays(new ArrayList<>());
 
         List<ParamValuePair> paramValues = new ArrayList<>();
         paramValues.add(new ParamValuePair("requestId", requestId));
@@ -389,6 +391,12 @@ public class RequestService {
 
         paramValues.clear();
         paramValues.add(new ParamValuePair("requestId", requestId));
+
+        res.setGuides(ProductGuidesDTO.parseToList((List<ProductGuides>) requestDAO.getAllByParamValue(ProductGuides.class, paramValues, null)));
+        if (!res.getGuides().isEmpty()) {
+            List<String> tmp = Arrays.asList(res.getGuides().get(0).getDays().split(","));
+            res.setGuideDays(tmp);
+        }
 
         res.getTransports().addAll((List<ProductTransports>) requestDAO.getAllByParamValue(ProductTransports.class, paramValues, null));
         if (!res.getTransports().isEmpty()) {
