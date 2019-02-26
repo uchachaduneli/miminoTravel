@@ -39,6 +39,7 @@
         $scope.imageNames = [];
         $scope.transports = [];
         $scope.transportDaysList = [];
+        $scope.placeRow = [1];
 
         function getMealCategories(res) {
             $scope.mealCategories = res.data;
@@ -454,6 +455,18 @@
             }
         };
 
+        $scope.addPlaceRow = function () {
+            var size = $scope.placeRow.length;
+            $scope.placeRow.push(size + 1);
+        };
+
+        $scope.removePlaceRow = function (index) {
+            $scope.placeRow.splice(index, 1);
+            // if ($scope.request.combinedCountries) {
+            //     $scope.request.combinedCountries.splice(index, 1);
+            // }
+        };
+
     }]);
 </script>
 <style>
@@ -603,6 +616,34 @@
                     </div>
                 </div>
 
+                <%--<div class="panel panel-default">--%>
+                <%--<div class="panel-heading">--%>
+                <%--<a class="btn btn-app">--%>
+                <%--<i class="fa fa-map-marker"></i> Places--%>
+                <%--</a>--%>
+                <%--<div class="progress">--%>
+                <%--<div class="progress-bar {{$index %2 == 0 ? 'progress-bar-success':'progress-bar-primary'}}"--%>
+                <%--role="progressbar" ng-repeat="key in distances"--%>
+                <%--style="{{'width:'+100/distances.length+'%;'}}">--%>
+                <%--{{key}}--%>
+                <%--</div>--%>
+                <%--</div>--%>
+                <%--Sum Of Day({{daysList[dayIndex]}}) Distance: {{distanceSum}} Kilometers--%>
+                <%--</div>--%>
+                <%--<div class="panel-body">--%>
+                <%--<div class="form-group col-sm-12 ">--%>
+                <%--<div class="col-sm-12">--%>
+                <%--<label ng-repeat="t in places"--%>
+                <%--class="col-sm-3 {{t.selected == true ? ' markAsSelected':''}}">--%>
+                <%--<input type="checkbox" id="placechecks{{t.id}}" ng-model="t.selected"--%>
+                <%--ng-click="searchByPlace()"--%>
+                <%--checklist-model="product.places" checklist-value="t.id">&nbsp; {{t.nameEn}}--%>
+                <%--</label>--%>
+                <%--</div>--%>
+                <%--</div>--%>
+                <%--</div>--%>
+                <%--</div>--%>
+
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <a class="btn btn-app">
@@ -620,12 +661,42 @@
                     <div class="panel-body">
                         <div class="form-group col-sm-12 ">
                             <div class="col-sm-12">
-                                <label ng-repeat="t in places"
-                                       class="col-sm-3 {{t.selected == true ? ' markAsSelected':''}}">
-                                    <input type="checkbox" id="placechecks{{t.id}}" ng-model="t.selected"
-                                           ng-click="searchByPlace()"
-                                           checklist-model="product.places" checklist-value="t.id">&nbsp; {{t.nameEn}}
-                                </label>
+                                <div class="form-group" ng-repeat="r in placeRow">
+                                    <div class="col-sm-1 text-right text-bold">{{$index +1}})</div>
+                                    <div class="col-sm-6" id="divId_{{r}}">
+                                        <select class="form-control input-sm"
+                                                ng-model="choosedPlaces[r - 1]">
+                                            <option ng-repeat="c in places" value="{{c.id}}" ng-value="c.id"
+                                                    ng-selected="c.id === choosedPlaces[r - 1]">
+                                                {{c.id}}. {{c.nameEn}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <div class="col-md-1" ng-show="$index == 0">
+                                            <a class="btn btn-sm row" style="vertical-align: bottom;">
+                                                <span class="fa fa-plus" ng-click="addPlaceRow()"></span>
+                                            </a>
+                                        </div>
+                                        <div class="col-md-1" ng-show="$index > 0">
+                                            <a class="btn btn-sm row">
+                                                <span class="fa fa-trash"
+                                                      ng-click="removePlaceRow($index)"></span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                    <hr class="col-sm-12"/>
+                                </div>
+                                <div class="col-sm-12">
+                                    <label ng-repeat="t in places"
+                                           class="col-sm-3 {{t.selected == true ? ' markAsSelected':''}}">
+                                        <input type="checkbox" id="placechecks{{t.id}}" ng-model="t.selected"
+                                               ng-click="searchByPlace()"
+                                               checklist-model="product.places" checklist-value="t.id">&nbsp;
+                                        {{t.nameEn}}
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>

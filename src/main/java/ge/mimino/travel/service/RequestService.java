@@ -266,7 +266,7 @@ public class RequestService {
         Request request = (Request) requestDAO.find(Request.class, requestId);
         for (Integer count : touristCounts) {
             if (count > 0) {
-                if (RequestDTO.NAT_FOR_TRANSPORT.contains(request.getNationality())) {
+                if (request.getNationality() != null && RequestDTO.NAT_FOR_TRANSPORT.contains(request.getNationality())) {
                     if (count < 3) {
                         transportsForSave.add(new ProductTransports((Transport) requestDAO.find(Transport.class, TransportDTO.SEDAN), requestId, 1, count));
                     } else if (count > 2 && count < 5) {
