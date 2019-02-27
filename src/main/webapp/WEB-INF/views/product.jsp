@@ -40,6 +40,7 @@
         $scope.transports = [];
         $scope.transportDaysList = [];
         $scope.placeRow = [1];
+        $scope.choosedPlaces = [];
 
         function getMealCategories(res) {
             $scope.mealCategories = res.data;
@@ -198,6 +199,14 @@
             $scope.distanceSum = 0.0;
 
             function getDists(res) {
+                console.log("loadDistances method - distances from java");
+                console.log("requested array");
+                console.log(array);
+                console.log("distances from java");
+                console.log(res.data);
+                console.log("******* after add into $scope.distances ***********");
+                console.log($scope.distances);
+                console.log("******************");
                 angular.forEach(res.data, function (value, key) {
                     $scope.distances.push(key);
                     $scope.distanceSum = value + $scope.distanceSum;
@@ -385,6 +394,38 @@
             }
         }
 
+        $scope.searchByPlace1 = function () {
+
+            console.log($scope.places);
+            console.log($scope.choosedPlaces);
+
+            // var slctedPlaces = $filter('filter')($scope.places, {selected: true}, true);
+            // var slctedPlaces = $filter('filter')($scope.places, {id:}, true);
+            var ids = [];
+            angular.forEach($scope.choosedPlaces, function (v) {
+                $filter('filter')($scope.places, {id: v.id}, true).selected = true;
+                ids.push(v.id);
+            });
+            $scope.loadDistances(ids);
+            console.log(angular.toJson(ids));
+            if (ids.length > 0 || $scope.hotelStars.length > 0) {
+                // function getHotels(res) {
+                //     $scope.hotels = res.data;
+                // }
+                //
+                // ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars, angular.toJson(ids), getHotels);
+
+                function getSights(res) {
+                    $scope.sights = res.data;
+                }
+
+                ajaxCall($http, "objects/get-objects-by-place", angular.toJson(ids), getSights);
+            } else {
+                // $scope.hotels = [];
+                $scope.sights = [];
+            }
+        };
+
         $scope.searchByPlace = function () {
             var slctedPlaces = $filter('filter')($scope.places, {selected: true}, true);
             var ids = [];
@@ -462,9 +503,10 @@
 
         $scope.removePlaceRow = function (index) {
             $scope.placeRow.splice(index, 1);
-            // if ($scope.request.combinedCountries) {
-            //     $scope.request.combinedCountries.splice(index, 1);
-            // }
+            $filter('filter')($scope.places, {id: $scope.choosedPlaces[index].id}, true).selected = false;
+            if ($scope.choosedPlaces) {
+                $scope.choosedPlaces.splice(index, 1);
+            }
         };
 
     }]);
@@ -664,10 +706,10 @@
                                 <div class="form-group" ng-repeat="r in placeRow">
                                     <div class="col-sm-1 text-right text-bold">{{$index +1}})</div>
                                     <div class="col-sm-6" id="divId_{{r}}">
-                                        <select class="form-control input-sm"
-                                                ng-model="choosedPlaces[r - 1]">
+                                        <select class="form-control input-sm" ng-change="searchByPlace1()"
+                                                ng-model="choosedPlaces[r - 1].id">
                                             <option ng-repeat="c in places" value="{{c.id}}" ng-value="c.id"
-                                                    ng-selected="c.id === choosedPlaces[r - 1]">
+                                                    ng-selected="c.id === choosedPlaces[r - 1].id">
                                                 {{c.id}}. {{c.nameEn}}
                                             </option>
                                         </select>
