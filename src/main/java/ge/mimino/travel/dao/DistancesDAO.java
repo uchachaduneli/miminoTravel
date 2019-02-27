@@ -10,10 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by ME.
@@ -63,7 +60,7 @@ public class DistancesDAO extends AbstractDAO {
 
     String q = "";
     List<Distances> distances = new ArrayList<>();
-    Map<String, Double> res = new HashMap<>();
+    Map<String, Double> res = new LinkedHashMap<>();
     for (int i = 0; i < ids.size(); i++) {
       distances.clear();
       Integer nextId;
@@ -80,8 +77,8 @@ public class DistancesDAO extends AbstractDAO {
       Query query = entityManager.createQuery(q);
       distances = query.getResultList();
       if (!distances.isEmpty()) {
-        res.put(distances.get(0).getFromPlace().getNameEn() + " --> " + distances.get(0).getDistance()
-                + " <-- " + distances.get(0).getToPlace().getNameEn(), distances.get(0).getDistance());
+        res.put(distances.get(0).getFromPlace().getNameEn()+" "+ ids.get(i) + "  --> " + distances.get(0).getDistance()
+                + " <-- " +" "+ nextId + distances.get(0).getToPlace().getNameEn(), distances.get(0).getDistance());
       } else {
         if (ids.get(i) != nextId) {
           query = entityManager.createQuery("Select e From " + Place.class.getSimpleName()
