@@ -153,34 +153,20 @@
                 }
 
                 if ($scope.product.places.length > 0) {
-                    // function getHotels(res) {
-                    //     $scope.hotels1 = res.data;
-                    //     $scope.hotels2 = res.data;
-                    //     $scope.hotels3 = res.data;
-                    //
-                    //     $scope.filterHotels1();
-                    //     $scope.filterHotels2();
-                    //     $scope.filterHotels3();
-                    // }
-                    //
-                    // ajaxCall($http, "hotels/get-hotels-by-place?stars=" + $scope.hotelStars, angular.toJson($scope.product.places), getHotels);
 
                     function getSights(res) {
                         $scope.sights = res.data;
-//            $scope.sights = [];
-//            angular.forEach(res.data, function (v, k) {
-//              $scope.sights[k] = {id: v.id, photoOrVisit: undefined};
-//            });
                     }
 
                     ajaxCall($http, "objects/get-objects-by-place", angular.toJson($scope.product.places), getSights);
-
-                    function getRestaurants(res) {
-                        $scope.restaurants = res.data;
-                    }
-
-                    ajaxCall($http, "restaurants/get-restaurants-by-place", angular.toJson($scope.product.places), getRestaurants);
                 }
+
+                function getRestaurants(res) {
+                    $scope.restaurants = res.data;
+                    console.log(res.data);
+                }
+
+                ajaxCall($http, "restaurants/get-restaurants-by-place", angular.toJson($scope.product.places), getRestaurants);
             }
 
             ajaxCall($http, "requests/get-product-details?requestId=" + $scope.request.id + "&day=" + ($scope.dayIndex + 1), null, getProdDet);
@@ -199,14 +185,6 @@
             $scope.distanceSum = 0.0;
 
             function getDists(res) {
-                console.log("loadDistances method - distances from java");
-                console.log("requested array");
-                console.log(array);
-                console.log("distances from java");
-                console.log(res.data);
-                console.log("******* after add into $scope.distances ***********");
-                console.log($scope.distances);
-                console.log("******************");
                 angular.forEach(res.data, function (value, key) {
                     $scope.distances.push(key);
                     $scope.distanceSum = value + $scope.distanceSum;
@@ -658,34 +636,6 @@
                     </div>
                 </div>
 
-                <%--<div class="panel panel-default">--%>
-                <%--<div class="panel-heading">--%>
-                <%--<a class="btn btn-app">--%>
-                <%--<i class="fa fa-map-marker"></i> Places--%>
-                <%--</a>--%>
-                <%--<div class="progress">--%>
-                <%--<div class="progress-bar {{$index %2 == 0 ? 'progress-bar-success':'progress-bar-primary'}}"--%>
-                <%--role="progressbar" ng-repeat="key in distances"--%>
-                <%--style="{{'width:'+100/distances.length+'%;'}}">--%>
-                <%--{{key}}--%>
-                <%--</div>--%>
-                <%--</div>--%>
-                <%--Sum Of Day({{daysList[dayIndex]}}) Distance: {{distanceSum}} Kilometers--%>
-                <%--</div>--%>
-                <%--<div class="panel-body">--%>
-                <%--<div class="form-group col-sm-12 ">--%>
-                <%--<div class="col-sm-12">--%>
-                <%--<label ng-repeat="t in places"--%>
-                <%--class="col-sm-3 {{t.selected == true ? ' markAsSelected':''}}">--%>
-                <%--<input type="checkbox" id="placechecks{{t.id}}" ng-model="t.selected"--%>
-                <%--ng-click="searchByPlace()"--%>
-                <%--checklist-model="product.places" checklist-value="t.id">&nbsp; {{t.nameEn}}--%>
-                <%--</label>--%>
-                <%--</div>--%>
-                <%--</div>--%>
-                <%--</div>--%>
-                <%--</div>--%>
-
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <a class="btn btn-app">
@@ -703,46 +653,65 @@
                     <div class="panel-body">
                         <div class="form-group col-sm-12 ">
                             <div class="col-sm-12">
-                                <div class="form-group" ng-repeat="r in placeRow">
-                                    <div class="col-sm-1 text-right text-bold">{{$index +1}})</div>
-                                    <div class="col-sm-6" id="divId_{{r}}">
-                                        <select class="form-control input-sm" ng-change="searchByPlace1()"
-                                                ng-model="choosedPlaces[r - 1].id">
-                                            <option ng-repeat="c in places" value="{{c.id}}" ng-value="c.id"
-                                                    ng-selected="c.id === choosedPlaces[r - 1].id">
-                                                {{c.id}}. {{c.nameEn}}
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="col-sm-1">
-                                        <div class="col-md-1" ng-show="$index == 0">
-                                            <a class="btn btn-sm row" style="vertical-align: bottom;">
-                                                <span class="fa fa-plus" ng-click="addPlaceRow()"></span>
-                                            </a>
-                                        </div>
-                                        <div class="col-md-1" ng-show="$index > 0">
-                                            <a class="btn btn-sm row">
-                                                <span class="fa fa-trash"
-                                                      ng-click="removePlaceRow($index)"></span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4"></div>
-                                    <hr class="col-sm-12"/>
-                                </div>
-                                <div class="col-sm-12">
-                                    <label ng-repeat="t in places"
-                                           class="col-sm-3 {{t.selected == true ? ' markAsSelected':''}}">
-                                        <input type="checkbox" id="placechecks{{t.id}}" ng-model="t.selected"
-                                               ng-click="searchByPlace()"
-                                               checklist-model="product.places" checklist-value="t.id">&nbsp;
-                                        {{t.nameEn}}
-                                    </label>
-                                </div>
+                                <label ng-repeat="t in places"
+                                       class="col-sm-3 {{t.selected == true ? ' markAsSelected':''}}">
+                                    <input type="checkbox" id="placechecks{{t.id}}" ng-model="t.selected"
+                                           ng-click="searchByPlace()"
+                                           checklist-model="product.places" checklist-value="t.id">&nbsp; {{t.nameEn}}
+                                </label>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <%--<div class="panel panel-default">--%>
+                <%--<div class="panel-heading">--%>
+                <%--<a class="btn btn-app">--%>
+                <%--<i class="fa fa-map-marker"></i> Places--%>
+                <%--</a>--%>
+                <%--<div class="progress">--%>
+                <%--<div class="progress-bar {{$index %2 == 0 ? 'progress-bar-success':'progress-bar-primary'}}"--%>
+                <%--role="progressbar" ng-repeat="key in distances"--%>
+                <%--style="{{'width:'+100/distances.length+'%;'}}">--%>
+                <%--{{key}}--%>
+                <%--</div>--%>
+                <%--</div>--%>
+                <%--Sum Of Day({{daysList[dayIndex]}}) Distance: {{distanceSum}} Kilometers--%>
+                <%--</div>--%>
+                <%--<div class="panel-body">--%>
+                <%--<div class="form-group col-sm-12 ">--%>
+                <%--<div class="col-sm-12">--%>
+                <%--<div class="form-group" ng-repeat="r in placeRow">--%>
+                <%--<div class="col-sm-1 text-right text-bold">{{$index +1}})</div>--%>
+                <%--<div class="col-sm-6" id="divId_{{r}}">--%>
+                <%--<select class="form-control input-sm" ng-change="searchByPlace1()"--%>
+                <%--ng-model="choosedPlaces[r - 1].id">--%>
+                <%--<option ng-repeat="c in places" value="{{c.id}}" ng-value="c.id"--%>
+                <%--ng-selected="c.id === choosedPlaces[r - 1].id">--%>
+                <%--{{c.id}}. {{c.nameEn}}--%>
+                <%--</option>--%>
+                <%--</select>--%>
+                <%--</div>--%>
+                <%--<div class="col-sm-1">--%>
+                <%--<div class="col-md-1" ng-show="$index == 0">--%>
+                <%--<a class="btn btn-sm row" style="vertical-align: bottom;">--%>
+                <%--<span class="fa fa-plus" ng-click="addPlaceRow()"></span>--%>
+                <%--</a>--%>
+                <%--</div>--%>
+                <%--<div class="col-md-1" ng-show="$index > 0">--%>
+                <%--<a class="btn btn-sm row">--%>
+                <%--<span class="fa fa-trash"--%>
+                <%--ng-click="removePlaceRow($index)"></span>--%>
+                <%--</a>--%>
+                <%--</div>--%>
+                <%--</div>--%>
+                <%--<div class="col-sm-4"></div>--%>
+                <%--<hr class="col-sm-12"/>--%>
+                <%--</div>--%>
+                <%--</div>--%>
+                <%--</div>--%>
+                <%--</div>--%>
+                <%--</div>--%>
 
                 <div class="panel panel-info ">
                     <div class="panel-heading">

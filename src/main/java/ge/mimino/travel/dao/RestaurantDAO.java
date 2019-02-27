@@ -69,9 +69,15 @@ public class RestaurantDAO extends AbstractDAO {
     }
 
     public List<Restaurant> getRestaurantsByPlaces(List<Integer> placeIds) {
-        TypedQuery<Restaurant> query = getEntityManager().createQuery("select c from " + Restaurant.class.getSimpleName()
-                + " c where c.place.id in :listOfIds", Restaurant.class);
-        query.setParameter("listOfIds", placeIds);
+        String qr = "select c from " + Restaurant.class.getSimpleName() + " c";
+        TypedQuery<Restaurant> query;
+        if (!placeIds.isEmpty()) {
+            qr += " where c.place.id in :listOfIds";
+            query = getEntityManager().createQuery(qr, Restaurant.class);
+            query.setParameter("listOfIds", placeIds);
+        } else {
+            query = getEntityManager().createQuery(qr, Restaurant.class);
+        }
         return query.getResultList();
     }
 }
