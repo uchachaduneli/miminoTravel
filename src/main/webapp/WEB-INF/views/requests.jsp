@@ -489,6 +489,7 @@
                                 <span ng-if="slcted.guideDriver == 2">Guide-Driver</span>
                                 <span ng-if="slcted.guideDriver == 3">Driver</span>
                                 <span ng-if="slcted.guideDriver == 4">Self driver</span>
+                                <span ng-if="slcted.guideDriver == 5">Separated Guide & Driver</span>
                             </td>
                         </tr>
                         <tr>
@@ -791,6 +792,8 @@
                                                   class="input-sm">Driver</label>&nbsp;
                                     <label><input type="radio" ng-model="request.guideDriver" value="4"
                                                   class="input-sm">Self Drive</label>
+                                    <label><input type="radio" ng-model="request.guideDriver" value="5"
+                                                  class="input-sm">Separated Guide & Driver</label>
                                 </div>
                             </div>
                         </div>

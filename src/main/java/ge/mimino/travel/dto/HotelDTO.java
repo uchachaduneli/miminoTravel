@@ -15,6 +15,7 @@ public class HotelDTO {
     private Double doublePrice;
     private Double triplePrice;
     private Double singleSupply;
+    private Double family;
     private String starsCount;
     @JsonSerialize(using = JsonDateTimeSerializeSupport.class)
     private Timestamp createDate;
@@ -66,6 +67,7 @@ public class HotelDTO {
         dto.setPlaceId(record.getPlace().getId());
         dto.setLink(record.getLink());
         dto.setCurrency(record.getCurrency());
+        dto.setFamily(record.getFamily());
         return dto;
     }
 
@@ -76,6 +78,14 @@ public class HotelDTO {
             list.add(HotelDTO.parse(record));
         }
         return list;
+    }
+
+    public Double getFamily() {
+        return family;
+    }
+
+    public void setFamily(Double family) {
+        this.family = family;
     }
 
     public Integer getCurrency() {

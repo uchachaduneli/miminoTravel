@@ -27,6 +27,7 @@ public class GuideDTO {
         dto.setType(record.getType());
         dto.setLanguage(LanguageDTO.parse(record.getLanguage()));
         dto.setLanguageId(record.getLanguage().getId());
+        dto.setPrices(record.getPrices());
         return dto;
     }
 

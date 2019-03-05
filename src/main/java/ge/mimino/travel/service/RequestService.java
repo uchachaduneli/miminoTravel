@@ -351,6 +351,13 @@ public class RequestService {
 //      tmp.removeAll(Arrays.asList("", null));
             res.setTransportDays(tmp);
         }
+
+        res.setGuides(ProductGuidesDTO.parseToList((List<ProductGuides>) requestDAO.getAllByParamValue(ProductGuides.class, paramValues, null)));
+        if (!res.getGuides().isEmpty() && res.getGuides().get(0).getDays() != null) {
+            List<String> tmp = Arrays.asList(res.getGuides().get(0).getDays().split(","));
+            res.setGuideDays(tmp);
+        }
+
         paramValues.add(new ParamValuePair("day", day));
         res.setRestaurants(ProductRestaurantsDTO.parseToList((List<ProductRestaurants>) requestDAO.getAllByParamValue(ProductRestaurants.class, paramValues, null)));
 
@@ -399,7 +406,7 @@ public class RequestService {
         }
 
         res.getTransports().addAll((List<ProductTransports>) requestDAO.getAllByParamValue(ProductTransports.class, paramValues, null));
-        if (!res.getTransports().isEmpty()) {
+        if (!res.getTransports().isEmpty() && res.getTransports().get(0).getDays() != null) {
             List<String> tmp = Arrays.asList(res.getTransports().get(0).getDays().split(","));
             res.setTransportDays(tmp);
         }

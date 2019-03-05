@@ -54,6 +54,7 @@ public class HotelService {
         obj.setDescriptionRu(request.getDescriptionRu());
         obj.setSinglePrice(request.getSinglePrice());
         obj.setTriplePrice(request.getTriplePrice());
+        obj.setFamily(request.getFamily());
         obj.setSingleSupply(request.getSingleSupply());
         obj.setStarsCount(request.getStarsCount());
         obj.setLink(request.getLink());

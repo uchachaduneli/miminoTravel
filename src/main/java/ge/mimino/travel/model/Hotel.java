@@ -11,6 +11,7 @@ public class Hotel {
     private Double doublePrice;
     private Double triplePrice;
     private Double singleSupply;
+    private Double family;
     private String starsCount;
     private Timestamp createDate;
     private String nameEn;
@@ -270,5 +271,15 @@ public class Hotel {
 
     public void setCurrency(Integer currency) {
         this.currency = currency;
+    }
+
+    @Basic
+    @Column(name = "family", nullable = true, precision = 0)
+    public Double getFamily() {
+        return family;
+    }
+
+    public void setFamily(Double family) {
+        this.family = family;
     }
 }

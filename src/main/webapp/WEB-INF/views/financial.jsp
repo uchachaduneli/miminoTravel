@@ -92,6 +92,8 @@
                 console.log(res.data);
                 $scope.transportDaysList = res.data.transportDays;
                 $scope.transports = res.data.transports;
+                $scope.guideDaysList = res.data.guideDays;
+                $scope.guides = res.data.guides;
                 $scope.product.regions = res.data.regionsList;
                 $scope.product.places = res.data.placesList;
                 $scope.product.sightsList = res.data.sightsList;
@@ -259,7 +261,7 @@
                                 <td>{{request.leaveTime}} / {{request.strLeaveTime}}</td>
                             </tr>
                         </table>
-
+                        <hr/>
                         <a class="btn btn-app">
                             <i class="fa fa-car"></i> Transports
                         </a>
@@ -282,6 +284,40 @@
                         </table>
                         Transport Needed For Days: &nbsp;
                         <label ng-repeat="t in transportDaysList" style="display: inline !important;">
+                            &nbsp; Day -
+                            {{t}}&nbsp;&nbsp;
+                        </label>
+
+                        <hr/>
+
+                        <a class="btn btn-app">
+                            <i class="fa fa-blind"></i> Guides
+                        </a>
+
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Language</th>
+                                <th>Tourists Count(From <--> To) : Price</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="r in guides">
+                                <td>{{r.id}}</td>
+                                <td>{{r.name}}</td>
+                                <td>{{r.language.name}}</td>
+                                <td>
+                                    <ul>
+                                        <li ng-repeat="v in r.prices">{{v.from}} <--> {{v.to}} : {{v.amount}}</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        Guides Needed For Days: &nbsp;
+                        <label ng-repeat="t in guideDaysList" style="display: inline !important;">
                             &nbsp; Day -
                             {{t}}&nbsp;&nbsp;
                         </label>
@@ -308,13 +344,18 @@
                                 </b><br><br>
                                 <div class="col-md-6">
                                     <input type="number" placeholder="USD Rate of Current Request"
+                                           value="{{currencyByService['USD'] | number : 1}}"
                                            title="USD Rate of Current Request" class="form-control ">
                                     <br>
                                     <input type="number" placeholder="EUR Rate of Current Request"
+                                           value="{{currencyByService['EUR'] | number : 1}}"
                                            title="EUR Rate of Current Request" class="form-control ">
                                     <br>
                                     <input type="number" placeholder="Overnight Charge for Guide/Driver"
                                            title="Overnight Charge for Guide/Driver" class="form-control ">
+                                    <br>
+                                    <input type="number" placeholder="Water Expense (Generated Source)" disabled
+                                           title="Water " class="form-control ">
                                 </div>
                                 <div class="col-md-6">
                                     <input type="number" placeholder="Phone Charge for Guide/Driver"
@@ -325,6 +366,9 @@
                                     <br>
                                     <input type="number" placeholder="Admin Cost" title="Admin Cost"
                                            class="form-control ">
+                                    <br>
+                                    <input type="number" placeholder="Tour Leader Expense (Generated Source)" disabled
+                                           title="Tour Leader Expense " class="form-control ">
                                 </div>
                             </div>
                         </div>

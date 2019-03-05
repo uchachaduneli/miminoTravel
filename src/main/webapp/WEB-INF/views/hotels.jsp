@@ -109,6 +109,7 @@
             $scope.req.doublePrice = $scope.request.doublePrice;
             $scope.req.triplePrice = $scope.request.triplePrice;
             $scope.req.singleSupply = $scope.request.singleSupply;
+            $scope.req.family = $scope.request.family;
             $scope.req.starsCount = $scope.request.starsCount;
             $scope.req.nameEn = $scope.request.nameEn;
             $scope.req.nameGe = $scope.request.nameGe;
@@ -231,7 +232,9 @@
                         </tr>
                         <tr>
                             <th class="text-right">Currency</th>
-                            <td>{{slcted.currency == 2 ? 'USD':(slcted.currency == 3 ? 'EUR':'')}}</td>
+                            <td>{{slcted.currency == 2 ? 'USD':(slcted.currency == 3 ? 'EUR':(slcted.currency == 4 ?
+                                'GEL':''))}}
+                            </td>
                         </tr>
                         <tr>
                             <th class="text-right">Web Page</th>
@@ -308,6 +311,10 @@
                         <tr>
                             <th class="text-right">TriplePrice</th>
                             <td>{{slcted.triplePrice}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Family</th>
+                            <td>{{slcted.family}}</td>
                         </tr>
                         <tr>
                             <th class="text-right">SingleSupply</th>
@@ -431,6 +438,7 @@
                                 <select class="form-control" ng-model="request.currency" required>
                                     <option ng-selected="2 === request.currency" value="2"> USD</option>
                                     <option ng-selected="3 === request.currency" value="3"> EUR</option>
+                                    <option ng-selected="3 === request.currency" value="4"> GEL</option>
                                 </select>
                             </div>
                         </div>
@@ -566,6 +574,13 @@
                             <label class="control-label col-sm-3">TriplePrice</label>
                             <div class="col-sm-9">
                                 <input type="text" ng-model="request.triplePrice" required
+                                       class="form-control input-sm">
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3">Family</label>
+                            <div class="col-sm-9">
+                                <input type="text" ng-model="request.family" required
                                        class="form-control input-sm">
                             </div>
                         </div>

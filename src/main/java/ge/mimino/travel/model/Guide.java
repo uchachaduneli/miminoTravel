@@ -56,7 +56,7 @@ public class Guide {
   }
 
   @OneToMany(fetch = FetchType.EAGER, mappedBy = "guide", orphanRemoval = true, cascade = CascadeType.ALL)
-  @OrderBy("id")
+  @OrderBy("from")
   public Set<GuidePrices> getPrices() {
     return prices;
   }

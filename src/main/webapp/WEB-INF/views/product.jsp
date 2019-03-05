@@ -214,10 +214,17 @@
 
             function getNonstandarts(res) {
                 $scope.nonstandarts = res.data;
-                $('#loadingModal').modal('hide');
             }
 
             ajaxCall($http, "nonstandarts/get-nonstandart-services?start=0&limit=99999", {}, getNonstandarts);
+
+            function getGuides(res) {
+                $scope.guides = res.data;
+                console.log(res.data);
+                $('#loadingModal').modal('hide');
+            }
+
+            ajaxCall($http, "guides/get-guides?start=0&limit=99999", {}, getGuides);
         };
 
         $scope.loadLists();
@@ -248,6 +255,19 @@
             console.log($scope.transportDaysList);
 
             ajaxCall($http, "requests/update-transport-days?reqId=" + $scope.request.id + "&checkedDays=" + $scope.transportDaysList.join(','), null, resFunc);
+        }
+        $scope.saveGuidesDaysList = function () {
+            // function resFunc(res) {
+            //     if (res.errorCode == 0) {
+            //         successMsg('Operation Successfull');
+            //     } else {
+            //         errorMsg('Operation Failed');
+            //     }
+            // }
+            //
+            // console.log($scope.transportDaysList);
+            //
+            // ajaxCall($http, "requests/update-transport-days?reqId=" + $scope.request.id + "&checkedDays=" + $scope.transportDaysList.join(','), null, resFunc);
         }
 
         $scope.save = function () {
@@ -612,6 +632,43 @@
                                    checklist-model="transportDaysList" checklist-value="t">&nbsp; Day -
                             {{t}}&nbsp;&nbsp;
                         </label>
+
+                        <hr/>
+
+                        <a class="btn btn-app">
+                            <i class="fa fa-blind"></i> Guides
+                        </a>
+
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Language</th>
+                                <th>Tourists Count(From <--> To) : Price</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="r in guides">
+                                <td>{{r.id}}</td>
+                                <td>{{r.name}}</td>
+                                <td>{{r.language.name}}</td>
+                                <td>
+                                    <ul>
+                                        <li ng-repeat="v in r.prices">{{v.from}} <--> {{v.to}} : {{v.amount}}</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <label ng-repeat="t in daysList | limitTo:request.daysCount"
+                               style="display: inline !important; margin-left: 10px;"
+                               class="{{checkInList(t, guidesDaysList) > 0 ? 'markAsSelected':''}}">
+                            <input type="checkbox" id="daysListchecks2{{t.id}}"
+                                   ng-click="saveGuidesDaysList()"
+                                   checklist-model="guidesDaysList" checklist-value="t">&nbsp; Day -
+                            {{t}}&nbsp;&nbsp;
+                        </label>
                     </div>
                 </div>
             </div>
@@ -736,6 +793,7 @@
 
                                     <div id="collapsibleDiv{{t.id}}" class="radio text-right collapse">
                                         <label><input type="radio" ng-model="combSights[t.id].photoOrVisit" value="1"
+                                                      ng-init="combSights[t.id].photoOrVisit == undefined ? combSights[t.id].photoOrVisit = 1 :''"
                                                       ng-change="sightPhotoVisithandler(combSights[t.id].photoOrVisit, t.id)"
                                                       class="input-sm">Visit</label>&nbsp;
                                         <label><input type="radio" ng-model="combSights[t.id].photoOrVisit" value="2"
