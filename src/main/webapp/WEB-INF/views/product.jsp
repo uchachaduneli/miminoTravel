@@ -455,10 +455,17 @@
             $scope.restaurantRow.push(size + 1);
         };
 
+        $scope.markVisitAsDefault = function (sightId) {
+            if ($scope.checkInList(sightId, $scope.product.sights) > 0) {
+                $scope.combSights[sightId] = {photoOrVisit: 1, id: sightId};
+            }
+        };
+
         $scope.sightPhotoVisithandler = function (val, sightId) {
             var slcted = $filter('filter')($scope.product.sights, sightId, true);
             if (slcted != undefined && slcted.length > 0) {
                 $scope.combSights[sightId].id = sightId;
+
             } else {
                 errorMsg('Please Check Current Sight At First!');
                 $scope.combSights[sightId] = undefined;
@@ -507,7 +514,8 @@
             }
         };
 
-    }]);
+    }])
+    ;
 </script>
 <style>
     #myBtn {
@@ -662,8 +670,8 @@
                             </tbody>
                         </table>
                         <label ng-repeat="t in daysList | limitTo:request.daysCount"
-                               style="display: inline !important; margin-left: 10px;"
-                               class="{{checkInList(t, guidesDaysList) > 0 ? 'markAsSelected':''}}">
+                               style="display: inline !important; margin-left: 10px;">
+                            <%--< class="{{checkInList(t, guidesDaysList) > 0 ? 'markAsSelected':''}}">--%>
                             <input type="checkbox" id="daysListchecks2{{t.id}}"
                                    ng-click="saveGuidesDaysList()"
                                    checklist-model="guidesDaysList" checklist-value="t">&nbsp; Day -
@@ -720,56 +728,6 @@
                         </div>
                     </div>
                 </div>
-
-                <%--<div class="panel panel-default">--%>
-                <%--<div class="panel-heading">--%>
-                <%--<a class="btn btn-app">--%>
-                <%--<i class="fa fa-map-marker"></i> Places--%>
-                <%--</a>--%>
-                <%--<div class="progress">--%>
-                <%--<div class="progress-bar {{$index %2 == 0 ? 'progress-bar-success':'progress-bar-primary'}}"--%>
-                <%--role="progressbar" ng-repeat="key in distances"--%>
-                <%--style="{{'width:'+100/distances.length+'%;'}}">--%>
-                <%--{{key}}--%>
-                <%--</div>--%>
-                <%--</div>--%>
-                <%--Sum Of Day({{daysList[dayIndex]}}) Distance: {{distanceSum}} Kilometers--%>
-                <%--</div>--%>
-                <%--<div class="panel-body">--%>
-                <%--<div class="form-group col-sm-12 ">--%>
-                <%--<div class="col-sm-12">--%>
-                <%--<div class="form-group" ng-repeat="r in placeRow">--%>
-                <%--<div class="col-sm-1 text-right text-bold">{{$index +1}})</div>--%>
-                <%--<div class="col-sm-6" id="divId_{{r}}">--%>
-                <%--<select class="form-control input-sm" ng-change="searchByPlace1()"--%>
-                <%--ng-model="choosedPlaces[r - 1].id">--%>
-                <%--<option ng-repeat="c in places" value="{{c.id}}" ng-value="c.id"--%>
-                <%--ng-selected="c.id === choosedPlaces[r - 1].id">--%>
-                <%--{{c.id}}. {{c.nameEn}}--%>
-                <%--</option>--%>
-                <%--</select>--%>
-                <%--</div>--%>
-                <%--<div class="col-sm-1">--%>
-                <%--<div class="col-md-1" ng-show="$index == 0">--%>
-                <%--<a class="btn btn-sm row" style="vertical-align: bottom;">--%>
-                <%--<span class="fa fa-plus" ng-click="addPlaceRow()"></span>--%>
-                <%--</a>--%>
-                <%--</div>--%>
-                <%--<div class="col-md-1" ng-show="$index > 0">--%>
-                <%--<a class="btn btn-sm row">--%>
-                <%--<span class="fa fa-trash"--%>
-                <%--ng-click="removePlaceRow($index)"></span>--%>
-                <%--</a>--%>
-                <%--</div>--%>
-                <%--</div>--%>
-                <%--<div class="col-sm-4"></div>--%>
-                <%--<hr class="col-sm-12"/>--%>
-                <%--</div>--%>
-                <%--</div>--%>
-                <%--</div>--%>
-                <%--</div>--%>
-                <%--</div>--%>
-
                 <div class="panel panel-info ">
                     <div class="panel-heading">
                         <a class="btn btn-app">
@@ -783,6 +741,7 @@
                                        class="col-sm-3 panel {{checkInList(t.id, product.sights) > 0 ? 'markAsSelected':''}}">
 
                                     <input type="checkbox" id="sightschecks{{t.id}}"
+                                           ng-click="markVisitAsDefault(t.id)"
                                            checklist-model="product.sights" checklist-value="t.id">&nbsp;
                                     {{t.nameEn}}
 
@@ -793,8 +752,6 @@
 
                                     <div id="collapsibleDiv{{t.id}}" class="radio text-right collapse">
                                         <label><input type="radio" ng-model="combSights[t.id].photoOrVisit" value="1"
-                                                      ng-init="combSights[t.id].photoOrVisit == undefined ? combSights[t.id].photoOrVisit = 1 :''"
-                                                      ng-change="sightPhotoVisithandler(combSights[t.id].photoOrVisit, t.id)"
                                                       class="input-sm">Visit</label>&nbsp;
                                         <label><input type="radio" ng-model="combSights[t.id].photoOrVisit" value="2"
                                                       ng-change="sightPhotoVisithandler(combSights[t.id].photoOrVisit, t.id)"
