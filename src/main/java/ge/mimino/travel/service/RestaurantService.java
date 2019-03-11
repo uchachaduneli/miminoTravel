@@ -4,9 +4,11 @@ package ge.mimino.travel.service;
 import ge.mimino.travel.dao.ParamValuePair;
 import ge.mimino.travel.dao.RestaurantDAO;
 import ge.mimino.travel.dto.RestaurantDTO;
+import ge.mimino.travel.dto.RestaurantMealCatsDTO;
 import ge.mimino.travel.dto.RestaurantPackageDTO;
 import ge.mimino.travel.model.Place;
 import ge.mimino.travel.model.Restaurant;
+import ge.mimino.travel.model.RestaurantMealCategories;
 import ge.mimino.travel.model.RestaurantPackage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,17 @@ public class RestaurantService {
 
     public List<RestaurantDTO> getRestaurantsByPlaces(List<Integer> placeIds) {
         return RestaurantDTO.parseToList(restaurantDAO.getRestaurantsByPlaces(placeIds));
+    }
+
+    @Transactional(rollbackFor = Throwable.class)
+    public void saveMealCats(List<RestaurantMealCatsDTO> request, Integer restaurantId) throws Exception {
+
+        restaurantDAO.removeRestaurantMealCats(restaurantId);
+        if (request != null && !request.isEmpty()) {
+            for (RestaurantMealCatsDTO pack : request) {
+                restaurantDAO.create(new RestaurantMealCategories(restaurantId, pack.getCategoryName(), pack.getPrice(), pack.getGroup()));
+            }
+        }
     }
 
     @Transactional(rollbackFor = Throwable.class)
@@ -82,6 +95,12 @@ public class RestaurantService {
         List<ParamValuePair> paramValues = new ArrayList<>();
         paramValues.add(new ParamValuePair("restaurantId", restaurantId));
         return RestaurantPackageDTO.parseToList(restaurantDAO.getAllByParamValue(RestaurantPackage.class, paramValues, null));
+    }
+
+    public List<RestaurantMealCatsDTO> getRestaurantMealCats(int restaurantId) {
+        List<ParamValuePair> paramValues = new ArrayList<>();
+        paramValues.add(new ParamValuePair("restaurantId", restaurantId));
+        return RestaurantMealCatsDTO.parseToList(restaurantDAO.getAllByParamValue(RestaurantMealCategories.class, paramValues, null));
     }
 
 }

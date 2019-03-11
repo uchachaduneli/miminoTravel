@@ -3,6 +3,7 @@ package ge.mimino.travel.dao;
 
 import ge.mimino.travel.dto.RestaurantDTO;
 import ge.mimino.travel.model.Restaurant;
+import ge.mimino.travel.model.RestaurantMealCategories;
 import ge.mimino.travel.model.RestaurantPackage;
 import org.springframework.stereotype.Repository;
 
@@ -65,6 +66,11 @@ public class RestaurantDAO extends AbstractDAO {
 
     public int removeRestaurantPackages(Integer restaurantId) {
         return entityManager.createQuery("delete from " + RestaurantPackage.class.getSimpleName()
+                + " c where c.restaurantId=" + restaurantId).executeUpdate();
+    }
+
+    public int removeRestaurantMealCats(Integer restaurantId) {
+        return entityManager.createQuery("delete from " + RestaurantMealCategories.class.getSimpleName()
                 + " c where c.restaurantId=" + restaurantId).executeUpdate();
     }
 

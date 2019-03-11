@@ -42,6 +42,7 @@
     <script src="resources/js/checklist-model.js"></script>
     <script src="resources/js/ng-file-upload-shim.js"></script>
     <script src="resources/js/ng-file-upload.js"></script>
+
     <script>
         $(document).ready(function () {
             $(".datepicker").datepicker({language: 'ka'});

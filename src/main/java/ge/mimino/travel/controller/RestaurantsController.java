@@ -1,6 +1,7 @@
 package ge.mimino.travel.controller;
 
 import ge.mimino.travel.dto.RestaurantDTO;
+import ge.mimino.travel.dto.RestaurantMealCatsDTO;
 import ge.mimino.travel.misc.Response;
 import ge.mimino.travel.service.FileService;
 import ge.mimino.travel.service.RestaurantService;
@@ -34,10 +35,23 @@ public class RestaurantsController {
         return Response.withSuccess(restaurantService.getRestaurants(start, limit, request));
     }
 
+    @RequestMapping("/get-restaurant-meal-cats")
+    @ResponseBody
+    private Response getRestaurantMealCats(@RequestParam("id") int restaurantId) throws Exception {
+        return Response.withSuccess(restaurantService.getRestaurantMealCats(restaurantId));
+    }
+
     @RequestMapping({"/save"})
     @ResponseBody
     public Response saveUser(@RequestBody RestaurantDTO request) throws Exception {
         return Response.withSuccess(RestaurantDTO.parse(restaurantService.save(request)));
+    }
+
+    @RequestMapping({"/save-meal-categories"})
+    @ResponseBody
+    public Response saveMealCats(@RequestParam("restaurantId") Integer restaurantId, @RequestBody List<RestaurantMealCatsDTO> request) throws Exception {
+        restaurantService.saveMealCats(request, restaurantId);
+        return Response.ok();
     }
 
     @RequestMapping({"/delete"})
