@@ -75,8 +75,8 @@ public class RestaurantService {
 
         restaurantDAO.removeRestaurantPackages(obj.getId());
         if (request.getRestaurantPackages() != null && !request.getRestaurantPackages().isEmpty()) {
-            for (String pack : request.getRestaurantPackages()) {
-                restaurantDAO.create(new RestaurantPackage(obj.getId(), pack));
+            for (RestaurantPackageDTO pack : request.getRestaurantPackages()) {
+                restaurantDAO.create(new RestaurantPackage(obj.getId(), pack.getName(), pack.getPrice()));
             }
         }
 
@@ -97,9 +97,12 @@ public class RestaurantService {
         return RestaurantPackageDTO.parseToList(restaurantDAO.getAllByParamValue(RestaurantPackage.class, paramValues, null));
     }
 
-    public List<RestaurantMealCatsDTO> getRestaurantMealCats(int restaurantId) {
+    public List<RestaurantMealCatsDTO> getRestaurantMealCats(int restaurantId, String group) {
         List<ParamValuePair> paramValues = new ArrayList<>();
         paramValues.add(new ParamValuePair("restaurantId", restaurantId));
+        if (group != null && group.length() > 0) {
+            paramValues.add(new ParamValuePair("group", group));
+        }
         return RestaurantMealCatsDTO.parseToList(restaurantDAO.getAllByParamValue(RestaurantMealCategories.class, paramValues, null));
     }
 

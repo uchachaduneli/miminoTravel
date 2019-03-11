@@ -100,8 +100,8 @@
 
                     angular.forEach(res.data, function (v, k) {
                         $scope.packageRow.push(k + 1);
-                        $scope.request.restaurantPackages.push(v.name);
-                        $scope.slcted.restPacks.push(v.name);
+                        $scope.request.restaurantPackages.push(v);
+                        $scope.slcted.restPacks.push(v);
                     });
 
                     if ($scope.request.restaurantPackages.length === 0) {
@@ -126,7 +126,7 @@
                     }
                 }
 
-                ajaxCall($http, "restaurants/get-restaurant-meal-cats?id=" + $scope.slcted.id, null, getData);
+                ajaxCall($http, "restaurants/get-restaurant-meal-cats?id=" + $scope.slcted.id + "&group=", null, getData);
             };
 
             $scope.addDynamicRow = function () {
@@ -425,7 +425,7 @@
                             <td>
                                 <ul>
                                     <li ng-repeat="item in slcted.restPacks track by $index">
-                                        {{item}}
+                                        {{item.name}} - {{item.price}}₾
                                     </li>
                                 </ul>
                             </td>
@@ -572,9 +572,13 @@
                             <label class="control-label col-sm-3">Packages</label>
                             <div class="col-sm-9">
                                 <div class="form-group" ng-repeat="r in packageRow">
-                                    <div class="col-sm-11">
-                                        <input ng-model="request.restaurantPackages[r-1]" type="text"
+                                    <div class="col-sm-7">
+                                        <input ng-model="request.restaurantPackages[r-1].name" type="text"
                                                placeholder="Package Desc" class="form-control input-sm"/>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input ng-model="request.restaurantPackages[r-1].price" type="text"
+                                               placeholder="Price" class="form-control input-sm"/>
                                     </div>
                                     <div class="col-sm-1">
                                         <div class="col-md-1" ng-show="$index == 0">

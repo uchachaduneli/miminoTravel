@@ -24,7 +24,7 @@ public class RestaurantDTO {
     private String descriptionSp;
     private String descriptionPo;
     private String descriptionRu;
-    private List<String> restaurantPackages;
+    private List<RestaurantPackageDTO> restaurantPackages;
 
 
     public static RestaurantDTO parse(Restaurant record) {
@@ -58,11 +58,11 @@ public class RestaurantDTO {
         return list;
     }
 
-    public List<String> getRestaurantPackages() {
+    public List<RestaurantPackageDTO> getRestaurantPackages() {
         return restaurantPackages;
     }
 
-    public void setRestaurantPackages(List<String> restaurantPackages) {
+    public void setRestaurantPackages(List<RestaurantPackageDTO> restaurantPackages) {
         this.restaurantPackages = restaurantPackages;
     }
 

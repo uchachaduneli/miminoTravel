@@ -37,8 +37,8 @@ public class RestaurantsController {
 
     @RequestMapping("/get-restaurant-meal-cats")
     @ResponseBody
-    private Response getRestaurantMealCats(@RequestParam("id") int restaurantId) throws Exception {
-        return Response.withSuccess(restaurantService.getRestaurantMealCats(restaurantId));
+    private Response getRestaurantMealCats(@RequestParam("id") int restaurantId, @RequestParam("group") String group) throws Exception {
+        return Response.withSuccess(restaurantService.getRestaurantMealCats(restaurantId, group));
     }
 
     @RequestMapping({"/save"})
