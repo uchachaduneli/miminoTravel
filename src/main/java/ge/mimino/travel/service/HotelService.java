@@ -83,8 +83,14 @@ public class HotelService {
             HotelPrices obj = new HotelPrices();
             obj.setHotel(hotel);
             obj.setDate(dt);
-            obj.setFitPrice(request.getFitPrice());
-            obj.setGroupPrice(request.getGroupPrice());
+            obj.setSingleFit(request.getSingleFit());
+            obj.setSingleGroup(request.getSingleGroup());
+            obj.setDoubleFit(request.getDoubleFit());
+            obj.setDoubleGroup(request.getDoubleGroup());
+            obj.setTripleFit(request.getTripleFit());
+            obj.setTripleGroup(request.getTripleGroup());
+            obj.setSingleSupplementFit(request.getSingleFit() - request.getDoubleFit() / 2);
+            obj.setSingleSupplementGroup(request.getSingleGroup() - request.getDoubleGroup() / 2);
             hotelDAO.create(obj);
         }
     }
