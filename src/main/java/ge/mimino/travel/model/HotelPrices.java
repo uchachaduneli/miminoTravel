@@ -1,18 +1,22 @@
 package ge.mimino.travel.model;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "hotel_prices", schema = "mimino")
 public class HotelPrices {
     private Integer id;
-    private String date;
+    private Date date;
     private Hotel hotel;
-    private Double usd;
-    private Double eur;
-    private Double gel;
     private Timestamp createDate;
+    private Double singleFit;
+    private Double singleGroup;
+    private Double doubleFit;
+    private Double doubleGroup;
+    private Double tripleFit;
+    private Double tripleGroup;
 
     @Id
     @Column(name = "id")
@@ -26,12 +30,12 @@ public class HotelPrices {
     }
 
     @Basic
-    @Column(name = "date")
-    public String getDate() {
+    @Column(name = "`date`")
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -46,36 +50,6 @@ public class HotelPrices {
     }
 
     @Basic
-    @Column(name = "usd")
-    public Double getUsd() {
-        return usd;
-    }
-
-    public void setUsd(Double usd) {
-        this.usd = usd;
-    }
-
-    @Basic
-    @Column(name = "eur")
-    public Double getEur() {
-        return eur;
-    }
-
-    public void setEur(Double eur) {
-        this.eur = eur;
-    }
-
-    @Basic
-    @Column(name = "gel")
-    public Double getGel() {
-        return gel;
-    }
-
-    public void setGel(Double gel) {
-        this.gel = gel;
-    }
-
-    @Basic
     @Column(name = "create_date", nullable = false, insertable = false, updatable = false)
     public Timestamp getCreateDate() {
         return createDate;
@@ -83,6 +57,66 @@ public class HotelPrices {
 
     public void setCreateDate(Timestamp createDate) {
         this.createDate = createDate;
+    }
+
+    @Basic
+    @Column(name = "single_fit")
+    public Double getSingleFit() {
+        return singleFit;
+    }
+
+    public void setSingleFit(Double singleFit) {
+        this.singleFit = singleFit;
+    }
+
+    @Basic
+    @Column(name = "single_group")
+    public Double getSingleGroup() {
+        return singleGroup;
+    }
+
+    public void setSingleGroup(Double singleGroup) {
+        this.singleGroup = singleGroup;
+    }
+
+    @Basic
+    @Column(name = "double_fit")
+    public Double getDoubleFit() {
+        return doubleFit;
+    }
+
+    public void setDoubleFit(Double doubleFit) {
+        this.doubleFit = doubleFit;
+    }
+
+    @Basic
+    @Column(name = "double_group")
+    public Double getDoubleGroup() {
+        return doubleGroup;
+    }
+
+    public void setDoubleGroup(Double doubleGroup) {
+        this.doubleGroup = doubleGroup;
+    }
+
+    @Basic
+    @Column(name = "triple_fit")
+    public Double getTripleFit() {
+        return tripleFit;
+    }
+
+    public void setTripleFit(Double tripleFit) {
+        this.tripleFit = tripleFit;
+    }
+
+    @Basic
+    @Column(name = "triple_group")
+    public Double getTripleGroup() {
+        return tripleGroup;
+    }
+
+    public void setTripleGroup(Double tripleGroup) {
+        this.tripleGroup = tripleGroup;
     }
 
 }

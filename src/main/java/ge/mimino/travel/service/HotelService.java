@@ -5,14 +5,19 @@ import ge.mimino.travel.dao.HotelDAO;
 import ge.mimino.travel.dao.ParamValuePair;
 import ge.mimino.travel.dto.HotelDTO;
 import ge.mimino.travel.dto.HotelImagesDTO;
+import ge.mimino.travel.dto.HotelPricesDTO;
 import ge.mimino.travel.model.Hotel;
 import ge.mimino.travel.model.HotelImages;
+import ge.mimino.travel.model.HotelPrices;
 import ge.mimino.travel.model.Place;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -69,6 +74,35 @@ public class HotelService {
         }
 
         return obj;
+    }
+
+    @Transactional(rollbackFor = Throwable.class)
+    public void savePrices(HotelPricesDTO request) throws Exception {
+        Hotel hotel = (Hotel) hotelDAO.find(Hotel.class, request.getHotelId());
+        for (Date dt : getDatesBetween(request.getFrom(), request.getTo())) {
+            HotelPrices obj = new HotelPrices();
+            obj.setHotel(hotel);
+            obj.setDate(dt);
+            obj.setFitPrice(request.getFitPrice());
+            obj.setGroupPrice(request.getGroupPrice());
+            hotelDAO.create(obj);
+        }
+    }
+
+    public List<Date> getDatesBetween(Date startDate, Date endDate) {
+        List<Date> datesInRange = new ArrayList<>();
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(startDate);
+
+        Calendar endCalendar = new GregorianCalendar();
+        endCalendar.setTime(endDate);
+
+        while (calendar.before(endCalendar)) {
+            Date result = new java.sql.Date(calendar.getTime().getTime());
+            datesInRange.add(result);
+            calendar.add(Calendar.DATE, 1);
+        }
+        return datesInRange;
     }
 
     @Transactional(rollbackFor = Throwable.class)

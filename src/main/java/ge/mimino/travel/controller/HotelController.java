@@ -1,6 +1,7 @@
 package ge.mimino.travel.controller;
 
 import ge.mimino.travel.dto.HotelDTO;
+import ge.mimino.travel.dto.HotelPricesDTO;
 import ge.mimino.travel.misc.Response;
 import ge.mimino.travel.service.FileService;
 import ge.mimino.travel.service.HotelService;
@@ -46,6 +47,13 @@ public class HotelController {
     @ResponseBody
     public Response saveUser(@RequestBody HotelDTO request) throws Exception {
         return Response.withSuccess(HotelDTO.parse(hotelService.save(request)));
+    }
+
+    @RequestMapping({"/save-prices"})
+    @ResponseBody
+    public Response saveHotelPrices(@RequestBody HotelPricesDTO request) throws Exception {
+        hotelService.savePrices(request);
+        return Response.ok();
     }
 
     @RequestMapping({"/save-images"})
