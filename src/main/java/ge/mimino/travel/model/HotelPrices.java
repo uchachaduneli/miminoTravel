@@ -5,7 +5,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "hotel_prices", schema = "mimino")
+@Table(name = "hotel_prices", schema = "mimino", catalog = "")
 public class HotelPrices {
     private Integer id;
     private Date date;
@@ -17,6 +17,8 @@ public class HotelPrices {
     private Double doubleGroup;
     private Double tripleFit;
     private Double tripleGroup;
+    private Double singleSupplementFit;
+    private Double singleSupplementGroup;
 
     @Id
     @Column(name = "id")
@@ -119,4 +121,23 @@ public class HotelPrices {
         this.tripleGroup = tripleGroup;
     }
 
+    @Basic
+    @Column(name = "single_supplement_fit")
+    public Double getSingleSupplementFit() {
+        return singleSupplementFit;
+    }
+
+    public void setSingleSupplementFit(Double singleSupplementFit) {
+        this.singleSupplementFit = singleSupplementFit;
+    }
+
+    @Basic
+    @Column(name = "single_supplement_group")
+    public Double getSingleSupplementGroup() {
+        return singleSupplementGroup;
+    }
+
+    public void setSingleSupplementGroup(Double singleSupplementGroup) {
+        this.singleSupplementGroup = singleSupplementGroup;
+    }
 }

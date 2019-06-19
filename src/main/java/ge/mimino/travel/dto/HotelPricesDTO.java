@@ -25,6 +25,8 @@ public class HotelPricesDTO {
     private Double doubleGroup;
     private Double tripleFit;
     private Double tripleGroup;
+    private Double singleSupplementFit;
+    private Double singleSupplementGroup;
 
 
     public static HotelPricesDTO parse(HotelPrices record) {
@@ -39,6 +41,8 @@ public class HotelPricesDTO {
         dto.setTripleFit(record.getTripleFit());
         dto.setTripleGroup(record.getTripleGroup());
         dto.setCreateDate(record.getCreateDate());
+        dto.setSingleSupplementFit(record.getSingleSupplementFit());
+        dto.setSingleSupplementGroup(record.getSingleSupplementGroup());
         return dto;
     }
 
@@ -49,6 +53,22 @@ public class HotelPricesDTO {
             list.add(HotelPricesDTO.parse(record));
         }
         return list;
+    }
+
+    public Double getSingleSupplementFit() {
+        return singleSupplementFit;
+    }
+
+    public void setSingleSupplementFit(Double singleSupplementFit) {
+        this.singleSupplementFit = singleSupplementFit;
+    }
+
+    public Double getSingleSupplementGroup() {
+        return singleSupplementGroup;
+    }
+
+    public void setSingleSupplementGroup(Double singleSupplementGroup) {
+        this.singleSupplementGroup = singleSupplementGroup;
     }
 
     public Integer getId() {
