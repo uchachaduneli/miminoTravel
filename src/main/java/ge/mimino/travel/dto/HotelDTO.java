@@ -11,15 +11,9 @@ import java.util.List;
 public class HotelDTO {
 
     private Integer id;
-    private Double singlePrice;
-    private Double doublePrice;
-    private Double triplePrice;
-    private Double singleSupply;
-    private Double family;
     private String starsCount;
     @JsonSerialize(using = JsonDateTimeSerializeSupport.class)
     private Timestamp createDate;
-
     private String nameEn;
     private String nameGe;
     private String nameFr;
@@ -57,17 +51,12 @@ public class HotelDTO {
         dto.setDescriptionSp(record.getDescriptionSp());
         dto.setDescriptionPo(record.getDescriptionPo());
         dto.setDescriptionRu(record.getDescriptionRu());
-        dto.setSinglePrice(record.getSinglePrice());
-        dto.setDoublePrice(record.getDoublePrice());
-        dto.setTriplePrice(record.getTriplePrice());
-        dto.setSingleSupply(record.getSingleSupply());
         dto.setStarsCount(record.getStarsCount());
         dto.setCreateDate(record.getCreateDate());
         dto.setPlace(PlaceDTO.parse(record.getPlace()));
         dto.setPlaceId(record.getPlace().getId());
         dto.setLink(record.getLink());
         dto.setCurrency(record.getCurrency());
-        dto.setFamily(record.getFamily());
         return dto;
     }
 
@@ -80,84 +69,12 @@ public class HotelDTO {
         return list;
     }
 
-    public Double getFamily() {
-        return family;
-    }
-
-    public void setFamily(Double family) {
-        this.family = family;
-    }
-
-    public Integer getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Integer currency) {
-        this.currency = currency;
-    }
-
-    public String getLink() {
-        return link;
-    }
-
-    public void setLink(String link) {
-        this.link = link;
-    }
-
-    public PlaceDTO getPlace() {
-        return place;
-    }
-
-    public void setPlace(PlaceDTO place) {
-        this.place = place;
-    }
-
-    public Integer getPlaceId() {
-        return placeId;
-    }
-
-    public void setPlaceId(Integer placeId) {
-        this.placeId = placeId;
-    }
-
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Double getSinglePrice() {
-        return singlePrice;
-    }
-
-    public void setSinglePrice(Double singlePrice) {
-        this.singlePrice = singlePrice;
-    }
-
-    public Double getDoublePrice() {
-        return doublePrice;
-    }
-
-    public void setDoublePrice(Double doublePrice) {
-        this.doublePrice = doublePrice;
-    }
-
-    public Double getTriplePrice() {
-        return triplePrice;
-    }
-
-    public void setTriplePrice(Double triplePrice) {
-        this.triplePrice = triplePrice;
-    }
-
-    public Double getSingleSupply() {
-        return singleSupply;
-    }
-
-    public void setSingleSupply(Double singleSupply) {
-        this.singleSupply = singleSupply;
     }
 
     public String getStarsCount() {
@@ -286,5 +203,37 @@ public class HotelDTO {
 
     public void setDescriptionRu(String descriptionRu) {
         this.descriptionRu = descriptionRu;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public PlaceDTO getPlace() {
+        return place;
+    }
+
+    public void setPlace(PlaceDTO place) {
+        this.place = place;
+    }
+
+    public Integer getPlaceId() {
+        return placeId;
+    }
+
+    public void setPlaceId(Integer placeId) {
+        this.placeId = placeId;
+    }
+
+    public Integer getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Integer currency) {
+        this.currency = currency;
     }
 }

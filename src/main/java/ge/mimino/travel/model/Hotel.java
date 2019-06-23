@@ -7,11 +7,6 @@ import java.sql.Timestamp;
 @Table(name = "hotel")
 public class Hotel {
     private Integer id;
-    private Double singlePrice;
-    private Double doublePrice;
-    private Double triplePrice;
-    private Double singleSupply;
-    private Double family;
     private String starsCount;
     private Timestamp createDate;
     private String nameEn;
@@ -41,46 +36,6 @@ public class Hotel {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    @Basic
-    @Column(name = "single_price", nullable = true, precision = 0)
-    public Double getSinglePrice() {
-        return singlePrice;
-    }
-
-    public void setSinglePrice(Double singlePrice) {
-        this.singlePrice = singlePrice;
-    }
-
-    @Basic
-    @Column(name = "double_price", nullable = true, precision = 0)
-    public Double getDoublePrice() {
-        return doublePrice;
-    }
-
-    public void setDoublePrice(Double doublePrice) {
-        this.doublePrice = doublePrice;
-    }
-
-    @Basic
-    @Column(name = "triple_price", nullable = true, precision = 0)
-    public Double getTriplePrice() {
-        return triplePrice;
-    }
-
-    public void setTriplePrice(Double triplePrice) {
-        this.triplePrice = triplePrice;
-    }
-
-    @Basic
-    @Column(name = "single_supply", nullable = true, precision = 0)
-    public Double getSingleSupply() {
-        return singleSupply;
-    }
-
-    public void setSingleSupply(Double singleSupply) {
-        this.singleSupply = singleSupply;
     }
 
     @Basic
@@ -273,13 +228,4 @@ public class Hotel {
         this.currency = currency;
     }
 
-    @Basic
-    @Column(name = "family", nullable = true, precision = 0)
-    public Double getFamily() {
-        return family;
-    }
-
-    public void setFamily(Double family) {
-        this.family = family;
-    }
 }

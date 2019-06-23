@@ -14,6 +14,7 @@
         $scope.page = 1;
         $scope.limit = "10";
         $scope.request = {};
+        $scope.price = {};
         $scope.srchCase = {};
         $scope.stars = ['*', '**', '***', '****', '*****'];
         $scope.imageNames = [];
@@ -105,11 +106,43 @@
             $scope.req = {};
 
             $scope.req.id = $scope.request.id;
-            $scope.req.singlePrice = $scope.request.singlePrice;
-            $scope.req.doublePrice = $scope.request.doublePrice;
-            $scope.req.triplePrice = $scope.request.triplePrice;
-            $scope.req.singleSupply = $scope.request.singleSupply;
-            $scope.req.family = $scope.request.family;
+            $scope.req.starsCount = $scope.request.starsCount;
+            $scope.req.nameEn = $scope.request.nameEn;
+            $scope.req.nameGe = $scope.request.nameGe;
+            $scope.req.nameFr = $scope.request.nameFr;
+            $scope.req.nameIt = $scope.request.nameIt;
+            $scope.req.nameSp = $scope.request.nameSp;
+            $scope.req.namePo = $scope.request.namePo;
+            $scope.req.nameRu = $scope.request.nameRu;
+            $scope.req.descriptionEn = $scope.request.descriptionEn;
+            $scope.req.descriptionGe = $scope.request.descriptionGe;
+            $scope.req.descriptionFr = $scope.request.descriptionFr;
+            $scope.req.descriptionIt = $scope.request.descriptionIt;
+            $scope.req.descriptionSp = $scope.request.descriptionSp;
+            $scope.req.descriptionPo = $scope.request.descriptionPo;
+            $scope.req.descriptionRu = $scope.request.descriptionRu;
+            $scope.req.placeId = $scope.request.placeId;
+            $scope.req.link = $scope.request.link;
+            $scope.req.currency = $scope.request.currency;
+
+            console.log(angular.toJson($scope.req));
+            ajaxCall($http, "hotels/save", angular.toJson($scope.req), resFunc);
+        };
+
+        $scope.savePrices = function () {
+
+            function resFunc(res) {
+                if (res.errorCode == 0) {
+                    successMsg('Operation Successfull');
+                    closeModal('editPrices');
+                } else {
+                    errorMsg('Operation Failed');
+                }
+            }
+
+            $scope.req = {};
+
+            $scope.req.id = $scope.request.id;
             $scope.req.starsCount = $scope.request.starsCount;
             $scope.req.nameEn = $scope.request.nameEn;
             $scope.req.nameGe = $scope.request.nameGe;
@@ -299,26 +332,6 @@
                         <tr>
                             <th class="text-right">Description Russian</th>
                             <td>{{slcted.descriptionRu}}</td>
-                        </tr>
-                        <tr>
-                            <th class="text-right">SinglePrice</th>
-                            <td>{{slcted.singlePrice}}</td>
-                        </tr>
-                        <tr>
-                            <th class="text-right">DoublePrice</th>
-                            <td>{{slcted.doublePrice}}</td>
-                        </tr>
-                        <tr>
-                            <th class="text-right">TriplePrice</th>
-                            <td>{{slcted.triplePrice}}</td>
-                        </tr>
-                        <tr>
-                            <th class="text-right">Family</th>
-                            <td>{{slcted.family}}</td>
-                        </tr>
-                        <tr>
-                            <th class="text-right">SingleSupply</th>
-                            <td>{{slcted.singleSupply}}</td>
                         </tr>
                         <tr>
                             <th class="text-right">Stars</th>
@@ -617,6 +630,85 @@
     </div>
 </div>
 
+
+<div class="modal fade bs-example-modal-lg not-printable" id="editPrices" role="dialog"
+     aria-labelledby="editPricesModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="editPricesModalLabel">Fill The Hotel Price Information</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <form class="form-horizontal" name="ediFormName">
+
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-2">From - </label>
+                            <div class="col-sm-4">
+                                <input type="text" ng-model="price.from"
+                                       required class="form-control input-sm dateInput">
+                            </div>
+                            <label class="control-label col-sm-2 ">To - </label>
+                            <div class="col-sm-4">
+                                <input type="text" ng-model="price.to" required
+                                       class="form-control input-sm dateInput">
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3"> </label>
+                            <div class="form-group col-sm-9 ">
+                                <div class="col-sm-9">
+                                    <label class="control-label col-sm-6">Fit</label>
+                                    <label class="control-label col-sm-6">Group</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3"> DoublePrice </label>
+                            <div class="form-group col-sm-9 ">
+                                <div class="col-sm-9">
+                                    <label class="control-label col-sm-6">Fit</label>
+                                    <label class="control-label col-sm-6">Group</label>
+                                </div>
+                            </div>
+                        </div>
+                        <%--<div class="form-group col-sm-10 ">--%>
+                        <%--<label class="control-label col-sm-3">DoublePrice</label>--%>
+                        <%--<div class="col-sm-9">--%>
+                        <input type="text" ng-keyup="calculateSingleSupply()" ng-model="price.doublePrice" class="form-control input-sm">
+                        <%--</div>--%>
+                        <%--</div>--%>
+                        <%--<div class="form-group col-sm-10 ">--%>
+                        <%--<label class="control-label col-sm-3">TriplePrice</label>--%>
+                        <%--<div class="col-sm-9">--%>
+                        <%--<input type="text" ng-model="price.triplePrice" required--%>
+                        <%--class="form-control input-sm">--%>
+                        <%--</div>--%>
+                        <%--</div>--%>
+                        <%--<div class="form-group col-sm-10 ">--%>
+                        <%--<label class="control-label col-sm-3">SingleSupply</label>--%>
+                        <%--<div class="col-sm-9">--%>
+                        <%--<input type="text" disabled="true" ng-model="price.singleSupply" required--%>
+                        <%--class="form-control input-sm">--%>
+                        <%--</div>--%>
+                        <%--</div>--%>
+                        <div class="form-group col-sm-10"></div>
+                        <div class="form-group col-sm-10"></div>
+                        <div class="form-group col-sm-12 text-center">
+                            <a class="btn btn-app" ng-click="savePrices()">
+                                <i class="fa fa-save"></i> Add
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row not-printable">
     <div class="col-xs-12">
         <div class="box">
@@ -680,10 +772,6 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <th>SinglePrice</th>
-                            <th>DoublePrice</th>
-                            <th>TriplePrice</th>
-                            <th>SingleSupply</th>
                             <th>StarsCount</th>
                             <th class="col-md-2 text-center">Action</th>
                         </tr>
@@ -692,10 +780,6 @@
                         <tr ng-repeat="r in list" ng-dblclick="handleDoubleClick(r.id)">
                             <td>{{r.id}}</td>
                             <td>{{r.nameEn}}</td>
-                            <td>{{r.singlePrice}}</td>
-                            <td>{{r.doublePrice}}</td>
-                            <td>{{r.triplePrice}}</td>
-                            <td>{{r.singleSupply}}</td>
                             <td>{{r.starsCount}}</td>
                             <td class="text-center">
                                 <a ng-click="showDetails(r.id)" data-toggle="modal" title="Details"
@@ -706,6 +790,11 @@
                                 <a ng-click="edit(r.id)" data-toggle="modal" data-target="#editModal"
                                    class="btn btn-xs">
                                     <i class="fa fa-pencil"></i>&nbsp;Edit
+                                </a>&nbsp;&nbsp;
+
+                                <a ng-click="edit(r.id)" data-toggle="modal" data-target="#editPrices"
+                                   class="btn btn-xs">
+                                    <i class="fa fa-usd"></i>&nbsp;Prices
                                 </a>&nbsp;&nbsp;
 
                                 <a ng-click="showDetails(r.id)" data-toggle="modal" data-target="#imageModal"

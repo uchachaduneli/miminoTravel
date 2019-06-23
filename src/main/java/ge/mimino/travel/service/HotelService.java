@@ -38,11 +38,9 @@ public class HotelService {
         return HotelDTO.parseToList(hotelDAO.getHotelsByPlaces(placeIds, stars));
     }
 
-//    SELECT * FROM hotel_prices
-//    WHERE
-//    id IN (SELECT MAX(id) FROM hotel_prices GROUP BY hotel_id )
-//    AND hotel_id=3
-//    AND `date` BETWEEN
+    public List<HotelPricesDTO> getHotelPraces(Integer hotelId, Date fromDate, Date toDate) {
+        return HotelPricesDTO.parseToList(hotelDAO.getHotelPraces(hotelId, fromDate, toDate));
+    }
 
     @Transactional(rollbackFor = Throwable.class)
     public Hotel save(HotelDTO request) throws Exception {
