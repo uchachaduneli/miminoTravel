@@ -46,7 +46,6 @@ public class HotelService {
     public Hotel save(HotelDTO request) throws Exception {
 
         Hotel obj = request.getId() != null ? ((Hotel) hotelDAO.find(Hotel.class, request.getId())) : new Hotel();
-        obj.setDoublePrice(request.getDoublePrice());
         obj.setNameEn(request.getNameEn());
         obj.setNameGe(request.getNameGe());
         obj.setNameFr(request.getNameFr());
@@ -61,10 +60,6 @@ public class HotelService {
         obj.setDescriptionSp(request.getDescriptionSp());
         obj.setDescriptionPo(request.getDescriptionPo());
         obj.setDescriptionRu(request.getDescriptionRu());
-        obj.setSinglePrice(request.getSinglePrice());
-        obj.setTriplePrice(request.getTriplePrice());
-        obj.setFamily(request.getFamily());
-        obj.setSingleSupply(request.getSingleSupply());
         obj.setStarsCount(request.getStarsCount());
         obj.setLink(request.getLink());
         obj.setCurrency(request.getCurrency());
