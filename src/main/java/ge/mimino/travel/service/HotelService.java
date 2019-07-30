@@ -38,7 +38,7 @@ public class HotelService {
         return HotelDTO.parseToList(hotelDAO.getHotelsByPlaces(placeIds, stars));
     }
 
-    public List<HotelPricesDTO> getHotelPraces(Integer hotelId, Date fromDate, Date toDate) {
+    public List<HotelPricesDTO> getHotelPrices(Integer hotelId, Date fromDate, Date toDate) {
         return HotelPricesDTO.parseToList(hotelDAO.getHotelPraces(hotelId, fromDate, toDate));
     }
 

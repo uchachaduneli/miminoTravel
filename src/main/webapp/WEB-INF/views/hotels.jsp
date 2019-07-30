@@ -63,6 +63,25 @@
             }
         }
 
+        $scope.showPrices = function () {
+            if ($scope.price.from == undefined || $scope.price.to == undefined) {
+                errorMsg('Fill From - To Date fields');
+                return;
+            } else {
+                $scope.price.from = $scope.price.from.split(/\//).reverse().join('-');
+                $scope.price.to = $scope.price.to.split(/\//).reverse().join('-');
+            }
+            $('#loadingModal').modal('show');
+            $scope.prices = [];
+
+            function getPricesData(res) {
+                $scope.prices = res.data;
+                $('#loadingModal').modal('hide');
+            }
+
+            ajaxCall($http, "hotels/get-hotel-prices?hotelId=" + $scope.request.id + "&fromDate=" + $scope.price.from + "&toDate=" + $scope.price.to, null, getPricesData);
+        }
+
         $scope.showDetails = function (id) {
             if (id != undefined) {
                 var selected = $filter('filter')($scope.list, {id: id}, true);
@@ -652,7 +671,8 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="editPricesModalLabel">Fill The Hotel Price Information</h4>
+                <h4 class="modal-title" id="editPricesModalLabel">Fill The Hotel(<b> {{request.nameEn}}'s</b> ) Price
+                    Information</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -737,7 +757,7 @@
                         <div class="form-group col-sm-10"></div>
                         <div class="form-group col-sm-12 text-center">
                             <a class="btn btn-app" ng-click="savePrices()">
-                                <i class="fa fa-save"></i> Add
+                                <i class="fa fa-save"></i> Save
                             </a>
                         </div>
                     </form>
@@ -746,6 +766,90 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade bs-example-modal-lg not-printable" id="listPrices" role="dialog"
+     aria-labelledby="listPricesModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="listPricesModalLabel">Prices List For Hotel(<b> {{request.nameEn}}</b> )
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <form class="form-horizontal" name="ediFormName">
+
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-2">From - </label>
+                            <div class="col-sm-3">
+                                <input type="text" ng-model="price.from" placeholder="Enter START Date"
+                                       required class="form-control input-sm dateInput">
+                            </div>
+                            <label class="control-label col-sm-2 ">To - </label>
+                            <div class="col-sm-3">
+                                <input type="text" ng-model="price.to" required placeholder="Enter END Date"
+                                       class="form-control input-sm dateInput">
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-default col-md-11" ng-click="showPrices()">
+                                    <span class="fa fa-search"></span> &nbsp;Load &nbsp;
+                                </button>
+                            </div>
+                        </div>
+                        <%--<div class="  ">--%>
+                        <table class=" table table-bordered table-hover col-sm-12 fix-head">
+                            <thead>
+
+                            <tr>
+                                <th style="vertical-align : middle;text-align:center;" rowspan="2">ID</th>
+                                <th style="vertical-align : middle;text-align:center;" rowspan="2">Date</th>
+                                <th class="text-center" colspan="4">Fit</th>
+                                <th class="text-center" colspan="4">Group</th>
+                            </tr>
+                            <tr>
+                                <th class="text-center">Sigle</th>
+                                <th class="text-center">Double
+                                </td>
+                                <th class="text-center">Tripple
+                                </td>
+                                <th class="text-center">Supply
+                                </td>
+                                <th class="text-center">Sigle
+                                </td>
+                                <th class="text-center">Double
+                                </td>
+                                <th class="text-center">Tripple
+                                </td>
+                                <th class="text-center">Supply
+                                </td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="r in prices">
+                                <td class="text-center">{{r.id}}</td>
+                                <td class="text-center">{{r.date}}</td>
+                                <td class="text-center">{{r.singleFit}}</td>
+                                <td class="text-center">{{r.doubleFit}}</td>
+                                <td class="text-center">{{r.tripleFit}}</td>
+                                <td class="text-center">{{r.singleSupplementFit}}</td>
+                                <td class="text-center">{{r.singleGroup}}</td>
+                                <td class="text-center">{{r.doubleGroup}}</td>
+                                <td class="text-center">{{r.tripleGroup}}</td>
+                                <td class="text-center">{{r.singleSupplementGroup}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <%--</div>--%>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="row not-printable">
     <div class="col-xs-12">
@@ -832,7 +936,12 @@
 
                                 <a ng-click="edit(r.id)" data-toggle="modal" data-target="#editPrices"
                                    class="btn btn-xs">
-                                    <i class="fa fa-usd"></i>&nbsp;Prices
+                                    <i class="fa fa-usd"></i>&nbsp;new Prices
+                                </a>&nbsp;&nbsp;
+
+                                <a ng-click="edit(r.id)" data-toggle="modal" data-target="#listPrices"
+                                   class="btn btn-xs">
+                                    <i class="fa fa-calendar"></i>&nbsp;Prices
                                 </a>&nbsp;&nbsp;
 
                                 <a ng-click="showDetails(r.id)" data-toggle="modal" data-target="#imageModal"

@@ -89,7 +89,7 @@ public class HotelDAO extends AbstractDAO {
 //    AND `date` BETWEEN
     public List<HotelPrices> getHotelPraces(Integer hotelId, Date fromDate, Date toDate) {
         String query = "select c from " + HotelPrices.class.getSimpleName()
-                + " c where c.id in (SELECT MAX(e.id) FROM " + HotelPrices.class.getSimpleName() + " e GROUP BY e.hotel_id ) AND c.hotel_id="
+                + " c where c.id in (SELECT MAX(e.id) FROM " + HotelPrices.class.getSimpleName() + " e GROUP BY e.hotel.id, e.date ) AND c.hotel.id="
                 + hotelId + " and c.date between '" + fromDate + "' and '" + toDate + "'";
         TypedQuery<HotelPrices> tquery = getEntityManager().createQuery(query, HotelPrices.class);
         return tquery.getResultList();

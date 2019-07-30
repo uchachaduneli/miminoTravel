@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.List;
 
 
@@ -35,6 +36,13 @@ public class HotelController {
     private Response getHotel(@RequestParam("start") int start, @RequestParam("limit") int limit,
                               @RequestBody HotelDTO request) throws Exception {
         return Response.withSuccess(hotelService.getHotels(start, limit, request));
+    }
+
+    @RequestMapping("/get-hotel-prices")
+    @ResponseBody
+    private Response getHotel(@RequestParam("hotelId") int hotelId, @RequestParam("fromDate") Date fromDate
+            , @RequestParam("toDate") Date toDate) throws Exception {
+        return Response.withSuccess(hotelService.getHotelPrices(hotelId, fromDate, toDate));
     }
 
     @RequestMapping("/get-hotels-by-place")
