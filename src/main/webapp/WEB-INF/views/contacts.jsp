@@ -60,10 +60,10 @@
 
       if ($scope.srchCase != undefined) {
         if ($scope.srchCase.nextActivity != undefined && $scope.srchCase.nextActivity.includes('/')) {
-          $scope.srchCase.nextActivity = $scope.srchCase.nextActivity.split(/\//).reverse().join('-')
+          $scope.srchCase.nextActivity = $scope.srchCase.nextActivity.split(/\//).reverse().join('-');
         }
         if ($scope.srchCase.nextActivityTo != undefined && $scope.srchCase.nextActivityTo.includes('/')) {
-          $scope.srchCase.nextActivityTo = $scope.srchCase.nextActivityTo.split(/\//).reverse().join('-')
+          $scope.srchCase.nextActivityTo = $scope.srchCase.nextActivityTo.split(/\//).reverse().join('-');
         }
       }
 

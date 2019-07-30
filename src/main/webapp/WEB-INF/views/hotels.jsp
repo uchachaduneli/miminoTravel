@@ -59,7 +59,7 @@
                 $scope.slcted = selected[0];
                 $scope.request = selected[0];
                 $scope.loadDetailsList($scope.request.id);
-                $scope.calculateSingleSupply();
+                // $scope.calculateSingleSupply();
             }
         }
 
@@ -140,30 +140,30 @@
                 }
             }
 
+            if ($scope.price.from == undefined || $scope.price.to == undefined) {
+                errorMsg('Fill From - To Date fields');
+                return;
+            } else {
+                $scope.price.from = $scope.price.from.split(/\//).reverse().join('-');
+                $scope.price.to = $scope.price.to.split(/\//).reverse().join('-');
+            }
+
             $scope.req = {};
 
-            $scope.req.id = $scope.request.id;
-            $scope.req.starsCount = $scope.request.starsCount;
-            $scope.req.nameEn = $scope.request.nameEn;
-            $scope.req.nameGe = $scope.request.nameGe;
-            $scope.req.nameFr = $scope.request.nameFr;
-            $scope.req.nameIt = $scope.request.nameIt;
-            $scope.req.nameSp = $scope.request.nameSp;
-            $scope.req.namePo = $scope.request.namePo;
-            $scope.req.nameRu = $scope.request.nameRu;
-            $scope.req.descriptionEn = $scope.request.descriptionEn;
-            $scope.req.descriptionGe = $scope.request.descriptionGe;
-            $scope.req.descriptionFr = $scope.request.descriptionFr;
-            $scope.req.descriptionIt = $scope.request.descriptionIt;
-            $scope.req.descriptionSp = $scope.request.descriptionSp;
-            $scope.req.descriptionPo = $scope.request.descriptionPo;
-            $scope.req.descriptionRu = $scope.request.descriptionRu;
-            $scope.req.placeId = $scope.request.placeId;
-            $scope.req.link = $scope.request.link;
-            $scope.req.currency = $scope.request.currency;
+            $scope.req.from = $scope.price.from;
+            $scope.req.to = $scope.price.to;
+            $scope.req.singleFit = $scope.price.singleFit;
+            $scope.req.singleGroup = $scope.price.singleGroup;
+            $scope.req.doubleFit = $scope.price.doubleFit;
+            $scope.req.doubleGroup = $scope.price.doubleGroup;
+            $scope.req.tripleFit = $scope.price.tripleFit;
+            $scope.req.tripleGroup = $scope.price.tripleGroup;
+            $scope.req.singleSupplementFit = $scope.price.singleSupplementFit;
+            $scope.req.singleSupplementGroup = $scope.price.singleSupplementGroup;
+            $scope.req.hotelId = $scope.request.id;
 
             console.log(angular.toJson($scope.req));
-            ajaxCall($http, "hotels/save", angular.toJson($scope.req), resFunc);
+            ajaxCall($http, "hotels/save-prices", angular.toJson($scope.req), resFunc);
         };
 
         $scope.saveImages = function () {
@@ -193,10 +193,23 @@
             $scope.start = 0;
             $scope.loadMainData();
         }
+        //
+        // $scope.calculateSingleSupply = function (h) {
+        //     $scope.request.singleSupply = Math.abs($scope.request.singlePrice - $scope.request.doublePrice / 2);
+        // }
 
-        $scope.calculateSingleSupply = function (h) {
-            $scope.request.singleSupply = Math.abs($scope.request.singlePrice - $scope.request.doublePrice / 2);
+        $scope.calculateSingleSupplyFit = function () {
+            if ($scope.price.singleFit != undefined && $scope.price.doubleFit != undefined) {
+                $scope.price.singleSupplementFit = Math.abs($scope.price.singleFit - $scope.price.doubleFit / 2);
+            }
         }
+
+        $scope.calculateSingleSupplyGroup = function () {
+            if ($scope.price.singleGroup != undefined && $scope.price.doubleGroup != undefined) {
+                $scope.price.singleSupplementGroup = Math.abs($scope.price.singleGroup - $scope.price.doubleGroup / 2);
+            }
+        }
+
 
         $scope.handlePage = function (h) {
             if (parseInt(h) >= 0) {
@@ -648,53 +661,78 @@
                         <div class="form-group col-sm-10 ">
                             <label class="control-label col-sm-2">From - </label>
                             <div class="col-sm-4">
-                                <input type="text" ng-model="price.from"
+                                <input type="text" ng-model="price.from" placeholder="Enter START Date"
                                        required class="form-control input-sm dateInput">
                             </div>
                             <label class="control-label col-sm-2 ">To - </label>
                             <div class="col-sm-4">
-                                <input type="text" ng-model="price.to" required
+                                <input type="text" ng-model="price.to" required placeholder="Enter END Date"
                                        class="form-control input-sm dateInput">
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3"> </label>
+                            <label class="control-label col-sm-3"></label>
+                            <label class="control-label col-sm-2">Fit</label>
+                            <label class="control-label col-sm-5">Group</label>
+                        </div>
+
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3"> Single </label>
                             <div class="form-group col-sm-9 ">
-                                <div class="col-sm-9">
-                                    <label class="control-label col-sm-6">Fit</label>
-                                    <label class="control-label col-sm-6">Group</label>
+                                <div class="col-sm-6">
+                                    <input type="number" ng-model="price.singleFit"
+                                           ng-keyup="calculateSingleSupplyFit()"
+                                           required class="form-control input-sm ">
+                                </div>
+                                <div class="col-sm-6">
+                                    <input type="number" ng-model="price.singleGroup"
+                                           ng-keyup="calculateSingleSupplyGroup()"
+                                           required class="form-control input-sm ">
                                 </div>
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3"> DoublePrice </label>
+                            <label class="control-label col-sm-3"> Double </label>
                             <div class="form-group col-sm-9 ">
-                                <div class="col-sm-9">
-                                    <label class="control-label col-sm-6">Fit</label>
-                                    <label class="control-label col-sm-6">Group</label>
+                                <div class="col-sm-6">
+                                    <input type="number" ng-model="price.doubleFit"
+                                           ng-keyup="calculateSingleSupplyFit()"
+                                           required class="form-control input-sm ">
+                                </div>
+                                <div class="col-sm-6">
+                                    <input type="number" ng-model="price.doubleGroup"
+                                           ng-keyup="calculateSingleSupplyGroup()"
+                                           required class="form-control input-sm ">
                                 </div>
                             </div>
                         </div>
-                        <%--<div class="form-group col-sm-10 ">--%>
-                        <%--<label class="control-label col-sm-3">DoublePrice</label>--%>
-                        <%--<div class="col-sm-9">--%>
-                        <input type="text" ng-keyup="calculateSingleSupply()" ng-model="price.doublePrice" class="form-control input-sm">
-                        <%--</div>--%>
-                        <%--</div>--%>
-                        <%--<div class="form-group col-sm-10 ">--%>
-                        <%--<label class="control-label col-sm-3">TriplePrice</label>--%>
-                        <%--<div class="col-sm-9">--%>
-                        <%--<input type="text" ng-model="price.triplePrice" required--%>
-                        <%--class="form-control input-sm">--%>
-                        <%--</div>--%>
-                        <%--</div>--%>
-                        <%--<div class="form-group col-sm-10 ">--%>
-                        <%--<label class="control-label col-sm-3">SingleSupply</label>--%>
-                        <%--<div class="col-sm-9">--%>
-                        <%--<input type="text" disabled="true" ng-model="price.singleSupply" required--%>
-                        <%--class="form-control input-sm">--%>
-                        <%--</div>--%>
-                        <%--</div>--%>
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3"> Tripple </label>
+                            <div class="form-group col-sm-9 ">
+                                <div class="col-sm-6">
+                                    <input type="number" ng-model="price.tripleFit"
+                                           required class="form-control input-sm ">
+                                </div>
+                                <div class="col-sm-6">
+                                    <input type="number" ng-model="price.tripleGroup"
+                                           required class="form-control input-sm ">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3"> Supplementy </label>
+                            <div class="form-group col-sm-9 ">
+                                <div class="col-sm-6">
+                                    <input type="number" ng-model="price.singleSupplementFit" disabled
+                                           required class="form-control input-sm ">
+                                </div>
+                                <div class="col-sm-6">
+                                    <input type="number" ng-model="price.singleSupplementGroup" disabled
+                                           required class="form-control input-sm ">
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="form-group col-sm-10"></div>
                         <div class="form-group col-sm-10"></div>
                         <div class="form-group col-sm-12 text-center">

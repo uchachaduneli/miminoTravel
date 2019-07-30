@@ -88,8 +88,8 @@ public class HotelService {
             obj.setDoubleGroup(request.getDoubleGroup());
             obj.setTripleFit(request.getTripleFit());
             obj.setTripleGroup(request.getTripleGroup());
-            obj.setSingleSupplementFit(request.getSingleFit() - request.getDoubleFit() / 2);
-            obj.setSingleSupplementGroup(request.getSingleGroup() - request.getDoubleGroup() / 2);
+            obj.setSingleSupplementFit(request.getSingleSupplementFit());
+            obj.setSingleSupplementGroup(request.getSingleSupplementGroup());
             hotelDAO.create(obj);
         }
     }
@@ -101,6 +101,7 @@ public class HotelService {
 
         Calendar endCalendar = new GregorianCalendar();
         endCalendar.setTime(endDate);
+        endCalendar.add(Calendar.DATE, 1);
 
         while (calendar.before(endCalendar)) {
             Date result = new java.sql.Date(calendar.getTime().getTime());
