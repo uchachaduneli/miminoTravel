@@ -3,6 +3,7 @@ package ge.mimino.travel.model;
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 @Entity
 @Table(name = "request")
@@ -39,6 +40,7 @@ public class Request {
     private String strArrivalTime;
     private Double eur;
     private Double usd;
+    private Stage stage;
 
     @Id
     @Column(name = "id")
@@ -359,5 +361,15 @@ public class Request {
 
     public void setUsd(Double usd) {
         this.usd = usd;
+    }
+
+    @JoinColumn(name = "stage_id")
+    @OneToOne
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 }

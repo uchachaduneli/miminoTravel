@@ -43,7 +43,8 @@ public class RequestService {
     public Request save(AddRequest request) throws Exception {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        Request obj = new Request();
+        Request obj = request.getId() != null ? (Request) requestDAO.find(Request.class, request.getId()) : new Request();
+
         obj.setContactEmail(request.getContactEmail());
         obj.setCombined(request.getCombined());
         obj.setTourStart(request.getTourStart());
@@ -128,6 +129,13 @@ public class RequestService {
         defineTransportForRequest(obj.getId(), true);
 
         return obj;
+    }
+
+    @Transactional(rollbackFor = Throwable.class)
+    public void updateRequestStage(Integer stageId, Integer requestId) throws Exception {
+        Stage stage = (Stage) requestDAO.find(Stage.class, stageId);
+        Request obj = (Request) requestDAO.find(Request.class, requestId);
+        requestDAO.update(obj);
     }
 
     @Transactional(rollbackFor = Throwable.class)
