@@ -601,7 +601,7 @@
                                         <i class="fa fa-calendar"></i>
                                     </div>
                                     <input type="text" name="tourStartDateInput" ng-model="request.tourStart"
-                                           id="tourStartDateInput" required
+                                           id="tourStartDatisAdmineInput" required
                                            class="form-control pull-right">
                                 </div>
                                 <input type="text" ng-model="request.strTourStart" placeholder="Textual"
@@ -907,7 +907,7 @@
         <div class="box">
             <div class="box-header">
                 <div class="col-md-2">
-                    <c:if test="<%= isAdmin %>">
+                    <c:if test="<%= !FINANCIAL_MANAGER && !RESERVATION_MANAGER %>">
                         <button type="button" class="btn btn-block btn-primary btn-md" ng-click="init()"
                                 data-toggle="modal" data-target="#editModal">
                             <i class="fa fa-plus" aria-hidden="true"></i> &nbsp;

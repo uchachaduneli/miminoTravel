@@ -1,8 +1,31 @@
+<%@ page import="ge.mimino.travel.dto.UsersDTO" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
-    //    boolean isAdmin = ((Integer) session.getAttribute("typeId") != null && (Integer) session.getAttribute("typeId") == UserDTO.USER_ADMIN);
-    boolean isAdmin = true;
+    boolean ADMINISTRATOR = false;
+    boolean COMUNICATION_MANAGER = false;
+    boolean PRODUCT_MANAGER = false;
+    boolean FINANCIAL_MANAGER = false;
+    boolean RESERVATION_MANAGER = false;
+    if ((Integer) session.getAttribute("typeId") != null) {
+        switch ((Integer) session.getAttribute("typeId")) {
+            case UsersDTO.ADMINISTRATOR:
+                ADMINISTRATOR = true;
+                break;
+            case UsersDTO.COMUNICATION_MANAGER:
+                COMUNICATION_MANAGER = true;
+                break;
+            case UsersDTO.PRODUCT_MANAGER:
+                PRODUCT_MANAGER = true;
+                break;
+            case UsersDTO.FINANCIAL_MANAGER:
+                FINANCIAL_MANAGER = true;
+                break;
+            case UsersDTO.RESERVATION_MANAGER:
+                RESERVATION_MANAGER = true;
+                break;
+        }
+    }
 %>
 <!DOCTYPE html>
 <html>
@@ -69,7 +92,7 @@
             } else if (url.pathname.indexOf("distances") > -1) {
                 $('#selected_item').text("Distances");
             } else if (url.pathname.indexOf("guides") > -1) {
-              $('#selected_item').text("Guides");
+                $('#selected_item').text("Guides");
             }
 
 
@@ -89,9 +112,9 @@
 
             $('input').attr('autocomplete', 'off');
 
-          $(function () {
-            $('[data-toggle="popover"]').popover()
-          });
+            $(function () {
+                $('[data-toggle="popover"]').popover()
+            });
         });
 
         var app = angular.module("app", ["checklist-model", "ngFileUpload"]);
@@ -203,61 +226,65 @@
                             <span>Requests</span>
                         </a>
                     </li>
-                    <li>
-                        <a class="menuItem" href="contacts">
-                            <i class="fa fa-share-alt"></i>
-                            <span>Contact Db</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="menuItem" href="objects">
-                            <i class="fa fa-university"></i>
-                            <span>Sights</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="menuItem" href="places">
-                            <i class="fa fa-map-marker"></i>
-                            <span>Places</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="menuItem" href="distances">
-                            <i class="fa fa-space-shuttle"></i>
-                            <span>Distances</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="menuItem" href="hotels">
-                            <i class="fa fa-bed"></i>
-                            <span>Hotels</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="menuItem" href="restaurants">
-                            <i class="fa fa-cutlery"></i>
-                            <span>Restaurants</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="menuItem" href="transports">
-                            <i class="fa fa-car"></i>
-                            <span>Transport</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="menuItem" href="nonstandarts">
-                            <i class="fa fa-server"></i>
-                            <span>Non St. Serv.</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="menuItem" href="guides">
-                            <i class="fa fa-blind"></i>
-                            <span>Guides</span>
-                        </a>
-                    </li>
-                    <c:if test="<%= isAdmin %>">
+                    <c:if test="<%= !PRODUCT_MANAGER && !FINANCIAL_MANAGER %>">
+                        <li>
+                            <a class="menuItem" href="contacts">
+                                <i class="fa fa-share-alt"></i>
+                                <span>Contact Db</span>
+                            </a>
+                        </li>
+                    </c:if>
+                    <c:if test="<%= PRODUCT_MANAGER || ADMINISTRATOR %>">
+                        <li>
+                            <a class="menuItem" href="objects">
+                                <i class="fa fa-university"></i>
+                                <span>Sights</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="menuItem" href="places">
+                                <i class="fa fa-map-marker"></i>
+                                <span>Places</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="menuItem" href="distances">
+                                <i class="fa fa-space-shuttle"></i>
+                                <span>Distances</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="menuItem" href="hotels">
+                                <i class="fa fa-bed"></i>
+                                <span>Hotels</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="menuItem" href="restaurants">
+                                <i class="fa fa-cutlery"></i>
+                                <span>Restaurants</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="menuItem" href="transports">
+                                <i class="fa fa-car"></i>
+                                <span>Transport</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="menuItem" href="nonstandarts">
+                                <i class="fa fa-server"></i>
+                                <span>Non St. Serv.</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="menuItem" href="guides">
+                                <i class="fa fa-blind"></i>
+                                <span>Guides</span>
+                            </a>
+                        </li>
+                    </c:if>
+                    <c:if test="<%= ADMINISTRATOR %>">
                         <li>
                             <a href="users">
                                 <i class="fa fa-users"></i>

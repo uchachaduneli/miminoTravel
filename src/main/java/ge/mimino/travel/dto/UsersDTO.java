@@ -22,11 +22,11 @@ public class UsersDTO {
     @JsonSerialize(using = JsonDateSerializeSupport.class)
     private Date createDate;
 
-    public static int ADMINISTRATOR = 1;
-    public static int COMUNICATION_MANAGER = 2;
-    public static int PRODUCT_MANAGER = 3;
-    public static int FINANCIAL_MANAGER = 4;
-    public static int RESERVATION_MANAGER = 5;
+    public static final int ADMINISTRATOR = 1;
+    public static final int COMUNICATION_MANAGER = 2;
+    public static final int PRODUCT_MANAGER = 3;
+    public static final int FINANCIAL_MANAGER = 4;
+    public static final int RESERVATION_MANAGER = 5;
 
 
     public static int DELETED = 1;
@@ -55,70 +55,6 @@ public class UsersDTO {
             list.add(UsersDTO.parse(record));
         }
         return list;
-    }
-
-    public static int getADMINISTRATOR() {
-        return ADMINISTRATOR;
-    }
-
-    public static void setADMINISTRATOR(int ADMINISTRATOR) {
-        UsersDTO.ADMINISTRATOR = ADMINISTRATOR;
-    }
-
-    public static int getComunicationManager() {
-        return COMUNICATION_MANAGER;
-    }
-
-    public static void setComunicationManager(int comunicationManager) {
-        COMUNICATION_MANAGER = comunicationManager;
-    }
-
-    public static int getProductManager() {
-        return PRODUCT_MANAGER;
-    }
-
-    public static void setProductManager(int productManager) {
-        PRODUCT_MANAGER = productManager;
-    }
-
-    public static int getFinancialManager() {
-        return FINANCIAL_MANAGER;
-    }
-
-    public static void setFinancialManager(int financialManager) {
-        FINANCIAL_MANAGER = financialManager;
-    }
-
-    public static int getReservationManager() {
-        return RESERVATION_MANAGER;
-    }
-
-    public static void setReservationManager(int reservationManager) {
-        RESERVATION_MANAGER = reservationManager;
-    }
-
-    public static int getDELETED() {
-        return DELETED;
-    }
-
-    public static void setDELETED(int DELETED) {
-        UsersDTO.DELETED = DELETED;
-    }
-
-    public static int getACTIVE() {
-        return ACTIVE;
-    }
-
-    public static void setACTIVE(int ACTIVE) {
-        UsersDTO.ACTIVE = ACTIVE;
-    }
-
-    public Integer getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(Integer typeId) {
-        this.typeId = typeId;
     }
 
     public Integer getUserId() {
@@ -161,6 +97,14 @@ public class UsersDTO {
         this.type = type;
     }
 
+    public Integer getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(Integer typeId) {
+        this.typeId = typeId;
+    }
+
     public Integer getDeleted() {
         return deleted;
     }
@@ -193,4 +137,39 @@ public class UsersDTO {
         this.createDate = createDate;
     }
 
+    public static int getADMINISTRATOR() {
+        return ADMINISTRATOR;
+    }
+
+    public static int getComunicationManager() {
+        return COMUNICATION_MANAGER;
+    }
+
+    public static int getProductManager() {
+        return PRODUCT_MANAGER;
+    }
+
+    public static int getFinancialManager() {
+        return FINANCIAL_MANAGER;
+    }
+
+    public static int getReservationManager() {
+        return RESERVATION_MANAGER;
+    }
+
+    public static int getDELETED() {
+        return DELETED;
+    }
+
+    public static void setDELETED(int DELETED) {
+        UsersDTO.DELETED = DELETED;
+    }
+
+    public static int getACTIVE() {
+        return ACTIVE;
+    }
+
+    public static void setACTIVE(int ACTIVE) {
+        UsersDTO.ACTIVE = ACTIVE;
+    }
 }
