@@ -11,6 +11,16 @@ public class RequestStageHistory {
     private Stage stage;
     private Integer requestId;
     private Timestamp createDate;
+    private Users user;
+
+    public RequestStageHistory() {
+    }
+
+    public RequestStageHistory(Stage stage, Integer requestId, Users user) {
+        this.stage = stage;
+        this.requestId = requestId;
+        this.user = user;
+    }
 
     @Id
     @Column(name = "id")
@@ -44,7 +54,7 @@ public class RequestStageHistory {
     }
 
     @Basic
-    @Column(name = "create_date")
+    @Column(name = "create_date", updatable = false, insertable = false)
     public Timestamp getCreateDate() {
         return createDate;
     }
@@ -53,4 +63,13 @@ public class RequestStageHistory {
         this.createDate = createDate;
     }
 
+    @JoinColumn(name = "user_id")
+    @OneToOne
+    public Users getUser() {
+        return user;
+    }
+
+    public void setUser(Users user) {
+        this.user = user;
+    }
 }

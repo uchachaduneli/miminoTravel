@@ -51,6 +51,25 @@ public class RequestController {
         return Response.withSuccess(requestService.getRequestCountries(id));
     }
 
+    @RequestMapping("/get-request-stages")
+    @ResponseBody
+    private Response getRequestStages(@RequestParam Integer id) throws Exception {
+        return Response.withSuccess(requestService.getRequestStages(id));
+    }
+
+    @RequestMapping("/change-stage")
+    @ResponseBody
+    private Response changeRequestStage(@RequestParam Integer requestId, @RequestParam Integer stageId, HttpServletRequest servletRequest) throws Exception {
+        requestService.updateRequestStage(stageId, requestId, (Integer) servletRequest.getSession().getAttribute("userId"));
+        return Response.ok();
+    }
+
+    @RequestMapping("/get-stages")
+    @ResponseBody
+    private Response getStages() throws Exception {
+        return Response.withSuccess(requestService.getStages());
+    }
+
     @RequestMapping("/update-transport-days")
     @ResponseBody
     private Response updateTransportDays(@RequestParam Integer reqId, @RequestParam String checkedDays) throws Exception {

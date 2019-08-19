@@ -34,6 +34,9 @@ public class RequestService {
     @Autowired
     private RequestDAO requestDAO;
 
+    @Autowired
+    private MailService mailService;
+
 
     public List<RequestDTO> getRequests(int start, int limit, AddRequest srchRequest) {
         return RequestDTO.parseToList(requestDAO.getRequests(start, limit, srchRequest));
@@ -132,10 +135,30 @@ public class RequestService {
     }
 
     @Transactional(rollbackFor = Throwable.class)
-    public void updateRequestStage(Integer stageId, Integer requestId) throws Exception {
+    public void updateRequestStage(Integer stageId, Integer requestId, Integer userId) throws Exception {
         Stage stage = (Stage) requestDAO.find(Stage.class, stageId);
         Request obj = (Request) requestDAO.find(Request.class, requestId);
+        obj.setStage(stage);
         requestDAO.update(obj);
+        Users user = (Users) requestDAO.find(Users.class, userId);
+        RequestStageHistory requestStageHistory = new RequestStageHistory(stage, requestId, user);
+        requestDAO.create(requestStageHistory);
+        mailService.sendNotifUsingGmail(stageId, obj);
+    }
+
+    public List<Stage> getStages() throws Exception {
+        return requestDAO.getAll(Stage.class);
+    }
+
+    public List<RequestStageHistoryDTO> getRequestStages(Integer requestId) throws Exception {
+
+        List<ParamValuePair> paramValues = new ArrayList<>();
+        paramValues.add(new ParamValuePair("requestId", requestId));
+
+        List<ParamValuePair> order = new ArrayList<>();
+        order.add(new ParamValuePair("id", "ASC"));
+
+        return RequestStageHistoryDTO.parseToList(requestDAO.getAllByParamValue(RequestStageHistory.class, paramValues, order));
     }
 
     @Transactional(rollbackFor = Throwable.class)

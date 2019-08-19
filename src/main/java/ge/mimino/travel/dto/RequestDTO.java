@@ -56,6 +56,7 @@ public class RequestDTO {
     private String nationality;
     private Double eur;
     private Double usd;
+    private StageDTO stage;
 
     public static String NAT_FOR_TRANSPORT = "German/Italian/Spain/France";
 
@@ -113,6 +114,7 @@ public class RequestDTO {
         dto.setStrTourEnd(record.getStrTourEnd());
         dto.setEur(record.getEur());
         dto.setUsd(record.getUsd());
+        dto.setStage(StageDTO.parse(record.getStage()));
         return dto;
     }
 
@@ -123,6 +125,14 @@ public class RequestDTO {
             list.add(RequestDTO.parse(record));
         }
         return list;
+    }
+
+    public StageDTO getStage() {
+        return stage;
+    }
+
+    public void setStage(StageDTO stage) {
+        this.stage = stage;
     }
 
     public static String getNatForTransport() {

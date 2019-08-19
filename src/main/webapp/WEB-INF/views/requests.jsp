@@ -62,6 +62,7 @@
         $scope.srchCase = {};
         $scope.countryRow = [1];
         $scope.touristCountRow = [1];
+        $scope.stageHistory = [];
 //        $scope.request.docs = [];
 
         $scope.loadMainData = function () {
@@ -85,6 +86,12 @@
         }
 
         $scope.loadMainData();
+
+        function getStages(res) {
+            $scope.stages = res.data;
+        }
+
+        ajaxCall($http, "requests/get-stages", null, getStages);
 
         function getCountries(res) {
             $scope.countries = res.data;
@@ -151,6 +158,20 @@
                 $scope.request.countries = [];
                 $scope.request.details = [];
                 $scope.loadCaseDetailsList($scope.request.id);
+            }
+        }
+
+        $scope.showStageHist = function (id) {
+            $scope.stageHistory = [];
+            if (id != undefined) {
+                var selected = $filter('filter')($scope.list, {id: id}, true);
+                $scope.request = selected[0];
+
+                function getStageHist(res) {
+                    $scope.stageHistory = res.data;
+                }
+
+                ajaxCall($http, "requests/get-request-stages?id=" + id, null, getStageHist);
             }
         }
 
@@ -321,6 +342,23 @@
 
             // console.log(angular.toJson($scope.req));
             ajaxCall($http, "requests/save-message", angular.toJson($scope.req), resFunc);
+        };
+
+        $scope.changeStage = function () {
+            if (confirm("Pleace confirm operation")) {
+                function resFunc(res) {
+                    if (res.errorCode == 0) {
+                        successMsg('Operation Successfull (Email Notiffications Sent)');
+                        closeModal('stageModal');
+                        $scope.loadMainData();
+                    } else {
+                        errorMsg('Operation Failed');
+                    }
+                    $scope.stageId = {};
+                }
+
+                ajaxCall($http, "requests/change-stage?requestId=" + $scope.slcted.id + "&stageId=" + $scope.stageId, null, resFunc);
+            }
         };
 
 
@@ -573,6 +611,46 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade bs-example-modal-lg not-printable" id="stageModal" role="dialog"
+     aria-labelledby="stageModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="stageModalLabel">Select Group To Forward Request</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <form class="form-horizontal">
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3">Request Stages</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" ng-model="stageId" required>
+                                    <option ng-repeat="v in stages"
+                                            ng-selected="v.id === request.stage.id"
+                                            value="{{v.id}}">{{v.name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-10"></div>
+                        <div class="form-group col-sm-10"></div>
+                        <div class="form-group col-sm-12 text-center">
+                            <a class="btn btn-app" ng-click="changeStage()">
+                                <i class="fa fa-paper-plane-o"></i> Send
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="modal fade bs-example-modal-lg not-printable" id="editModal" role="dialog" aria-labelledby="editModalLabel"
      aria-hidden="true">
@@ -902,6 +980,39 @@
     </div>
 </div>
 
+<div class="modal fade bs-example-modal-lg not-printable" id="stageHistModal" role="dialog"
+     aria-labelledby="stageHistModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="stageHistModalLabel">Stages History For Request ID: (<b> {{request.id}}</b>
+                    )
+                </h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped">
+                    <tr>
+                        <th class="col-md-2 text-right">ID</th>
+                        <th>Stage</th>
+                        <th>Action User</th>
+                        <th>Operation Time</th>
+                        <th class="text-center">Flow Queue</th>
+                    </tr>
+                    <tr ng-repeat="v in stageHistory">
+                        <td class="col-md-2 text-right">{{v.id}}</td>
+                        <td>{{v.stage.name}}</td>
+                        <td>{{v.user.userDesc}}</td>
+                        <td>{{v.createDate}}</td>
+                        <td class="text-center"><i class="fa fa-arrow-down"></i></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row not-printable">
     <div class="col-xs-12">
         <div class="box">
@@ -1022,6 +1133,7 @@
                         <thead>
                         <tr>
                             <th>ID</th>
+                            <th style="text-align: center" class="text-center">Stage</th>
                             <th>Email</th>
                             <th>Days/Nights</th>
                             <th>Arrival</th>
@@ -1032,6 +1144,9 @@
                         <tbody title="Double Click For Detailed Information">
                         <tr ng-repeat="r in list" ng-dblclick="handleDoubleClick(r.id)">
                             <td>{{r.id}}</td>
+                            <td title="{{r.stage.name}}" style="text-align: center"
+                                class="text-bold text-capitalize, text-center">{{r.stage.name | limitTo: 1}}
+                            </td>
                             <td>{{r.contactEmail}}</td>
                             <td>{{r.daysCount}} / {{r.nightsCount}}</td>
                             <td>{{r.arrivalTime}}</td>
@@ -1046,10 +1161,18 @@
                                    class="btn btn-xs">
                                     <i class="fa fa-pencil"></i>&nbsp;Edit
                                 </a>&nbsp;&nbsp;
-                                <a href="/miminoTravel/product?key={{r.requestKey}}"
+                                <a ng-click="edit(r.id)" data-toggle="modal" data-target="#stageModal"
                                    class="btn btn-xs">
-                                    <i class="fa fa-server"></i>&nbsp;product
+                                    <i class="fa fa-gears"></i>&nbsp;Stage
                                 </a>&nbsp;&nbsp;
+                                <a ng-click="showStageHist(r.id)" data-toggle="modal" data-target="#stageHistModal"
+                                   class="btn btn-xs">
+                                    <i class="fa fa-clock-o"></i>&nbsp;St. Hist
+                                </a>&nbsp;&nbsp;
+                                <%--<a href="/miminoTravel/product?key={{r.requestKey}}"--%>
+                                <%--class="btn btn-xs">--%>
+                                <%--<i class="fa fa-server"></i>&nbsp;product--%>
+                                <%--</a>&nbsp;&nbsp;--%>
                                 <a ng-click="remove(r.id)" class="btn btn-xs">
                                     <i class="fa fa-trash-o"></i>&nbsp;Remove
                                 </a>

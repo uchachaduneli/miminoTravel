@@ -3,14 +3,12 @@ package ge.mimino.travel.service;
 
 import ge.mimino.travel.dao.MailDAO;
 import ge.mimino.travel.dao.ParamValuePair;
+import ge.mimino.travel.dao.UserDAO;
 import ge.mimino.travel.dto.EmailAttachmentsDTO;
 import ge.mimino.travel.dto.EmailDTO;
 import ge.mimino.travel.dto.EmailFolderDTO;
 import ge.mimino.travel.dto.UsersDTO;
-import ge.mimino.travel.model.Email;
-import ge.mimino.travel.model.EmailAttachments;
-import ge.mimino.travel.model.EmailFolders;
-import ge.mimino.travel.model.Users;
+import ge.mimino.travel.model.*;
 import ge.mimino.travel.request.MailRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,10 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
+import javax.mail.Transport;
+import javax.mail.internet.*;
 import javax.mail.search.FlagTerm;
 import java.io.File;
 import java.io.IOException;
@@ -42,6 +38,9 @@ public class MailService {
 
     @Autowired
     private MailDAO mailDAO;
+
+    @Autowired
+    private UserDAO userDAO;
 
     @Autowired
     private UsersService userService;
@@ -285,7 +284,7 @@ public class MailService {
     }
 
     public static void main(String[] args) throws Exception {
-
+//        sendNotifUsingGmail(1);
 //        String mailFrom = new String("miminotest@gmail.com");
 //        String mailTo = new String("miminotest@gmail.com");
 
@@ -313,6 +312,50 @@ public class MailService {
 //        newGmailClient.sendEmail(senderUserName, senderPassword,
 //                addresats,
 //                null, attachments, "TEST MAIL SUBJECT", "ეს არის სატესტო მეილის ტექსტი");
+    }
+
+    public void sendNotifUsingGmail(Integer StageId, Request request) throws MessagingException {
+//   miminotravelcompany@gmail.com pass: miminotravel123
+        Properties emailProperties;
+        Session mailSession;
+        MimeMessage emailMessage;
+        emailProperties = System.getProperties();
+        emailProperties.put("mail.smtp.port", "587");
+        emailProperties.put("mail.smtp.auth", "true");
+        emailProperties.put("mail.smtp.starttls.enable", "true");
+
+
+        String[] toEmails = getEmailsByStageGroupId(StageId);
+        String emailSubject = "Action Needed MiminoTravel";
+
+        mailSession = Session.getDefaultInstance(emailProperties, null);
+        emailMessage = new MimeMessage(mailSession);
+
+        for (int i = 0; i < toEmails.length; i++) {
+            emailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmails[i]));
+        }
+
+        Multipart mmp = new MimeMultipart();
+        MimeBodyPart bodyPart = new MimeBodyPart();
+        bodyPart.setContent("Request ID: " + request.getId() + "   , Tour Code: " + request.getTourCode(), "text/plain; charset=utf-8");
+        mmp.addBodyPart(bodyPart);
+
+        emailMessage.setSubject(emailSubject);
+        emailMessage.setContent(mmp);
+
+        Transport transport = mailSession.getTransport("smtp");
+
+        transport.connect("smtp.gmail.com", "miminotravelcompany@gmail.com", "miminotravel123");
+        transport.sendMessage(emailMessage, emailMessage.getAllRecipients());
+        transport.close();
+    }
+
+    private String[] getEmailsByStageGroupId(Integer stageId) {
+        List<String> mails = new ArrayList<String>();
+        for (Users u : userDAO.getUsersByTypeId(stageId)) {
+            mails.add(u.getEmail());
+        }
+        return mails.stream().toArray(String[]::new);
     }
 
 

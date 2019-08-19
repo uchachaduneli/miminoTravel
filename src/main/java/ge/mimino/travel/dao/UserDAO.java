@@ -36,6 +36,15 @@ public class UserDAO extends AbstractDAO {
         return res.isEmpty() ? null : res.get(0);
     }
 
+    public List<Users> getUsersByTypeId(Integer stageId) {
+        StringBuilder q = new StringBuilder();
+        q.append("Select e From ").append(Users.class.getSimpleName())
+                .append(" e Where e.type.userTypeId ='").append(stageId).append("'");
+        TypedQuery<Users> query = entityManager.createQuery(q.toString(), Users.class);
+        List<Users> res = query.getResultList();
+        return res;
+    }
+
     public int removeUserLanguages(Integer id) {
         return entityManager.createQuery("delete from " + UserLanguages.class.getSimpleName() + " c where c.userId=" + id).executeUpdate();
     }
