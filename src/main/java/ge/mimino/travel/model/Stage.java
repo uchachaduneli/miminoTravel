@@ -1,12 +1,10 @@
 package ge.mimino.travel.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@Table(name = "stage", schema = "mimino")
 public class Stage {
     private Integer id;
     private String name;

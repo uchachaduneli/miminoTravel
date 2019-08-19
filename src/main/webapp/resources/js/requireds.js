@@ -1,55 +1,50 @@
 function caseRequredFields(formVar) {
-    if (formVar.name.$error.required) {
-        errorMsg('დასახელების მითითება სავალდებულოა');
+    if (formVar.daysCount.$error.required) {
+        errorMsg('Days Count Is Mandatory Field!');
         return false;
     }
-    if (formVar.number.$error.required) {
-        errorMsg('საქმის ნომრის მითითება სავალდებულოა');
+    if (formVar.nightsCount.$error.required) {
+        errorMsg('Nights Count Is Mandatory Field!');
         return false;
     }
-    if (formVar.boardId.$error.required) {
-        errorMsg('კოლეგიის მითითება სავალდებულოა');
+    if (formVar.touristCount.$error.required) {
+        errorMsg('Tourists Count Is Mandatory Field!');
         return false;
     }
-    if (formVar.judgeId.$error.required) {
-        errorMsg('მოსამართლის მითითება სავალდებულოა');
+    if (formVar.arrivalCityId.$error.required) {
+        errorMsg('Arrival City Is Mandatory Field');
         return false;
     }
-    if (formVar.startdate.$error.required && $("input[name=startdate]").val().length === 0) {
-        errorMsg('საქმის დაწყების თარიღის მითითება სავალდებულოა');
+    if (formVar.leaveCityId.$error.required) {
+        errorMsg('Leave City Is Mandatory Field');
         return false;
     }
-
-    if (formVar.litigationSubjectId.$error.required) {
-        errorMsg(' დავის საგნის მითითება სავალდებულოა');
+    if (formVar.guideDriver.$error.required) {
+        errorMsg('Guide/Driver Is Mandatory Field');
         return false;
     }
-    if (formVar.litigationPrice.$error.required) {
-        errorMsg('დავის საგნის ღირებულების მითითება სავალდებულოა');
+    if (formVar.guideLanguageId.$error.required) {
+        errorMsg('Guide Language Is Mandatory Field');
         return false;
     }
-    if (formVar.litigationDescription.$error.required) {
-        errorMsg(' დავის შინაარსის მითითება სავალდებულოა');
+    if (formVar.mealCategoryId.$error.required) {
+        errorMsg('Meal Category Is Mandatory Field');
         return false;
     }
-    if (formVar.courtInstanceId.$error.required) {
-        errorMsg(' სასამართლო ინსტანციის მითითება სავალდებულოა');
+    if (formVar.entranceFees.$error.required) {
+        errorMsg(' Entrance Fees Is Mandatory Field');
         return false;
     }
-    if (formVar.endResultId.$error.required) {
-        errorMsg('საქმის დამთავრების შედეგის მითითება სავალდებულოა');
+    if (formVar.nationality.$error.required) {
+        errorMsg(' Nationality Is Mandatory Field');
         return false;
     }
-    if (formVar.courtId.$error.required) {
-        errorMsg(' სასამართლოს მითითება სავალდებულოა');
+    if (formVar.currencyId.$error.required) {
+        errorMsg(' Currency Is Mandatory Field');
         return false;
     }
-    if (formVar.ministryStatus.$error.required) {
-        errorMsg(' სამინისტროს სტატუსის მითითება სავალდებულოა');
-        return false;
-    }
-    if (formVar.statusId.$error.required) {
-        errorMsg(' სტატუსის მითითება სავალდებულოა');
+    if (formVar.packageCategoryId.$error.required) {
+        errorMsg(' Package Category Is Mandatory Field');
         return false;
     }
     return true;

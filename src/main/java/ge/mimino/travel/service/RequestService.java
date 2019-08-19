@@ -105,6 +105,7 @@ public class RequestService {
             obj = (Request) requestDAO.update(obj);
         } else {
             obj.setRequestKey(UUID.randomUUID() + "");
+            obj.setStage((Stage) requestDAO.find(Stage.class, 2));
             obj = (Request) requestDAO.create(obj);
         }
 
