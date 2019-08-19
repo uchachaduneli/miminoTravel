@@ -31,6 +31,7 @@ public class AddRequest {
     private Double budget;
     private Integer packageCategoryId;
     private Integer userId;
+    private Integer userTypeId;
     private List<Integer> otherDetails;
     private List<CombinedCountry> combinedCountries;
     private List<TouristCount> touristCount;
@@ -42,6 +43,14 @@ public class AddRequest {
     private String nationality;
     private Double eur;
     private Double usd;
+
+    public Integer getUserTypeId() {
+        return userTypeId;
+    }
+
+    public void setUserTypeId(Integer userTypeId) {
+        this.userTypeId = userTypeId;
+    }
 
     public Double getEur() {
         return eur;

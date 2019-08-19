@@ -39,7 +39,8 @@ public class RequestController {
     @ResponseBody
     private Response getRequests(@RequestParam("start") int start, @RequestParam("limit") int limit,
                                  @RequestBody AddRequest request, HttpServletRequest servletRequest) throws Exception {
-        if (((Integer) servletRequest.getSession().getAttribute("typeId")) == UsersDTO.COMUNICATION_MANAGER) {
+        request.setUserTypeId((Integer) servletRequest.getSession().getAttribute("typeId"));// Stage Id Igive
+        if (request.getUserTypeId() == UsersDTO.COMUNICATION_MANAGER) {
             request.setUserId((Integer) servletRequest.getSession().getAttribute("userId"));
         }
         return Response.withSuccess(requestService.getRequests(start, limit, request));
