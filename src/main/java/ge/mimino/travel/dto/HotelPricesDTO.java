@@ -27,6 +27,7 @@ public class HotelPricesDTO {
     private Double tripleGroup;
     private Double singleSupplementFit;
     private Double singleSupplementGroup;
+    private HotelPriceDateRangesDTO dateRange;
 
 
     public static HotelPricesDTO parse(HotelPrices record) {
@@ -43,6 +44,7 @@ public class HotelPricesDTO {
         dto.setCreateDate(record.getCreateDate());
         dto.setSingleSupplementFit(record.getSingleSupplementFit());
         dto.setSingleSupplementGroup(record.getSingleSupplementGroup());
+        dto.setDateRange(HotelPriceDateRangesDTO.parse(record.getDateRange()));
         return dto;
     }
 
@@ -53,6 +55,14 @@ public class HotelPricesDTO {
             list.add(HotelPricesDTO.parse(record));
         }
         return list;
+    }
+
+    public HotelPriceDateRangesDTO getDateRange() {
+        return dateRange;
+    }
+
+    public void setDateRange(HotelPriceDateRangesDTO dateRange) {
+        this.dateRange = dateRange;
     }
 
     public Double getSingleSupplementFit() {

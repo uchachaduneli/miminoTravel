@@ -68,8 +68,8 @@
                 errorMsg('Fill From - To Date fields');
                 return;
             } else {
-                $scope.price.from = $scope.price.from.split(/\//).reverse().join('-');
-                $scope.price.to = $scope.price.to.split(/\//).reverse().join('-');
+                $scope.frm = $scope.price.from.split(/\//).reverse().join('-');
+                $scope.to = $scope.price.to.split(/\//).reverse().join('-');
             }
             $('#loadingModal').modal('show');
             $scope.prices = [];
@@ -79,7 +79,7 @@
                 $('#loadingModal').modal('hide');
             }
 
-            ajaxCall($http, "hotels/get-hotel-prices?hotelId=" + $scope.request.id + "&fromDate=" + $scope.price.from + "&toDate=" + $scope.price.to, null, getPricesData);
+            ajaxCall($http, "hotels/get-hotel-prices?hotelId=" + $scope.request.id + "&fromDate=" + $scope.frm + "&toDate=" + $scope.to, null, getPricesData);
         }
 
         $scope.showDetails = function (id) {
@@ -157,20 +157,22 @@
                 } else {
                     errorMsg('Operation Failed');
                 }
+                $scope.price.from = "";
+                $scope.price.to = "";
             }
 
             if ($scope.price.from == undefined || $scope.price.to == undefined) {
                 errorMsg('Fill From - To Date fields');
                 return;
             } else {
-                $scope.price.from = $scope.price.from.split(/\//).reverse().join('-');
-                $scope.price.to = $scope.price.to.split(/\//).reverse().join('-');
+                $scope.frm = $scope.price.from.split(/\//).reverse().join('-');
+                $scope.to = $scope.price.to.split(/\//).reverse().join('-');
             }
 
             $scope.req = {};
 
-            $scope.req.from = $scope.price.from;
-            $scope.req.to = $scope.price.to;
+            $scope.req.from = $scope.frm;
+            $scope.req.to = $scope.to;
             $scope.req.singleFit = $scope.price.singleFit;
             $scope.req.singleGroup = $scope.price.singleGroup;
             $scope.req.doubleFit = $scope.price.doubleFit;
@@ -805,7 +807,7 @@
 
                             <tr>
                                 <th style="vertical-align : middle;text-align:center;" rowspan="2">ID</th>
-                                <th style="vertical-align : middle;text-align:center;" rowspan="2">Date</th>
+                                <th style="vertical-align : middle;text-align:center;" rowspan="2">Date: From-To</th>
                                 <th class="text-center" colspan="4">Fit</th>
                                 <th class="text-center" colspan="4">Group</th>
                             </tr>
@@ -830,7 +832,7 @@
                             <tbody>
                             <tr ng-repeat="r in prices">
                                 <td class="text-center">{{r.id}}</td>
-                                <td class="text-center">{{r.date}}</td>
+                                <td class="text-center">{{r.dateRange.from}} - {{r.dateRange.to}}</td>
                                 <td class="text-center">{{r.singleFit}}</td>
                                 <td class="text-center">{{r.doubleFit}}</td>
                                 <td class="text-center">{{r.tripleFit}}</td>

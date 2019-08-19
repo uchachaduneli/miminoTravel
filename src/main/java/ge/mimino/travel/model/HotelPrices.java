@@ -3,9 +3,10 @@ package ge.mimino.travel.model;
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 @Entity
-@Table(name = "hotel_prices", schema = "mimino", catalog = "")
+@Table(name = "hotel_prices", schema = "mimino")
 public class HotelPrices {
     private Integer id;
     private Date date;
@@ -19,6 +20,7 @@ public class HotelPrices {
     private Double tripleGroup;
     private Double singleSupplementFit;
     private Double singleSupplementGroup;
+    private HotelPriceDateRanges dateRange;
 
     @Id
     @Column(name = "id")
@@ -140,4 +142,15 @@ public class HotelPrices {
     public void setSingleSupplementGroup(Double singleSupplementGroup) {
         this.singleSupplementGroup = singleSupplementGroup;
     }
+
+    @JoinColumn(name = "date_range_id")
+    @OneToOne
+    public HotelPriceDateRanges getDateRange() {
+        return dateRange;
+    }
+
+    public void setDateRange(HotelPriceDateRanges dateRange) {
+        this.dateRange = dateRange;
+    }
+
 }

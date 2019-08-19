@@ -6,10 +6,7 @@ import ge.mimino.travel.dao.ParamValuePair;
 import ge.mimino.travel.dto.HotelDTO;
 import ge.mimino.travel.dto.HotelImagesDTO;
 import ge.mimino.travel.dto.HotelPricesDTO;
-import ge.mimino.travel.model.Hotel;
-import ge.mimino.travel.model.HotelImages;
-import ge.mimino.travel.model.HotelPrices;
-import ge.mimino.travel.model.Place;
+import ge.mimino.travel.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,6 +74,8 @@ public class HotelService {
 
     @Transactional(rollbackFor = Throwable.class)
     public void savePrices(HotelPricesDTO request) throws Exception {
+        HotelPriceDateRanges priceDateRanges = new HotelPriceDateRanges(request.getFrom(), request.getTo());
+        priceDateRanges = (HotelPriceDateRanges) hotelDAO.create(priceDateRanges);
         Hotel hotel = (Hotel) hotelDAO.find(Hotel.class, request.getHotelId());
         for (Date dt : getDatesBetween(request.getFrom(), request.getTo())) {
             HotelPrices obj = new HotelPrices();
@@ -90,6 +89,7 @@ public class HotelService {
             obj.setTripleGroup(request.getTripleGroup());
             obj.setSingleSupplementFit(request.getSingleSupplementFit());
             obj.setSingleSupplementGroup(request.getSingleSupplementGroup());
+            obj.setDateRange(priceDateRanges);
             hotelDAO.create(obj);
         }
     }
