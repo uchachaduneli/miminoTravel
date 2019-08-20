@@ -4,6 +4,7 @@ package ge.mimino.travel.service;
 import ge.mimino.travel.dao.MiscDAO;
 import ge.mimino.travel.dto.*;
 import ge.mimino.travel.model.*;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.List;
  */
 @Service
 public class MiscService {
+    Logger logger = Logger.getLogger(MiscService.class);
 
     @Autowired
     private MiscDAO miscDAO;

@@ -10,15 +10,19 @@ import ge.mimino.travel.dto.EmailFolderDTO;
 import ge.mimino.travel.dto.UsersDTO;
 import ge.mimino.travel.model.*;
 import ge.mimino.travel.request.MailRequest;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
-import javax.mail.*;
 import javax.mail.Transport;
-import javax.mail.internet.*;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.mail.search.FlagTerm;
 import java.io.File;
 import java.io.IOException;
@@ -35,6 +39,7 @@ import java.util.Properties;
  */
 @Service
 public class MailService {
+    Logger logger = Logger.getLogger(MailService.class);
 
     @Autowired
     private MailDAO mailDAO;
@@ -316,45 +321,55 @@ public class MailService {
 
     public void sendNotifUsingGmail(Integer StageId, Request request) throws MessagingException {
 //   miminotravelcompany@gmail.com pass: miminotravel123
-        Properties emailProperties;
-        Session mailSession;
-        MimeMessage emailMessage;
-        emailProperties = System.getProperties();
-        emailProperties.put("mail.smtp.port", "587");
-        emailProperties.put("mail.smtp.auth", "true");
-        emailProperties.put("mail.smtp.starttls.enable", "true");
+        logger.debug("Started Sending Mail About Stage Change ");
+        try {
+
+            Properties emailProperties;
+            Session mailSession;
+            MimeMessage emailMessage;
+            emailProperties = System.getProperties();
+            emailProperties.put("mail.smtp.port", "587");
+            emailProperties.put("mail.smtp.auth", "true");
+            emailProperties.put("mail.smtp.starttls.enable", "true");
+            emailProperties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
 
 
-        String[] toEmails = getEmailsByStageGroupId(StageId);
-        String emailSubject = "Action Needed MiminoTravel";
+            String[] toEmails = getEmailsByStageGroupId(StageId);
+            String emailSubject = "Action Needed MiminoTravel";
 
-        mailSession = Session.getDefaultInstance(emailProperties, null);
-        emailMessage = new MimeMessage(mailSession);
+            mailSession = Session.getDefaultInstance(emailProperties, null);
+            emailMessage = new MimeMessage(mailSession);
 
-        for (int i = 0; i < toEmails.length; i++) {
-            emailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmails[i]));
+            for (int i = 0; i < toEmails.length; i++) {
+                emailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(toEmails[i]));
+            }
+
+            Multipart mmp = new MimeMultipart();
+            MimeBodyPart bodyPart = new MimeBodyPart();
+            bodyPart.setContent("Request ID: " + request.getId() + "   , Tour Code: " + request.getTourCode(), "text/plain; charset=utf-8");
+            mmp.addBodyPart(bodyPart);
+
+            emailMessage.setSubject(emailSubject);
+            emailMessage.setContent(mmp);
+
+            Transport transport = mailSession.getTransport("smtp");
+
+            transport.connect("smtp.gmail.com", "miminotravelcompany@gmail.com", "miminotravel123");
+            transport.sendMessage(emailMessage, emailMessage.getAllRecipients());
+            transport.close();
+        } catch (MessagingException ex) {
+            logger.error("Error While Sending Mail About Stage Change ", ex);
+            throw ex;
         }
-
-        Multipart mmp = new MimeMultipart();
-        MimeBodyPart bodyPart = new MimeBodyPart();
-        bodyPart.setContent("Request ID: " + request.getId() + "   , Tour Code: " + request.getTourCode(), "text/plain; charset=utf-8");
-        mmp.addBodyPart(bodyPart);
-
-        emailMessage.setSubject(emailSubject);
-        emailMessage.setContent(mmp);
-
-        Transport transport = mailSession.getTransport("smtp");
-
-        transport.connect("smtp.gmail.com", "miminotravelcompany@gmail.com", "miminotravel123");
-        transport.sendMessage(emailMessage, emailMessage.getAllRecipients());
-        transport.close();
     }
 
     private String[] getEmailsByStageGroupId(Integer stageId) {
+        logger.debug("Retrieving Users Emails For This Stage Types");
         List<String> mails = new ArrayList<String>();
         for (Users u : userDAO.getUsersByTypeId(stageId)) {
             mails.add(u.getEmail());
         }
+        logger.debug("Users Emails For This Stage Types Are Loaded");
         return mails.stream().toArray(String[]::new);
     }
 

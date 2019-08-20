@@ -4,6 +4,7 @@ package ge.mimino.travel.service;
 import ge.mimino.travel.dao.NonstandartDAO;
 import ge.mimino.travel.dto.NonstandartServiceDTO;
 import ge.mimino.travel.model.NonstandartService;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import java.util.List;
  */
 @Service
 public class NonStandartService {
+    Logger logger = Logger.getLogger(NonStandartService.class);
 
     @Autowired
     private NonstandartDAO nonStandartDAO;

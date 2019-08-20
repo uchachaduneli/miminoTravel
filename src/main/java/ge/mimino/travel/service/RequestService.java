@@ -29,7 +29,7 @@ import java.util.*;
 @Service
 public class RequestService {
 
-    final static Logger logger = Logger.getLogger(RequestService.class);
+    Logger logger = Logger.getLogger(RequestService.class);
 
     @Autowired
     private RequestDAO requestDAO;
@@ -94,6 +94,9 @@ public class RequestService {
         }
         if (request.getGuideLanguageId() != null) {
             obj.setGuideLanguage((Language) requestDAO.find(Language.class, request.getGuideLanguageId()));
+        }
+        if (request.getLanguageGroupId() != null) {
+            obj.setLanguageGroup((Language) requestDAO.find(Language.class, request.getLanguageGroupId()));
         }
 
         obj.setUser((Users) requestDAO.find(Users.class, request.getUserId()));

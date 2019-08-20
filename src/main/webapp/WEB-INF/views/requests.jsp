@@ -87,6 +87,12 @@
 
         $scope.loadMainData();
 
+        function getlanguageGroups(res) {
+            $scope.usersLanguageGroups = res.data;
+        }
+
+        ajaxCall($http, "requests/get-user-languages", null, getlanguageGroups);
+
         function getStages(res) {
             $scope.stages = res.data;
         }
@@ -304,6 +310,7 @@
             $scope.req.tourCode = $scope.request.tourCode;
             $scope.req.nationality = $scope.request.nationality;
             $scope.req.packageCategoryId = $scope.request.packageCategoryId;
+            $scope.req.languageGroupId = $scope.request.languageGroupId;
 
             angular.forEach($scope.request.combinedCountries, function (v) {
                 $scope.req.combinedCountries.push({
@@ -346,6 +353,7 @@
 
         $scope.changeStage = function () {
             if (confirm("Pleace confirm operation")) {
+                $('#loadingModal').modal('show');
                 function resFunc(res) {
                     if (res.errorCode == 0) {
                         successMsg('Operation Successfull (Email Notiffications Sent)');
@@ -355,6 +363,7 @@
                         errorMsg('Operation Failed');
                     }
                     $scope.stageId = {};
+                    $('#loadingModal').modal('hide');
                 }
 
                 ajaxCall($http, "requests/change-stage?requestId=" + $scope.slcted.id + "&stageId=" + $scope.stageId, null, resFunc);
@@ -566,6 +575,10 @@
                             <th class="text-right">Create Date</th>
                             <td>{{slcted.createDate}}</td>
                         </tr>
+                        <tr>
+                            <th class="text-right">Language Group</th>
+                            <td>{{slcted.languageGroup.name}}</td>
+                        </tr>
                     </table>
                     <div class="form-group"><br/>
 
@@ -754,21 +767,21 @@
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">Days Count</label>
+                            <label class="control-label col-sm-3">Days Count(*)</label>
                             <div class="col-sm-9">
                                 <input ng-model="request.daysCount" type="number" name="daysCount" required
                                        class="form-control input-sm"/>
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">Nights Count</label>
+                            <label class="control-label col-sm-3">Nights Count(*)</label>
                             <div class="col-sm-9">
                                 <input ng-model="request.nightsCount" type="number" name="nightsCount" required
                                        class="form-control input-sm"/>
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">Tourist Count(s) </label>
+                            <label class="control-label col-sm-3">Tourist Count(s) (*)</label>
                             <div class="col-sm-9">
                                 <div class="form-group" ng-repeat="r in touristCountRow">
                                     <div class="col-sm-11" id="div1Id_{{r}}">
@@ -805,7 +818,7 @@
                         </div>
 
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">Arrival City</label>
+                            <label class="control-label col-sm-3">Arrival City(*)</label>
                             <div class="col-sm-9">
                                 <select class="form-control" ng-model="request.arrivalCityId" name="arrivalCityId"
                                         required>
@@ -829,7 +842,7 @@
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">Leave City</label>
+                            <label class="control-label col-sm-3">Leave City(*)</label>
                             <div class="col-sm-9">
                                 <select class="form-control" ng-model="request.leaveCityId" name="leaveCityId" required>
                                     <option ng-repeat="v in cities"
@@ -860,7 +873,7 @@
                             </div>
                         </div>
                         <div class="form-group col-sm-10">
-                            <label class="control-label col-sm-3">Guide/Driver</label>
+                            <label class="control-label col-sm-3">Guide/Driver(*)</label>
                             <div class="col-xs-9 btn-group">
                                 <div class="radio col-xs-6">
                                     <label><input type="radio" ng-model="request.guideDriver" value="1"
@@ -882,7 +895,7 @@
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">Guide Language</label>
+                            <label class="control-label col-sm-3">Guide Language(*)</label>
                             <div class="col-sm-9">
                                 <select class="form-control" ng-model="request.guideLanguageId" name="guideLanguageId"
                                         required>
@@ -897,12 +910,11 @@
                             <label class="control-label col-sm-3">Hotel category</label>
                             <div class="col-sm-9">
                                 <textarea rows="5" cols="10" ng-model="request.hotelCategory"
-                                          name="source" required
                                           class="form-control input-sm"></textarea>
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">Meal Category</label>
+                            <label class="control-label col-sm-3">Meal Category(*)</label>
                             <div class="col-sm-9">
                                 <select class="form-control" ng-model="request.mealCategoryId" required
                                         name="mealCategoryId">
@@ -914,7 +926,7 @@
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">Entrance Fees</label>
+                            <label class="control-label col-sm-3">Entrance Fees(*)</label>
                             <div class="col-sm-9">
                                 <textarea rows="5" cols="10" ng-model="request.entranceFees"
                                           name="entranceFees" required
@@ -922,7 +934,7 @@
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">Nationality</label>
+                            <label class="control-label col-sm-3">Nationality(*)</label>
                             <div class="col-sm-9">
                                 <select class="form-control" ng-model="request.nationality" name="nationality" required>
                                     <option ng-selected="'English' === request.nationality" value="English">English
@@ -937,7 +949,7 @@
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">Currency</label>
+                            <label class="control-label col-sm-3">Currency(*)</label>
                             <div class="col-sm-9">
                                 <select class="form-control" ng-model="request.currencyId" name="currencyId" required>
                                     <option ng-repeat="v in currencies"
@@ -956,7 +968,7 @@
                             </div>
                         </div>
                         <div class="form-group col-sm-10 ">
-                            <label class="control-label col-sm-3">Package Category</label>
+                            <label class="control-label col-sm-3">Package Category(*)</label>
                             <div class="col-sm-9">
                                 <select class="form-control" ng-model="request.packageCategoryId"
                                         name="packageCategoryId" required>
@@ -972,6 +984,19 @@
                             <div class="col-sm-9">
                                 <input ng-model="request.budget" type="number" required
                                        class="form-control input-sm"/>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-10 ">
+                            <label class="control-label col-sm-3">Below Language Group(*)</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" ng-model="request.languageGroupId" name="languageGroupId"
+                                        required
+                                        title="Choose One Of Your Supported Languages, The Request Will Be Shown Under It">
+                                    <option ng-repeat="v in usersLanguageGroups"
+                                            ng-selected="v.id === request.languageGroup.id"
+                                            value="{{v.id}}">{{v.name}}
+                                    </option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group col-sm-10"></div>

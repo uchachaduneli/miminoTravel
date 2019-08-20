@@ -8,6 +8,7 @@ import ge.mimino.travel.dto.PlaceImagesDTO;
 import ge.mimino.travel.model.Place;
 import ge.mimino.travel.model.PlaceImages;
 import ge.mimino.travel.model.Region;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ import java.util.List;
  */
 @Service
 public class PlaceService {
+    Logger logger = Logger.getLogger(PlaceService.class);
 
     @Autowired
     private PlaceDAO placeDAO;

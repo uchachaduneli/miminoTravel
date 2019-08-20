@@ -3,6 +3,7 @@ package ge.mimino.travel.service;
 
 import ge.mimino.travel.dao.ParamValuePair;
 import ge.mimino.travel.dao.UserDAO;
+import ge.mimino.travel.dto.LanguageDTO;
 import ge.mimino.travel.dto.UserLanguagesDTO;
 import ge.mimino.travel.dto.UsersDTO;
 import ge.mimino.travel.dto.UsersTypeDTO;
@@ -12,6 +13,7 @@ import ge.mimino.travel.model.UserTypes;
 import ge.mimino.travel.model.Users;
 import ge.mimino.travel.request.AddUserRequest;
 import ge.mimino.travel.utils.MD5Provider;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,7 @@ import java.util.List;
  */
 @Service
 public class UsersService {
+    Logger logger = Logger.getLogger(UsersService.class);
 
     @Autowired
     private UserDAO userDAO;
@@ -38,6 +41,16 @@ public class UsersService {
         List<ParamValuePair> paramValues = new ArrayList<>();
         paramValues.add(new ParamValuePair("userId", id));
         return UserLanguagesDTO.parseToList(userDAO.getAllByParamValue(UserLanguages.class, paramValues, null));
+    }
+
+    public List<LanguageDTO> getUserLanguagesDTO(Integer userId) {
+        List<ParamValuePair> criteria = new ArrayList<>();
+        criteria.add(new ParamValuePair("userId", userId));
+        List<LanguageDTO> resList = new ArrayList<>();
+        for (UserLanguages ul : (List<UserLanguages>) userDAO.getAllByParamValue(UserLanguages.class, criteria, null)) {
+            resList.add(LanguageDTO.parse(ul.getLanguage()));
+        }
+        return resList;
     }
 
     public Users getUserById(int id) {

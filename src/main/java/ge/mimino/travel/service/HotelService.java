@@ -7,6 +7,7 @@ import ge.mimino.travel.dto.HotelDTO;
 import ge.mimino.travel.dto.HotelImagesDTO;
 import ge.mimino.travel.dto.HotelPricesDTO;
 import ge.mimino.travel.model.*;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ import java.util.List;
  */
 @Service
 public class HotelService {
+    Logger logger = Logger.getLogger(HotelService.class);
 
     @Autowired
     private HotelDAO hotelDAO;

@@ -10,6 +10,7 @@ import ge.mimino.travel.model.GeoObject;
 import ge.mimino.travel.model.GeoObjectImages;
 import ge.mimino.travel.model.GeoObjectTypes;
 import ge.mimino.travel.model.Place;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ import java.util.List;
  */
 @Service
 public class GeoObjectService {
+    Logger logger = Logger.getLogger(GeoObjectService.class);
 
     @Autowired
     private GeoObjectDAO geoObjectDAO;

@@ -47,5 +47,9 @@ function caseRequredFields(formVar) {
         errorMsg(' Package Category Is Mandatory Field');
         return false;
     }
+    if (formVar.languageGroupId.$error.required) {
+        errorMsg('Below Language Group Is Mandatory Field');
+        return false;
+    }
     return true;
 }

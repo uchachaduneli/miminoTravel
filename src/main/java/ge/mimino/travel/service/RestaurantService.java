@@ -10,6 +10,7 @@ import ge.mimino.travel.model.Place;
 import ge.mimino.travel.model.Restaurant;
 import ge.mimino.travel.model.RestaurantMealCategories;
 import ge.mimino.travel.model.RestaurantPackage;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ import java.util.List;
  */
 @Service
 public class RestaurantService {
+    Logger logger = Logger.getLogger(RestaurantService.class);
 
     @Autowired
     private RestaurantDAO restaurantDAO;

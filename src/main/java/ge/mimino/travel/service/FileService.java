@@ -34,7 +34,7 @@ import java.util.Map;
 @Service
 public class FileService {
 
-  final static Logger logger = Logger.getLogger(FileService.class);
+  Logger logger = Logger.getLogger(FileService.class);
 
   @Autowired
   private RequestDAO requestDAO;

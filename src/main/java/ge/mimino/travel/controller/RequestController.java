@@ -8,6 +8,7 @@ import ge.mimino.travel.request.AddRequest;
 import ge.mimino.travel.request.ProductRequest;
 import ge.mimino.travel.service.FileService;
 import ge.mimino.travel.service.RequestService;
+import ge.mimino.travel.service.UsersService;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,6 +36,9 @@ public class RequestController {
     @Autowired
     private FileService fileService;
 
+    @Autowired
+    private UsersService usersService;
+
     @RequestMapping("/get-requests")
     @ResponseBody
     private Response getRequests(@RequestParam("start") int start, @RequestParam("limit") int limit,
@@ -44,6 +48,12 @@ public class RequestController {
             request.setUserId((Integer) servletRequest.getSession().getAttribute("userId"));
         }
         return Response.withSuccess(requestService.getRequests(start, limit, request));
+    }
+
+    @RequestMapping("/get-user-languages")
+    @ResponseBody
+    private Response getUserLanguages(HttpServletRequest servletRequest) throws Exception {
+        return Response.withSuccess(usersService.getUserLanguagesDTO((Integer) servletRequest.getSession().getAttribute("userId")));
     }
 
     @RequestMapping("/get-requests-countries")

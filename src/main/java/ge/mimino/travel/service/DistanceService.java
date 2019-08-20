@@ -5,6 +5,7 @@ import ge.mimino.travel.dao.DistancesDAO;
 import ge.mimino.travel.dto.DistancesDTO;
 import ge.mimino.travel.model.Distances;
 import ge.mimino.travel.model.Place;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import java.util.Map;
  */
 @Service
 public class DistanceService {
+    Logger logger = Logger.getLogger(DistanceService.class);
 
   @Autowired
   private DistancesDAO distanceDAO;

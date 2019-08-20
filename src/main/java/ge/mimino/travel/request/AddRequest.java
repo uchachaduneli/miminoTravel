@@ -43,6 +43,15 @@ public class AddRequest {
     private String nationality;
     private Double eur;
     private Double usd;
+    private Integer languageGroupId;
+
+    public Integer getLanguageGroupId() {
+        return languageGroupId;
+    }
+
+    public void setLanguageGroupId(Integer languageGroupId) {
+        this.languageGroupId = languageGroupId;
+    }
 
     public Integer getUserTypeId() {
         return userTypeId;

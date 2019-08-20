@@ -6,6 +6,7 @@ import ge.mimino.travel.dto.FuelDTO;
 import ge.mimino.travel.dto.TransportDTO;
 import ge.mimino.travel.model.Fuel;
 import ge.mimino.travel.model.Transport;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import java.util.List;
  */
 @Service
 public class TransportService {
+    Logger logger = Logger.getLogger(TransportService.class);
 
     @Autowired
     private TransportDAO transportDAO;

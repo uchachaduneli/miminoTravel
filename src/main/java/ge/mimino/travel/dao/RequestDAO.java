@@ -67,6 +67,8 @@ public class RequestDAO extends AbstractDAO {
         }
         if (srchRequest.getUserTypeId() != null && srchRequest.getUserTypeId() != UsersDTO.getADMINISTRATOR()) {
             q.append(" and e.stage.id ='").append(srchRequest.getUserTypeId()).append("'");// Filter By Stage For Users
+            q.append(" and e.languageGroup.id ='").append(srchRequest.getUserTypeId()).append("'");// Filter By Stage For Users
+
         }
         if (srchRequest.getTourStart() != null && srchRequest.getTourStartTo() != null) {
             q.append(" and e.tourStart between '").append(srchRequest.getTourStart())

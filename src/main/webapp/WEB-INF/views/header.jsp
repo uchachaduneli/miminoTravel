@@ -214,12 +214,14 @@
                 <img src="resources/imgs/logo.png" style="width: 80%; margin-top: 10%; margin-left: 14%"/>
                 <hr/>
                 <ul class="sidebar-menu" data-widget="tree">
-                    <li>
-                        <a class="menuItem" href="emails">
-                            <i class="fa fa-envelope"></i>
-                            <span>Emails</span>
-                        </a>
-                    </li>
+                    <c:if test="<%= ADMINISTRATOR || COMUNICATION_MANAGER %>">
+                        <li>
+                            <a class="menuItem" href="emails">
+                                <i class="fa fa-envelope"></i>
+                                <span>Emails</span>
+                            </a>
+                        </li>
+                    </c:if>
                     <li>
                         <a class="menuItem" href="requests">
                             <i class="fa fa-briefcase"></i>
@@ -291,6 +293,8 @@
                                 <span>Users</span>
                             </a>
                         </li>
+                    </c:if>
+                    <c:if test="<%= ADMINISTRATOR || FINANCIAL_MANAGER %>">
                         <li>
                             <a href="statistics">
                                 <i class="fa fa-bar-chart"></i>
@@ -298,6 +302,7 @@
                             </a>
                         </li>
                     </c:if>
+
                 </ul>
             </section>
         </aside>

@@ -6,6 +6,7 @@ import ge.mimino.travel.dto.GuideDTO;
 import ge.mimino.travel.model.Guide;
 import ge.mimino.travel.model.GuidePrices;
 import ge.mimino.travel.model.Language;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import java.util.List;
  */
 @Service
 public class GuideService {
+    Logger logger = Logger.getLogger(GuideService.class);
 
     @Autowired
     private GuideDAO guideDAO;

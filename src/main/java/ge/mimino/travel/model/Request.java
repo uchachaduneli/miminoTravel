@@ -3,7 +3,6 @@ package ge.mimino.travel.model;
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.Objects;
 
 @Entity
 @Table(name = "request")
@@ -41,6 +40,7 @@ public class Request {
     private Double eur;
     private Double usd;
     private Stage stage;
+    private Language languageGroup;
 
     @Id
     @Column(name = "id")
@@ -372,4 +372,15 @@ public class Request {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+
+    @JoinColumn(name = "language_group")
+    @OneToOne
+    public Language getLanguageGroup() {
+        return languageGroup;
+    }
+
+    public void setLanguageGroup(Language languageGroup) {
+        this.languageGroup = languageGroup;
+    }
+
 }

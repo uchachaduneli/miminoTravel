@@ -6,6 +6,7 @@ import ge.mimino.travel.dao.ParamValuePair;
 import ge.mimino.travel.dto.*;
 import ge.mimino.travel.model.*;
 import ge.mimino.travel.request.AddContactRequest;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ import java.util.List;
  */
 @Service
 public class ContactService {
+    Logger logger = Logger.getLogger(ContactService.class);
 
     @Autowired
     private ContactDAO contactDAO;

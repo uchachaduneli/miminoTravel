@@ -57,6 +57,8 @@ public class RequestDTO {
     private Double eur;
     private Double usd;
     private StageDTO stage;
+    private LanguageDTO languageGroup; //tanamshromelma romeli enis farglebshi daamata(zogi ramdenime enas kurirebs)
+    private Integer languageGroupId;
 
     public static String NAT_FOR_TRANSPORT = "German/Italian/Spain/France";
 
@@ -115,6 +117,8 @@ public class RequestDTO {
         dto.setEur(record.getEur());
         dto.setUsd(record.getUsd());
         dto.setStage(StageDTO.parse(record.getStage()));
+        dto.setLanguageGroup(LanguageDTO.parse(record.getLanguageGroup()));
+        dto.setLanguageGroupId(record.getLanguageGroup().getId());
         return dto;
     }
 
@@ -125,6 +129,22 @@ public class RequestDTO {
             list.add(RequestDTO.parse(record));
         }
         return list;
+    }
+
+    public Integer getLanguageGroupId() {
+        return languageGroupId;
+    }
+
+    public void setLanguageGroupId(Integer languageGroupId) {
+        this.languageGroupId = languageGroupId;
+    }
+
+    public LanguageDTO getLanguageGroup() {
+        return languageGroup;
+    }
+
+    public void setLanguageGroup(LanguageDTO languageGroup) {
+        this.languageGroup = languageGroup;
     }
 
     public StageDTO getStage() {
