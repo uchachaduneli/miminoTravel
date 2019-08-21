@@ -27,6 +27,14 @@ public class Response extends JsonSerializable {
         return r;
     }
 
+    public static Response withErrorData(String error, Object data) {
+        Response r = new Response();
+        r.setErrorCode(700);
+        r.setMessage(error);
+        r.setData(data);
+        return r;
+    }
+
     public static Response withError(int errorCode) {
         Response r = new Response();
         r.setErrorCode(errorCode);
