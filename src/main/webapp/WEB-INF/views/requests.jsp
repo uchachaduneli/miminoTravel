@@ -229,7 +229,8 @@
                     $scope.touristCountRow.push(k + 1);
                     $scope.request.touristCount.push({
                         'count': v.count,
-                        'plusCount': v.plusCount
+                        'plusCount': v.plusCount,
+                        'plusCountStr': v.plusCountStr
                     });
                 });
                 $scope.slcted.touristCount = asd.data;
@@ -323,7 +324,8 @@
             angular.forEach($scope.request.touristCount, function (v) {
                 $scope.req.touristCount.push({
                     'count': v.count,
-                    'plusCount': v.plusCount
+                    'plusCount': v.plusCount,
+                    'plusCountStr': v.plusCountStr
                 });
             });
 
@@ -354,6 +356,7 @@
         $scope.changeStage = function () {
             if (confirm("Pleace confirm operation")) {
                 $('#loadingModal').modal('show');
+
                 function resFunc(res) {
                     if (res.errorCode == 0) {
                         successMsg('Operation Successfull (Email Notiffications Sent)');
@@ -500,6 +503,7 @@
                                     <tr ng-repeat="r in slcted.touristCount">
                                         <td>{{r.count}}</td>
                                         <td>{{r.plusCount}}</td>
+                                        <td>{{r.plusCountStr}}</td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -718,9 +722,11 @@
                             <label class="control-label col-sm-3">Combined</label>
                             <div class="col-xs-9 btn-group">
                                 <div class="radio col-xs-6">
-                                    <label><input type="radio" ng-model="request.combined" value="1"
+                                    <label><input type="radio" ng-model="request.combined" name="combined" value="1"
+                                                  required
                                                   class="input-sm">Yes</label>&nbsp;
-                                    <label><input type="radio" ng-model="request.combined" value="2"
+                                    <label><input type="radio" ng-model="request.combined" name="combined" value="2"
+                                                  required
                                                   class="input-sm">No</label>
                                 </div>
                             </div>
@@ -785,18 +791,23 @@
                             <div class="col-sm-9">
                                 <div class="form-group" ng-repeat="r in touristCountRow">
                                     <div class="col-sm-11" id="div1Id_{{r}}">
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-4">
                                             <span class="col-sm-12">Tourist Count</span>
                                             <input class="col-sm-12" ng-model="request.touristCount[r - 1].count"
                                                    type="number" placeholder="Tourists Count" name="touristCount"
                                                    required
                                                    class="form-control input-sm"/>
                                         </div>
-                                        <div class="col-sm-6">
-                                            <span class="col-sm-12">Leader Count</span>
+                                        <div class="col-sm-4">
+                                            <span class="col-sm-12">Leaders Count</span>
                                             <input class="col-sm-12" ng-model="request.touristCount[r - 1].plusCount"
+                                                   type="number" class="form-control input-sm"/>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <span class="col-sm-12">count Note</span>
+                                            <input class="col-sm-12" ng-model="request.touristCount[r - 1].plusCountStr"
                                                    type="text"
-                                                   placeholder="Count As Text ex.(30+1)" name="activity" required
+                                                   placeholder="Count As Text ex.(30+1)"
                                                    class="form-control input-sm"/>
                                         </div>
                                     </div>
@@ -1203,14 +1214,22 @@
                                    class="btn btn-xs">
                                     <i class="fa fa-clock-o"></i>&nbsp;St. Hist
                                 </a>&nbsp;&nbsp;
-                                <%--<a href="/miminoTravel/product?key={{r.requestKey}}"--%>
-                                <%--class="btn btn-xs">--%>
-                                <%--<i class="fa fa-server"></i>&nbsp;product--%>
-                                <%--</a>&nbsp;&nbsp;--%>
+                                <c:if test="<%= PRODUCT_MANAGER || ADMINISTRATOR %>">
+                                    <a href="/miminoTravel/product?key={{r.requestKey}}"
+                                       class="btn btn-xs">
+                                        <i class="fa fa-server"></i>&nbsp;Production
+                                    </a>&nbsp;&nbsp;
+                                </c:if>
+                                <c:if test="<%= ADMINISTRATOR || FINANCIAL_MANAGER %>">
+                                    <a href="/miminoTravel/financial?key={{r.requestKey}}" ng-if="r.stage.id > 3"
+                                       class="btn btn-xs">
+                                        <i class="fa fa-bar-chart"></i>&nbsp;Financial
+                                    </a>&nbsp;&nbsp;
+                                </c:if>
                                 <a ng-click="remove(r.id)" class="btn btn-xs">
                                     <i class="fa fa-trash-o"></i>&nbsp;Remove
                                 </a>
-                                <%--</c:if>--%>
+
                             </td>
                         </tr>
                         </tbody>

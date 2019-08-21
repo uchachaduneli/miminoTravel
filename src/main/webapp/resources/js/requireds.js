@@ -1,4 +1,12 @@
 function caseRequredFields(formVar) {
+    if (formVar.combined.$error.required) {
+        errorMsg('Combined Is Mandatory Field!');
+        return false;
+    }
+    if (formVar.contactEmail.$error.required) {
+        errorMsg('Contact Email Is Mandatory Field!');
+        return false;
+    }
     if (formVar.daysCount.$error.required) {
         errorMsg('Days Count Is Mandatory Field!');
         return false;

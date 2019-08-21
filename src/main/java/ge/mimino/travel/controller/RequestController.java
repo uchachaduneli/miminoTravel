@@ -2,7 +2,6 @@ package ge.mimino.travel.controller;
 
 import ge.mimino.travel.dto.RequestDTO;
 import ge.mimino.travel.dto.RequestMessageDTO;
-import ge.mimino.travel.dto.UsersDTO;
 import ge.mimino.travel.misc.Response;
 import ge.mimino.travel.request.AddRequest;
 import ge.mimino.travel.request.ProductRequest;
@@ -44,9 +43,7 @@ public class RequestController {
     private Response getRequests(@RequestParam("start") int start, @RequestParam("limit") int limit,
                                  @RequestBody AddRequest request, HttpServletRequest servletRequest) throws Exception {
         request.setUserTypeId((Integer) servletRequest.getSession().getAttribute("typeId"));// Stage Id Igive
-        if (request.getUserTypeId() == UsersDTO.COMUNICATION_MANAGER) {
-            request.setUserId((Integer) servletRequest.getSession().getAttribute("userId"));
-        }
+        request.setUserId((Integer) servletRequest.getSession().getAttribute("userId"));
         return Response.withSuccess(requestService.getRequests(start, limit, request));
     }
 

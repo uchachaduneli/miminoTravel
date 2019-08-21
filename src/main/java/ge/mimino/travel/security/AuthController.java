@@ -1,4 +1,4 @@
-package ge.mimino.travel.security.auth;
+package ge.mimino.travel.security;
 
 import ge.mimino.travel.dto.UsersDTO;
 import ge.mimino.travel.service.UsersService;

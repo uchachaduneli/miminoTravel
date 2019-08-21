@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -125,7 +126,7 @@ public class RequestService {
         if (request.getTouristCount() != null && !request.getTouristCount().isEmpty()) {
             for (TouristCount tc : request.getTouristCount()) {
                 tmpCount += tc.getCount() + ",";
-                requestDAO.create(new TouristCount(obj.getId(), tc.getCount(), tc.getPlusCount()));
+                requestDAO.create(new TouristCount(obj.getId(), tc.getCount(), tc.getPlusCount(), tc.getPlusCountStr()));
             }
             Calendar cal = Calendar.getInstance();
             obj.setTourCode(cal.get(Calendar.DAY_OF_MONTH) + "." + cal.get(Calendar.MONTH) + "-" + tmpCount);
@@ -147,7 +148,14 @@ public class RequestService {
         Users user = (Users) requestDAO.find(Users.class, userId);
         RequestStageHistory requestStageHistory = new RequestStageHistory(stage, requestId, user);
         requestDAO.create(requestStageHistory);
-        mailService.sendNotifUsingGmail(stageId, obj);
+        new Thread(() -> {
+            try {
+                mailService.sendNotifUsingGmail(stageId, obj);
+            } catch (MessagingException e) {
+                logger.error("Can't Send Email Notifications");
+            }
+        }).start();
+
     }
 
     public List<Stage> getStages() throws Exception {

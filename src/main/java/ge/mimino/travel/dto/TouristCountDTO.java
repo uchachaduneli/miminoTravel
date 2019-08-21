@@ -10,7 +10,8 @@ public class TouristCountDTO {
   private Integer id;
   private Integer requestId;
   private Integer count;
-    private String plusCount;
+    private Integer plusCount;
+    private String plusCountStr;
 
 
   public static TouristCountDTO parse(TouristCount record) {
@@ -19,6 +20,7 @@ public class TouristCountDTO {
     dto.setCount(record.getCount());
     dto.setRequestId(record.getRequestId());
     dto.setPlusCount(record.getPlusCount());
+      dto.setPlusCountStr(record.getPlusCountStr());
     return dto;
   }
 
@@ -55,11 +57,19 @@ public class TouristCountDTO {
     this.count = count;
   }
 
-    public String getPlusCount() {
+    public Integer getPlusCount() {
     return plusCount;
   }
 
-    public void setPlusCount(String plusCount) {
+    public void setPlusCount(Integer plusCount) {
     this.plusCount = plusCount;
   }
+
+    public String getPlusCountStr() {
+        return plusCountStr;
+    }
+
+    public void setPlusCountStr(String plusCountStr) {
+        this.plusCountStr = plusCountStr;
+    }
 }

@@ -62,12 +62,12 @@ public class RequestDAO extends AbstractDAO {
         if (srchRequest.getGuideLanguageId() != null) {
             q.append(" and e.guideLanguage.id ='").append(srchRequest.getGuideLanguageId()).append("'");
         }
-        if (srchRequest.getUserId() != null && srchRequest.getUserId() > 0) {
+        if (srchRequest.getUserId() != null && srchRequest.getUserId() > 0 && srchRequest.getUserTypeId() == UsersDTO.COMUNICATION_MANAGER) {
             q.append(" and e.user.id ='").append(srchRequest.getUserId()).append("'");
         }
         if (srchRequest.getUserTypeId() != null && srchRequest.getUserTypeId() != UsersDTO.getADMINISTRATOR()) {
             q.append(" and e.stage.id ='").append(srchRequest.getUserTypeId()).append("'");// Filter By Stage For Users
-            q.append(" and e.languageGroup.id ='").append(srchRequest.getUserTypeId()).append("'");// Filter By Stage For Users
+            q.append(" and e.languageGroup.id  in ( :listUserLanguagesIds ) ");// Filter By Stage For Users
 
         }
         if (srchRequest.getTourStart() != null && srchRequest.getTourStartTo() != null) {
@@ -80,6 +80,13 @@ public class RequestDAO extends AbstractDAO {
         }
 
         TypedQuery<Request> query = entityManager.createQuery(q.toString(), Request.class);
+
+        if (srchRequest.getUserTypeId() != null && srchRequest.getUserTypeId() != UsersDTO.getADMINISTRATOR()) {
+            Query qr = entityManager.createNativeQuery("SELECT a.language_id FROM user_languages a where a.user_id='" + srchRequest.getUserId() + "'");
+            List<Integer> userLanguageIds = qr.getResultList();
+            query.setParameter("listUserLanguagesIds", userLanguageIds);
+        }
+
         return query.setFirstResult(start).setMaxResults(limit).getResultList();
     }
 

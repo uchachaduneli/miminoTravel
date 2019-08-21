@@ -1,4 +1,4 @@
-package ge.mimino.travel.security.auth;
+package ge.mimino.travel.security;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;

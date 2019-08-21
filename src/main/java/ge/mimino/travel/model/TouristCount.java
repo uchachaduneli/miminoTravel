@@ -1,7 +1,6 @@
 package ge.mimino.travel.model;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Table(name = "tourist_count", schema = "mimino")
@@ -9,15 +8,17 @@ public class TouristCount {
     private Integer id;
     private Integer requestId;
     private Integer count;
-    private String plusCount;
+    private Integer plusCount;
+    private String plusCountStr;
 
     public TouristCount() {
     }
 
-    public TouristCount(Integer requestId, Integer count, String plusCount) {
+    public TouristCount(Integer requestId, Integer count, Integer plusCount, String plusCountStr) {
         this.requestId = requestId;
         this.count = count;
         this.plusCount = plusCount;
+        this.plusCountStr = plusCountStr;
     }
 
     @Id
@@ -53,27 +54,22 @@ public class TouristCount {
 
     @Basic
     @Column(name = "plus_count")
-    public String getPlusCount() {
+    public Integer getPlusCount() {
         return plusCount;
     }
 
-    public void setPlusCount(String plusCount) {
+    public void setPlusCount(Integer plusCount) {
         this.plusCount = plusCount;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TouristCount that = (TouristCount) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(requestId, that.requestId) &&
-                Objects.equals(count, that.count) &&
-                Objects.equals(plusCount, that.plusCount);
+
+    @Basic
+    @Column(name = "plus_count_str")
+    public String getPlusCountStr() {
+        return plusCountStr;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, requestId, count, plusCount);
+    public void setPlusCountStr(String plusCountStr) {
+        this.plusCountStr = plusCountStr;
     }
 }
