@@ -37,7 +37,7 @@ public class RequestDAO extends AbstractDAO {
         return entityManager.createQuery("delete from " + TouristCount.class.getSimpleName() + " c where c.requestId=" + requestId).executeUpdate();
     }
 
-    public List<Request> getRequests(int start, int limit, AddRequest srchRequest) {
+    public List<Request> getRequests(int start, int limit, AddRequest srchRequest) throws Exception {
         StringBuilder q = new StringBuilder();
         q.append("Select e From ").append(Request.class.getSimpleName()).append(" e Where 1=1 ");
 
@@ -84,6 +84,8 @@ public class RequestDAO extends AbstractDAO {
         if (srchRequest.getUserTypeId() != null && srchRequest.getUserTypeId() != UsersDTO.getADMINISTRATOR()) {
             Query qr = entityManager.createNativeQuery("SELECT a.language_id FROM user_languages a where a.user_id='" + srchRequest.getUserId() + "'");
             List<Integer> userLanguageIds = qr.getResultList();
+            if (userLanguageIds.isEmpty())
+                throw new Exception("Contact Administrator To Add At Least One Of Languages To Your User");
             query.setParameter("listUserLanguagesIds", userLanguageIds);
         }
 

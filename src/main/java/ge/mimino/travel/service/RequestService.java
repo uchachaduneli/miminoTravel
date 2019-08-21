@@ -39,7 +39,7 @@ public class RequestService {
     private MailService mailService;
 
 
-    public List<RequestDTO> getRequests(int start, int limit, AddRequest srchRequest) {
+    public List<RequestDTO> getRequests(int start, int limit, AddRequest srchRequest) throws Exception {
         return RequestDTO.parseToList(requestDAO.getRequests(start, limit, srchRequest));
     }
 
