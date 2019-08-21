@@ -128,7 +128,7 @@ public class UsersService {
         }
     }
 
-    public UsersDTO login(String username, String password) {
+    public UsersDTO login(String username, String password) throws Exception {
         return UsersDTO.parse(userDAO.login(username, MD5Provider.doubleMd5(password)));
     }
 

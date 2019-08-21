@@ -27,7 +27,7 @@
     <script type="text/javascript">
         $(document).keypress(function (e) {
             if (e.which == 13) {
-                document.getElementById("auth").click();
+                document.getElementById("loginBtnId").click();
             }
         });
 
@@ -38,24 +38,17 @@
             if (absUrl.split("?")[1]) {
                 $scope.uri = absUrl.split("?")[1].split("=")[1];
             }
+            $scope.user = {};
 
             $scope.login = function () {
-
-                $.ajax({
-                    type: "POST",
-                    url: "login",
-                    data: "username=" + $scope.user.username + "&password=" + $scope.user.password,
-                    success: function (response) {
-                        location.reload();
-
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        if (errorThrown == 'Bad Request') {
-                            errorMsg("Can't authorise, Please Check the credentials");
-                        }
-                        console.log(textStatus, errorThrown);
+                function resFunc(res) {
+                    if (res.errorCode == undefined) {
+                        window.location.reload();
                     }
-                });
+                }
+
+                $scope.req = {username: $scope.user.username, password: $scope.user.password};
+                ajaxCall($http, "login?username=" + $scope.user.username + "&password=" + $scope.user.password, null, resFunc);
             };
         });
 
@@ -81,11 +74,11 @@
                 <span class="fa fa-key form-control-feedback"></span>
             </div>
             <br>
-            <div class="row">
-                <div class="col-xs-12">
-                    <button type="submit" ng-click="login()" class="btn btn-primary btn-block btn-flat">L o g i n
-                    </button>
-                </div>
+            <div class="form-group">
+                <a class="btn btn-app btn-primary form-control" id="loginBtnId" style="margin: 0!important;"
+                   ng-click="login()">
+                    <i class="fa fa-sign-in"></i> L o g i n
+                </a>
             </div>
         </form>
     </div>
