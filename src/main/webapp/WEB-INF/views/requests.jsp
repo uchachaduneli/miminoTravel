@@ -794,20 +794,21 @@
                                         <div class="col-sm-4">
                                             <span class="col-sm-12">Tourist Count</span>
                                             <input class="col-sm-12" ng-model="request.touristCount[r - 1].count"
-                                                   type="number" placeholder="Tourists Count" name="touristCount"
+                                                   type="number" placeholder="Count" name="touristCount"
                                                    required
                                                    class="form-control input-sm"/>
                                         </div>
-                                        <div class="col-sm-4">
-                                            <span class="col-sm-12">Leaders Count</span>
+                                        <div class="col-sm-3">
+                                            <span class="col-sm-12">Leaders</span>
                                             <input class="col-sm-12" ng-model="request.touristCount[r - 1].plusCount"
+                                                   placeholder="Count"
                                                    type="number" class="form-control input-sm"/>
                                         </div>
                                         <div class="col-sm-4">
-                                            <span class="col-sm-12">count Note</span>
+                                            <span class="col-sm-12">Count Note</span>
                                             <input class="col-sm-12" ng-model="request.touristCount[r - 1].plusCountStr"
                                                    type="text"
-                                                   placeholder="Count As Text ex.(30+1)"
+                                                   placeholder="ex:(30+1)"
                                                    class="form-control input-sm"/>
                                         </div>
                                     </div>
